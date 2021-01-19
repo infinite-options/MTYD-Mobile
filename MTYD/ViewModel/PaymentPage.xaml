@@ -1,0 +1,265 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:local="clr-namespace:MTYD;assembly=MTYD"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MTYD.ViewModel.PaymentPage">
+    
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout x:Name="StackL" BackgroundColor="White">
+
+                <Label Text="PAYMENT OPTIONS" FontFamily="CapsRegular" TextColor="Orange" HorizontalOptions="Start" FontSize="Large" Margin="30,0,0,0" FontAttributes="Bold"/>
+
+                <Grid x:Name="ButtonStack1"
+                HorizontalOptions="Center"
+                VerticalOptions="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="12.5*" />
+                        <ColumnDefinition Width="12.5*" />
+                        <ColumnDefinition Width="12.5*" />
+                        <ColumnDefinition Width="12.5*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50" />
+                    </Grid.RowDefinitions>
+
+                    <ImageButton
+                    x:Name="meals1"
+                    WidthRequest="150"
+                    HeightRequest="60"
+                    HorizontalOptions="Center"
+                    BackgroundColor="#F5F5F5"
+                    BorderColor="Black"
+                    BorderWidth="1"
+                    VerticalOptions="Start"
+                    Grid.Column="0"
+                    Grid.Row="0"
+                    CornerRadius="5"
+                     Margin="30,6,5,6"
+                    Clicked="clickedMeals1"/>
+
+                    <ImageButton 
+                    x:Name="meals2"
+                    WidthRequest="150"
+                    HeightRequest="60"
+                     Margin="20,6,10,6"
+                    HorizontalOptions="Center"
+                    BackgroundColor="#F5F5F5"
+                    BorderColor="Black"
+                    BorderWidth="1"
+                    VerticalOptions="Start"
+                    Grid.Column="1"
+                    Grid.Row="0"
+                    CornerRadius="5"
+                    Clicked="clickedMeals2" />
+
+                    <ImageButton 
+                    x:Name="meals3"
+                    WidthRequest="150"
+                    HeightRequest="60"
+                     Margin="17,6,15,6"
+                    HorizontalOptions="Center"
+                    BackgroundColor="#F5F5F5"
+                    BorderColor="Black"
+                    BorderWidth="1"
+                    VerticalOptions="Start"
+                    Grid.Column="2"
+                    Grid.Row="0"
+                    CornerRadius="5"
+                    Clicked="clickedMeals3"/>
+
+                    <ImageButton 
+                    x:Name="meals4"
+                    WidthRequest="150"
+                    HeightRequest="60"
+                     Margin="5,6,30,6"
+                    HorizontalOptions="Center"
+                    BackgroundColor="#F5F5F5"
+                    BorderColor="Black"
+                    BorderWidth="1"
+                    VerticalOptions="Start"
+                    Grid.Column="3"
+                    Grid.Row="0"
+                    CornerRadius="5"
+                    Clicked="clickedMeals4"/>
+                </Grid>
+
+                <Label Text="ADDRESS DETAILS" FontFamily="CapsRegular" TextColor="Orange" HorizontalOptions="Start" FontSize="Large" Margin="30,0,0,0" FontAttributes="Bold"/>
+                <Grid Margin="30,0,30,10">
+                    <Frame Grid.Column="0" Grid.Row="0" 
+                        Padding = "0"
+                        CornerRadius     ="20"
+                        IsClippedToBounds="true">
+                        <local:CustomEntry x:Name="FNameEntry" FontFamily="CapsRegular"  Placeholder="    First Name"  PlaceholderColor="Gray" TextColor="DarkGreen" FontSize="Medium" FontAttributes="Bold" BackgroundColor="LightGray"></local:CustomEntry>
+                    </Frame>
+
+                    <Frame Grid.Column="0" Grid.Row="1" 
+                        Padding = "0"
+                        CornerRadius     ="20"
+                        IsClippedToBounds="true"
+                        >
+                        <local:CustomEntry x:Name="LNameEntry" FontFamily="CapsRegular"  Placeholder="    Last Name"  PlaceholderColor="Gray" TextColor="DarkGreen" FontSize="Medium" FontAttributes="Bold" BackgroundColor="LightGray"></local:CustomEntry>
+                    </Frame>
+
+                    <Frame Grid.Column="0" Grid.Row="2" 
+                        Padding = "0"
+                        CornerRadius     ="20"
+                        IsClippedToBounds="true">
+                        <local:CustomEntry x:Name="AddressEntry" FontFamily="CapsRegular"  Placeholder="    Address"  PlaceholderColor="Gray" TextColor="DarkGreen" FontSize="Medium" FontAttributes="Bold" BackgroundColor="LightGray"></local:CustomEntry>
+                    </Frame>
+                </Grid>
+                
+                <!--<Grid Margin="30,0,80,20">
+                    <Frame
+                        Padding = "0"
+                        CornerRadius     ="20"
+                        IsClippedToBounds="true"
+                        >
+                        <Entry x:Name="LNameEntry" FontFamily="CapsRegular"  Placeholder="    Last Name"  PlaceholderColor="Gray" TextColor="DarkGreen" FontSize="Medium" FontAttributes="Bold" ></Entry>
+                    </Frame>
+                </Grid>
+                
+                <Grid Margin="30,0,80,20">
+                    <Frame
+                        Padding = "0"
+                        CornerRadius     ="20"
+                        IsClippedToBounds="true">
+                        <Entry x:Name="StreetEntry" FontFamily="CapsRegular"  Placeholder="    Street"  PlaceholderColor="Gray" TextColor="DarkGreen" FontSize="Medium" FontAttributes="Bold" ></Entry>
+                    </Frame>
+                </Grid>-->
+
+                <Grid Margin="30,0,30,20">
+                    <Frame Grid.Column="0" Grid.Row="0"
+                        Padding = "0"
+                        CornerRadius     ="20"
+                        IsClippedToBounds="true">
+                        <local:CustomEntry x:Name="AptEntry" FontFamily="CapsRegular"  Placeholder="  Apt. #"  PlaceholderColor="Gray" TextColor="DarkGreen" FontSize="Medium" FontAttributes="Bold" BackgroundColor="LightGray"></local:CustomEntry>
+                    </Frame>
+
+                    <Frame Grid.Column="1" Grid.Row="0" Margin="10,0,0,0"
+                        Padding = "0"
+                        CornerRadius     ="20"
+                        IsClippedToBounds="true">
+                        <local:CustomEntry x:Name="CityEntry" FontFamily="CapsRegular"  Placeholder="    City"  PlaceholderColor="Gray" TextColor="DarkGreen" FontSize="Medium" FontAttributes="Bold" BackgroundColor="LightGray"></local:CustomEntry>
+                    </Frame>
+
+                    <Frame Grid.Column="2" Grid.Row="0" Margin="10,0,0,0"
+                        Padding = "0"
+                        CornerRadius     ="20"
+                        IsClippedToBounds="true">
+                        <local:CustomEntry x:Name="StateEntry" FontFamily="CapsRegular"  Placeholder="  State"  PlaceholderColor="Gray" TextColor="DarkGreen" FontSize="Medium" FontAttributes="Bold" BackgroundColor="LightGray"></local:CustomEntry>
+                    </Frame> 
+                </Grid>
+
+                <Grid Margin="30,0,30,20">
+
+                    <Frame Grid.Column="0" Grid.Row="0" Margin="0,0,40,0"
+                        Padding = "0"
+                        CornerRadius     ="20" 
+                        IsClippedToBounds="true">
+                        <local:CustomEntry x:Name="ZipEntry" FontFamily="CapsRegular"  Placeholder="    Zip"  PlaceholderColor="Gray" TextColor="DarkGreen" FontSize="Medium" FontAttributes="Bold" Keyboard="Numeric" BackgroundColor="LightGray"></local:CustomEntry>
+                    </Frame>
+
+                    <Frame Grid.Column="1" Grid.Row="0" Margin="-10,0,0,0"
+                        Padding = "0"
+                        CornerRadius     ="20" 
+                        IsClippedToBounds="true">
+                        <local:CustomEntry x:Name="PhoneEntry" FontFamily="CapsRegular"  Placeholder="  Phone Number"  PlaceholderColor="Gray" TextColor="DarkGreen" FontSize="Medium" FontAttributes="Bold" Keyboard="Telephone" BackgroundColor="LightGray" ></local:CustomEntry>
+                    </Frame>
+                </Grid>
+
+                <Grid Margin="30,0,30,5">
+                    <!-- <Grid.RowDefinitions>
+                        <RowDefinition Height="90"/>
+                    </Grid.RowDefinitions> -->
+                    <Frame Grid.Column="0" Grid.Row="0" 
+                        Padding = "0"
+                        CornerRadius     ="20" 
+                        IsClippedToBounds="true">
+                        <local:CustomEditor x:Name="DeliveryEntry" FontFamily="CapsRegular"  Placeholder="  Delivery Instructions"  PlaceholderColor="Gray" TextColor="DarkGreen" FontSize="Medium" FontAttributes="Bold" Keyboard="Default"  BackgroundColor="LightGray" AutoSize="TextChanges"></local:CustomEditor>
+                    </Frame>
+                </Grid>
+                <StackLayout Orientation="Horizontal">
+                    <ImageButton
+                    x:Name="SaveAdd"
+                    WidthRequest="25"
+                    HeightRequest="25"
+                    HorizontalOptions="Start"
+                    BackgroundColor="#F5F5F5"
+                    BorderColor="Black"
+                    BorderWidth="1"
+                    VerticalOptions="Start"
+                    Grid.Column="0"
+                    Grid.Row="0"
+                    CornerRadius="5"
+                    Margin="35,6,5,6"
+                    Clicked="clickedSaveAdd"/>
+
+                    <Label VerticalOptions="Center" Margin="5,0,0,0"  Text="Save this delivery information details."/>
+                </StackLayout>
+                
+                <Label Text="BILLING INFORMATION" FontFamily="CapsRegular" TextColor="Orange" HorizontalOptions="Start" FontSize="Large" Margin="30,10,0,0" FontAttributes="Bold"/>
+                <Grid Margin="30,0,30,5">
+
+                    <Frame Grid.Column="0" Grid.Row="0" Margin="0,0,0,0"
+                        Padding = "0"
+                        CornerRadius     ="20" 
+                        IsClippedToBounds="true">
+                        <local:CustomEntry x:Name="CCEntry" FontFamily="CapsRegular"  Placeholder="Credit Card Number"  PlaceholderColor="Gray" TextColor="DarkGreen" FontSize="Medium" FontAttributes="Bold" Keyboard="Numeric" BackgroundColor="LightGray"></local:CustomEntry>
+                    </Frame>
+
+                    <Frame Grid.Column="1" Grid.Row="0" Margin="40,0,0,0"
+                        Padding = "0"
+                        CornerRadius     ="20" 
+                        IsClippedToBounds="true">
+                        <local:CustomEntry x:Name="CVVEntry" FontFamily="CapsRegular"  Placeholder="  CVC/CVV"  PlaceholderColor="Gray" TextColor="DarkGreen" FontSize="Medium" FontAttributes="Bold" Keyboard="Telephone" BackgroundColor="LightGray" ></local:CustomEntry>
+                    </Frame>
+                </Grid>
+                
+                <Grid Margin="30,0,30,5">
+                    <Frame Grid.Column="0" Grid.Row="0"
+                        Padding = "0"
+                        CornerRadius     ="20"
+                        IsClippedToBounds="true">
+                        <local:CustomEntry x:Name="MonthEntry" FontFamily="CapsRegular"  Placeholder="  Month"  PlaceholderColor="Gray" TextColor="DarkGreen" FontSize="Medium" FontAttributes="Bold" BackgroundColor="LightGray"></local:CustomEntry>
+                    </Frame>
+
+                    <Frame Grid.Column="1" Grid.Row="0" Margin="10,0,0,0"
+                        Padding = "0"
+                        CornerRadius     ="20"
+                        IsClippedToBounds="true">
+                        <local:CustomEntry x:Name="YearEntry" FontFamily="CapsRegular"  Placeholder="    Year"  PlaceholderColor="Gray" TextColor="DarkGreen" FontSize="Medium" FontAttributes="Bold" BackgroundColor="LightGray"></local:CustomEntry>
+                    </Frame>
+
+                    <Frame Grid.Column="2" Grid.Row="0" Margin="10,0,0,0"
+                        Padding = "0"
+                        CornerRadius     ="20"
+                        IsClippedToBounds="true">
+                        <local:CustomEntry x:Name="ZipCCEntry" FontFamily="CapsRegular"  Placeholder="  Zip"  PlaceholderColor="Gray" TextColor="DarkGreen" FontSize="Medium" FontAttributes="Bold" BackgroundColor="LightGray"></local:CustomEntry>
+                    </Frame>
+                </Grid>
+
+                <StackLayout Orientation="Horizontal">
+                    <ImageButton
+                    x:Name="SaveCC"
+                    WidthRequest="25"
+                    HeightRequest="25"
+                    HorizontalOptions="Start"
+                    BackgroundColor="#F5F5F5"
+                    BorderColor="Black"
+                    BorderWidth="1"
+                    VerticalOptions="Start"
+                    Grid.Column="0"
+                    Grid.Row="0"
+                    CornerRadius="5"
+                    Margin="35,6,5,6"
+                    Clicked="clickedSaveCC"/>
+
+                    <Label VerticalOptions="Center" Margin="5,0,0,0"  Text="Save this card's details."/>
+                </StackLayout>
+                <Button x:Name= "SignUpButton" FontFamily= "CapsRegular" BackgroundColor="White" Text="Done" TextColor="Orange"  FontAttributes="Bold" FontSize="Medium" CornerRadius="40" BorderColor="Orange" BorderWidth="1" Margin="30,0,250,10" WidthRequest="100" HeightRequest="50" Clicked="clickedDone"/>
+            </StackLayout>
+
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

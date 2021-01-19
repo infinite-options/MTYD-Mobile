@@ -1,0 +1,558 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:local="clr-namespace:MTYD;assembly=MTYD"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MTYD.ViewModel.DeliveryBilling">
+    
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout x:Name="StackL" BackgroundColor="White">
+
+                <!--<AbsoluteLayout>
+
+                    <BoxView x:Name="orangeBox" BackgroundColor="#FF9E19" 
+                           Margin="0, -100, 0, 0"
+                           AbsoluteLayout.LayoutBounds="0.5, 0, 1, 70"
+                           AbsoluteLayout.LayoutFlags="PositionProportional,WidthProportional"/>
+
+                    <Label Text="DELIVERY INFO" FontSize="25" FontAttributes="Bold"
+                           AbsoluteLayout.LayoutBounds="0.5, 0.23"
+                           AbsoluteLayout.LayoutFlags="PositionProportional"/>
+
+                    <ImageButton x:Name="pfp" BackgroundColor="LightGray" HeightRequest="40" WidthRequest="40"
+                                 AbsoluteLayout.LayoutBounds="0.93, 0.15" Clicked="clickedPfp"
+                                 AbsoluteLayout.LayoutFlags="PositionProportional"/>
+
+                    <ImageButton x:Name="menu" Source="menu.png" HeightRequest="40" WidthRequest="40"
+                                 AbsoluteLayout.LayoutBounds="0.07, 0.15" Scale="0.8" Clicked="clickedMenu"
+                                 AbsoluteLayout.LayoutFlags="PositionProportional"/>
+                </AbsoluteLayout>-->
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    
+                    <BoxView x:Name="orangeBox" BackgroundColor="#FF9E19" HorizontalOptions="Fill"/>
+                    <Label x:Name="heading" Text="DELIVERY INFO" FontAttributes="Bold" VerticalOptions="End" HorizontalTextAlignment="Center" TextColor="Black"/>
+                    <!--<Label x:Name="heading" Text="MENU THIS WEEK" FontAttributes="Bold" VerticalOptions="End" HorizontalTextAlignment="Center" TextColor="Black"/>-->
+                    <Grid x:Name="innerGrid" VerticalOptions="End" HorizontalOptions="End">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                    <ImageButton x:Name="pfp" BackgroundColor="LightGray" VerticalOptions="End" HorizontalOptions="End" Clicked="clickedPfp"/>
+                    <Label x:Name="initials" TextColor="Black" FontAttributes="Bold" VerticalOptions="Center"  HorizontalOptions="Center"/>
+
+                    </Grid>
+
+                    <ImageButton x:Name="menu" Source="menu2.png" VerticalOptions="End" HorizontalOptions="Start" BackgroundColor="Transparent" Clicked="clickedMenu"/>
+
+                </Grid>
+
+                <Label x:Name="spacer" HeightRequest="5"/>
+
+                <Label Text="DELIVERY ADDRESS" HorizontalOptions="Start" FontSize="22"
+                       Margin="25,0,0,0" FontAttributes="Bold"/>
+
+                <Label x:Name="spacer1" HeightRequest="3"/>
+
+
+                <Grid x:Name="FirstandLast" HorizontalOptions="Center" VerticalOptions="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="16*"/>
+                        <ColumnDefinition Width="16*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                   <Frame x:Name="firstName" Padding="10,5" Margin="20,0.5,1,0.5" BackgroundColor="#FFE5B4"
+                          Grid.Row="0" Grid.Column="0" HasShadow="False">
+
+                        <Entry x:Name="FNameEntry" Keyboard="Text" FontAttributes="Bold"
+                   FontSize="17" TextColor="Black"
+                   WidthRequest="12"
+                   BackgroundColor="#FFE5B4" />
+
+                   </Frame>
+
+                   <Frame x:Name="lastName" Padding="10,5" Margin="1,0.5,20,0.5" BackgroundColor="#FFE5B4"
+                          Grid.Row="0" Grid.Column="1" HasShadow="False">
+
+                        <Entry x:Name="LNameEntry" Keyboard="Text" FontAttributes="Bold"
+                   FontSize="17" 
+                   WidthRequest="12"
+                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"/>
+
+                   </Frame>
+
+                </Grid>
+
+
+                <Grid x:Name="Email" HorizontalOptions="Center" VerticalOptions="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="16*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                   <Frame x:Name="emailAdd" Padding="10,5" Margin="20,0.5" BackgroundColor="#FFE5B4"
+                          Grid.Row="0" Grid.Column="0" HasShadow="False">
+                    
+                   <Entry x:Name="emailEntry" Keyboard="Email" FontAttributes="Bold"
+                   FontSize="17"
+                   WidthRequest="24"
+                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"/>
+
+                   </Frame>
+
+                </Grid>
+
+
+                <Grid x:Name="St" HorizontalOptions="Center" VerticalOptions="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="16*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                   <Frame x:Name="street" Padding="10,5" Margin="20,0.5" BackgroundColor="#FFE5B4"
+                          Grid.Row="0" Grid.Column="0" HasShadow="False">
+
+                        <Entry x:Name="AddressEntry" Keyboard="Text" FontAttributes="Bold"
+                   FontSize="17" 
+                   WidthRequest="24"
+                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"/>
+
+                   </Frame>
+
+                </Grid>
+
+
+                <Grid x:Name="UnitCityState" HorizontalOptions="Center" VerticalOptions="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="12*"/>
+                        <ColumnDefinition Width="16*"/>
+                        <ColumnDefinition Width="12*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                   <Frame x:Name="unit" Padding="10,5" Margin="20,0.5,1,0.5" BackgroundColor="#FFE5B4"
+                          Grid.Row="0" Grid.Column="0" HasShadow="False">
+
+                        <Entry x:Name="AptEntry" Keyboard="Text" FontAttributes="Bold"
+                   FontSize="17" 
+                    WidthRequest="8"
+                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"/>
+
+                   </Frame>
+
+                   <Frame x:Name="city" Padding="10,5" Margin="1,0.5" BackgroundColor="#FFE5B4"
+                          Grid.Row="0" Grid.Column="1" HasShadow="False">
+
+                        <Entry x:Name="CityEntry" Keyboard="Text" FontAttributes="Bold"
+                   FontSize="17" 
+                    WidthRequest="12"
+                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"/>
+
+                   </Frame>
+
+                   <Frame x:Name="state" Padding="10,5" Margin="1,0.5,20,0.5" BackgroundColor="#FFE5B4"
+                          Grid.Row="0" Grid.Column="2" HasShadow="False">
+
+                        <Entry x:Name="StateEntry" Keyboard="Text" FontAttributes="Bold"
+                   FontSize="17" 
+                    WidthRequest="8"
+                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"/>
+
+                   </Frame>
+
+                </Grid>
+
+
+                <Grid x:Name="ZipPhone" HorizontalOptions="Center" VerticalOptions="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="12*"/>
+                        <ColumnDefinition Width="20*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                   <Frame x:Name="zipCode" Padding="10,5" Margin="20,0.5,1,0.5" BackgroundColor="#FFE5B4"
+                          Grid.Row="0" Grid.Column="0" HasShadow="False">
+
+                        <Entry x:Name="ZipEntry" Keyboard="Numeric" FontAttributes="Bold"
+                   FontSize="17" 
+                    WidthRequest="12"
+                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"/>
+
+                   </Frame>
+
+                   <Frame x:Name="phoneNum" Padding="10,5" Margin="1,0.5,20,0.5" BackgroundColor="#FFE5B4"
+                          Grid.Row="0" Grid.Column="1" HasShadow="False">
+
+                        <Entry x:Name="PhoneEntry" MaxLength="10" Keyboard="Numeric" FontAttributes="Bold"
+                   FontSize="17" 
+                    WidthRequest="12"
+                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"/>
+
+                   </Frame>
+
+                </Grid>
+
+
+                <Grid x:Name="deliveryInstructions" HorizontalOptions="Center" VerticalOptions="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="16*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="120*"/>
+                    </Grid.RowDefinitions>
+
+                   <Frame x:Name="deliveryInstr" Padding="10,5" Margin="20,0.5" BackgroundColor="#FFE5B4"
+                          Grid.Row="0" Grid.Column="0" HasShadow="False" >
+
+                        <Editor x:Name="DeliveryEntry" Keyboard="Text" FontAttributes="Bold"
+                   FontSize="17" TextColor="Black" PlaceholderColor="#B4B4B4"
+                   HeightRequest="100" WidthRequest="24" Margin="0,2,0,0"
+                   BackgroundColor="#FFE5B4"  />
+
+                   </Frame>
+
+                </Grid>
+
+
+                <Label x:Name="spacer2" HeightRequest="5"/>
+                <Frame HasShadow="False" Padding="0" HeightRequest="0">
+                    <StackLayout>
+                        <Label Text="BILLING INFORMATION" HorizontalOptions="Start" FontSize="22"
+                               Margin="25,0,0,0" FontAttributes="Bold"/>
+                        <Label x:Name="spacer3" HeightRequest="3"/>
+                        <Grid x:Name="credit" HorizontalOptions="Center" VerticalOptions="Center">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="16*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <Frame x:Name="creditCard" Padding="10,5" Margin="20,0.5" BackgroundColor="#FFE5B4"
+                                    Grid.Row="0" Grid.Column="0" HasShadow="False">
+
+                                <Entry x:Name="CCEntry" Keyboard="Numeric" MaxLength="16" FontAttributes="Bold"
+                            FontSize="17" 
+                            WidthRequest="24"
+                            BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"/>
+
+                            </Frame>
+                        </Grid>
+                        <Grid x:Name="cvvZip" HorizontalOptions="Center" VerticalOptions="Center">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="16*"/>
+                                <ColumnDefinition Width="18*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <Frame x:Name="cvv" Padding="10,5" Margin="20,0.5,1,0.5" BackgroundColor="#FFE5B4"
+                                    Grid.Row="0" Grid.Column="0" HasShadow="False">
+
+                                <Entry x:Name="CVVEntry" Keyboard="Numeric" FontAttributes="Bold"
+                                    FontSize="17" 
+                                    WidthRequest="12"
+                                    BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"/>
+                            </Frame>
+
+                            <Frame x:Name="zipCode2" Padding="10,5" Margin="1,0.5,20,0.5" BackgroundColor="#FFE5B4"
+                                    Grid.Row="0" Grid.Column="1" HasShadow="False">
+
+                                <Entry x:Name="ZipCCEntry" Keyboard="Numeric" FontAttributes="Bold"
+                                FontSize="17" 
+                                WidthRequest="12"
+                                BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"/>
+                            </Frame>
+                        </Grid>
+                        <Grid x:Name="monthYear" HorizontalOptions="Center" VerticalOptions="Center">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="18*"/>
+                                <ColumnDefinition Width="16*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <Frame x:Name="month" Padding="10,5" Margin="20,0.5,1,0.5" BackgroundColor="#FFE5B4"
+                                    Grid.Row="0" Grid.Column="0" HasShadow="False">
+
+                                <Frame HasShadow="False" Padding="0" BorderColor="#FFE5B4">
+                                    <Picker x:Name="MonthPicker"  FontSize="17" FontAttributes="Bold" Title="Select Month*"
+                                    BackgroundColor="#FFE5B4" TextColor="Black">
+                                    <Picker.ItemsSource>
+                                        <x:Array Type="{x:Type x:String}">
+                                        <x:String>01-January</x:String>
+                                        <x:String>02-February</x:String>
+                                        <x:String>03-March</x:String>
+                                        <x:String>04-April</x:String>
+                                        <x:String>05-May</x:String>
+                                        <x:String>06-June</x:String>
+                                        <x:String>07-July</x:String>
+                                        <x:String>08-August</x:String>
+                                        <x:String>09-September</x:String>
+                                        <x:String>10-October</x:String>
+                                        <x:String>11-November</x:String>
+                                        <x:String>12-December</x:String>
+                                        </x:Array>
+                                    </Picker.ItemsSource>
+
+                                    </Picker>
+                                </Frame>
+                            </Frame>
+
+                           <Frame x:Name="year" Padding="10,5" Margin="1,0.5,20,0.5" BackgroundColor="#FFE5B4"
+                                  Grid.Row="0" Grid.Column="1" HasShadow="False">
+
+                                <Frame HasShadow="False" Padding="0" BorderColor="#FFE5B4">
+                                    <Picker x:Name="YearPicker" FontSize="17" FontAttributes="Bold" Title="Select Year*"
+                                            BackgroundColor="#FFE5B4" TextColor="Black"> 
+                                        <Picker.ItemsSource>
+                                            <x:Array Type="{x:Type x:String}">
+                                            <x:String>2020</x:String> <x:String>2021</x:String>
+                                            <x:String>2022</x:String> <x:String>2023</x:String>
+                                            <x:String>2024</x:String> <x:String>2025</x:String>
+                                            <x:String>2026</x:String> <x:String>2027</x:String>
+                                            <x:String>2028</x:String> <x:String>2029</x:String>
+                                            <x:String>2030</x:String> <x:String>2031</x:String>
+                                            <x:String>2032</x:String> <x:String>2033</x:String>
+                                            <x:String>2034</x:String> <x:String>2035</x:String>
+                                            <x:String>2036</x:String> <x:String>2037</x:String>
+                                            <x:String>2038</x:String> <x:String>2039</x:String>
+                                            <x:String>2040</x:String> <x:String>2041</x:String>
+                                            <x:String>2042</x:String> <x:String>2043</x:String>
+                                            </x:Array>
+                                        </Picker.ItemsSource>
+                                    </Picker>
+                                </Frame>
+                           </Frame>
+                        </Grid>
+                    </StackLayout>
+                </Frame>
+
+
+                <!--<Grid x:Name="ButtonStack1"
+                HorizontalOptions="Center"
+                VerticalOptions="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="12.5*" />
+                        <ColumnDefinition Width="12.5*" />
+                        <ColumnDefinition Width="12.5*" />
+                        <ColumnDefinition Width="12.5*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50" />
+                    </Grid.RowDefinitions>
+
+                    <ImageButton
+                    x:Name="meals1"
+                    WidthRequest="150"
+                    HeightRequest="60"
+                    HorizontalOptions="Center"
+                    BackgroundColor="#F5F5F5"
+                    BorderColor="Black"
+                    BorderWidth="1"
+                    VerticalOptions="Start"
+                    Grid.Column="0"
+                    Grid.Row="0"
+                    CornerRadius="5"
+                     Margin="30,6,5,6"
+                    Clicked="clickedMeals1"/>
+
+                    <ImageButton 
+                    x:Name="meals2"
+                    WidthRequest="150"
+                    HeightRequest="60"
+                     Margin="20,6,10,6"
+                    HorizontalOptions="Center"
+                    BackgroundColor="#F5F5F5"
+                    BorderColor="Black"
+                    BorderWidth="1"
+                    VerticalOptions="Start"
+                    Grid.Column="1"
+                    Grid.Row="0"
+                    CornerRadius="5"
+                    Clicked="clickedMeals2" />
+
+                    <ImageButton 
+                    x:Name="meals3"
+                    WidthRequest="150"
+                    HeightRequest="60"
+                     Margin="17,6,15,6"
+                    HorizontalOptions="Center"
+                    BackgroundColor="#F5F5F5"
+                    BorderColor="Black"
+                    BorderWidth="1"
+                    VerticalOptions="Start"
+                    Grid.Column="2"
+                    Grid.Row="0"
+                    CornerRadius="5"
+                    Clicked="clickedMeals3"/>
+
+                    <ImageButton 
+                    x:Name="meals4"
+                    WidthRequest="150"
+                    HeightRequest="60"
+                     Margin="5,6,30,6"
+                    HorizontalOptions="Center"
+                    BackgroundColor="#F5F5F5"
+                    BorderColor="Black"
+                    BorderWidth="1"
+                    VerticalOptions="Start"
+                    Grid.Column="3"
+                    Grid.Row="0"
+                    CornerRadius="5"
+                    Clicked="clickedMeals4"/>
+                </Grid>
+
+                <Label Text="ADDRESS DETAILS" FontFamily="CapsRegular" TextColor="Orange" HorizontalOptions="Start" FontSize="Large" Margin="30,0,0,0" FontAttributes="Bold"/>
+                <Grid Margin="30,0,30,10">
+                    <Frame Grid.Column="0" Grid.Row="0" 
+                        Padding = "0"
+                        CornerRadius     ="20"
+                        IsClippedToBounds="true">
+                        <local:CustomEntry x:Name="FNameEntry" FontFamily="CapsRegular"  Placeholder="    First Name"  PlaceholderColor="Gray" TextColor="DarkGreen" FontSize="Medium" FontAttributes="Bold" BackgroundColor="LightGray"></local:CustomEntry>
+                    </Frame>
+
+                    <Frame Grid.Column="0" Grid.Row="1" 
+                        Padding = "0"
+                        CornerRadius     ="20"
+                        IsClippedToBounds="true"
+                        >
+                        <local:CustomEntry x:Name="LNameEntry" FontFamily="CapsRegular"  Placeholder="    Last Name"  PlaceholderColor="Gray" TextColor="DarkGreen" FontSize="Medium" FontAttributes="Bold" BackgroundColor="LightGray"></local:CustomEntry>
+                    </Frame>
+
+                    <Frame Grid.Column="0" Grid.Row="2" 
+                        Padding = "0"
+                        CornerRadius     ="20"
+                        IsClippedToBounds="true">
+                        <local:CustomEntry x:Name="AddressEntry" FontFamily="CapsRegular"  Placeholder="    Address"  PlaceholderColor="Gray" TextColor="DarkGreen" FontSize="Medium" FontAttributes="Bold" BackgroundColor="LightGray"></local:CustomEntry>
+                    </Frame>
+                </Grid>-->
+                
+                <!--<Grid Margin="30,0,80,20">
+                    <Frame
+                        Padding = "0"
+                        CornerRadius     ="20"
+                        IsClippedToBounds="true"
+                        >
+                        <Entry x:Name="LNameEntry" FontFamily="CapsRegular"  Placeholder="    Last Name"  PlaceholderColor="Gray" TextColor="DarkGreen" FontSize="Medium" FontAttributes="Bold" ></Entry>
+                    </Frame>
+                </Grid>-->
+                
+                <!--<Grid Margin="30,0,80,20">
+                    <Frame
+                        Padding = "0"
+                        CornerRadius     ="20"
+                        IsClippedToBounds="true">
+                        <Entry x:Name="StreetEntry" FontFamily="CapsRegular"  Placeholder="    Street"  PlaceholderColor="Gray" TextColor="DarkGreen" FontSize="Medium" FontAttributes="Bold" ></Entry>
+                    </Frame>
+                </Grid>
+
+                <Grid Margin="30,0,30,20">
+                    <Frame Grid.Column="0" Grid.Row="0"
+                        Padding = "0"
+                        CornerRadius     ="20"
+                        IsClippedToBounds="true">
+                        <local:CustomEntry x:Name="AptEntry" FontFamily="CapsRegular"  Placeholder="  Apt. #"  PlaceholderColor="Gray" TextColor="DarkGreen" FontSize="Medium" FontAttributes="Bold" BackgroundColor="LightGray"></local:CustomEntry>
+                    </Frame>
+
+                    <Frame Grid.Column="1" Grid.Row="0" Margin="10,0,0,0"
+                        Padding = "0"
+                        CornerRadius     ="20"
+                        IsClippedToBounds="true">
+                        <local:CustomEntry x:Name="CityEntry" FontFamily="CapsRegular"  Placeholder="    City"  PlaceholderColor="Gray" TextColor="DarkGreen" FontSize="Medium" FontAttributes="Bold" BackgroundColor="LightGray"></local:CustomEntry>
+                    </Frame>
+
+                    <Frame Grid.Column="2" Grid.Row="0" Margin="10,0,0,0"
+                        Padding = "0"
+                        CornerRadius     ="20"
+                        IsClippedToBounds="true">
+                        <local:CustomEntry x:Name="StateEntry" FontFamily="CapsRegular"  Placeholder="  State"  PlaceholderColor="Gray" TextColor="DarkGreen" FontSize="Medium" FontAttributes="Bold" BackgroundColor="LightGray"></local:CustomEntry>
+                    </Frame> 
+                </Grid>-->
+
+                <!--<Grid Margin="30,0,30,20">
+
+                    <Frame Grid.Column="0" Grid.Row="0" Margin="0,0,40,0"
+                        Padding = "0"
+                        CornerRadius     ="20" 
+                        IsClippedToBounds="true">
+                        <local:CustomEntry x:Name="ZipEntry" FontFamily="CapsRegular"  Placeholder="    Zip"  PlaceholderColor="Gray" TextColor="DarkGreen" FontSize="Medium" FontAttributes="Bold" Keyboard="Numeric" BackgroundColor="LightGray"></local:CustomEntry>
+                    </Frame>
+
+                    <Frame Grid.Column="1" Grid.Row="0" Margin="-10,0,0,0"
+                        Padding = "0"
+                        CornerRadius     ="20" 
+                        IsClippedToBounds="true">
+                        <local:CustomEntry x:Name="PhoneEntry" FontFamily="CapsRegular"  Placeholder="  Phone Number"  PlaceholderColor="Gray" TextColor="DarkGreen" FontSize="Medium" FontAttributes="Bold" Keyboard="Telephone" BackgroundColor="LightGray" ></local:CustomEntry>
+                    </Frame>
+                </Grid>-->
+
+                <!--<Grid Margin="30,0,30,10">
+                   <Grid.RowDefinitions>
+                        <RowDefinition Height="90"/>
+                    </Grid.RowDefinitions> 
+                    <Frame Grid.Column="0" Grid.Row="0" 
+                        Padding = "0"
+                        CornerRadius     ="20" 
+                        IsClippedToBounds="true">
+                        <local:CustomEditor x:Name="DeliveryEntry" FontFamily="CapsRegular"  Placeholder="  Delivery Instructions"  PlaceholderColor="Gray" TextColor="DarkGreen" FontSize="Medium" FontAttributes="Bold" Keyboard="Default"  BackgroundColor="LightGray" AutoSize="TextChanges"></local:CustomEditor>
+                    </Frame>
+                </Grid>-->
+
+                <Label x:Name="spacer5" HeightRequest="25"/>
+
+                <!-- <Grid HorizontalOptions="Center" VerticalOptions="Center">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="16*"/>
+                        <ColumnDefinition Width="16*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button x:Name= "SignUpButton" BackgroundColor="#FF9E19" Margin="20,10,60,10"
+                        Text="SAVE" TextColor="White"  FontAttributes="Bold" FontSize="20"
+                        WidthRequest="40" HeightRequest="50" Clicked="clickedNotDone" />
+
+                </Grid>-->
+
+                <Grid HorizontalOptions="Center" VerticalOptions="Center">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="16*"/>
+                        <ColumnDefinition Width="16*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button x:Name= "SignUpButton" BackgroundColor="#FF9E19" Margin="20,10,50,10"
+                        Text="SAVE" TextColor="White"  FontAttributes="Bold" FontSize="20"
+                        WidthRequest="40" HeightRequest="50" Clicked="clickedNotDone" Grid.Column="1" Grid.Row="0"/>
+
+                    <Button x:Name="backButton" Text="◀  BACK" FontSize="20" FontAttributes="Bold"
+                BackgroundColor="#F59A28" TextColor= "White"
+                HeightRequest="50" WidthRequest="120" CornerRadius="25" Margin="50,10,20,10"
+                Clicked="clickedBack" Grid.Column="0" Grid.Row="0"/>
+
+                </Grid>
+               
+            </StackLayout>
+
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

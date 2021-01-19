@@ -1,0 +1,67 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+    <Platforms>AnyCPU;x64</Platforms>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>portable</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <DebugType>portable</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- <PackageReference Include="Xamarin.Forms" Version="4.8.0.1269" /> -->
+    <PackageReference Include="Xamarin.Forms" Version="4.8.0.1687" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.5.3.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="sqlite-net-pcl" Version="1.7.335" />
+    <PackageReference Include="Xamarin.Auth" Version="1.7.0" />
+    <PackageReference Include="Xamarin.Forms.Maps" Version="4.8.0.1687" />
+    <PackageReference Include="PayPalCheckoutSdk" Version="1.0.3" />
+    <PackageReference Include="PayPalHttp" Version="1.0.0" />
+    <PackageReference Include="Stripe.net" Version="39.31.0" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="Google.Apis.Auth" Version="1.49.0" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Folder Include="Model\" />
+    <Folder Include="Model\Login\" />
+    <Folder Include="Model\Database\" />
+    <Folder Include="Model\User\" />
+    <Folder Include="Model\SignUp\" />
+    <Folder Include="Resources\" />
+    <Folder Include="Resources\Font\" />
+    <Folder Include="Model\Login\LoginClasses\" />
+    <Folder Include="Model\Login\Constants\" />
+    <Folder Include="Model\Login\LoginClasses\Apple\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="DirectSignUp.xaml.cs" />
+    <Compile Remove="SocialSignUp.xaml.cs" />
+    <Compile Remove="DirectSignUpAV.xaml.cs" />
+    <Compile Remove="DirectSignUpA.xaml.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="ViewModel\OldLogin.xaml.cs">
+      <DependentUpon>OldLogin.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="ViewModel\OldMealSched.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="ViewModel\PaymentPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>

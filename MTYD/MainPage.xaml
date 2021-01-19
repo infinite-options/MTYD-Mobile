@@ -1,0 +1,374 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="MTYD.MainPage" NavigationPage.HasNavigationBar="False">
+
+    <!-- center all of the main page content -->
+    <ScrollView>
+    <Grid VerticalOptions="CenterAndExpand">
+        <StackLayout>
+
+            
+            <!--heading and subheading-->
+            <Grid x:Name="grid1" VerticalOptions="Center" HorizontalOptions="Center" Margin="0,50,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="120*" />
+                    <RowDefinition Height="40*" />
+                </Grid.RowDefinitions>
+
+                <!--<Label x:Name="Heading" Grid.Row="0" Text="NUTRITION&#10;MADE EASY" FontAttributes="Bold"
+                       LineHeight="1" FontSize="44" HorizontalTextAlignment="Center" VerticalOptions="End"
+                       TextColor="#FFFFFF" CharacterSpacing="3" />-->
+                <StackLayout HeightRequest="150">
+                    <Image Source="MealsForMeMainPage.png"></Image>
+                </StackLayout>
+
+                <Label x:Name="subHeading" Grid.Row="1" Text="NUTRITION. MADE. EASY."
+                   VerticalOptions="Start" TextColor="#FFB054" FontAttributes="Bold"
+                   HorizontalTextAlignment="Center" FontSize="20" CharacterSpacing="1"
+                       />
+
+            </Grid>
+
+            <!-- username and password entry, forget password -->
+            <Grid x:Name="grid2" HorizontalOptions="Center" VerticalOptions="Center" RowSpacing="20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/> 
+                </Grid.RowDefinitions>
+
+
+                <Frame x:Name="userFrame" BackgroundColor="#FFE5B4" CornerRadius="25">
+                    
+                   <Entry x:Name="loginUsername" FontAttributes="Bold"
+                   FontSize="16" Placeholder="USERNAME" Keyboard="Email"
+                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4">
+
+                   </Entry>
+
+                </Frame>
+
+
+                <Frame x:Name="passFrame" BackgroundColor="#FFE5B4" Grid.Row="1" CornerRadius="25">
+                    
+                   <Entry x:Name="loginPassword" Keyboard="Text" FontAttributes="Bold"
+                   FontSize="16" Placeholder="PASSWORD" IsPassword="True" TextColor="Black"
+                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"/>   
+                   
+                </Frame>
+
+                <ImageButton Grid.Row="1" x:Name="seePassword" HorizontalOptions="End" VerticalOptions="Center"
+                         HeightRequest="28" WidthRequest="28" Source="eye.png" Margin="0,0,6,0"
+                         Aspect="AspectFit" Opacity="0.5" Clicked="clickedSeePassword" />
+
+                <Button x:Name="forgotPass" Text="Forgot Password?" TextColor="White" HorizontalOptions="End" FontSize="15"
+                        Grid.Row="2" Margin="0,-25,10,0" VerticalOptions="Center" BackgroundColor="Transparent" Clicked="clickedForgotPass"/>
+
+                <!--<ImageButton x:Name="seePassword" Grid.Row="1" HorizontalOptions="End" Margin="0,0,10,0"
+                          Source="eye.png" Opacity="0.5" Clicked="clickedSeePassword" />-->
+                
+            </Grid>
+
+            <!-- login and signup buttons -->
+            <Grid x:Name="grid3" VerticalOptions="Center" ColumnSpacing="25" Margin="0,10,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+
+                <Button x:Name="loginButton" Text="LOG IN" FontSize="17" FontAttributes="Bold"
+                    BackgroundColor="#F59A28" TextColor= "White" HorizontalOptions="End"
+                    Clicked="clickedLogin"/>
+
+            <Button x:Name= "signUpButton" Text="SIGN UP" FontSize="17" FontAttributes="Bold"
+                    BackgroundColor="#F59A28" TextColor= "White" HorizontalOptions="Start"
+                    Grid.Column="1" Clicked="clickedSignUp"></Button>
+
+            </Grid>
+
+
+            <!-- or divider -->
+            <Grid x:Name="grid4" VerticalOptions="Center" ColumnSpacing="15">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Column="1" Text="or" FontSize="15" TextColor="White"
+                       HorizontalTextAlignment="Center"/>
+
+                <BoxView BackgroundColor="#C49F3F" HeightRequest="1" Grid.Column="0"
+                         VerticalOptions="Center" HorizontalOptions="Fill"/>
+                <BoxView BackgroundColor="#C49F3F" HeightRequest="1" Grid.Column="2"
+                         VerticalOptions="Center" HorizontalOptions="Fill"/>
+
+            </Grid>
+
+
+            <Label Text="LOG IN OR SIGN UP WITH" TextColor="White" FontSize="18" HorizontalTextAlignment="Center"/>
+
+
+            <!-- social media buttons -->
+            <Grid x:Name="grid5" VerticalOptions="Center" ColumnSpacing="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+
+                <ImageButton x:Name="googleLoginButton" HorizontalOptions="End" BackgroundColor="#DD4B39" 
+                          Clicked="googleLoginButtonClicked" Source="googleicon2.png" Aspect="AspectFill"/>
+
+                <ImageButton Grid.Column="1" x:Name="facebookLoginButton" BackgroundColor="#6C9BE8" HorizontalOptions="Center"
+                         Source="fbicon.png" Clicked="facebookLoginButtonClicked" Aspect="AspectFill"/>
+
+                <ImageButton Grid.Column="2" x:Name="appleLoginButton" HorizontalOptions="Start" BackgroundColor="#E4E4E4"
+                          Clicked="appleLoginButtonClicked" Source="appleicon2.png" Aspect="AspectFill"/>
+
+            </Grid>
+
+            <BoxView HeightRequest="12"/>
+            <!--<BoxView HeightRequest="6" BackgroundColor="#f3f2dc" />-->
+            <BoxView HeightRequest="2"/>
+            <!--<BoxView HeightRequest="6" BackgroundColor="#f3f2dc" />-->
+            <BoxView HeightRequest="6"/>
+
+            <StackLayout BackgroundColor="White">
+            <BoxView HeightRequest="20" Opacity="1"/>
+            <Label Opacity="1" Text="How It Works" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Center" BackgroundColor="Transparent" FontSize="30"/>
+
+
+            <BoxView HeightRequest="5"/>
+
+                <Label Opacity="1" x:Name="introParagraph" HorizontalOptions="Center" TextColor="#909090" HorizontalTextAlignment="Center"
+                       Text="Pay -> Explore -> Choose -> Enjoy"/>
+                <BoxView HeightRequest="35"/>
+
+                <Image x:Name="choosePic" Source="choose.png" Aspect="AspectFit"/>
+
+                <BoxView HeightRequest="5"/>
+
+                <Grid Opacity="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button x:Name="first" HorizontalOptions="Center" VerticalOptions="Start" BackgroundColor="#FFBA00" TextColor="Black" Text="1" FontAttributes="Bold"/>
+
+                    <StackLayout Grid.Column="1">
+                        <Label x:Name="step1" Text="CHOOSE MEAL PLAN" TextColor="Black" FontAttributes="Bold" HorizontalTextAlignment="Start"/>
+                        <Label x:Name="sub1" Text="Pay weekly or get discounted&#x0a;pricing by pre-ordering" TextColor="#909090" HorizontalTextAlignment="Start"/>
+                    </StackLayout>
+
+                </Grid>
+                <BoxView HeightRequest="35"/>
+
+                <Image x:Name="deliveryPic" Source="deliveryInfo.png" Aspect="AspectFit"/>
+
+                <BoxView HeightRequest="5"/>
+
+                <Grid Opacity="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button x:Name="second" HorizontalOptions="Center" VerticalOptions="Start" BackgroundColor="#FFBA00" TextColor="Black" Text="2" FontAttributes="Bold"/>
+
+                    <StackLayout Grid.Column="1">
+                        <Label x:Name="step2" Text="PAYMENT FREQUENCY" TextColor="Black" FontAttributes="Bold" HorizontalOptions="Start" HorizontalTextAlignment="Start"/>
+                        <Label x:Name="sub2" Text="Nutritional facts on each meal&#x0a;are provided" TextColor="#909090" HorizontalOptions="Start" HorizontalTextAlignment="Start"/>
+                    </StackLayout>
+
+                </Grid>
+                <BoxView HeightRequest="35"/>
+
+                <Image x:Name="paymentPic" Source="paymentFrequency.png" Aspect="AspectFit"/>
+
+                <BoxView HeightRequest="5"/>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button x:Name="third" HorizontalOptions="Center" VerticalOptions="Start" BackgroundColor="#FFBA00" TextColor="Black" Text="3" FontAttributes="Bold"/>
+
+                    <StackLayout Grid.Column="1">
+                        <Label x:Name="step3" Text="DELIVERY INFORMATION" TextColor="Black" FontAttributes="Bold" HorizontalTextAlignment="Start"/>
+                        <Label x:Name="sub3" Text="Place old containers outside on&#x0a;your next delivery date" TextColor="#909090" HorizontalTextAlignment="Start"/>
+                    </StackLayout>
+
+                </Grid>
+                <BoxView HeightRequest="50"/>
+
+                <Button x:Name="browseMenu" HorizontalOptions="Center" Text="Browse our menu for this week" TextColor="#FFBA00" FontAttributes="Bold" Clicked="clickedWeeksMeals"/>
+
+                <BoxView HeightRequest="20"/>
+                </StackLayout>
+
+            <!--<BoxView HeightRequest="6"/>-->
+            <!--<Grid x:Name="grid3" HorizontalOptions="Center" VerticalOptions="Center" 
+                  BackgroundColor="LightGray">
+                
+
+
+                <Frame x:Name="passFrame" BackgroundColor="#FFE5B4">
+                    
+                   <Entry x:Name="loginPassword" Keyboard="Text" FontAttributes="Bold"
+                   FontSize="16" Placeholder="PASSWORD" IsPassword="True" TextColor="Black"
+                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"/>
+
+                </Frame>
+
+                <ImageButton x:Name="seePassword" HorizontalOptions="End" Margin="0,0,10,0"
+                          Source="eye.png" Opacity="0.5" Clicked="clickedSeePassword" />
+
+            </Grid>-->
+
+
+            
+
+        </StackLayout>
+            </Grid>
+                </ScrollView>
+
+
+
+
+
+    <!-- old formatting work -->
+    <!--<StackLayout x:Name="mainStack">
+
+            <AbsoluteLayout x:Name="absLayout" BackgroundColor="#000000">
+            <Image  AbsoluteLayout.LayoutBounds="1, -15, 2, 1.0"
+                    AbsoluteLayout.LayoutFlags="All" 
+                    Source="landing.jpg" Aspect="AspectFill" Rotation="180"/>
+
+            <Image AbsoluteLayout.LayoutBounds="1,1,1,1"
+                   AbsoluteLayout.LayoutFlags="All"
+                   BackgroundColor="Black" Aspect="AspectFill" Opacity="0.5"/>
+
+            <Button Clicked="Button_Clicked" Text="Click here to see trial main page"
+                    AbsoluteLayout.LayoutBounds="0,0.08" AbsoluteLayout.LayoutFlags="PositionProportional"/>
+
+            <Label x:Name="Heading" Text="NUTRITION&#10;MADE EASY" FontAttributes="Bold" LineHeight="1"
+
+
+                   AbsoluteLayout.LayoutBounds="0.5, 0.14"
+                   AbsoluteLayout.LayoutFlags="PositionProportional"
+                   FontSize="44" VerticalOptions="Center"
+                   HorizontalTextAlignment="Center"
+                   TextColor="#FFFFFF" CharacterSpacing="3" />
+
+            <Label x:Name="subHeading" Text="LOCAL. ORGANIC. RESPONSIBLE."
+                   VerticalOptions="Center" TextColor="#FFB054" FontAttributes="Bold"
+                   HorizontalTextAlignment="Center" FontSize="20"
+                   AbsoluteLayout.LayoutBounds="0.5, 0.26" CharacterSpacing="1"
+                   AbsoluteLayout.LayoutFlags="PositionProportional"/>
+
+            <Grid AbsoluteLayout.LayoutBounds="0.5, 0.405"
+                   AbsoluteLayout.LayoutFlags="PositionProportional">
+
+                <Frame x:Name="userFrame" Padding="20,10" Margin="0" BackgroundColor="#FFE5B4">
+                    
+                   <Entry x:Name="loginUsername" Keyboard="Text" FontAttributes="Bold"
+                   FontSize="16" Placeholder="USERNAME"
+                   HeightRequest="20" WidthRequest="245"
+                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"/>
+
+                </Frame>
+
+            </Grid>
+
+
+            <Grid AbsoluteLayout.LayoutBounds="0.5, 0.47"
+                   AbsoluteLayout.LayoutFlags="PositionProportional">
+
+                <Frame x:Name="passFrame" Padding="20,10,35,10" Margin="0" BackgroundColor="#FFE5B4">
+                    
+                   <Entry x:Name="loginPassword" Keyboard="Text" FontAttributes="Bold"
+                   FontSize="16" Placeholder="PASSWORD" IsPassword="True"
+                   HeightRequest="20" WidthRequest="230"
+                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"/>
+
+                </Frame>
+
+            </Grid>
+            
+
+            <ImageButton x:Name="seePassword" AbsoluteLayout.LayoutBounds="0.815, 0.47"
+                         AbsoluteLayout.LayoutFlags="PositionProportional"
+                         HeightRequest="28" WidthRequest="28" Source="eye.png"
+                         Aspect="AspectFill" Opacity="0.5" Clicked="clickedSeePassword" />
+
+            <Button x:Name="forgotPass" Text="Forgot Password?"
+                    BackgroundColor="Transparent" TextColor="White"
+                    FontSize="14" HeightRequest="20" WidthRequest="120"
+                    AbsoluteLayout.LayoutBounds="0.75, 0.51"
+                    AbsoluteLayout.LayoutFlags="PositionProportional"
+                    Clicked="clickedForgotPass"/>
+
+            <Button x:Name="loginButton" Text="LOG IN" FontSize="17" FontAttributes="Bold"
+                    BackgroundColor="#F59A28" TextColor= "White"
+                    HeightRequest="49" WidthRequest="120"
+                    AbsoluteLayout.LayoutBounds="0.28, 0.57"
+                    AbsoluteLayout.LayoutFlags="PositionProportional"
+                    Clicked="clickedLogin"/>
+
+            <Button x:Name= "signUpButton" Text="SIGN UP" FontSize="17" FontAttributes="Bold"
+                    BackgroundColor="#F59A28" TextColor= "White"
+                    HeightRequest="49" WidthRequest="120"
+                    AbsoluteLayout.LayoutBounds="0.72, 0.57"
+                    AbsoluteLayout.LayoutFlags="PositionProportional"
+                    Clicked="clickedSignUp"></Button>
+
+            <Label Text="or" TextColor="White" FontSize="16"
+                   AbsoluteLayout.LayoutBounds="0.5, 0.635"
+                   AbsoluteLayout.LayoutFlags="PositionProportional"/>
+
+            <BoxView BackgroundColor="#C49F3F"
+                     HeightRequest="1" WidthRequest="105"
+                     AbsoluteLayout.LayoutBounds="0.23, 0.6325"
+                     AbsoluteLayout.LayoutFlags="PositionProportional"/>
+
+            <BoxView BackgroundColor="#C49F3F"
+                     HeightRequest="1" WidthRequest="105"
+                     AbsoluteLayout.LayoutBounds="0.77, 0.6325"
+                     AbsoluteLayout.LayoutFlags="PositionProportional"/>
+
+            <Label Text="LOG IN OR SIGN UP WITH" TextColor="White" FontSize="18"
+                   AbsoluteLayout.LayoutBounds="0.5, 0.685"
+                   AbsoluteLayout.LayoutFlags="PositionProportional"/>
+
+            <ImageButton  x:Name="googleLoginButton" AbsoluteLayout.LayoutBounds="0.25, 0.77"
+                          AbsoluteLayout.LayoutFlags="PositionProportional"
+                          BackgroundColor="#DD4B39"
+                          HeightRequest="55" WidthRequest="55"
+                          Clicked="googleLoginButtonClicked" Source="googleicon2.png"
+                          Aspect="AspectFill"/>
+
+            <ImageButton x:Name="facebookLoginButton" AbsoluteLayout.LayoutBounds="0.5, 0.77"
+                         AbsoluteLayout.LayoutFlags="PositionProportional"
+                         BackgroundColor="#6C9BE8"
+                         HeightRequest="55" WidthRequest="55"
+                         Source="fbicon.png" Clicked="facebookLoginButtonClicked"
+                         Aspect="AspectFill"/>
+
+            <ImageButton  x:Name="appleLoginButton" AbsoluteLayout.LayoutBounds="0.75, 0.77"
+                          AbsoluteLayout.LayoutFlags="PositionProportional"
+                          BackgroundColor="#E4E4E4"
+                          HeightRequest="55" WidthRequest="55"
+                          Clicked="appleLoginButtonClicked" Source="appleicon2.png"
+                          Aspect="AspectFill"
+                          Command = "{Binding SignInWithAppleCommand}"/>
+               
+
+            </AbsoluteLayout>
+
+                  
+    </StackLayout>-->
+    
+</ContentPage>

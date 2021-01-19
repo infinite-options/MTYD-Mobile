@@ -1,0 +1,247 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="MTYD.CarlosSignUp">
+        <ContentPage.Content>
+            <ScrollView>
+        <StackLayout Padding="0,0,0,0">
+
+            <Label x:Name="heading" Text="SIGNUP" TextColor="#F59A28" FontAttributes="Bold"/>
+
+            <BoxView HeightRequest="10"/>
+
+            <Grid x:Name="FirstandLast" HorizontalOptions="Center" VerticalOptions="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="16*"/>
+                        <ColumnDefinition Width="16*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                   <Frame x:Name="firstName" Padding="10,5" Margin="20,0.5,1,0.5" BackgroundColor="#FFE5B4"
+                          Grid.Row="0" Grid.Column="0" HasShadow="False">
+
+                        <Entry x:Name="FNameEntry" Keyboard="Text" FontAttributes="Bold"
+                   FontSize="17" TextColor="Black"
+                   WidthRequest="12"
+                   BackgroundColor="#FFE5B4" Placeholder="First Name*"/>
+
+                   </Frame>
+
+                   <Frame x:Name="lastName" Padding="10,5" Margin="1,0.5,20,0.5" BackgroundColor="#FFE5B4"
+                          Grid.Row="0" Grid.Column="1" HasShadow="False">
+
+                        <Entry x:Name="LNameEntry" Keyboard="Text" FontAttributes="Bold"
+                   FontSize="17" 
+                   WidthRequest="12"
+                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4" Placeholder="Last Name*"/>
+
+                   </Frame>
+
+                </Grid>
+
+
+                <Grid x:Name="Email" HorizontalOptions="Center" VerticalOptions="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="16*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                   <Frame x:Name="emailAdd" Padding="10,5" Margin="20,0.5" BackgroundColor="#FFE5B4"
+                          Grid.Row="0" Grid.Column="0" HasShadow="False">
+                    
+                   <Entry x:Name="emailEntry" Keyboard="Email" FontAttributes="Bold"
+                   FontSize="17"
+                   WidthRequest="24"
+                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4" Placeholder="Email*"/>
+
+                   </Frame>
+
+                </Grid>
+
+            <Grid x:Name="reenterEmail" HorizontalOptions="Center" VerticalOptions="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="16*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                   <Frame x:Name="reenterEmailAdd" Padding="10,5" Margin="20,0.5" BackgroundColor="#FFE5B4"
+                          Grid.Row="0" Grid.Column="0" HasShadow="False">
+                    
+                   <Entry x:Name="reenterEmailEntry" Keyboard="Email" FontAttributes="Bold"
+                   FontSize="17"
+                   WidthRequest="24"
+                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4" Placeholder="Confirm Email*"/>
+
+                   </Frame>
+
+                </Grid>
+
+
+                <Grid x:Name="St" HorizontalOptions="Center" VerticalOptions="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="16*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                   <Frame x:Name="street" Padding="10,5" Margin="20,0.5" BackgroundColor="#FFE5B4"
+                          Grid.Row="0" Grid.Column="0" HasShadow="False">
+
+                        <Entry x:Name="AddressEntry" Keyboard="Text" FontAttributes="Bold"
+                   FontSize="17" 
+                   WidthRequest="24"
+                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4" Placeholder="Address*"/>
+
+                   </Frame>
+
+                </Grid>
+
+
+                <Grid x:Name="UnitCityState" HorizontalOptions="Center" VerticalOptions="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="12*"/>
+                        <ColumnDefinition Width="16*"/>
+                        <ColumnDefinition Width="12*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                   <Frame x:Name="unit" Padding="10,5" Margin="20,0.5,1,0.5" BackgroundColor="#FFE5B4"
+                          Grid.Row="0" Grid.Column="0" HasShadow="False">
+
+                        <Entry x:Name="AptEntry" Keyboard="Text" FontAttributes="Bold"
+                   FontSize="17" 
+                    WidthRequest="8" Placeholder="Unit"
+                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"/>
+
+                   </Frame>
+
+                   <Frame x:Name="city" Padding="10,5" Margin="1,0.5" BackgroundColor="#FFE5B4"
+                          Grid.Row="0" Grid.Column="1" HasShadow="False">
+
+                        <Entry x:Name="CityEntry" Keyboard="Text" FontAttributes="Bold"
+                   FontSize="17" 
+                    WidthRequest="12" Placeholder="City*"
+                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"/>
+
+                   </Frame>
+
+                   <Frame x:Name="state" Padding="10,5" Margin="1,0.5,20,0.5" BackgroundColor="#FFE5B4"
+                          Grid.Row="0" Grid.Column="2" HasShadow="False">
+
+                        <Entry x:Name="StateEntry" Keyboard="Text" FontAttributes="Bold"
+                   FontSize="17" 
+                    WidthRequest="8" Placeholder="State*"
+                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"/>
+
+                   </Frame>
+
+                </Grid>
+
+
+                <Grid x:Name="ZipPhone" HorizontalOptions="Center" VerticalOptions="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="12*"/>
+                        <ColumnDefinition Width="20*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                   <Frame x:Name="zipCode" Padding="10,5" Margin="20,0.5,1,0.5" BackgroundColor="#FFE5B4"
+                          Grid.Row="0" Grid.Column="0" HasShadow="False">
+
+                        <Entry x:Name="ZipEntry" Keyboard="Numeric" FontAttributes="Bold"
+                   FontSize="17" 
+                    WidthRequest="12" Placeholder="Zip*"
+                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"/>
+
+                   </Frame>
+
+                   <Frame x:Name="phoneNum" Padding="10,5" Margin="1,0.5,20,0.5" BackgroundColor="#FFE5B4"
+                          Grid.Row="0" Grid.Column="1" HasShadow="False">
+
+                        <Entry x:Name="PhoneEntry" MaxLength="10" Keyboard="Numeric" FontAttributes="Bold"
+                   FontSize="17" 
+                    WidthRequest="12" Placeholder="Phone Number*"
+                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"/>
+
+                   </Frame>
+
+                </Grid>
+
+            <Grid x:Name="PasswordGrid" HorizontalOptions="Center" VerticalOptions="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="16*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                   <Frame x:Name="password" Padding="10,5" Margin="20,0.5" BackgroundColor="#FFE5B4"
+                          Grid.Row="0" Grid.Column="0" HasShadow="False">
+                    
+                   <Entry x:Name="passwordEntry" Keyboard="Text" IsPassword="True" FontAttributes="Bold"
+                   FontSize="17"
+                   WidthRequest="24" Placeholder="Password*"
+                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"/>
+
+                   </Frame>
+
+                </Grid>
+
+            <Grid x:Name="reenterPasswordGrid" HorizontalOptions="Center" VerticalOptions="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="16*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                   <Frame x:Name="reenterPassword" Padding="10,5" Margin="20,0.5" BackgroundColor="#FFE5B4"
+                          Grid.Row="0" Grid.Column="0" HasShadow="False">
+                    
+                   <Entry x:Name="reenterPasswordEntry" Keyboard="Text" IsPassword="True" FontAttributes="Bold"
+                   FontSize="17"
+                   WidthRequest="24" Placeholder="Confirm Password*"
+                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"/>
+
+                   </Frame>
+
+                </Grid>
+
+                    <Grid Margin="20,0">
+                        <Entry Placeholder="Enable Push Notifications" IsReadOnly="True"></Entry>
+                        <Switch HorizontalOptions="End" Grid.Column="1" IsToggled="True"></Switch>
+                    </Grid>
+
+            <Grid HorizontalOptions="Center" VerticalOptions="Center">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="16*"/>
+                        <ColumnDefinition Width="16*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button x:Name= "SignUpButton" BackgroundColor="#FF9E19" Margin="20,10,50,10"
+                        Text="SIGN UP" TextColor="White"  FontAttributes="Bold" FontSize="20"
+                        WidthRequest="40" HeightRequest="50" Clicked="ValidateAddressClick" Grid.Column="1" Grid.Row="0"/>
+
+                    <Button x:Name="backButton" Text="◀  BACK" FontSize="20" FontAttributes="Bold"
+                BackgroundColor="#F59A28" TextColor= "White"
+                HeightRequest="50" WidthRequest="120" CornerRadius="25" Margin="50,10,20,10"
+                Clicked="BackClick" Grid.Column="0" Grid.Row="0"/>
+
+                </Grid>
+
+            </StackLayout>
+            </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

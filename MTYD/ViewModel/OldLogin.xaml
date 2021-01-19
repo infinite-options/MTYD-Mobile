@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="MTYD.ViewModel.Login">
+
+    <ContentPage.Content>
+
+
+            <StackLayout VerticalOptions="FillAndExpand" Padding="5" Margin="50,0,50,0">
+                <StackLayout VerticalOptions="CenterAndExpand">
+                <Label Text="Login" FontFamily="CapsRegular" TextColor="Orange" HorizontalOptions="Center" FontSize="Title" Margin="0,20,0,30" FontAttributes="Bold"/>
+                <StackLayout VerticalOptions="CenterAndExpand" Padding="5">
+                    <Button x:Name="googleLoginButton" FontFamily="CapsRegular" BackgroundColor="SkyBlue" Text="Sign in with Google" TextColor="White" Clicked="googleLoginButtonClicked" FontAttributes="Bold" Margin="30,15"/>
+                    <Button x:Name="facebookLoginButton" FontFamily="CapsRegular" BackgroundColor="DarkBlue" Text="Continue with Facebook" TextColor="White" Clicked="facebookLoginButtonClicked" FontAttributes="Bold"/>
+                    <Label Text="OR" TextColor="Black" FontSize="Title" HorizontalOptions="Center" Margin="20,20"/>
+                    <Entry x:Name="loginEmail" FontFamily="CapsRegular"  Placeholder="Email" TextColor="DarkGreen"></Entry>
+                    <Entry x:Name="loginPassword" FontFamily="CapsRegular" Placeholder="Password"  IsPassword="True" TextColor="DarkGreen"></Entry>
+                    <Button x:Name="LoginButton" FontFamily="CapsRegular" BackgroundColor = "DarkGreen" Text="Sign in" TextColor="Orange" Clicked="ClickedLogin" FontAttributes="Bold" BorderWidth="5" CornerRadius="40" FontSize="Medium" Margin="60,0" />
+                        
+                        <Label x:Name="forgotPasswordLabel"
+                       Text="Forgot Password?"
+                       FontSize="Medium"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Center"
+                       TextDecorations="Underline">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding ForgotPasswordCommand}" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </StackLayout>
+
+                    <StackLayout VerticalOptions="EndAndExpand"  HorizontalOptions="Center" Margin="0,50,0,0">
+                        <Label FontFamily = "CapsRegular" Text="Don't have an account?" TextColor="Black" VerticalOptions="End"/>
+                    <Button x:Name= "SignUpButton" FontFamily= "CapsRegular" BackgroundColor="Orange" Text="Sign Up" Clicked="SignUpClicked" TextColor="DarkGreen" FontAttributes="Bold" FontSize="Medium" CornerRadius="40"/>
+
+                    </StackLayout>
+                </StackLayout>
+
+                <StackLayout Orientation="Horizontal" VerticalOptions="End" Margin="0, 0, 0, 30">
+                    <Label x:Name="versionNumber" VerticalOptions="Center" HorizontalOptions="CenterAndExpand" FontSize="Medium" TextColor="Black" FontAttributes="Bold" />
+                </StackLayout>
+
+            </StackLayout>
+
+
+
+        </ContentPage.Content>
+    </ContentPage>
