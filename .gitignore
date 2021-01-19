@@ -8,6 +8,10 @@
 # Project-specific files 
 Constant*.cs
 .env  
+.DS_Store
+
+# Web certificates 
+*.pem
 
 
 # User-specific files
