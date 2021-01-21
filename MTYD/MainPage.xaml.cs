@@ -43,6 +43,7 @@ namespace MTYD
         public bool createAccount = false;
         public ObservableCollection<Plans> NewMainPage = new ObservableCollection<Plans>();
         LoginViewModel vm = new LoginViewModel();
+        bool directEmailVerified = false;
 
         Account account;
         [Obsolete]
@@ -245,7 +246,12 @@ namespace MTYD
                 {
                     var loginAttempt = await LogInUser(loginUsername.Text.ToLower(), loginPassword.Text, accountSalt);
 
-                    if (loginAttempt != null && loginAttempt.message != "Request failed, wrong password.")
+                    if (directEmailVerified == true)
+                    {
+                        DisplayAlert("Please Verify Email", "Please click the link in the email sent to " + loginUsername.Text + ". Check inbox and spam folders.", "OK");
+                        loginButton.IsEnabled = true;
+                    }
+                    else if (loginAttempt != null && loginAttempt.message != "Request failed, wrong password.")
                     {
                         System.Diagnostics.Debug.WriteLine("USER'S DATA");
                         System.Diagnostics.Debug.WriteLine("USER CUSTOMER_UID: " + loginAttempt.result[0].customer_uid);
@@ -313,6 +319,7 @@ namespace MTYD
 
                                 Debug.WriteLine("email verified:" + (info_obj3["result"])[0]["email_verified"].ToString());
                                 Application.Current.MainPage = new NavigationPage(new SubscriptionPage(loginAttempt.result[0].customer_first_name, loginAttempt.result[0].customer_last_name, loginAttempt.result[0].customer_email));
+                                directEmailVerified = false;
                                 return;
                             }
 
@@ -362,6 +369,7 @@ namespace MTYD
                                 Console.WriteLine("go to SubscriptionPage");
                                 Preferences.Set("canChooseSelect", false);
                                 Application.Current.MainPage = new NavigationPage(new SubscriptionPage(loginAttempt.result[0].customer_first_name, loginAttempt.result[0].customer_last_name, loginAttempt.result[0].customer_email));
+                                directEmailVerified = false;
                             }
                             else
                             {
@@ -391,6 +399,7 @@ namespace MTYD
                                 //TEMPORARY
                                 Preferences.Set("canChooseSelect", true);
                                 Application.Current.MainPage = new NavigationPage(new Select(loginAttempt.result[0].customer_first_name, loginAttempt.result[0].customer_last_name, loginAttempt.result[0].customer_email));
+                                directEmailVerified = false;
                             }
                         }
                     }
@@ -485,7 +494,12 @@ namespace MTYD
                 var httpContent = new StringContent(loginPostContentJson, Encoding.UTF8, "application/json"); // encode orderContentJson into format to send to database
                 var response = await client.PostAsync(Constant.LogInUrl, httpContent); // try to post to database
                 var message = await response.Content.ReadAsStringAsync();
-                System.Diagnostics.Debug.WriteLine(message);
+                System.Diagnostics.Debug.WriteLine("LogInUser message: " + message);
+                string emailVerify = message.Substring(message.IndexOf("email_verified") + 18, 1);
+                Debug.WriteLine("emailVerify: " + emailVerify);
+                if (emailVerify == "1")
+                    directEmailVerified = true;
+
 
                 if (message.Contains(Constant.AutheticatedSuccesful)){
 
@@ -566,8 +580,10 @@ namespace MTYD
         public async void FacebookUserProfileAsync(string accessToken)
         {
             //email might not be found so loading page can't be here forever
+            //testing with loading page FB
             Application.Current.MainPage = new Loading();
             var client = new HttpClient();
+
             var socialLogInPost = new SocialLogInPost();
 
             // Actual call to Facebooks end point now that we have the token (appending accessToken to URL in constants file)
@@ -605,10 +621,11 @@ namespace MTYD
                     // Do I don't have the email in RDS
                     if (responseContent.Contains(Constant.EmailNotFound))
                     {
-                        //testing because we have to go back to mainpage to display the alert if the user hasn't signed up yet
+                        //testing with loading page
                         Application.Current.MainPage = new MainPage();
 
-                        var signUp = await DisplayAlert("Message", "It looks like you don't have a MTYD account. Please sign up!", "OK", "Cancel");
+
+                        var signUp = await Application.Current.MainPage.DisplayAlert("Message", "It looks like you don't have a MTYD account. Please sign up!", "OK", "Cancel");
                         if (signUp)
                         {
                             // HERE YOU NEED TO SUBSTITUTE MY SOCIAL SIGN UP PAGE WITH MTYD SOCIAL SIGN UP
@@ -775,22 +792,31 @@ namespace MTYD
                         }
                         else
                         {
-                            await DisplayAlert("Oops", "We are facing some problems with our internal system. We weren't able to update your credentials", "OK");
+                            //testing with loading page
+                            Application.Current.MainPage = new MainPage();
+
+                            await Application.Current.MainPage.DisplayAlert("Oops", "We are facing some problems with our internal system. We weren't able to update your credentials", "OK");
                         }
                     }
 
                     // Wrong Platform message
                     if (responseContent.Contains(Constant.ErrorPlatform))
                     {
+                        //testing with loading page
+                        Application.Current.MainPage = new MainPage();
+
                         var RDSCode = JsonConvert.DeserializeObject<RDSLogInMessage>(responseContent);
-                        await DisplayAlert("Message", RDSCode.message, "OK");
+                        await Application.Current.MainPage.DisplayAlert("Message", RDSCode.message, "OK");
                     }
 
 
                     // Wrong LOGIN method message
                     if (responseContent.Contains(Constant.ErrorUserDirectLogIn))
                     {
-                        await DisplayAlert("Oops!", "You have an existing MTYD account. Please use direct login", "OK");
+                        //testing with loading page
+                        Application.Current.MainPage = new MainPage();
+
+                        await Application.Current.MainPage.DisplayAlert("Oops!", "You have an existing MTYD account. Please use direct login", "OK");
                     }
                 }
             }
@@ -889,7 +915,9 @@ namespace MTYD
         public async void GoogleUserProfileAsync(string accessToken, string refreshToken, AuthenticatorCompletedEventArgs e)
         {
             Console.WriteLine("googleUserProfileAsync entered");
-            //Application.Current.MainPage = new Loading();
+
+            //testing with loading page
+            Application.Current.MainPage = new Loading();
 
             var client = new HttpClient();
             var socialLogInPost = new SocialLogInPost();
@@ -926,7 +954,10 @@ namespace MTYD
                 {
                     if (responseContent.Contains(Constant.EmailNotFound))
                     {
-                        var signUp = await DisplayAlert("Message", "It looks like you don't have a MTYD account. Please sign up!", "OK", "Cancel");
+                        //testing with loading page
+                        Application.Current.MainPage = new MainPage();
+
+                        var signUp = await Application.Current.MainPage.DisplayAlert("Message", "It looks like you don't have a MTYD account. Please sign up!", "OK", "Cancel");
                         if (signUp)
                         {
                             // HERE YOU NEED TO SUBSTITUTE MY SOCIAL SIGN UP PAGE WITH MTYD SOCIAL SIGN UP
@@ -938,7 +969,8 @@ namespace MTYD
                     }
                     if (responseContent.Contains(Constant.AutheticatedSuccesful))
                     {
-                        Application.Current.MainPage = new NavigationPage(new Loading());
+                        //testing with loading page
+                        //Application.Current.MainPage = new Loading();
 
                         var data = JsonConvert.DeserializeObject<SuccessfulSocialLogIn>(responseContent);
                         Debug.WriteLine("responseContent: " + responseContent.ToString());
@@ -1160,18 +1192,29 @@ namespace MTYD
                             }
                         else
                         {
-                            await DisplayAlert("Oops", "We are facing some problems with our internal system. We weren't able to update your credentials", "OK");
+                            //testing with loading page
+                            Application.Current.MainPage = new MainPage();
+
+                            await Application.Current.MainPage.DisplayAlert("Oops", "We are facing some problems with our internal system. We weren't able to update your credentials", "OK");
                         }
                     }
                     if (responseContent.Contains(Constant.ErrorPlatform))
                     {
+                        //testing with loading page
+                        Application.Current.MainPage = new MainPage();
+
                         var RDSCode = JsonConvert.DeserializeObject<RDSLogInMessage>(responseContent);
-                        await DisplayAlert("Message", RDSCode.message, "OK");
+                        await Application.Current.MainPage.DisplayAlert("Message", RDSCode.message, "OK");
                     }
 
                     if (responseContent.Contains(Constant.ErrorUserDirectLogIn))
                     {
-                        await DisplayAlert("Oops!", "You have an existing MTYD account. Please use direct login", "OK");
+                        //testing with loading page
+                        //await Navigation.PopAsync();
+                        Application.Current.MainPage = new MainPage();
+                        //Navigation.RemovePage(this.Navigation.NavigationStack[0]);
+
+                        await Application.Current.MainPage.DisplayAlert("Oops!", "You have an existing MTYD account. Please use direct login", "OK");
                     }
                 }
             }

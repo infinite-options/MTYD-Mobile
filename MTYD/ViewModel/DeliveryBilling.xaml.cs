@@ -605,6 +605,8 @@ namespace MTYD.ViewModel
 
             //-------------validate address end
 
+
+
             Navigation.PushAsync(new VerifyInfo(cust_firstName, cust_lastName, cust_email, AptEntry.Text, FNameEntry.Text, LNameEntry.Text, emailEntry.Text, PhoneEntry.Text, AddressEntry.Text, CityEntry.Text, StateEntry.Text, ZipEntry.Text, DeliveryEntry.Text, "", "", "", salt));
 
 
