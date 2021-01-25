@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="MTYD.ViewModel.Landing">
-
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="MTYD.ViewModel.Discounts">
     <ContentPage.Content>
-        <ScrollView>
-            <Grid>
+
+       <ScrollView>
+           <Grid>
             <StackLayout x:Name="mainStack">
 
                 <Grid>
@@ -30,7 +30,7 @@
 
 
                     <StackLayout x:Name="topStack" Grid.Row="1">
-                    <Button x:Name="discounts" Text="Our Special Discounts" FontSize="17" HorizontalOptions="End" TextColor="White" Margin="0,0,10,0" Clicked="clickedDiscounts"/>
+                    <Button x:Name="discounts" Text="Our Special Discounts" FontSize="17" HorizontalOptions="End" TextColor="White" Margin="0,0,10,0"/>
 
                     <BoxView HeightRequest="50"/>
 
@@ -44,7 +44,7 @@
 
                     <BoxView HeightRequest="40"/>
 
-                    <Button x:Name="getStarted" Text="GET STARTED" TextColor="White" BackgroundColor="#FF9E19" HorizontalOptions="Fill" FontAttributes="Bold" Clicked="clickedStarted"/>
+                    <Button x:Name="getStarted" Text="GET STARTED" TextColor="White" BackgroundColor="#FF9E19" HorizontalOptions="Fill" FontAttributes="Bold"/>
 
                     </StackLayout>
 
@@ -157,54 +157,12 @@
 
             </StackLayout>
 
-        <BoxView x:Name="fade" BackgroundColor="White" Opacity="0.6" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"/>
+               <Grid VerticalOptions="Start">
+               <BoxView HeightRequest="350" WidthRequest="250" Color="#FFBA00" CornerRadius="25" HorizontalOptions="Center"/>
+               <BoxView HeightRequest="340" WidthRequest="240" Color="White" CornerRadius="24" HorizontalOptions="Center"/>
+                </Grid>
 
-            <Grid x:Name="DiscountGrid" VerticalOptions="Start">
-               <BoxView x:Name="outerFrame" Color="#FFBA00" CornerRadius="25" />
-               <BoxView x:Name="innerFrame" Color="White" CornerRadius="24" Margin="5"/>
-
-               <StackLayout>
-
-                   <Button x:Name="xButton" Text="X" FontAttributes="Bold" TextColor="#FFBA00" HorizontalOptions="End" Margin="0,5,15,0" Clicked="clickedX"/>
-
-                   <Label x:Name="discHeader" Text="Our Special Discounts" FontAttributes="Bold" Margin="15,0,0,0"/>
-                   <BoxView HeightRequest="5"/>
-                   <BoxView HeightRequest="2" HorizontalOptions="FillAndExpand" Margin="15,0" Color="#FFBA00"/>
-                   <BoxView HeightRequest="5"/>
-
-                   <Grid x:Name="couponGrid" ColumnSpacing="4">
-                       <Grid.ColumnDefinitions>
-                           <ColumnDefinition Width="Auto"/>
-                           <ColumnDefinition Width="*"/>
-                       </Grid.ColumnDefinitions>
-
-                       <Image  x:Name="couponImg" Source="coupon.png" Aspect="AspectFit" Margin="15,0,0,0"/>
-                       <Label  x:Name="couponAmt" Text="10%&#x0a;Off" FontAttributes="Bold" Margin="35,0,0,0" VerticalOptions="Center"/>
-
-                       <Label Grid.Column="1" x:Name="couponDesc" Text="Select 2 Weeks Pre-Pay&#x0a;Option and Get 10% off" FontAttributes="Bold" TextColor="DarkGray" VerticalOptions="Center" HorizontalTextAlignment="Start"/>
-
-                   </Grid>
-
-                   <BoxView HeightRequest="3"/>
-
-                   <Grid x:Name="couponGrid2" ColumnSpacing="4">
-                       <Grid.ColumnDefinitions>
-                           <ColumnDefinition Width="Auto"/>
-                           <ColumnDefinition Width="*"/>
-                       </Grid.ColumnDefinitions>
-
-                       <Image  x:Name="couponImg2" Source="coupon.png" Aspect="AspectFit" Margin="15,0,0,0"/>
-                       <Label  x:Name="couponAmt2" Text="15%&#x0a;Off" FontAttributes="Bold" Margin="35,0,0,0" VerticalOptions="Center"/>
-
-                       <Label Grid.Column="1" x:Name="couponDesc2" Text="Select 4 Weeks Pre-Pay&#x0a;Option and Get 15% off" FontAttributes="Bold" TextColor="DarkGray" VerticalOptions="Center" HorizontalTextAlignment="Start"/>
-
-                   </Grid>
-
-               </StackLayout>
-            </Grid>
-
-        </Grid>
+               </Grid>
         </ScrollView>
     </ContentPage.Content>
-
 </ContentPage>

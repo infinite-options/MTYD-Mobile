@@ -5,15 +5,16 @@ using Xamarin.Forms;
 
 namespace MTYD.ViewModel
 {
-    public partial class Landing : ContentPage
+    public partial class Discounts : ContentPage
     {
         string cust_firstName; string cust_lastName; string cust_email;
 
-        public Landing(string firstName, string lastName, string email)
+        public Discounts(string firstName, string lastName, string email)
         {
             cust_firstName = firstName;
             cust_lastName = lastName;
             cust_email = email;
+
             InitializeComponent();
 
             var width = DeviceDisplay.MainDisplayInfo.Width;
@@ -106,44 +107,7 @@ namespace MTYD.ViewModel
                 step4.Margin = new Thickness(3, 0, 0, 0);
                 step4.FontSize = width / 30;
                 sub4.FontSize = width / 45;
-
-                fade.Margin = new Thickness(0, -height / 3, 0, 0);
-
-                xButton.FontSize = width / 37;
-                DiscountGrid.Margin = new Thickness(width / 30, height / 9, width / 30, 0);
-                DiscountGrid.HeightRequest = height / 5.2;
-                DiscountGrid.WidthRequest = width / 2.3;
-                couponGrid.HeightRequest = height / 5.2;
-                couponGrid.WidthRequest = width / 2.3;
-
-                outerFrame.HeightRequest = height / 5.2;
-                //innerFrame.HeightRequest = (height / 5.2) - 15;
-                //innerFrame.WidthRequest = outerFrame.Height - 60;
-
-                discHeader.FontSize = width / 35;
-
-                couponGrid.HeightRequest = height / 30;
-                couponImg.HeightRequest = height / 30;
-                couponAmt.FontSize = width / 50;
-                couponDesc.FontSize = width / 43;
-
-                couponGrid2.HeightRequest = height / 30;
-                couponImg2.HeightRequest = height / 30;
-                couponAmt2.FontSize = width / 50;
-                couponDesc2.FontSize = width / 43;
             }
-        }
-
-        async void clickedX(System.Object sender, System.EventArgs e)
-        {
-            fade.IsVisible = false;
-            DiscountGrid.IsVisible = false;
-        }
-
-        async void clickedDiscounts(System.Object sender, System.EventArgs e)
-        {
-            fade.IsVisible = true;
-            DiscountGrid.IsVisible = true;
         }
 
         async void clickedPfp(System.Object sender, System.EventArgs e)
@@ -154,11 +118,6 @@ namespace MTYD.ViewModel
         async void clickedMenu(System.Object sender, System.EventArgs e)
         {
             await Navigation.PushAsync(new Menu(cust_firstName, cust_lastName, cust_email));
-        }
-
-        async void clickedStarted(System.Object sender, System.EventArgs e)
-        {
-            await Navigation.PushAsync(new SubscriptionPage(cust_firstName, cust_lastName, cust_email));
         }
     }
 }
