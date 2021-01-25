@@ -58,6 +58,54 @@ namespace MTYD.ViewModel
                 menu.HeightRequest = width / 25;
                 menu.WidthRequest = width / 25;
                 menu.Margin = new Thickness(25, 0, 0, 30);
+
+                //topGrid.HeightRequest = height / 1.5;
+                landingPic.Margin = new Thickness(0, -height / 30, 0, 0);
+                //topStack.Margin = new Thickness(0, height / 20, 0, 0);
+                mainLogo.HeightRequest = height / 18;
+                getStarted.HeightRequest = height / 35;
+                getStarted.CornerRadius = (int)(height / 70);
+                getStarted.Margin = new Thickness(width / 7, 0);
+
+                searchPic.Margin = new Thickness(width / 5.5, 0);
+                first.FontSize = width / 30;
+                first.HeightRequest = width / 15;
+                first.WidthRequest = width / 15;
+                first.CornerRadius = (int)(width / 30);
+                first.Margin = new Thickness(0, 0, 3, 0);
+                step1.Margin = new Thickness(3, 0, 0, 0);
+                step1.FontSize = width / 30;
+                sub1.FontSize = width / 45;
+
+                cardPic.Margin = new Thickness(width / 5.5, 0);
+                second.FontSize = width / 30;
+                second.HeightRequest = width / 15;
+                second.WidthRequest = width / 15;
+                second.CornerRadius = (int)(width / 30);
+                second.Margin = new Thickness(0, 0, 3, 0);
+                step2.Margin = new Thickness(3, 0, 0, 0);
+                step2.FontSize = width / 30;
+                sub2.FontSize = width / 45;
+
+                pickPic.Margin = new Thickness(width / 5.5, 0);
+                third.FontSize = width / 30;
+                third.HeightRequest = width / 15;
+                third.WidthRequest = width / 15;
+                third.CornerRadius = (int)(width / 30);
+                third.Margin = new Thickness(0, 0, 3, 0);
+                step3.Margin = new Thickness(3, 0, 0, 0);
+                step3.FontSize = width / 30;
+                sub3.FontSize = width / 45;
+
+                delivPic.Margin = new Thickness(width / 5.5, 0);
+                fourth.FontSize = width / 30;
+                fourth.HeightRequest = width / 15;
+                fourth.WidthRequest = width / 15;
+                fourth.CornerRadius = (int)(width / 30);
+                fourth.Margin = new Thickness(0, 0, 3, 0);
+                step4.Margin = new Thickness(3, 0, 0, 0);
+                step4.FontSize = width / 30;
+                sub4.FontSize = width / 45;
             }
         }
 
@@ -69,6 +117,11 @@ namespace MTYD.ViewModel
         async void clickedMenu(System.Object sender, System.EventArgs e)
         {
             await Navigation.PushAsync(new Menu(cust_firstName, cust_lastName, cust_email));
+        }
+
+        async void clickedStarted(System.Object sender, System.EventArgs e)
+        {
+            await Navigation.PushAsync(new SubscriptionPage(cust_firstName, cust_lastName, cust_email));
         }
     }
 }

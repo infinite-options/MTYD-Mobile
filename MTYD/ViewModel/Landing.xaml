@@ -8,8 +8,11 @@
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    
+
+                    <Image Grid.Row="1" x:Name="landingPic" Source="landing_pic.png" Aspect="AspectFit" HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand"/>
+
                     <BoxView x:Name="orangeBox" BackgroundColor="#FF9E19" HorizontalOptions="Fill"/>
                     <Image x:Name="logo" Source="logo.png" VerticalOptions="End" HorizontalOptions="Center"/>
                     <!--<Label x:Name="heading" Text="MENU THIS WEEK" FontAttributes="Bold" VerticalOptions="End" HorizontalTextAlignment="Center" TextColor="Black"/>-->
@@ -23,7 +26,133 @@
                     </Grid>
                     <ImageButton x:Name="menu" Source="menu2.png" VerticalOptions="End" HorizontalOptions="Start" BackgroundColor="Transparent" Clicked="clickedMenu"/>
 
+
+
+                    <StackLayout x:Name="topStack" Grid.Row="1">
+                    <Button x:Name="discounts" Text="Our Special Discounts" FontSize="17" HorizontalOptions="End" TextColor="White" Margin="0,0,10,0"/>
+
+                    <BoxView HeightRequest="50"/>
+
+                    <Label x:Name="header" Text="WELCOME TO" FontSize="20" HorizontalOptions="Center" TextColor="White" FontAttributes="Bold"/>
+
+                    <Image x:Name="mainLogo" Source="m4me_logo.png" Aspect="AspectFit"/>
+
+                    <BoxView HeightRequest="40"/>
+
+                    <Label x:Name="subheading" Text="Get the freshly cooked meal options&#x0a;for your healthy lifestyle" FontSize="22" FontAttributes="Bold" TextColor="White" HorizontalTextAlignment="Center" HorizontalOptions="Center"/>
+
+                    <BoxView HeightRequest="40"/>
+
+                    <Button x:Name="getStarted" Text="GET STARTED" TextColor="White" BackgroundColor="#FF9E19" HorizontalOptions="Fill" FontAttributes="Bold" Clicked="clickedStarted"/>
+
+                    </StackLayout>
+
                 </Grid>
+
+                <StackLayout BackgroundColor="White">
+            <BoxView HeightRequest="20" Opacity="1"/>
+            <Label Opacity="1" Text="How It Works" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Center" BackgroundColor="Transparent" FontSize="35"/>
+
+
+            <BoxView HeightRequest="5"/>
+
+                <Label Opacity="1" x:Name="introParagraph" HorizontalOptions="Center" TextColor="#909090" HorizontalTextAlignment="Center"
+                       Text="Explore -> Purchase -> Choose -> Enjoy" FontAttributes="Bold"/>
+
+                <BoxView HeightRequest="50"/>
+
+                <Image x:Name="searchPic" Source="search.png" Aspect="AspectFit"/>
+
+                <BoxView HeightRequest="5"/>
+
+                <Grid Opacity="1" HorizontalOptions="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button x:Name="first" HorizontalOptions="End" VerticalOptions="Start" BackgroundColor="#FFBA00" TextColor="Black" Text="1" FontAttributes="Bold"/>
+
+                    <Label x:Name="step1" Grid.Column="1" Text="EXPLORE" TextColor="Black" FontAttributes="Bold" HorizontalOptions="Start" VerticalOptions="Center"/>
+
+                </Grid>
+
+                <BoxView HeightRequest="3"/>
+                    
+                <Label x:Name="sub1" Text="Explore Meal Plans&#x0a;Choose one that is right for you." TextColor="#909090" HorizontalTextAlignment="Center"/>
+
+                <BoxView HeightRequest="50"/>
+
+                <Image x:Name="cardPic" Source="cards.png" Aspect="AspectFit"/>
+
+                <BoxView HeightRequest="5"/>
+
+                <Grid Opacity="1" HorizontalOptions="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button x:Name="second" HorizontalOptions="End" VerticalOptions="Start" BackgroundColor="#FFBA00" TextColor="Black" Text="2" FontAttributes="Bold"/>
+
+                    <Label x:Name="step2" Grid.Column="1" Text="PURCHASE" TextColor="Black" FontAttributes="Bold" HorizontalTextAlignment="Start" VerticalOptions="Center"/>
+
+                </Grid>
+
+                <BoxView HeightRequest="3"/>
+
+                <Label x:Name="sub2" Text="Pre-pay with Paypal or Stripe&#x0a;Get discounts if you purchase 2 or 4 weeks in advance." TextColor="#909090" HorizontalTextAlignment="Center"/>
+
+                <BoxView HeightRequest="50"/>
+
+                <Image x:Name="pickPic" Source="pick.png" Aspect="AspectFit"/>
+
+                <BoxView HeightRequest="5"/>
+
+                <Grid Opacity="1" HorizontalOptions="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button x:Name="third" HorizontalOptions="End" VerticalOptions="Start" BackgroundColor="#FFBA00" TextColor="Black" Text="3" FontAttributes="Bold"/>
+
+                    <Label x:Name="step3" Grid.Column="1" Text="CHOOSE" TextColor="Black" FontAttributes="Bold" HorizontalTextAlignment="Start" VerticalOptions="Center"/>
+
+                </Grid>
+
+                <BoxView HeightRequest="3"/>
+
+                <Label x:Name="sub3" Text="Choose the Meals you want&#x0a;up to 4 weeks in advance." TextColor="#909090" HorizontalTextAlignment="Center"/>
+
+                <BoxView HeightRequest="50"/>
+
+                <Image x:Name="delivPic" Source="deliveryGuy.png" Aspect="AspectFit"/>
+
+                <BoxView HeightRequest="5"/>
+
+                <Grid Opacity="1" HorizontalOptions="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button x:Name="fourth" HorizontalOptions="End" VerticalOptions="Start" BackgroundColor="#FFBA00" TextColor="Black" Text="4" FontAttributes="Bold"/>
+
+                    <Label x:Name="step4" Grid.Column="1" Text="ENJOY" TextColor="Black" FontAttributes="Bold" HorizontalTextAlignment="Start" VerticalOptions="Center"/>
+
+                </Grid>
+
+                <BoxView HeightRequest="3"/>
+
+                <Label x:Name="sub4" Text="Heat, Enjoy and Stay Healthy." TextColor="#909090" HorizontalTextAlignment="Center"/>
+
+                <BoxView HeightRequest="50"/>
+
+                <!--<Button x:Name="browseMenu" HorizontalOptions="Center" Text="Browse our menu for this week" TextColor="#FFBA00" FontAttributes="Bold" Clicked="clickedWeeksMeals"/>-->
+
+                <!--<BoxView HeightRequest="20"/>-->
+                </StackLayout>
 
             </StackLayout>
         </ScrollView>

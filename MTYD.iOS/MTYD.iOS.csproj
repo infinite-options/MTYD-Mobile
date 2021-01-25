@@ -202,6 +202,12 @@
     <BundleResource Include="Resources\paymentFrequency.png" />
     <BundleResource Include="Resources\deliveryInfo.png" />
     <BundleResource Include="Resources\choose.png" />
+    <BundleResource Include="Resources\m4me_logo.png" />
+    <BundleResource Include="Resources\landing_pic.png" />
+    <BundleResource Include="Resources\deliveryGuy.png" />
+    <BundleResource Include="Resources\pick.png" />
+    <BundleResource Include="Resources\cards.png" />
+    <BundleResource Include="Resources\search.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AppleSignIn\" />

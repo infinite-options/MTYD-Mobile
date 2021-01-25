@@ -268,7 +268,7 @@
                           Grid.Row="0" Grid.Column="0" HasShadow="False">
 
                         <Entry x:Name="CVVEntry" Keyboard="Numeric" FontAttributes="Bold"
-                   FontSize="17" 
+                   FontSize="17" MaxLength="3"
                     WidthRequest="12"
                    BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"/>
 

@@ -208,12 +208,12 @@ namespace MTYD.Model.Login.LoginClasses.Apple
 
                             var request = new HttpRequestMessage();
                             Console.WriteLine("user_id: " + (string)Application.Current.Properties["user_id"]);
-                            string url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/customer_lplp?customer_uid=" + (string)Application.Current.Properties["user_id"];
-                            //string url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + (string)Application.Current.Properties["user_id"];
-                            //string url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + "100-000256";
+                            string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/customer_lplp?customer_uid=" + (string)Application.Current.Properties["user_id"];
+                            //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + (string)Application.Current.Properties["user_id"];
+                            //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + "100-000256";
                             Console.WriteLine("url: " + url);
                             request.RequestUri = new Uri(url);
-                            //request.RequestUri = new Uri("https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/get_delivery_info/400-000453");
+                            //request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/get_delivery_info/400-000453");
                             request.Method = HttpMethod.Get;
                             var client2 = new HttpClient();
                             HttpResponseMessage response = await client2.SendAsync(request);
@@ -228,7 +228,7 @@ namespace MTYD.Model.Login.LoginClasses.Apple
 
                                 if (userString.ToString()[0] != '{')
                                 {
-                                    url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
+                                    url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
                                     var request3 = new HttpRequestMessage();
                                     request3.RequestUri = new Uri(url);
                                     request3.Method = HttpMethod.Get;
@@ -271,7 +271,7 @@ namespace MTYD.Model.Login.LoginClasses.Apple
                                 //check if the user hasn't entered any info before, if so put in the placeholders
                                 if ((info_obj2["result"]).ToString() == "[]" || (info_obj2["result"]).ToString() == "204")
                                 {
-                                    url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
+                                    url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
                                     var request3 = new HttpRequestMessage();
                                     request3.RequestUri = new Uri(url);
                                     request3.Method = HttpMethod.Get;
@@ -294,7 +294,7 @@ namespace MTYD.Model.Login.LoginClasses.Apple
                                 }
                                 else
                                 {
-                                    url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
+                                    url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
                                     var request3 = new HttpRequestMessage();
                                     request3.RequestUri = new Uri(url);
                                     request3.Method = HttpMethod.Get;

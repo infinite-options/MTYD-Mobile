@@ -81,11 +81,11 @@ namespace MTYD.ViewModel
             var content = new StringContent(newPaymentJSONString, Encoding.UTF8, "application/json");
             Console.WriteLine("Content: " + content);
             /*var request = new HttpRequestMessage();
-            request.RequestUri = new Uri("https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/checkout");
+            request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/checkout");
             request.Method = HttpMethod.Post;
             request.Content = content;*/
             var client = new HttpClient();
-            var response = client.PostAsync("https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/checkout", content);
+            var response = client.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/checkout", content);
             // HttpResponseMessage response = await client.SendAsync(request);
             Console.WriteLine("RESPONSE TO CHECKOUT   " + response.Result);
             Console.WriteLine("CHECKOUT JSON OBJECT BEING SENT: " + newPaymentJSONString);
@@ -98,10 +98,10 @@ namespace MTYD.ViewModel
             Console.WriteLine("fillEntries entered");
             var request = new HttpRequestMessage();
             Console.WriteLine("user_id: " + (string)Application.Current.Properties["user_id"]);
-            string url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + (string)Application.Current.Properties["user_id"];
-            //string url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + "100-000256";
+            string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + (string)Application.Current.Properties["user_id"];
+            //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + "100-000256";
             request.RequestUri = new Uri(url);
-            //request.RequestUri = new Uri("https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/get_delivery_info/400-000453");
+            //request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/get_delivery_info/400-000453");
             request.Method = HttpMethod.Get;
             var client = new HttpClient();
             HttpResponseMessage response = await client.SendAsync(request);
@@ -467,11 +467,11 @@ namespace MTYD.ViewModel
             var content = new StringContent(newPaymentJSONString, Encoding.UTF8, "application/json");
             Console.WriteLine("Content: " + content);
             /*var request = new HttpRequestMessage();
-            request.RequestUri = new Uri("https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/checkout");
+            request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/checkout");
             request.Method = HttpMethod.Post;
             request.Content = content;*/
             var client = new HttpClient();
-            var response = client.PostAsync("https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_purchase_id", content);
+            var response = client.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_purchase_id", content);
             // HttpResponseMessage response = await client.SendAsync(request);
             Console.WriteLine("RESPONSE TO CHECKOUT   " + response.Result);
             Console.WriteLine("CHECKOUT JSON OBJECT BEING SENT: " + newPaymentJSONString);
@@ -501,93 +501,44 @@ namespace MTYD.ViewModel
 
         void clickedNotDone(object sender, EventArgs e)
         {
-            //if (FNameEntry.Text == null || FNameEntry.Text == "")
-            //{
-            //    DisplayAlert("Warning!", "first name required", "okay");
-            //    return;
-            //}
-
-            //if (LNameEntry.Text == null || LNameEntry.ToString() == "")
-            //{
-            //    DisplayAlert("Warning!", "last name required", "okay");
-            //    return;
-            //}
-
-            //if (emailEntry.Text == null || emailEntry.Text == "")
-            //{
-            //    DisplayAlert("Warning!", "email required", "okay");
-            //    return;
-            //}
-
-            //if (AddressEntry.Text == null || AddressEntry.Text == "")
-            //{
-            //    DisplayAlert("Warning!", "address required", "okay");
-            //    return;
-            //}
-
-            //if (CityEntry.Text == null || CityEntry.Text == "")
-            //{
-            //    DisplayAlert("Warning!", "city required", "okay");
-            //    return;
-            //}
-
-            //if (StateEntry.Text == null || StateEntry.Text == "")
-            //{
-            //    DisplayAlert("Warning!", "state required", "okay");
-            //    return;
-            //}
-
-            //if (ZipEntry.Text == null || ZipEntry.Text == "")
-            //{
-            //    DisplayAlert("Warning!", "address zip code required", "okay");
-            //    return;
-            //}
-
-            //if (StateEntry.Text == null || StateEntry.Text == "")
-            //{
-            //    DisplayAlert("Warning!", "state required", "okay");
-            //    return;
-            //}
-
-            //if (ZipEntry.Text == null || ZipEntry.Text == "")
-            //{
-            //    DisplayAlert("Warning!", "address zip code required", "okay");
-            //    return;
-            //}
-
-            //if (PhoneEntry.Text == null || PhoneEntry.Text == "")
-            //{
-            //    DisplayAlert("Warning!", "phone number required", "okay");
-            //    return;
-            //}
-
+            
             if (CCEntry.Text == null || CCEntry.Text == "")
             {
-                DisplayAlert("Warning!", "credit card number required", "okay");
+                DisplayAlert("Error", "credit card number required", "OK");
+                return;
+            }
+            else if (CCEntry.Text.Length != 16)
+            {
+                DisplayAlert("Error", "invalid credit card number", "OK");
                 return;
             }
 
             if (CVVEntry.Text == null || CVVEntry.Text == "")
             {
-                DisplayAlert("Warning!", "CVV required", "okay");
+                DisplayAlert("Error", "CVV required", "OK");
+                return;
+            }
+            else if (CVVEntry.Text.Length != 3)
+            {
+                DisplayAlert("Error", "invalid CVV", "OK");
                 return;
             }
 
             if (ZipCCEntry.Text == null || ZipCCEntry.Text == "")
             {
-                DisplayAlert("Warning!", "credit card zip code required", "okay");
+                DisplayAlert("Error", "credit card zip code required", "OK");
                 return;
             }
 
             if (MonthPicker.SelectedIndex == -1)
             {
-                DisplayAlert("Warning!", "select a month", "okay");
+                DisplayAlert("Error", "select a month", "OK");
                 return;
             }
 
             if (YearPicker.SelectedIndex == -1)
             {
-                DisplayAlert("Warning!", "select a year", "okay");
+                DisplayAlert("Error", "select a year", "OK");
                 return;
             }
 

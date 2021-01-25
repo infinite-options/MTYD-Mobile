@@ -54,11 +54,11 @@ namespace MTYD.ViewModel
         {
             var request = new HttpRequestMessage();
             Console.WriteLine("user_id: " + (string)Application.Current.Properties["user_id"]);
-            string url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/next_billing_date?customer_uid=" + (string)Application.Current.Properties["user_id"];
-            //string url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + (string)Application.Current.Properties["user_id"];
-            //string url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + "100-000256";
+            string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/next_billing_date?customer_uid=" + (string)Application.Current.Properties["user_id"];
+            //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + (string)Application.Current.Properties["user_id"];
+            //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + "100-000256";
             request.RequestUri = new Uri(url);
-            //request.RequestUri = new Uri("https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/get_delivery_info/400-000453");
+            //request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/get_delivery_info/400-000453");
             request.Method = HttpMethod.Get;
             var client = new HttpClient();
             HttpResponseMessage response = await client.SendAsync(request);
@@ -189,11 +189,11 @@ namespace MTYD.ViewModel
             Console.WriteLine("fillEntries entered");
             var request = new HttpRequestMessage();
             Console.WriteLine("user_id: " + (string)Application.Current.Properties["user_id"]);
-            string url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/customer_lplp?customer_uid=" + (string)Application.Current.Properties["user_id"];
-            //string url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + (string)Application.Current.Properties["user_id"];
-            //string url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + "100-000256";
+            string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/customer_lplp?customer_uid=" + (string)Application.Current.Properties["user_id"];
+            //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + (string)Application.Current.Properties["user_id"];
+            //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + "100-000256";
             request.RequestUri = new Uri(url);
-            //request.RequestUri = new Uri("https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/get_delivery_info/400-000453");
+            //request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/get_delivery_info/400-000453");
             request.Method = HttpMethod.Get;
             var client = new HttpClient();
             HttpResponseMessage response = await client.SendAsync(request);
@@ -368,8 +368,8 @@ namespace MTYD.ViewModel
             string userID = (string)Application.Current.Properties["user_id"];
             Console.WriteLine("Inside GET MEAL PLANS: User ID:  " + userID);
 
-            request.RequestUri = new Uri("https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/customer_lplp?customer_uid=" + userID);
-            Console.WriteLine("GET MEALS PLAN ENDPOINT TRYING TO BE REACHED: " + "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/customer_lplp?customer_uid=" + userID);
+            request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/customer_lplp?customer_uid=" + userID);
+            Console.WriteLine("GET MEALS PLAN ENDPOINT TRYING TO BE REACHED: " + "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/customer_lplp?customer_uid=" + userID);
             request.Method = HttpMethod.Get;
             var client = new HttpClient();
             HttpResponseMessage response = await client.SendAsync(request);
@@ -633,7 +633,7 @@ namespace MTYD.ViewModel
 
                 if (xdocAddress != AddressEntry.Text.ToUpper().Trim())
                 {
-                    DisplayAlert("heading", "changing address", "ok");
+                    //DisplayAlert("heading", "changing address", "ok");
                     AddressEntry.Text = xdocAddress;
                 }
 
@@ -643,7 +643,7 @@ namespace MTYD.ViewModel
 
                 if (xdocAddress != StateEntry.Text.ToUpper().Trim())
                 {
-                    DisplayAlert("heading", "changing state", "ok");
+                    //DisplayAlert("heading", "changing state", "ok");
                     StateEntry.Text = xdocState;
                 }
 
@@ -689,11 +689,11 @@ namespace MTYD.ViewModel
             var content2 = new StringContent(newPaymentJSONString, Encoding.UTF8, "application/json");
             Console.WriteLine("Content: " + content2);
             /*var request = new HttpRequestMessage();
-            request.RequestUri = new Uri("https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/checkout");
+            request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/checkout");
             request.Method = HttpMethod.Post;
             request.Content = content;*/
             var client = new HttpClient();
-            var response = client.PostAsync("https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/Update_Delivery_Info_Address", content2);
+            var response = client.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Update_Delivery_Info_Address", content2);
             // HttpResponseMessage response = await client.SendAsync(request);
             Console.WriteLine("RESPONSE TO CHECKOUT   " + response.Result);
             Console.WriteLine("CHECKOUT JSON OBJECT BEING SENT: " + newPaymentJSONString);
@@ -828,7 +828,7 @@ namespace MTYD.ViewModel
 
                 if (xdocAddress != AddressEntry.Text.ToUpper().Trim())
                 {
-                    DisplayAlert("heading", "changing address", "ok");
+                    //DisplayAlert("heading", "changing address", "ok");
                     AddressEntry.Text = xdocAddress;
                 }
 
@@ -838,7 +838,7 @@ namespace MTYD.ViewModel
 
                 if (xdocAddress != StateEntry.Text.ToUpper().Trim())
                 {
-                    DisplayAlert("heading", "changing state", "ok");
+                    //DisplayAlert("heading", "changing state", "ok");
                     StateEntry.Text = xdocState;
                 }
 

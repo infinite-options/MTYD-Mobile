@@ -15,7 +15,7 @@ namespace MTYD.ViewModel
         public static ObservableCollection<MealInfo> Meals1 = new ObservableCollection<MealInfo>();
         public static ObservableCollection<MealInfo> Meals2 = new ObservableCollection<MealInfo>();
         WebClient client = new WebClient();
-        private const string menuUrl = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/upcoming_menu";
+        private const string menuUrl = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/upcoming_menu";
         public string text1;
         private static Dictionary<string, string> qtyDict = new Dictionary<string, string>();
         int mealCount;

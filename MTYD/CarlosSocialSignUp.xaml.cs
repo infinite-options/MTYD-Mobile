@@ -293,7 +293,7 @@ namespace MTYD
                     System.Diagnostics.Debug.WriteLine("Refresh Token: " + RDSData.result.refresh_token);
                     Application.Current.Properties["user_id"] = RDSData.result.customer_uid;
 
-                    string url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
+                    string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
                     var request3 = new HttpRequestMessage();
                     request3.RequestUri = new Uri(url);
                     request3.Method = HttpMethod.Get;

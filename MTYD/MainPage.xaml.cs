@@ -155,32 +155,45 @@ namespace MTYD
 
                 introParagraph.FontSize = width / 50;
 
-                choosePic.Margin = new Thickness(width / 8, 0);
-                first.FontSize = width / 32;
-                first.HeightRequest = width / 17;
-                first.WidthRequest = width / 17;
-                first.CornerRadius = (int)(width / 34);
-                first.Margin = new Thickness(width / 30, 0);
-                step1.FontSize = width / 34;
-                sub1.FontSize = width / 47;
+                searchPic.Margin = new Thickness(width / 5.5, 0);
+                first.FontSize = width / 30;
+                first.HeightRequest = width / 15;
+                first.WidthRequest = width / 15;
+                first.CornerRadius = (int)(width / 30);
+                first.Margin = new Thickness(0, 0, 3, 0);
+                step1.Margin = new Thickness(3, 0, 0, 0);
+                step1.FontSize = width / 30;
+                sub1.FontSize = width / 45;
 
-                deliveryPic.Margin = new Thickness(width / 12, 0);
-                second.FontSize = width / 32;
-                second.HeightRequest = width / 17;
-                second.WidthRequest = width / 17;
-                second.CornerRadius = (int)(width / 34);
-                second.Margin = new Thickness(width / 30, 0);
-                step2.FontSize = width / 34;
-                sub2.FontSize = width / 47;
+                cardPic.Margin = new Thickness(width / 5.5, 0);
+                second.FontSize = width / 30;
+                second.HeightRequest = width / 15;
+                second.WidthRequest = width / 15;
+                second.CornerRadius = (int)(width / 30);
+                second.Margin = new Thickness(0, 0, 3, 0);
+                step2.Margin = new Thickness(3, 0, 0, 0);
+                step2.FontSize = width / 30;
+                sub2.FontSize = width / 45;
 
-                paymentPic.Margin = new Thickness(width / 10, 0);
-                third.FontSize = width / 32;
-                third.HeightRequest = width / 17;
-                third.WidthRequest = width / 17;
-                third.CornerRadius = (int)(width / 34);
-                third.Margin = new Thickness(width / 30, 0);
-                step3.FontSize = width / 34;
-                sub3.FontSize = width / 47;
+                pickPic.Margin = new Thickness(width / 5.5, 0);
+                third.FontSize = width / 30;
+                third.HeightRequest = width / 15;
+                third.WidthRequest = width / 15;
+                third.CornerRadius = (int)(width / 30);
+                third.Margin = new Thickness(0, 0, 3, 0);
+                step3.Margin = new Thickness(3, 0, 0, 0);
+                step3.FontSize = width / 30;
+                sub3.FontSize = width / 45;
+
+                delivPic.Margin = new Thickness(width / 5.5, 0);
+                fourth.FontSize = width / 30;
+                fourth.HeightRequest = width / 15;
+                fourth.WidthRequest = width / 15;
+                fourth.CornerRadius = (int)(width / 30);
+                fourth.Margin = new Thickness(0, 0, 3, 0);
+                step4.Margin = new Thickness(3, 0, 0, 0);
+                step4.FontSize = width / 30;
+                sub4.FontSize = width / 45;
 
                 browseMenu.FontSize = width / 33;
             }
@@ -246,7 +259,7 @@ namespace MTYD
                 {
                     var loginAttempt = await LogInUser(loginUsername.Text.ToLower(), loginPassword.Text, accountSalt);
 
-                    if (directEmailVerified == true)
+                    if (directEmailVerified == false)
                     {
                         DisplayAlert("Please Verify Email", "Please click the link in the email sent to " + loginUsername.Text + ". Check inbox and spam folders.", "OK");
                         loginButton.IsEnabled = true;
@@ -271,14 +284,14 @@ namespace MTYD
                         //check to see if user has already selected a meal plan before
                         var request = new HttpRequestMessage();
                         Console.WriteLine("user_id: " + (string)Application.Current.Properties["user_id"]);
-                        string url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/customer_lplp?customer_uid=" + (string)Application.Current.Properties["user_id"];
+                        string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/customer_lplp?customer_uid=" + (string)Application.Current.Properties["user_id"];
                         //old db
-                        //string url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/customer_lplp?customer_uid=" + (string)Application.Current.Properties["user_id"];
-                        //string url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + (string)Application.Current.Properties["user_id"];
-                        //string url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + "100-000256";
+                        //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/customer_lplp?customer_uid=" + (string)Application.Current.Properties["user_id"];
+                        //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + (string)Application.Current.Properties["user_id"];
+                        //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + "100-000256";
                         Console.WriteLine("url: " + url);
                         request.RequestUri = new Uri(url);
-                        //request.RequestUri = new Uri("https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/get_delivery_info/400-000453");
+                        //request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/get_delivery_info/400-000453");
                         request.Method = HttpMethod.Get;
                         var client = new HttpClient();
                         HttpResponseMessage response = await client.SendAsync(request);
@@ -292,9 +305,9 @@ namespace MTYD
 
                             if (userString.ToString()[0] != '{')
                             {
-                                url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
+                                url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
                                 //old db
-                                //url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
+                                //url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
                                 var request3 = new HttpRequestMessage();
                                 request3.RequestUri = new Uri(url);
                                 request3.Method = HttpMethod.Get;
@@ -343,10 +356,10 @@ namespace MTYD
                             if ((info_obj2["result"]).ToString() == "[]" || (info_obj2["result"]).ToString() == "204")
                             {
 
-                                url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
+                                url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
 
                                 //old db
-                                //url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
+                                //url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
                                 var request3 = new HttpRequestMessage();
                                 request3.RequestUri = new Uri(url);
                                 request3.Method = HttpMethod.Get;
@@ -373,10 +386,10 @@ namespace MTYD
                             }
                             else
                             {
-                                url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
+                                url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
 
                                 //old db
-                                //url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
+                                //url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
                                 var request3 = new HttpRequestMessage();
                                 request3.RequestUri = new Uri(url);
                                 request3.Method = HttpMethod.Get;
@@ -671,14 +684,14 @@ namespace MTYD
                             //check to see if user has already selected a meal plan before
                             var request2 = new HttpRequestMessage();
                             Console.WriteLine("user_id: " + (string)Application.Current.Properties["user_id"]);
-                            string url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/customer_lplp?customer_uid=" + (string)Application.Current.Properties["user_id"];
+                            string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/customer_lplp?customer_uid=" + (string)Application.Current.Properties["user_id"];
 
                             //old db
-                            //string url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/customer_lplp?customer_uid=" + (string)Application.Current.Properties["user_id"]; 
-                            //string url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + (string)Application.Current.Properties["user_id"];
-                            //string url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + "100-000256";
+                            //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/customer_lplp?customer_uid=" + (string)Application.Current.Properties["user_id"]; 
+                            //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + (string)Application.Current.Properties["user_id"];
+                            //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + "100-000256";
                             request2.RequestUri = new Uri(url);
-                            //request.RequestUri = new Uri("https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/get_delivery_info/400-000453");
+                            //request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/get_delivery_info/400-000453");
                             request2.Method = HttpMethod.Get;
                             var client2 = new HttpClient();
                             HttpResponseMessage response = await client.SendAsync(request2);
@@ -693,10 +706,10 @@ namespace MTYD
 
                                 if (userString.ToString()[0] != '{')
                                 {
-                                    url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
+                                    url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
 
                                     //old db
-                                    //url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
+                                    //url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
                                     var request3 = new HttpRequestMessage();
                                     request3.RequestUri = new Uri(url);
                                     request3.Method = HttpMethod.Get;
@@ -732,10 +745,10 @@ namespace MTYD
                                 //check if the user hasn't entered any info before, if so put in the placeholders
                                 if ((info_obj["result"]).ToString() == "[]")
                                 {
-                                    url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
+                                    url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
 
                                     //old db
-                                    //url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
+                                    //url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
                                     var request3 = new HttpRequestMessage();
                                     request3.RequestUri = new Uri(url);
                                     request3.Method = HttpMethod.Get;
@@ -759,10 +772,10 @@ namespace MTYD
                                 }
                                 else
                                 {
-                                    url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
+                                    url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
 
                                     //old db
-                                    //url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
+                                    //url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
                                     var request3 = new HttpRequestMessage();
                                     request3.RequestUri = new Uri(url);
                                     request3.Method = HttpMethod.Get;
@@ -1001,13 +1014,13 @@ namespace MTYD
                             //check to see if user has already selected a meal plan before
                             var request2 = new HttpRequestMessage();
                             Console.WriteLine("user_id: " + (string)Application.Current.Properties["user_id"]);
-                            string url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/customer_lplp?customer_uid=" + (string)Application.Current.Properties["user_id"];
+                            string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/customer_lplp?customer_uid=" + (string)Application.Current.Properties["user_id"];
                             //old db
-                            //string url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/customer_lplp?customer_uid=" + (string)Application.Current.Properties["user_id"];
-                            //string url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + (string)Application.Current.Properties["user_id"];
-                            //string url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + "100-000256";
+                            //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/customer_lplp?customer_uid=" + (string)Application.Current.Properties["user_id"];
+                            //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + (string)Application.Current.Properties["user_id"];
+                            //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + "100-000256";
                             request2.RequestUri = new Uri(url);
-                            //request.RequestUri = new Uri("https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/get_delivery_info/400-000453");
+                            //request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/get_delivery_info/400-000453");
                             request2.Method = HttpMethod.Get;
                             var client2 = new HttpClient();
                             HttpResponseMessage response = await client.SendAsync(request2);
@@ -1023,9 +1036,9 @@ namespace MTYD
                                 //testing for if the user only has serving fresh stuff
                                 if (userString.ToString()[0] != '{')
                                 {
-                                    url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
+                                    url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
                                     //old db
-                                    //url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
+                                    //url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
                                     var request3 = new HttpRequestMessage();
                                     request3.RequestUri = new Uri(url);
                                     request3.Method = HttpMethod.Get;
@@ -1092,10 +1105,10 @@ namespace MTYD
                                 //check if the user hasn't entered any info before, if so put in the placeholders
                                 if ((info_obj["result"]).ToString() == "[]" || (info_obj["result"]).ToString() == "204")
                                 {
-                                    url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
+                                    url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
 
                                     //old db
-                                    //url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
+                                    //url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
                                     var request3 = new HttpRequestMessage();
                                     request3.RequestUri = new Uri(url);
                                     request3.Method = HttpMethod.Get;
@@ -1136,10 +1149,10 @@ namespace MTYD
                                 }
                                 else
                                 {
-                                    url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
+                                    url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
 
                                     //old db
-                                    //url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
+                                    //url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
                                     var request3 = new HttpRequestMessage();
                                     request3.RequestUri = new Uri(url);
                                     request3.Method = HttpMethod.Get;
@@ -1262,8 +1275,8 @@ namespace MTYD
 
         async void clickedForgotPass(System.Object sender, System.EventArgs e)
         {
-            //reset password (get): https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/reset_password?email=welks@gmail.com
-            //change password (post): https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_password
+            //reset password (get): https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/reset_password?email=welks@gmail.com
+            //change password (post): https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_password
 
             if (loginUsername.Text == "" || loginUsername.Text == null)
             {
@@ -1273,7 +1286,7 @@ namespace MTYD
             //if endpoint returns email not found, display an alert
             else
             {
-                string url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/reset_password?email=" + loginUsername.Text;
+                string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/reset_password?email=" + loginUsername.Text;
                 var request = new HttpRequestMessage();
                 request.RequestUri = new Uri(url);
                 request.Method = HttpMethod.Get;
@@ -1305,10 +1318,10 @@ namespace MTYD
 
         async public void getProfileInfo()
         {
-            string url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
+            string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
 
             //old db
-            //string url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
+            //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
             Debug.WriteLine("getProfileInfo url: " + url);
             var request3 = new HttpRequestMessage();
             request3.RequestUri = new Uri(url);

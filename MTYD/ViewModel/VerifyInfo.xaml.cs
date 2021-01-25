@@ -281,11 +281,11 @@ namespace MTYD.ViewModel
             var content = new StringContent(newPaymentJSONString, Encoding.UTF8, "application/json");
             Console.WriteLine("Content: " + content);
             /*var request = new HttpRequestMessage();
-            request.RequestUri = new Uri("https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/checkout");
+            request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/checkout");
             request.Method = HttpMethod.Post;
             request.Content = content;*/
             var client = new System.Net.Http.HttpClient();
-            var response = await client.PostAsync("https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/checkout", content);
+            var response = await client.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/checkout", content);
             // HttpResponseMessage response = await client.SendAsync(request);
             if (response.IsSuccessStatusCode)
             {
@@ -399,7 +399,58 @@ namespace MTYD.ViewModel
             try
             {
                 //-----------validate address start
-                    if (cardHolderAddress.Text == null)
+                    if (cardHolderName.Text == null)
+                    {
+                        await DisplayAlert("Error", "Please enter your name", "OK");
+                        return;
+                    }
+
+                if (cardHolderEmail.Text == null)
+                {
+                    await DisplayAlert("Error", "Please enter your email", "OK");
+                    return;
+                }
+
+                if (cardHolderNumber.Text == null || cardHolderNumber.Text.Length != 16)
+                {
+                    await DisplayAlert("Error", "invalid credit card number", "OK");
+                    return;
+                }
+
+                if (cardExpMonth.Text == null)
+                {
+                    await DisplayAlert("Error", "Please enter your cc expiration month", "OK");
+                    return;
+                }
+                else if (cardExpMonth.Text.Length < 2)
+                {
+                    await DisplayAlert("Error", "invalid month", "OK");
+                    return;
+                }
+
+                if (cardExpYear.Text == null)
+                {
+                    await DisplayAlert("Error", "Please enter your cc expiration year", "OK");
+                    return;
+                }
+                else if (cardExpYear.Text.Length < 2)
+                {
+                    await DisplayAlert("Error", "invalid year", "OK");
+                    return;
+                }
+
+                if (cardCVV.Text == null)
+                {
+                    await DisplayAlert("Error", "Please enter your CVV", "OK");
+                    return;
+                }
+                else if (cardCVV.Text.Length < 3)
+                {
+                    await DisplayAlert("Error", "invalid CVV", "OK");
+                    return;
+                }
+
+                if (cardHolderAddress.Text == null)
                     {
                         await DisplayAlert("Error", "Please enter your address", "OK");
                     }
@@ -528,7 +579,7 @@ namespace MTYD.ViewModel
 
                         if (xdocAddress != cardHolderAddress.Text.ToUpper().Trim())
                         {
-                            DisplayAlert("heading", "changing address", "ok");
+                            //DisplayAlert("heading", "changing address", "ok");
                             cardHolderAddress.Text = xdocAddress;
                         }
 
@@ -538,7 +589,7 @@ namespace MTYD.ViewModel
 
                         if (xdocAddress != cardState.Text.ToUpper().Trim())
                         {
-                            DisplayAlert("heading", "changing state", "ok");
+                            //DisplayAlert("heading", "changing state", "ok");
                             cardState.Text = xdocState;
                         }
 
@@ -697,7 +748,10 @@ namespace MTYD.ViewModel
 
                             Debug.WriteLine("STRIPE PAYMENT WAS SUCCESSFUL");
                             //Preferences.Set("price", "00.00");
-                            await DisplayAlert("Payment Completed", "Your payment was successful. Press 'CONTINUE' to select your meals!", "OK");
+                            DisplayAlert("Payment Completed", "Your payment was successful. Press 'CONTINUE' to select your meals!", "OK");
+                            //when purchasing a first meal, might not send to endpoint on time when clicking the continue button as fast as possible, resulting in error on select pg
+                            //wait half a second
+                            Task.Delay(500).Wait();
                             if ((string)Application.Current.Properties["platform"] == "DIRECT")
                             {
                                 spacer6.IsVisible = true;
@@ -813,7 +867,10 @@ namespace MTYD.ViewModel
         {
             var source = Browser.Source as UrlWebViewSource;
             Debug.WriteLine("BROWSER CURRENT SOURCE: " + source.Url);
-            if (source.Url == "https://servingfresh.me/")
+            //old link used to check: https://servingfresh.me/
+            //m4me link: https://mealtoyourdoor.netlify.app/home
+            //paypal check info: Card Type: Visa. Card Number: 4032031027352565 Expiration Date: 02/2024 CVV: 154
+            if (source.Url == "https://mealtoyourdoor.netlify.app/home" )
             {
                 PaymentScreen.HeightRequest = 0;
                 PaymentScreen.Margin = new Thickness(0, 0, 0, 0);
@@ -915,8 +972,8 @@ namespace MTYD.ViewModel
                 },
                 ApplicationContext = new ApplicationContext()
                 {
-                    ReturnUrl = "https://servingfresh.me",
-                    CancelUrl = "https://servingfresh.me"
+                    ReturnUrl = "https://mealtoyourdoor.netlify.app/home",
+                    CancelUrl = "https://mealtoyourdoor.netlify.app/home"
                 }
             };
 

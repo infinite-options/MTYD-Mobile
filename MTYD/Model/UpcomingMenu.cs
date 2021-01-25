@@ -7,7 +7,7 @@ using Newtonsoft.Json.Converters;
 
 namespace MTYD.Model
 {
-    // Model for Upcoming Menu https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/upcoming_menu 
+    // Model for Upcoming Menu https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/upcoming_menu 
     public partial class UpcomingMenu
     {
         [JsonProperty("message")]

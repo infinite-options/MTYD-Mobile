@@ -27,6 +27,7 @@ namespace MTYD.ViewModel
         public string salt;
         string fullName; string emailAddress;
         public bool isAddessValidated = false;
+        bool withinZones = false;
 
         protected async Task setPaymentInfo()
         {
@@ -86,11 +87,11 @@ namespace MTYD.ViewModel
             var content = new StringContent(newPaymentJSONString, Encoding.UTF8, "application/json");
             Console.WriteLine("Content: " + content);
             /*var request = new HttpRequestMessage();
-            request.RequestUri = new Uri("https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/checkout");
+            request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/checkout");
             request.Method = HttpMethod.Post;
             request.Content = content;*/
             var client = new HttpClient();
-            var response = client.PostAsync("https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/checkout", content);
+            var response = client.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/checkout", content);
             // HttpResponseMessage response = await client.SendAsync(request);
             Console.WriteLine("RESPONSE TO CHECKOUT   " + response.Result);
             Console.WriteLine("CHECKOUT JSON OBJECT BEING SENT: " + newPaymentJSONString);
@@ -103,10 +104,10 @@ namespace MTYD.ViewModel
             Console.WriteLine("fillEntries entered");
             var request = new HttpRequestMessage();
             Console.WriteLine("user_id: " + (string)Application.Current.Properties["user_id"]);
-            string url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + (string)Application.Current.Properties["user_id"];
-            //string url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + "100-000256";
+            string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + (string)Application.Current.Properties["user_id"];
+            //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + "100-000256";
             request.RequestUri = new Uri(url);
-            //request.RequestUri = new Uri("https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/get_delivery_info/400-000453");
+            //request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/get_delivery_info/400-000453");
             request.Method = HttpMethod.Get;
             var client = new HttpClient();
             HttpResponseMessage response = await client.SendAsync(request);
@@ -130,7 +131,7 @@ namespace MTYD.ViewModel
                 if ((info_obj["result"]).ToString() == "[]")
                 {
                     Console.WriteLine("no info");
-                    url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
+                    url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
                     Debug.WriteLine("getProfileInfo url: " + url);
                     var request3 = new HttpRequestMessage();
                     request3.RequestUri = new Uri(url);
@@ -548,6 +549,30 @@ namespace MTYD.ViewModel
                         //map.MoveToRegion(mapSpan);
                         //map.Pins.Add(address);
 
+                        //https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/categoricalOptions/-121.8866517,37.2270928 long,lat
+                        var request3 = new HttpRequestMessage();
+                        Console.WriteLine("user_id: " + (string)Application.Current.Properties["user_id"]);
+                        Debug.WriteLine("latitude: " + latitude + ", longitude: " + longitude);
+                        string url3 = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/categoricalOptions/" + longitude + "," + latitude;
+                        request3.RequestUri = new Uri(url3);
+                        request3.Method = HttpMethod.Get;
+                        var client3 = new HttpClient();
+                        HttpResponseMessage response3 = await client3.SendAsync(request3);
+
+                        if (response3.StatusCode == System.Net.HttpStatusCode.OK)
+                        {
+                            HttpContent content3 = response3.Content;
+                            Console.WriteLine("content: " + content3);
+                            var userString3 = await content3.ReadAsStringAsync();
+                            Debug.WriteLine("userString3: " + userString3);
+                            JObject info_obj3 = JObject.Parse(userString3);
+                            if (info_obj3["result"].ToString() == "[]")
+                            {
+                                withinZones = false;
+                            }
+                            else withinZones = true;
+                        }
+
                         break;
                     }
                     else if (GetXMLElement(element, "DPVConfirmation").Equals("D"))
@@ -572,6 +597,10 @@ namespace MTYD.ViewModel
             {
                 await DisplayAlert("We couldn't find your address", "Please check for errors.", "Ok");
             }
+            else if (withinZones == false)
+            {
+                await DisplayAlert("Invalid Address", "Address is not within any of our delivery zones.", "OK");
+            }
             else
             {
                 int startIndex = xdoc.ToString().IndexOf("<Address2>") + 10;
@@ -583,7 +612,7 @@ namespace MTYD.ViewModel
 
                 if (xdocAddress != AddressEntry.Text.ToUpper().Trim())
                 {
-                    DisplayAlert("heading", "changing address", "ok");
+                    //DisplayAlert("heading", "changing address", "ok");
                     AddressEntry.Text = xdocAddress;
                 }
 
@@ -593,7 +622,7 @@ namespace MTYD.ViewModel
 
                 if (xdocAddress != StateEntry.Text.ToUpper().Trim())
                 {
-                    DisplayAlert("heading", "changing state", "ok");
+                    //DisplayAlert("heading", "changing state", "ok");
                     StateEntry.Text = xdocState;
                 }
 
@@ -688,17 +717,6 @@ namespace MTYD.ViewModel
                 return;
             }
 
-            if (StateEntry.Text == null || StateEntry.Text == "")
-            {
-                DisplayAlert("Warning!", "state required", "okay");
-                return;
-            }
-
-            if (ZipEntry.Text == null || ZipEntry.Text == "")
-            {
-                DisplayAlert("Warning!", "address zip code required", "okay");
-                return;
-            }
 
             if (PhoneEntry.Text == null || PhoneEntry.Text == "")
             {

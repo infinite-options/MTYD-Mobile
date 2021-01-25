@@ -155,7 +155,7 @@ namespace MTYD
             }
             else
             {
-                await DisplayAlert("Error", "Please your first name.", "OK");
+                await DisplayAlert("Error", "Please enter your first name.", "OK");
             }
 
             if (LNameEntry.Text != null)
@@ -164,7 +164,7 @@ namespace MTYD
             }
             else
             {
-                await DisplayAlert("Error", "Please your first name.", "OK");
+                await DisplayAlert("Error", "Please enter your last name.", "OK");
             }
 
             if (AddressEntry.Text != null)
@@ -214,7 +214,7 @@ namespace MTYD
             }
             else
             {
-                await DisplayAlert("Error", "Please enter your zipcode", "OK");
+                await DisplayAlert("Error", "Please enter your phone number", "OK");
             }
 
             if (directSignUp.unit == null)
@@ -414,7 +414,7 @@ namespace MTYD
                         System.Diagnostics.Debug.WriteLine("Time Stamp is:" + Application.Current.Properties["time_stamp"].ToString());
                         System.Diagnostics.Debug.WriteLine("platform is:" + (string)Application.Current.Properties["platform"]);
 
-                        string url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
+                        string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
                         var request3 = new HttpRequestMessage();
                         request3.RequestUri = new Uri(url);
                         request3.Method = HttpMethod.Get;
@@ -435,7 +435,7 @@ namespace MTYD
                         var emailVerSerializedObj = JsonConvert.SerializeObject(emailVer);
                         var content4 = new StringContent(emailVerSerializedObj, Encoding.UTF8, "application/json");
                         var client3 = new HttpClient();
-                        var response3 = client3.PostAsync("https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/email_verification", content4);
+                        var response3 = client3.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/email_verification", content4);
                         Console.WriteLine("RESPONSE TO CHECKOUT   " + response3.Result);
                         Console.WriteLine("CHECKOUT JSON OBJECT BEING SENT: " + emailVerSerializedObj);
 

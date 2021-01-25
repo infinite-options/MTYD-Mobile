@@ -68,10 +68,10 @@ namespace MTYD.ViewModel
         public static ObservableCollection<MealInfo> Meals1 = new ObservableCollection<MealInfo>();
         public static ObservableCollection<MealInfo> Meals2 = new ObservableCollection<MealInfo>();
         public static string userId = (string)Application.Current.Properties["user_id"];
-        private string postUrl = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selection?customer_uid=" + userId;
-        private const string menuUrl = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/upcoming_menu";
-        private string userMeals = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + userId;
-        //private const string userMeals = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=100-000001";
+        private string postUrl = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selection?customer_uid=" + userId;
+        private const string menuUrl = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/upcoming_menu";
+        private string userMeals = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + userId;
+        //private const string userMeals = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=100-000001";
         private static Dictionary<string, string> qtyDict = new Dictionary<string, string>();
         private static Dictionary<string, string> qtyDict_addon = new Dictionary<string, string>();
         private static List<MealInformation> mealsSaved = new List<MealInformation>();
@@ -251,7 +251,7 @@ namespace MTYD.ViewModel
             Console.WriteLine("newPaymentJSONString" + newPaymentJSONString);
             var content = new StringContent(newPaymentJSONString, Encoding.UTF8, "application/json");
             var request = new HttpRequestMessage();
-            request.RequestUri = new Uri("https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/checkout");
+            request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/checkout");
             request.Method = HttpMethod.Post;
             request.Content = content;
             var client = new HttpClient();
@@ -1091,8 +1091,8 @@ namespace MTYD.ViewModel
             string userID = (string)Application.Current.Properties["user_id"];
             Console.WriteLine("Inside GET MEAL PLANS: User ID:  " + userID);
 
-            request.RequestUri = new Uri("https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/customer_lplp?customer_uid=" + userID);
-            Console.WriteLine("GET MEALS PLAN ENDPOINT TRYING TO BE REACHED: " + "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/customer_lplp?customer_uid=" + userID);
+            request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/customer_lplp?customer_uid=" + userID);
+            Console.WriteLine("GET MEALS PLAN ENDPOINT TRYING TO BE REACHED: " + "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/customer_lplp?customer_uid=" + userID);
             request.Method = HttpMethod.Get;
             var client = new HttpClient();
             HttpResponseMessage response = await client.SendAsync(request);
@@ -1583,7 +1583,7 @@ namespace MTYD.ViewModel
             string purchaseID = Preferences.Get("purchId", "");
             string date = Preferences.Get("dateSelected", "");
             string userID = (string)Application.Current.Properties["user_id"];
-            string halfUrl = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected_specific?customer_uid=" + userID;
+            string halfUrl = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected_specific?customer_uid=" + userID;
             string urlSent = halfUrl + "&purchase_id=" + purchaseID + "&menu_date=" + date;
             Console.WriteLine("URL ENDPOINT TRYING TO BE REACHED:" + urlSent);
             request.RequestUri = new Uri(halfUrl + "&purchase_id=" + purchaseID + "&menu_date=" + date);
@@ -1779,7 +1779,7 @@ namespace MTYD.ViewModel
             string purchaseID = Preferences.Get("purchId", "");
             string date = Preferences.Get("dateSelected", "");
             string userID = (string)Application.Current.Properties["user_id"];
-            string halfUrl = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected_specific?customer_uid=" + userID;
+            string halfUrl = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected_specific?customer_uid=" + userID;
             string urlSent = halfUrl + "&purchase_id=" + purchaseID + "&menu_date=" + date;
             Console.WriteLine("URL ENDPOINT TRYING TO BE REACHED:" + urlSent);
             request.RequestUri = new Uri(halfUrl + "&purchase_id=" + purchaseID + "&menu_date=" + date);

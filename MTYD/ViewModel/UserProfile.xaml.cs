@@ -16,6 +16,7 @@ using System.Security.Cryptography;
 using System.Xml.Linq;
 using System.Net;
 using Xamarin.Forms.Maps;
+using System.Diagnostics;
 
 namespace MTYD.ViewModel
 {
@@ -28,8 +29,11 @@ namespace MTYD.ViewModel
         ArrayList purchIdArray = new ArrayList();
         ArrayList namesArray = new ArrayList();
         JObject info_obj;
+        JObject info_obj2;
         string cust_firstName; string cust_lastName; string cust_email;
         public bool isAddessValidated = false;
+        bool withinZones = false;
+        bool socialMediaLogin = false;
 
         public UserProfile(string firstName, string lastName, string email)
         {
@@ -179,11 +183,11 @@ namespace MTYD.ViewModel
         {
             var request = new HttpRequestMessage();
             Console.WriteLine("user_id: " + (string)Application.Current.Properties["user_id"]);
-            string url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
-            //string url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + (string)Application.Current.Properties["user_id"];
-            //string url = "https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + "100-000256";
+            string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
+            //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + (string)Application.Current.Properties["user_id"];
+            //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + "100-000256";
             request.RequestUri = new Uri(url);
-            //request.RequestUri = new Uri("https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/get_delivery_info/400-000453");
+            //request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/get_delivery_info/400-000453");
             request.Method = HttpMethod.Get;
             var client = new HttpClient();
             HttpResponseMessage response = await client.SendAsync(request);
@@ -211,8 +215,14 @@ namespace MTYD.ViewModel
                     divider5.IsVisible = false;
                     Email.IsVisible = false;
                     confirmEmail.IsVisible = false;
+
+                    socialMediaLogin = true;
                 }
-                else emailEntry.Text = (info_obj["result"])[0]["customer_email"].ToString();
+                else
+                {
+                    emailEntry.Text = (info_obj["result"])[0]["customer_email"].ToString();
+                    socialMediaLogin = false;
+                }
 
                 FNameEntry.Text = (info_obj["result"])[0]["customer_first_name"].ToString();
                 LNameEntry.Text = (info_obj["result"])[0]["customer_last_name"].ToString();
@@ -244,6 +254,52 @@ namespace MTYD.ViewModel
 
         async void clickedSave(System.Object sender, System.EventArgs e)
         {
+            if (isAddessValidated != true)
+            {
+                await DisplayAlert("Error", "please validate your address first", "OK");
+                return;
+            }
+
+            if (FNameEntry.Text == null)
+            {
+                await DisplayAlert("Error", "Please enter your first name", "OK");
+                return;
+            }
+
+            if (LNameEntry.Text == null)
+            {
+                await DisplayAlert("Error", "Please enter your last name", "OK");
+                return;
+            }
+            
+
+            if (PhoneEntry.Text == null)
+            {
+                await DisplayAlert("Error", "Please enter your phone number", "OK");
+                return;
+            }
+
+            if (socialMediaLogin == false)
+            {
+                if (emailEntry.Text == null)
+                {
+                    await DisplayAlert("Error", "Please enter your email address", "OK");
+                    return;
+                }
+
+                if (confirmEmailEntry.Text == null)
+                {
+                    await DisplayAlert("Error", "Please re-enter your email address", "OK");
+                    return;
+                }
+                else if (confirmEmailEntry.Text.Trim() != emailEntry.Text)
+                {
+                    await DisplayAlert("Error", "emails don't match", "OK");
+                    return;
+                }
+            }
+
+
             ProfileInfo profileUpdate = new ProfileInfo();
 
             //uid, first_name, last_name, phone, email, address, unit, city, state, zip, noti
@@ -265,7 +321,7 @@ namespace MTYD.ViewModel
             var content2 = new StringContent(newPaymentJSONString, Encoding.UTF8, "application/json");
             Console.WriteLine("Content: " + content2);
             var client = new HttpClient();
-            var response = client.PostAsync("https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/UpdateProfile", content2);
+            var response = client.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/UpdateProfile", content2);
             Console.WriteLine("RESPONSE TO CHECKOUT   " + response.Result);
             Console.WriteLine("CHECKOUT JSON OBJECT BEING SENT: " + newPaymentJSONString);
             Console.WriteLine("clickedSave Func ENDED!");
@@ -285,7 +341,17 @@ namespace MTYD.ViewModel
             string hashedPassword = BitConverter.ToString(data).Replace("-", string.Empty).ToLower(); // convert hash to hex
             //passwordUpdate.old_password = hashedPassword;
 
-            if (passwordEntry.Text == confirmPasswordEntry.Text)
+            if (passwordEntry.Text == null)
+            {
+                await DisplayAlert("Error", "Please enter your new password", "OK");
+                return;
+            }
+            else if (confirmPasswordEntry.Text == null)
+            {
+                await DisplayAlert("Error", "Please re-enter your new password", "OK");
+                return;
+            }
+            else if (passwordEntry.Text == confirmPasswordEntry.Text)
             {
                 //passwordUpdate.old_password = Preferences.Get("hashed_password", "");
                 passwordUpdate.old_password = Preferences.Get("user_password", "");
@@ -296,7 +362,7 @@ namespace MTYD.ViewModel
                 var content2 = new StringContent(newPaymentJSONString, Encoding.UTF8, "application/json");
                 Console.WriteLine("Content: " + content2);
                 var client = new HttpClient();
-                var response = client.PostAsync("https://kur4j57ved.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_password", content2);
+                var response = client.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_password", content2);
                 DisplayAlert("Success", "password updated!", "close");
                 Console.WriteLine("RESPONSE TO CHECKOUT   " + response.Result);
                 Console.WriteLine("CHECKOUT JSON OBJECT BEING SENT: " + newPaymentJSONString);
@@ -360,21 +426,25 @@ namespace MTYD.ViewModel
             if (AddressEntry.Text == null)
             {
                 await DisplayAlert("Error", "Please enter your address", "OK");
+                return;
             }
 
             if (CityEntry.Text == null)
             {
                 await DisplayAlert("Error", "Please enter your city", "OK");
+                return;
             }
 
             if (StateEntry.Text == null)
             {
                 await DisplayAlert("Error", "Please enter your state", "OK");
+                return;
             }
 
             if (ZipEntry.Text == null)
             {
                 await DisplayAlert("Error", "Please enter your zipcode", "OK");
+                return;
             }
 
             //if (PhoneEntry.Text == null && PhoneEntry.Text.Length == 10)
@@ -466,6 +536,30 @@ namespace MTYD.ViewModel
                         map.MoveToRegion(mapSpan);
                         map.Pins.Add(address);
 
+                        //https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/categoricalOptions/-121.8866517,37.2270928 long,lat
+                        //var request2 = new HttpRequestMessage();
+                        //Console.WriteLine("user_id: " + (string)Application.Current.Properties["user_id"]);
+                        //Debug.WriteLine("latitude: " + latitude + ", longitude: " + longitude);
+                        //string url2 = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/categoricalOptions/" + longitude + "," + latitude;
+                        //request2.RequestUri = new Uri(url2);
+                        //request2.Method = HttpMethod.Get;
+                        //var client2 = new HttpClient();
+                        //HttpResponseMessage response2 = await client2.SendAsync(request2);
+
+                        //if (response2.StatusCode == System.Net.HttpStatusCode.OK)
+                        //{
+                        //    HttpContent content2 = response2.Content;
+                        //    Console.WriteLine("content: " + content2);
+                        //    var userString2 = await content2.ReadAsStringAsync();
+                        //    Debug.WriteLine("userString2: " + userString2);
+                        //    info_obj2 = JObject.Parse(userString2);
+                        //    if (info_obj2["result"].ToString() == "[]")
+                        //    {
+                        //        withinZones = false;
+                        //    }
+                        //    else withinZones = true;
+                        //}
+
                         break;
                     }
                     else if (GetXMLElement(element, "DPVConfirmation").Equals("D"))
@@ -490,6 +584,10 @@ namespace MTYD.ViewModel
             {
                 await DisplayAlert("We couldn't find your address", "Please check for errors.", "Ok");
             }
+            //else if (withinZones == false)
+            //{
+            //    await DisplayAlert("Invalid Address", "Address is not within any of our delivery zones.", "OK");
+            //}
             else
             {
                 int startIndex = xdoc.ToString().IndexOf("<Address2>") + 10;
