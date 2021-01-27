@@ -366,6 +366,9 @@ namespace MTYD.ViewModel
             Debug.WriteLine("STRIPE AMOUNT TO PAY: " + total);
             if (total != "00.00")
             {
+                headingGrid.IsVisible = false;
+                checkoutButton.IsVisible = false;
+                backButton.IsVisible = false;
                 PaymentScreen.HeightRequest = this.Height;
                 //PaymentScreen.HeightRequest = 0;
                 PaymentScreen.Margin = new Thickness(0, -PaymentScreen.HeightRequest / 2, 0, 0);
@@ -396,6 +399,7 @@ namespace MTYD.ViewModel
         // FUNCTION  2:
         public async void PayViaStripe(System.Object sender, System.EventArgs e)
         {
+            Debug.WriteLine("PayViaStripe entered");
             try
             {
                 //-----------validate address start
@@ -714,7 +718,9 @@ namespace MTYD.ViewModel
                         CustomerCreateOptions customer = new CustomerCreateOptions();
                         customer.Name = cardHolderName.Text.Trim();
                         customer.Email = cardHolderEmail.Text.ToLower().Trim();
-                        customer.Description = cardDescription.Text.Trim();
+                        if (cardDescription.Text == "" || cardDescription.Text == null)
+                            customer.Description = "";
+                        else customer.Description = cardDescription.Text.Trim();
                         if (cardHolderUnit.Text == null)
                         {
                             cardHolderUnit.Text = "";
@@ -732,7 +738,11 @@ namespace MTYD.ViewModel
                         chargeOption.ReceiptEmail = cardHolderEmail.Text.ToLower().Trim();
                         chargeOption.Customer = cust.Id;
                         chargeOption.Source = source.Id;
-                        chargeOption.Description = cardDescription.Text.Trim();
+                        if (cardDescription.Text == "" || cardDescription.Text == null)
+                            chargeOption.Description = "";
+                        else chargeOption.Description = cardDescription.Text.Trim();
+
+                        //chargeOption.Description = cardDescription.Text.Trim();
 
                         Debug.WriteLine("step 6 reached");
                         // Step 6: charge the customer
@@ -796,6 +806,10 @@ namespace MTYD.ViewModel
         // FUNCTION  4:
         public void CancelViaStripe(System.Object sender, System.EventArgs e)
         {
+            headingGrid.IsVisible = true;
+            checkoutButton.IsVisible = true;
+            backButton.IsVisible = true;
+
             PaymentScreen.HeightRequest = 0;
             PaymentScreen.Margin = new Thickness(0, 0, 0, 0);
             StripeScreen.Height = 0;
@@ -813,6 +827,9 @@ namespace MTYD.ViewModel
             Debug.WriteLine("PAYPAL AMOUNT TO PAY: " + total);
             if (total != "00.00")
             {
+                headingGrid.IsVisible = false;
+                checkoutButton.IsVisible = false;
+                backButton.IsVisible = false;
                 PaymentScreen.HeightRequest = this.Height;
                 PaymentScreen.Margin = new Thickness(0, -PaymentScreen.HeightRequest / 2, 0, 0);
                 PayPalScreen.Height = 0;
@@ -872,6 +889,9 @@ namespace MTYD.ViewModel
             //paypal check info: Card Type: Visa. Card Number: 4032031027352565 Expiration Date: 02/2024 CVV: 154
             if (source.Url == "https://mealtoyourdoor.netlify.app/home" )
             {
+                headingGrid.IsVisible = true;
+                checkoutButton.IsVisible = true;
+                backButton.IsVisible = true;
                 PaymentScreen.HeightRequest = 0;
                 PaymentScreen.Margin = new Thickness(0, 0, 0, 0);
                 PayPalScreen.Height = 0;

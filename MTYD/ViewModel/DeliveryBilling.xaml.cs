@@ -630,13 +630,17 @@ namespace MTYD.ViewModel
                 await DisplayAlert("We validated your address", "Please click on the Sign up button to create your account!", "OK");
                 await Application.Current.SavePropertiesAsync();
                 //await tagUser(emailEntry.Text.Trim(), ZipEntry.Text.Trim());
+
+
+                Navigation.PushAsync(new VerifyInfo(cust_firstName, cust_lastName, cust_email, AptEntry.Text, FNameEntry.Text, LNameEntry.Text, emailEntry.Text, PhoneEntry.Text, AddressEntry.Text, CityEntry.Text, StateEntry.Text, ZipEntry.Text, DeliveryEntry.Text, "", "", "", salt));
+
             }
 
             //-------------validate address end
 
 
-
-            Navigation.PushAsync(new VerifyInfo(cust_firstName, cust_lastName, cust_email, AptEntry.Text, FNameEntry.Text, LNameEntry.Text, emailEntry.Text, PhoneEntry.Text, AddressEntry.Text, CityEntry.Text, StateEntry.Text, ZipEntry.Text, DeliveryEntry.Text, "", "", "", salt));
+            //old spot for navigation
+            //Navigation.PushAsync(new VerifyInfo(cust_firstName, cust_lastName, cust_email, AptEntry.Text, FNameEntry.Text, LNameEntry.Text, emailEntry.Text, PhoneEntry.Text, AddressEntry.Text, CityEntry.Text, StateEntry.Text, ZipEntry.Text, DeliveryEntry.Text, "", "", "", salt));
 
 
             //if (platform != "DIRECT")

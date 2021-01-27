@@ -887,6 +887,16 @@ namespace MTYD.ViewModel
             int permCount = Preferences.Get("origMax", 0);
             if (count != 0)
             {
+                //testing reseting the save button when they increase or decrease amount of meals/add-ons
+                surpriseBttn.BackgroundColor = Color.Transparent;
+                surpriseFrame.BackgroundColor = Color.Transparent;
+                surpriseBttn.TextColor = Color.Black;
+                saveBttn.BackgroundColor = Color.Transparent;
+                saveFrame.BackgroundColor = Color.Transparent;
+                saveBttn.TextColor = Color.Black;
+                skipBttn.BackgroundColor = Color.Transparent;
+                skipFrame.BackgroundColor = Color.Transparent;
+                skipBttn.TextColor = Color.Black;
                 // ======================================
                 // CARLOS PROGRESS BAR INTEGRATION
                 var width = this.Width;
@@ -983,16 +993,40 @@ namespace MTYD.ViewModel
 
         private async void clickIncreaseAddOn(object sender, EventArgs e)
         {
-                Button b = (Button)sender;
+            //testing reseting the save button when they increase or decrease amount of meals/add-ons
+            surpriseBttn.BackgroundColor = Color.Transparent;
+            surpriseFrame.BackgroundColor = Color.Transparent;
+            surpriseBttn.TextColor = Color.Black;
+            saveBttn.BackgroundColor = Color.Transparent;
+            saveFrame.BackgroundColor = Color.Transparent;
+            saveBttn.TextColor = Color.Black;
+            skipBttn.BackgroundColor = Color.Transparent;
+            skipFrame.BackgroundColor = Color.Transparent;
+            skipBttn.TextColor = Color.Black;
+
+            Button b = (Button)sender;
                 MealInfo ms = b.BindingContext as MealInfo;
                 ms.MealQuantity++;
         }
 
         private async void clickDecrease(object sender, EventArgs e)
         {
+            Button b = (Button)sender;
+            MealInfo ms = b.BindingContext as MealInfo;
             int count = Preferences.Get("total", 0);
-            if (count != Preferences.Get("origMax", 0))
+            //if meal quantity is 0, don't do anything
+            if (count != Preferences.Get("origMax", 0) && ms.MealQuantity != 0)
             {
+                //testing reseting the save button when they increase or decrease amount of meals/add-ons
+                surpriseBttn.BackgroundColor = Color.Transparent;
+                surpriseFrame.BackgroundColor = Color.Transparent;
+                surpriseBttn.TextColor = Color.Black;
+                saveBttn.BackgroundColor = Color.Transparent;
+                saveFrame.BackgroundColor = Color.Transparent;
+                saveBttn.TextColor = Color.Black;
+                skipBttn.BackgroundColor = Color.Transparent;
+                skipFrame.BackgroundColor = Color.Transparent;
+                skipBttn.TextColor = Color.Black;
                 // ======================================
                 // CARLOS PROGRESS BAR INTEGRATION
                 var width = this.Width;
@@ -1015,8 +1049,6 @@ namespace MTYD.ViewModel
                 BarParameters[0].margin = currentMargin;
                 BarParameters[0].update = currentMargin;
                 // ======================================
-                Button b = (Button)sender;
-                MealInfo ms = b.BindingContext as MealInfo;
                 if (ms.MealQuantity != 0)
                 {
                     totalCount.Text = (++count).ToString();
@@ -1076,10 +1108,21 @@ namespace MTYD.ViewModel
 
         private async void clickDecreaseAddOn(object sender, EventArgs e)
         {
-                Button b = (Button)sender;
+            Button b = (Button)sender;
                 MealInfo ms = b.BindingContext as MealInfo;
                 if (ms.MealQuantity != 0)
                 {
+                    //testing reseting the save button when they increase or decrease amount of meals/add-ons
+                    surpriseBttn.BackgroundColor = Color.Transparent;
+                    surpriseFrame.BackgroundColor = Color.Transparent;
+                    surpriseBttn.TextColor = Color.Black;
+                    saveBttn.BackgroundColor = Color.Transparent;
+                    saveFrame.BackgroundColor = Color.Transparent;
+                    saveBttn.TextColor = Color.Black;
+                    skipBttn.BackgroundColor = Color.Transparent;
+                    skipFrame.BackgroundColor = Color.Transparent;
+                    skipBttn.TextColor = Color.Black;
+
                     ms.MealQuantity--;
                 }
         }
@@ -1216,6 +1259,7 @@ namespace MTYD.ViewModel
                                 }
                                 Debug.WriteLine("add-on tracked: " + name + " amount: " + qty);
                                 qtyDict_addon.Add(name, qty);
+
                             }
 
                         }
@@ -1295,9 +1339,11 @@ namespace MTYD.ViewModel
                     Console.WriteLine("line 302 " + jsonMeals);
                     postData();
                     addOnSelected = false;
+                    DisplayAlert("Selection Saved", "You will be charged for your add-ons on 1/1/2021.", "OK");
                 }
+                else DisplayAlert("Selection Saved", "You've successfully saved your meal selection.", "OK");
                 addOnSelected = false;
-                DisplayAlert("Selection Saved", "You've successfully saved your meal selection.", "OK");
+                //DisplayAlert("Selection Saved", "You've successfully saved your meal selection.", "OK");
                 saveBttn.BackgroundColor = Color.Transparent;
                 saveBttn.TextColor = Color.Black;
             }

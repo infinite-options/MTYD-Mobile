@@ -157,15 +157,15 @@
 
             </StackLayout>
 
-        <BoxView x:Name="fade" BackgroundColor="White" Opacity="0.6" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"/>
+        <BoxView x:Name="fade" BackgroundColor="White" Opacity="0.6" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" IsVisible="false"/>
 
-            <Grid x:Name="DiscountGrid" VerticalOptions="Start">
+            <Grid x:Name="DiscountGrid" VerticalOptions="Start" IsVisible="false">
                <BoxView x:Name="outerFrame" Color="#FFBA00" CornerRadius="25" />
                <BoxView x:Name="innerFrame" Color="White" CornerRadius="24" Margin="5"/>
 
                <StackLayout>
 
-                   <Button x:Name="xButton" Text="X" FontAttributes="Bold" TextColor="#FFBA00" HorizontalOptions="End" Margin="0,5,15,0" Clicked="clickedX"/>
+                   <Button x:Name="xButton" Text="x" FontAttributes="Bold" TextColor="#FFBA00" HorizontalOptions="End" Margin="0,5,15,0" Clicked="clickedX"/>
 
                    <Label x:Name="discHeader" Text="Our Special Discounts" FontAttributes="Bold" Margin="15,0,0,0"/>
                    <BoxView HeightRequest="5"/>

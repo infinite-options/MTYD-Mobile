@@ -167,7 +167,8 @@ namespace MTYD.Model.Login.LoginClasses.Apple
             {
                 if (responseContent != null)
                 {
-                    if (responseContent.Contains(Constant.EmailNotFound))
+                    var data5 = JsonConvert.DeserializeObject<SuccessfulSocialLogIn>(responseContent);
+                    if (data5.code.ToString() == Constant.EmailNotFound)
                     {
                         var signUp = await Application.Current.MainPage.DisplayAlert("Message", "It looks like you don't have a MTYD account. Please sign up!", "OK", "Cancel");
                         if (signUp)
@@ -178,7 +179,7 @@ namespace MTYD.Model.Login.LoginClasses.Apple
                             Application.Current.MainPage = new CarlosSocialSignUp(appleId, userName, "", appleUserEmail, appleToken, appleToken, "APPLE");
                         }
                     }
-                    if (responseContent.Contains(Constant.AutheticatedSuccesful))
+                    else if (data5.code.ToString() == Constant.AutheticatedSuccesful)
                     {
                         var data = JsonConvert.DeserializeObject<SuccessfulSocialLogIn>(responseContent);
                         Application.Current.Properties["user_id"] = data.result[0].customer_uid;
@@ -326,13 +327,13 @@ namespace MTYD.Model.Login.LoginClasses.Apple
                             await Application.Current.MainPage.DisplayAlert("Oops", "We are facing some problems with our internal system. We weren't able to update your credentials", "OK");
                         }
                     }
-                    if (responseContent.Contains(Constant.ErrorPlatform))
+                    else if (data5.code.ToString() == Constant.ErrorPlatform)
                     {
                         var RDSCode = JsonConvert.DeserializeObject<RDSLogInMessage>(responseContent);
                         await Application.Current.MainPage.DisplayAlert("Message", RDSCode.message, "OK");
                     }
 
-                    if (responseContent.Contains(Constant.ErrorUserDirectLogIn))
+                    else if (data5.code.ToString() == Constant.ErrorUserDirectLogIn)
                     {
                         await Application.Current.MainPage.DisplayAlert("Oops!", "You have an existing MTYD account. Please use direct login", "OK");
                     }

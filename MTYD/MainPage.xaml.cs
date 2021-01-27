@@ -631,8 +631,9 @@ namespace MTYD
             {
                 if (responseContent != null)
                 {
+                    var data5 = JsonConvert.DeserializeObject<SuccessfulSocialLogIn>(responseContent);
                     // Do I don't have the email in RDS
-                    if (responseContent.Contains(Constant.EmailNotFound))
+                    if (data5.code.ToString() == Constant.EmailNotFound)
                     {
                         //testing with loading page
                         Application.Current.MainPage = new MainPage();
@@ -655,7 +656,7 @@ namespace MTYD
 
 
                     // if Response content contains 200
-                    if (responseContent.Contains(Constant.AutheticatedSuccesful))
+                    else if (data5.code.ToString() == Constant.AutheticatedSuccesful)
                     {
                         var data = JsonConvert.DeserializeObject<SuccessfulSocialLogIn>(responseContent);
                         Application.Current.Properties["user_id"] = data.result[0].customer_uid;  // converts RDS data into appication data.
@@ -813,7 +814,7 @@ namespace MTYD
                     }
 
                     // Wrong Platform message
-                    if (responseContent.Contains(Constant.ErrorPlatform))
+                    else if (data5.code.ToString() == Constant.ErrorPlatform)
                     {
                         //testing with loading page
                         Application.Current.MainPage = new MainPage();
@@ -824,7 +825,7 @@ namespace MTYD
 
 
                     // Wrong LOGIN method message
-                    if (responseContent.Contains(Constant.ErrorUserDirectLogIn))
+                    else if (data5.code.ToString() == Constant.ErrorUserDirectLogIn)
                     {
                         //testing with loading page
                         Application.Current.MainPage = new MainPage();
@@ -848,15 +849,6 @@ namespace MTYD
 
             await DisplayAlert("Authentication error: ", e.Message, "OK");
         }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -965,7 +957,9 @@ namespace MTYD
             {
                 if (responseContent != null)
                 {
-                    if (responseContent.Contains(Constant.EmailNotFound))
+                    var data5 = JsonConvert.DeserializeObject<SuccessfulSocialLogIn>(responseContent);
+                    //if (responseContent.Contains(Constant.EmailNotFound))
+                    if (data5.code.ToString() == Constant.EmailNotFound)
                     {
                         //testing with loading page
                         Application.Current.MainPage = new MainPage();
@@ -980,7 +974,8 @@ namespace MTYD
                             Application.Current.MainPage = new CarlosSocialSignUp(googleData.id, googleData.given_name, googleData.family_name, googleData.email, accessToken, refreshToken, "GOOGLE");
                         }
                     }
-                    if (responseContent.Contains(Constant.AutheticatedSuccesful))
+                    //else if (responseContent.Contains(Constant.AutheticatedSuccesful))
+                    else if (data5.code.ToString() == Constant.AutheticatedSuccesful)
                     {
                         //testing with loading page
                         //Application.Current.MainPage = new Loading();
@@ -1211,7 +1206,8 @@ namespace MTYD
                             await Application.Current.MainPage.DisplayAlert("Oops", "We are facing some problems with our internal system. We weren't able to update your credentials", "OK");
                         }
                     }
-                    if (responseContent.Contains(Constant.ErrorPlatform))
+                    //else if (responseContent.Contains(Constant.ErrorPlatform))
+                    else if (data5.code.ToString() == Constant.ErrorPlatform)
                     {
                         //testing with loading page
                         Application.Current.MainPage = new MainPage();
@@ -1219,9 +1215,12 @@ namespace MTYD
                         var RDSCode = JsonConvert.DeserializeObject<RDSLogInMessage>(responseContent);
                         await Application.Current.MainPage.DisplayAlert("Message", RDSCode.message, "OK");
                     }
-
-                    if (responseContent.Contains(Constant.ErrorUserDirectLogIn))
+                    //else if (responseContent.Contains(Constant.ErrorUserDirectLogIn))
+                    else if (data5.code.ToString() == Constant.ErrorUserDirectLogIn)
                     {
+
+                        var data = JsonConvert.DeserializeObject<SuccessfulSocialLogIn>(responseContent);
+                        Debug.WriteLine("responseContent direct login: " + responseContent.ToString());
                         //testing with loading page
                         //await Navigation.PopAsync();
                         Application.Current.MainPage = new MainPage();
