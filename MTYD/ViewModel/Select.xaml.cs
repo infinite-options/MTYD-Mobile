@@ -89,6 +89,7 @@ namespace MTYD.ViewModel
         int mealCount;
         int addOnCount;
         bool addOnSelected = false;
+        string selectedDate;
 
         WebClient client = new WebClient();
 
@@ -443,7 +444,7 @@ namespace MTYD.ViewModel
 
         }
 
-        
+       
         // Date Picker Selection Changes
         async private void dateChange(object sender, EventArgs e)
         {
@@ -456,6 +457,17 @@ namespace MTYD.ViewModel
             //getUserMeals();
             Console.WriteLine("Setting now");
             text1 = datePicker.SelectedItem.ToString();
+            string tempHolder = text1;
+            Debug.WriteLine("year:" + tempHolder.Substring(0, 4));
+            //tempHolder = tempHolder.Substring(tempHolder.IndexOf("-") + 1);
+            Debug.WriteLine("month:" + text1.Substring(5, 2));
+            //tempHolder = tempHolder.Substring(tempHolder.IndexOf("-") + 1);
+            Debug.WriteLine("day:" + text1.Substring(8, 2));
+            //getDayOfTheWeek();
+            DateTime selected = new DateTime(Int32.Parse(text1.Substring(0, 4)), Int32.Parse(text1.Substring(5, 2)), Int32.Parse(text1.Substring(8, 2)));
+            selectedDate = selected.ToString("dddd");
+            Debug.WriteLine("dayOfWeek: " + selectedDate);
+
 
             //testing no setMenu();
             //setMenu();
@@ -1276,6 +1288,18 @@ namespace MTYD.ViewModel
 
         private async void saveUserMeals(object sender, EventArgs e)
         {
+            //set delivery day of the week
+            string tempHolder = datePicker.SelectedItem.ToString();
+            Debug.WriteLine("year:" + tempHolder.Substring(0, 4));
+            //tempHolder = tempHolder.Substring(tempHolder.IndexOf("-") + 1);
+            Debug.WriteLine("month:" + text1.Substring(5, 2));
+            //tempHolder = tempHolder.Substring(tempHolder.IndexOf("-") + 1);
+            Debug.WriteLine("day:" + text1.Substring(8, 2));
+            //getDayOfTheWeek();
+            DateTime selected = new DateTime(Int32.Parse(text1.Substring(0, 4)), Int32.Parse(text1.Substring(5, 2)), Int32.Parse(text1.Substring(8, 2)));
+            selectedDate = selected.ToString("dddd");
+            Debug.WriteLine("dayOfWeek: " + selectedDate);
+
             surpriseBttn.BackgroundColor = Color.Transparent;
             surpriseFrame.BackgroundColor = Color.Transparent;
             surpriseBttn.TextColor = Color.Black;
@@ -1341,7 +1365,17 @@ namespace MTYD.ViewModel
                     addOnSelected = false;
                     DisplayAlert("Selection Saved", "You will be charged for your add-ons on 1/1/2021.", "OK");
                 }
-                else DisplayAlert("Selection Saved", "You've successfully saved your meal selection.", "OK");
+                else
+                {
+                    //clear add-ons on backend
+                    addOnSelected = true;
+                    mealsSaved = new List<MealInformation>();
+                    //mealsSaved = null;
+                    jsonMeals = JsonConvert.SerializeObject(mealsSaved);
+                    Console.WriteLine("line 302 " + jsonMeals);
+                    postData();
+                    DisplayAlert("Selection Saved", "You've successfully saved your meal selection.", "OK");
+                }
                 addOnSelected = false;
                 //DisplayAlert("Selection Saved", "You've successfully saved your meal selection.", "OK");
                 saveBttn.BackgroundColor = Color.Transparent;
@@ -1356,6 +1390,7 @@ namespace MTYD.ViewModel
 
         private async void skipMealSelection(object sender, EventArgs e)
         {
+            selectedDate = "SKIP";
             //addOnSelected = false;
             //qtyDict.Clear();
             skipBttn.BackgroundColor = Color.Orange;
@@ -1420,6 +1455,18 @@ namespace MTYD.ViewModel
 
         private void surprise()
         {
+            //set delivery day of the week
+            string tempHolder = datePicker.SelectedItem.ToString();
+            Debug.WriteLine("year:" + tempHolder.Substring(0, 4));
+            //tempHolder = tempHolder.Substring(tempHolder.IndexOf("-") + 1);
+            Debug.WriteLine("month:" + text1.Substring(5, 2));
+            //tempHolder = tempHolder.Substring(tempHolder.IndexOf("-") + 1);
+            Debug.WriteLine("day:" + text1.Substring(8, 2));
+            //getDayOfTheWeek();
+            DateTime selected = new DateTime(Int32.Parse(text1.Substring(0, 4)), Int32.Parse(text1.Substring(5, 2)), Int32.Parse(text1.Substring(8, 2)));
+            selectedDate = selected.ToString("dddd");
+            Debug.WriteLine("dayOfWeek: " + selectedDate);
+
             //weekOneProgress.Progress = 0;
             surpriseBttn.BackgroundColor = Color.Orange;
             surpriseFrame.BackgroundColor = Color.Orange;
@@ -1471,6 +1518,18 @@ namespace MTYD.ViewModel
         }
         private async void surpriseMealSelection(object sender, EventArgs e)
         {
+            //set delivery day of the week
+            string tempHolder = datePicker.SelectedItem.ToString();
+            Debug.WriteLine("year:" + tempHolder.Substring(0, 4));
+            //tempHolder = tempHolder.Substring(tempHolder.IndexOf("-") + 1);
+            Debug.WriteLine("month:" + text1.Substring(5, 2));
+            //tempHolder = tempHolder.Substring(tempHolder.IndexOf("-") + 1);
+            Debug.WriteLine("day:" + text1.Substring(8, 2));
+            //getDayOfTheWeek();
+            DateTime selected = new DateTime(Int32.Parse(text1.Substring(0, 4)), Int32.Parse(text1.Substring(5, 2)), Int32.Parse(text1.Substring(8, 2)));
+            selectedDate = selected.ToString("dddd");
+            Debug.WriteLine("dayOfWeek: " + selectedDate);
+
             //addOnSelected = false;
             //qtyDict.Clear();
             surpriseBttn.BackgroundColor = Color.Orange;
@@ -1543,7 +1602,7 @@ namespace MTYD.ViewModel
                 Items = mealsSaved,
                 PurchaseId = Preferences.Get("purchId", ""),
                 MenuDate = datePicker.SelectedItem.ToString(),
-                DeliveryDay = "Testday",
+                DeliveryDay = selectedDate,
             };
 
             string mealSelectInfoJson = JsonConvert.SerializeObject(mealSelectInfoTosend);
