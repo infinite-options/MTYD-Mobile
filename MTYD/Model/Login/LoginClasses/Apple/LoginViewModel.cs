@@ -46,6 +46,7 @@ namespace MTYD.Model.Login.LoginClasses.Apple
         public ObservableCollection<Plans> NewLogin = new ObservableCollection<Plans>();
         public static string apple_token = null;
         public static string apple_email = null;
+        string deviceId;
 
         public bool IsAppleSignInAvailable { get { return appleSignInService?.IsAvailable ?? false; } }
         public ICommand SignInWithAppleCommand { get; set; }
@@ -226,6 +227,51 @@ namespace MTYD.Model.Login.LoginClasses.Apple
                                 Console.WriteLine("content: " + content);
                                 var userString = await content.ReadAsStringAsync();
                                 Console.WriteLine(userString);
+
+                                //writing guid to db
+                                if (Preferences.Get("setGuid" + (string)Application.Current.Properties["user_id"], false) == false)
+                                {
+                                    if (Device.RuntimePlatform == Device.iOS)
+                                    {
+                                        deviceId = Preferences.Get("guid", null);
+                                        if (deviceId != null) { Debug.WriteLine("This is the iOS GUID from Log in: " + deviceId); }
+                                    }
+                                    else
+                                    {
+                                        deviceId = Preferences.Get("guid", null);
+                                        if (deviceId != null) { Debug.WriteLine("This is the Android GUID from Log in " + deviceId); }
+                                    }
+
+                                    if (deviceId != null)
+                                    {
+                                        GuidPost notificationPost = new GuidPost();
+
+                                        notificationPost.uid = (string)Application.Current.Properties["user_id"];
+                                        notificationPost.guid = deviceId.Substring(5);
+                                        Application.Current.Properties["guid"] = deviceId.Substring(5);
+                                        notificationPost.notification = "TRUE";
+
+                                        var notificationSerializedObject = JsonConvert.SerializeObject(notificationPost);
+                                        Debug.WriteLine("Notification JSON Object to send: " + notificationSerializedObject);
+
+                                        var notificationContent = new StringContent(notificationSerializedObject, Encoding.UTF8, "application/json");
+
+                                        var clientResponse = await client.PostAsync(Constant.GuidUrl, notificationContent);
+
+                                        Debug.WriteLine("Status code: " + clientResponse.IsSuccessStatusCode);
+
+                                        if (clientResponse.IsSuccessStatusCode)
+                                        {
+                                            System.Diagnostics.Debug.WriteLine("We have post the guid to the database");
+                                            Preferences.Set("setGuid" + (string)Application.Current.Properties["user_id"], true);
+                                        }
+                                        else
+                                        {
+                                            Debug.WriteLine("Something went wrong. We are not able to send you notification at this moment");
+                                        }
+                                    }
+                                }
+                                //written
 
                                 if (userString.ToString()[0] != '{')
                                 {

@@ -19,7 +19,7 @@ namespace MTYD.Droid
     [IntentFilter(
     new[] { Intent.ActionView },
     Categories = new[] { Intent.CategoryDefault, Intent.CategoryBrowsable },
-    DataSchemes = new[] { "com.googleusercontent.apps.736355098040-q7nr6ftln8ffp55jl4os3l3auvnq8k23" },
+    DataSchemes = new[] { "com.googleusercontent.apps.799054437694-5qaill0n61e2j3h1ui5hl84uih16qadg" },
     DataPath = "/oauth2redirect")]
 
     public class CustomUrlSchemeInterceptorActivity : Activity

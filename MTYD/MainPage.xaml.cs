@@ -44,6 +44,7 @@ namespace MTYD
         public ObservableCollection<Plans> NewMainPage = new ObservableCollection<Plans>();
         LoginViewModel vm = new LoginViewModel();
         bool directEmailVerified = false;
+        string deviceId;
 
         Account account;
         [Obsolete]
@@ -302,6 +303,51 @@ namespace MTYD
                             Console.WriteLine("content: " + content);
                             var userString = await content.ReadAsStringAsync();
                             Console.WriteLine(userString);
+
+                            //writing guid to db
+                            if (Preferences.Get("setGuid" + (string)Application.Current.Properties["user_id"], false) == false)
+                            {
+                                if (Device.RuntimePlatform == Device.iOS)
+                                {
+                                    deviceId = Preferences.Get("guid", null);
+                                    if (deviceId != null) { Debug.WriteLine("This is the iOS GUID from Log in: " + deviceId); }
+                                }
+                                else
+                                {
+                                    deviceId = Preferences.Get("guid", null);
+                                    if (deviceId != null) { Debug.WriteLine("This is the Android GUID from Log in " + deviceId); }
+                                }
+
+                                if (deviceId != null)
+                                {
+                                    GuidPost notificationPost = new GuidPost();
+
+                                    notificationPost.uid = (string)Application.Current.Properties["user_id"];
+                                    notificationPost.guid = deviceId.Substring(5);
+                                    Application.Current.Properties["guid"] = deviceId.Substring(5);
+                                    notificationPost.notification = "TRUE";
+
+                                    var notificationSerializedObject = JsonConvert.SerializeObject(notificationPost);
+                                    Debug.WriteLine("Notification JSON Object to send: " + notificationSerializedObject);
+
+                                    var notificationContent = new StringContent(notificationSerializedObject, Encoding.UTF8, "application/json");
+
+                                    var clientResponse = await client.PostAsync(Constant.GuidUrl, notificationContent);
+
+                                    Debug.WriteLine("Status code: " + clientResponse.IsSuccessStatusCode);
+
+                                    if (clientResponse.IsSuccessStatusCode)
+                                    {
+                                        System.Diagnostics.Debug.WriteLine("We have post the guid to the database");
+                                        Preferences.Set("setGuid" + (string)Application.Current.Properties["user_id"], true);
+                                    }
+                                    else
+                                    {
+                                        await DisplayAlert("Ooops!", "Something went wrong. We are not able to send you notification at this moment", "OK");
+                                    }
+                                }
+                            }
+                            //written
 
                             if (userString.ToString()[0] != '{')
                             {
@@ -697,6 +743,7 @@ namespace MTYD
                             var client2 = new HttpClient();
                             HttpResponseMessage response = await client.SendAsync(request2);
 
+
                             if (response.StatusCode == System.Net.HttpStatusCode.OK)
                             {
 
@@ -704,6 +751,54 @@ namespace MTYD
                                 Console.WriteLine("content: " + content);
                                 var userString = await content.ReadAsStringAsync();
                                 //Console.WriteLine(userString);
+
+
+                                //writing guid to db
+                                if (Preferences.Get("setGuid" + (string)Application.Current.Properties["user_id"], false) == false)
+                                {
+                                    if (Device.RuntimePlatform == Device.iOS)
+                                    {
+                                        deviceId = Preferences.Get("guid", null);
+                                        if (deviceId != null) { Debug.WriteLine("This is the iOS GUID from Log in: " + deviceId); }
+                                    }
+                                    else
+                                    {
+                                        deviceId = Preferences.Get("guid", null);
+                                        if (deviceId != null) { Debug.WriteLine("This is the Android GUID from Log in " + deviceId); }
+                                    }
+
+                                    if (deviceId != null)
+                                    {
+                                        GuidPost notificationPost = new GuidPost();
+
+                                        notificationPost.uid = (string)Application.Current.Properties["user_id"];
+                                        notificationPost.guid = deviceId.Substring(5);
+                                        Application.Current.Properties["guid"] = deviceId.Substring(5);
+                                        notificationPost.notification = "TRUE";
+
+                                        var notificationSerializedObject = JsonConvert.SerializeObject(notificationPost);
+                                        Debug.WriteLine("Notification JSON Object to send: " + notificationSerializedObject);
+
+                                        var notificationContent = new StringContent(notificationSerializedObject, Encoding.UTF8, "application/json");
+
+                                        var clientResponse = await client.PostAsync(Constant.GuidUrl, notificationContent);
+
+                                        Debug.WriteLine("Status code: " + clientResponse.IsSuccessStatusCode);
+
+                                        if (clientResponse.IsSuccessStatusCode)
+                                        {
+                                            System.Diagnostics.Debug.WriteLine("We have post the guid to the database");
+                                            Preferences.Set("setGuid" + (string)Application.Current.Properties["user_id"], true);
+                                        }
+                                        else
+                                        {
+                                            await DisplayAlert("Ooops!", "Something went wrong. We are not able to send you notification at this moment", "OK");
+                                        }
+                                    }
+                                }
+                                //written
+
+
 
                                 if (userString.ToString()[0] != '{')
                                 {
@@ -1027,6 +1122,54 @@ namespace MTYD
                                 Console.WriteLine("content: " + content);
                                 var userString = await content.ReadAsStringAsync();
                                 Console.WriteLine(userString.ToString());
+
+                                //writing guid to db
+                                if (Preferences.Get("setGuid" + (string)Application.Current.Properties["user_id"], false) == false)
+                                {
+
+                                    if (Device.RuntimePlatform == Device.iOS)
+                                    {
+                                        deviceId = Preferences.Get("guid", null);
+                                        if (deviceId != null) { Debug.WriteLine("This is the iOS GUID from Log in: " + deviceId); }
+                                    }
+                                    else
+                                    {
+                                        deviceId = Preferences.Get("guid", null);
+                                        if (deviceId != null) { Debug.WriteLine("This is the Android GUID from Log in " + deviceId); }
+                                    }
+
+                                    if (deviceId != null)
+                                    {
+                                        Debug.WriteLine("entered inside setting guid");
+                                        GuidPost notificationPost = new GuidPost();
+
+                                        notificationPost.uid = (string)Application.Current.Properties["user_id"];
+                                        notificationPost.guid = deviceId.Substring(5);
+                                        Application.Current.Properties["guid"] = deviceId.Substring(5);
+                                        notificationPost.notification = "TRUE";
+
+                                        var notificationSerializedObject = JsonConvert.SerializeObject(notificationPost);
+                                        Debug.WriteLine("Notification JSON Object to send: " + notificationSerializedObject);
+
+                                        var notificationContent = new StringContent(notificationSerializedObject, Encoding.UTF8, "application/json");
+
+                                        var clientResponse = await client.PostAsync(Constant.GuidUrl, notificationContent);
+
+                                        Debug.WriteLine("Status code: " + clientResponse.IsSuccessStatusCode);
+
+                                        if (clientResponse.IsSuccessStatusCode)
+                                        {
+                                            System.Diagnostics.Debug.WriteLine("We have post the guid to the database");
+                                            Preferences.Set("setGuid" + (string)Application.Current.Properties["user_id"], true);
+                                        }
+                                        else
+                                        {
+                                            await DisplayAlert("Ooops!", "Something went wrong. We are not able to send you notification at this moment", "OK");
+                                        }
+                                    }
+                                }
+                                //written
+
 
                                 //testing for if the user only has serving fresh stuff
                                 if (userString.ToString()[0] != '{')

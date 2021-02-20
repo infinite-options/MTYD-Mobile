@@ -251,6 +251,8 @@
                             <ImageButton x:Name="ticketPic" Source="noDiscount.png" Aspect="AspectFit" VerticalOptions="Start" Clicked="clickedSub"/>
                         </StackLayout>
 
+                        <ImageButton x:Name="deleteButton" Grid.Column="2" Source="food.png" Aspect="AspectFit" VerticalOptions="Center" HorizontalOptions="Center" HeightRequest="30" WidthRequest="30" Clicked="deleteClicked"/>
+
                     </Grid>
 
                     </StackLayout>

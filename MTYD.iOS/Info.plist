@@ -39,7 +39,7 @@
 			<string>Google Auth</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.736355098040-dfnf83qu5t7ocibh2iajqpiddaoe0qq9</string>
+				<string>com.googleusercontent.apps.799054437694-btjpb6hbp3r71psrvtfdr5qqb3hl5h67</string>
 			</array>
 		</dict>
 	</array>
@@ -50,6 +50,6 @@
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>The user&apos;s location is used to determine where the meals will be delivered as well as the billing calculations.</string>
 	<key>CFBundleVersion</key>
-	<string>14</string>
+	<string>16</string>
 </dict>
 </plist>

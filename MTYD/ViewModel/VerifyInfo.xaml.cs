@@ -258,7 +258,7 @@ namespace MTYD.ViewModel
             newPayment.purchase_notes = "new purch";
             newPayment.amount_due = Preferences.Get("price", "00.00");
             newPayment.amount_discount = "00.00";
-            newPayment.amount_paid = Preferences.Get("price", "00.00");
+            newPayment.amount_paid = "00.00";//Preferences.Get("price", "00.00");
             newPayment.cc_num = "4242424242424242";
             newPayment.cc_exp_year = "2022";
             newPayment.cc_exp_month = "08";

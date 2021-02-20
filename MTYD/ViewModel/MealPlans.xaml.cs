@@ -1,4 +1,5 @@
-﻿using MTYD.Model;
+﻿using MTYD.Constants;
+using MTYD.Model;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -34,6 +35,9 @@ namespace MTYD.ViewModel
         int chosenIndex;
         bool planChangeCalled = false;
         public bool isAddessValidated = false;
+        string chosenPurchUid;
+        int currentIndex = -1;
+        string currentPlan;
 
         public MealPlans(string firstName, string lastName, string email)
         {
@@ -294,6 +298,14 @@ namespace MTYD.ViewModel
             {
                 return;
             }
+
+            chosenPurchUid = (info_obj["result"])[planPicker.SelectedIndex]["purchase_uid"].ToString();
+            //currentIndex = planPicker.SelectedIndex;
+            //Debug.WriteLine("current index: " + currentIndex.ToString());
+            string tet = planPicker.SelectedItem.ToString();
+            Debug.WriteLine("picker text: " + tet);
+            currentPlan = planPicker.SelectedItem.ToString();
+            currentIndex = planPicker.SelectedIndex;
 
             FNameEntry.Text = (info_obj["result"])[planPicker.SelectedIndex]["delivery_first_name"].ToString();
 
@@ -857,6 +869,27 @@ namespace MTYD.ViewModel
                 return el.Value;
             }
             return "";
+        }
+
+        async void deleteClicked(object sender, System.EventArgs e)
+        {
+            var client = new HttpClient();
+            if (chosenPurchUid != null && chosenPurchUid != "")
+            {
+                CancelPlanPost willDelete = new CancelPlanPost();
+                willDelete.purchase_uid = chosenPurchUid;
+
+                var deleteSerializedObject = JsonConvert.SerializeObject(willDelete);
+                Debug.WriteLine("delete JSON Object to send: " + deleteSerializedObject);
+
+                var deleteContent = new StringContent(deleteSerializedObject, Encoding.UTF8, "application/json");
+
+                var clientResponse = await client.PutAsync(Constant.DeletePlanUrl, deleteContent);
+
+                Debug.WriteLine("Status code: " + clientResponse);
+            }
+
+            
         }
     }
 }

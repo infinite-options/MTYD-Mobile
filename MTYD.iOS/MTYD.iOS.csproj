@@ -27,8 +27,8 @@
     <MtouchArch>x86_64</MtouchArch>
     <MtouchLink>None</MtouchLink>
     <MtouchDebug>true</MtouchDebug>
-    <CodesignKey>Apple Distribution: Infinite Options, LLC (8V66NC2T37)</CodesignKey>
-    <CodesignProvision>MTYD</CodesignProvision>
+    <CodesignKey>Apple Development: Jonathan Ly (MS5P32VUQF)</CodesignKey>
+    <CodesignProvision>VS: com.infiniteoptions.MTYD Development</CodesignProvision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>
