@@ -29,6 +29,7 @@ namespace MTYD.ViewModel
         ArrayList itemsArray = new ArrayList();
         ArrayList purchIdArray = new ArrayList();
         ArrayList namesArray = new ArrayList();
+        ArrayList itemUidArray = new ArrayList();
         JObject info_obj;
         string frequency;
         int lastPickerIndex;
@@ -38,6 +39,7 @@ namespace MTYD.ViewModel
         string chosenPurchUid;
         int currentIndex = -1;
         string currentPlan;
+        List<JToken> activePlans = new List<JToken>();
 
         public MealPlans(string firstName, string lastName, string email)
         {
@@ -299,7 +301,11 @@ namespace MTYD.ViewModel
                 return;
             }
 
-            chosenPurchUid = (info_obj["result"])[planPicker.SelectedIndex]["purchase_uid"].ToString();
+            //old
+            //chosenPurchUid = (info_obj["result"])[planPicker.SelectedIndex]["purchase_uid"].ToString();
+            chosenPurchUid = purchIdArray[planPicker.SelectedIndex].ToString();
+            Debug.WriteLine("selected chosen purch id in plan change: " + chosenPurchUid.ToString());
+
             //currentIndex = planPicker.SelectedIndex;
             //Debug.WriteLine("current index: " + currentIndex.ToString());
             string tet = planPicker.SelectedItem.ToString();
@@ -406,8 +412,18 @@ namespace MTYD.ViewModel
                 {
                     Console.WriteLine("In first foreach loop of getmeal plans func:");
 
-                    itemsArray.Add((m["items"].ToString()));
-                    purchIdArray.Add((m["purchase_id"].ToString()));
+                    if (m["purchase_status"].ToString() == "ACTIVE")
+                    {
+                        itemsArray.Add((m["items"].ToString()));
+                        purchIdArray.Add((m["purchase_id"].ToString()));
+                        activePlans.Add(m);
+                    }
+                    else Debug.WriteLine(m["purchase_id"].ToString() + " was skipped");
+                }
+
+                if (purchIdArray.Count == 0)
+                {
+                    Preferences.Set("canChooseSelect", false);
                 }
 
                 lastPickerIndex = purchIdArray.Count - 1;
@@ -435,6 +451,9 @@ namespace MTYD.ViewModel
                         //string mealid = (string)config["item_uid"];
 
                         namesArray.Add(name);
+
+                        string mealid = (string)config["item_uid"];
+                        itemUidArray.Add(mealid);
                     }
                 }
                 Console.WriteLine("Outside foreach in GetmealsPlan func");
@@ -457,13 +476,15 @@ namespace MTYD.ViewModel
                 return;
             }
 
-            string itemsStr = (info_obj["result"])[planPicker.SelectedIndex]["items"].ToString();
-            string expDate = (info_obj["result"])[planPicker.SelectedIndex]["cc_exp_date"].ToString();
+            string itemsStr = activePlans[planPicker.SelectedIndex]["items"].ToString();
+            string expDate = activePlans[planPicker.SelectedIndex]["cc_exp_date"].ToString();
+            //var testing = (info_obj["result"])[1];
+            //string zip = testing["cc_zip"].ToString();
 
-            await Navigation.PushAsync(new SubscriptionModal(cust_firstName, cust_lastName, cust_email, "", (info_obj["result"])[planPicker.SelectedIndex]["mobile_refresh_token"].ToString(), (info_obj["result"])[planPicker.SelectedIndex]["cc_num"].ToString(),
-                expDate.Substring(0, 4), expDate.Substring(5, 2),
-                (info_obj["result"])[planPicker.SelectedIndex]["cc_cvv"].ToString(), (info_obj["result"])[planPicker.SelectedIndex]["cc_zip"].ToString(), (info_obj["result"])[planPicker.SelectedIndex]["purchase_uid"].ToString(), itemsStr.Substring(itemsStr.IndexOf("itm_business_uid") + 20, 10),
-                itemsStr.Substring(itemsStr.IndexOf("item_uid") + 12, 10), (info_obj["result"])[planPicker.SelectedIndex]["pur_customer_uid"].ToString()), false);
+            await Navigation.PushAsync(new SubscriptionModal(cust_firstName, cust_lastName, cust_email, activePlans[planPicker.SelectedIndex]["user_social_media"].ToString(), activePlans[planPicker.SelectedIndex]["mobile_refresh_token"].ToString(), activePlans[planPicker.SelectedIndex]["cc_num"].ToString(),
+                expDate.Substring(0, 10), 
+                activePlans[planPicker.SelectedIndex]["cc_cvv"].ToString(), activePlans[planPicker.SelectedIndex]["cc_zip"].ToString(), activePlans[planPicker.SelectedIndex]["purchase_uid"].ToString(), itemsStr.Substring(itemsStr.IndexOf("itm_business_uid") + 20, 10),
+                itemsStr.Substring(itemsStr.IndexOf("item_uid") + 12, 10), activePlans[planPicker.SelectedIndex]["pur_customer_uid"].ToString()), false);
         }
 
         async void clickedInfo(System.Object sender, System.EventArgs e)
@@ -474,8 +495,8 @@ namespace MTYD.ViewModel
                 return;
             }
 
-            string itemsStr = (info_obj["result"])[planPicker.SelectedIndex]["items"].ToString();
-            string expDate = (info_obj["result"])[planPicker.SelectedIndex]["cc_exp_date"].ToString();
+            string itemsStr = activePlans[planPicker.SelectedIndex]["items"].ToString();
+            string expDate = activePlans[planPicker.SelectedIndex]["cc_exp_date"].ToString();
             Console.WriteLine("clickedInfo exp date: " + expDate);
             string mealPlan;
             int lengthOfPrice = itemsStr.IndexOf("item_uid") - itemsStr.IndexOf("price") - 13;
@@ -488,10 +509,10 @@ namespace MTYD.ViewModel
 
 
 
-            await Navigation.PushAsync(new OrderInfoModal(cust_firstName, cust_lastName, cust_email, "", (info_obj["result"])[planPicker.SelectedIndex]["mobile_refresh_token"].ToString(), (info_obj["result"])[planPicker.SelectedIndex]["cc_num"].ToString(),
+            await Navigation.PushAsync(new OrderInfoModal(cust_firstName, cust_lastName, cust_email, "", activePlans[planPicker.SelectedIndex]["mobile_refresh_token"].ToString(), activePlans[planPicker.SelectedIndex]["cc_num"].ToString(),
                 expDate.Substring(0, 4), expDate.Substring(5, 2),
-                (info_obj["result"])[planPicker.SelectedIndex]["cc_cvv"].ToString(), (info_obj["result"])[planPicker.SelectedIndex]["cc_zip"].ToString(), (info_obj["result"])[planPicker.SelectedIndex]["purchase_uid"].ToString(), itemsStr.Substring(itemsStr.IndexOf("itm_business_uid") + 20, 10),
-                mealPlan, itemsStr.Substring(itemsStr.IndexOf("price") + 9, lengthOfPrice), itemsStr.Substring(itemsStr.IndexOf("item_uid") + 12, 10), (info_obj["result"])[planPicker.SelectedIndex]["pur_customer_uid"].ToString()), false);
+                activePlans[planPicker.SelectedIndex]["cc_cvv"].ToString(), activePlans[planPicker.SelectedIndex]["cc_zip"].ToString(), activePlans[planPicker.SelectedIndex]["purchase_uid"].ToString(), itemsStr.Substring(itemsStr.IndexOf("itm_business_uid") + 20, 10),
+                mealPlan, itemsStr.Substring(itemsStr.IndexOf("price") + 9, lengthOfPrice), itemsStr.Substring(itemsStr.IndexOf("item_uid") + 12, 10), activePlans[planPicker.SelectedIndex]["pur_customer_uid"].ToString()), false);
         }
 
         async void clickedPfp(System.Object sender, System.EventArgs e)
@@ -874,19 +895,29 @@ namespace MTYD.ViewModel
         async void deleteClicked(object sender, System.EventArgs e)
         {
             var client = new HttpClient();
-            if (chosenPurchUid != null && chosenPurchUid != "")
+            if (chosenPurchUid != null && chosenPurchUid != "" && currentIndex != -1)
             {
-                CancelPlanPost willDelete = new CancelPlanPost();
-                willDelete.purchase_uid = chosenPurchUid;
+                bool answer = await DisplayAlert("Delete a Plan", "Are you sure you want to delete this " + currentPlan + "?", "Yes", "No");
+                Debug.WriteLine("Answer: " + answer);
 
-                var deleteSerializedObject = JsonConvert.SerializeObject(willDelete);
-                Debug.WriteLine("delete JSON Object to send: " + deleteSerializedObject);
+                if (answer == true)
+                {
+                    CancelPlanPost willDelete = new CancelPlanPost();
+                    willDelete.purchase_uid = chosenPurchUid;
 
-                var deleteContent = new StringContent(deleteSerializedObject, Encoding.UTF8, "application/json");
+                    var deleteSerializedObject = JsonConvert.SerializeObject(willDelete);
+                    Debug.WriteLine("delete JSON Object to send: " + deleteSerializedObject);
 
-                var clientResponse = await client.PutAsync(Constant.DeletePlanUrl, deleteContent);
+                    var deleteContent = new StringContent(deleteSerializedObject, Encoding.UTF8, "application/json");
 
-                Debug.WriteLine("Status code: " + clientResponse);
+                    var clientResponse = await client.PutAsync(Constant.DeletePlanUrl, deleteContent);
+
+                    Debug.WriteLine("Status code: " + clientResponse);
+                    //await DisplayAlert("Deleted Plan", currentPlan + " was cancelled and refunded.", "OK");
+
+                    await Navigation.PushAsync(new MealPlans(cust_firstName, cust_lastName, cust_email), false);
+                    Navigation.RemovePage(this.Navigation.NavigationStack[this.Navigation.NavigationStack.Count - 2]);
+                }
             }
 
             

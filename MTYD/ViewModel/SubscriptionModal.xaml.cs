@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -25,8 +26,8 @@ namespace MTYD.ViewModel
         string m1f1name = "", m1f2name = "", m1f3name = "", m2f1name = "", m2f2name = "", m2f3name = "", m3f1name = "", m3f2name = "", m3f3name = "", m4f1name = "", m4f2name = "", m4f3name = "";
         string m1f1uid = "", m1f2uid = "", m1f3uid = "", m2f1uid = "", m2f2uid = "", m2f3uid = "", m3f1uid = "", m3f2uid = "", m3f3uid = "", m4f1uid = "", m4f2uid = "", m4f3uid = "";
 
-        string password; string refresh_token; string cc_num; string cc_exp_year; string cc_exp_month; string cc_cvv; string purchase_id;
-        string new_item_id; string customer_id; string itm_business_uid; string cc_zip;
+        string socialLogin; string refresh_token; string cc_num; string cc_exp_year; string cc_exp_month; string cc_cvv; string purchase_id;
+        string new_item_id; string customer_id; string itm_business_uid; string cc_zip; string cc_exp_date;
 
         protected async Task GetPlans()
         {
@@ -403,9 +404,9 @@ namespace MTYD.ViewModel
                 PriceFrame.CornerRadius = 30;
                 TotalPrice.FontSize = width / 40;
                 SignUpButton.HeightRequest = height / 30;
-                SignUpButton.WidthRequest = width / 6;
+                SignUpButton.WidthRequest = width / 5;
                 SignUpButton.CornerRadius = (int)(height / 60);
-                SignUpButton.FontSize = width / 40;
+                SignUpButton.FontSize = width / 43;
             }
             else //android
             {
@@ -485,7 +486,7 @@ namespace MTYD.ViewModel
             //common adjustments regardless of platform
         }
 
-        public SubscriptionModal(string firstName, string lastName, string email, string pass, string token, string num, string year, string month, string cvv, string zip, string purchaseID, string businessID, string itemID, string customerID)
+        public SubscriptionModal(string firstName, string lastName, string email, string social, string token, string num, string expDate, string cvv, string zip, string purchaseID, string businessID, string itemID, string customerID)
         {
             cust_firstName = firstName;
             cust_lastName = lastName;
@@ -495,7 +496,7 @@ namespace MTYD.ViewModel
             var height = DeviceDisplay.MainDisplayInfo.Height;
 
             Console.WriteLine("next entered");
-            password = pass; refresh_token = token; cc_num = num; cc_exp_year = year; cc_exp_month = month; cc_cvv = cvv; purchase_id = purchaseID;
+            socialLogin = social; refresh_token = token; cc_num = num; cc_exp_date = expDate; cc_cvv = cvv; purchase_id = purchaseID;
             new_item_id = itemID; customer_id = customerID; cc_zip = zip; itm_business_uid = businessID;
             Console.WriteLine("next2 entered");
 
@@ -510,6 +511,7 @@ namespace MTYD.ViewModel
 
         private void clickedMeals1(object sender, EventArgs e)
         {
+            SignUpButton.Text = "CHECK PRICE";
             meals1.BackgroundColor = Color.FromHex("#FFBA00");
             meals2.BackgroundColor = Color.FromHex("#FFF0C6");
             meals3.BackgroundColor = Color.FromHex("#FFF0C6");
@@ -546,6 +548,7 @@ namespace MTYD.ViewModel
         }
         private void clickedMeals2(object sender, EventArgs e)
         {
+            SignUpButton.Text = "CHECK PRICE";
             meals1.BackgroundColor = Color.FromHex("#FFF0C6");
             meals2.BackgroundColor = Color.FromHex("#FFBA00");
             meals3.BackgroundColor = Color.FromHex("#FFF0C6");
@@ -582,6 +585,7 @@ namespace MTYD.ViewModel
 
         private void clickedMeals3(object sender, EventArgs e)
         {
+            SignUpButton.Text = "CHECK PRICE";
             meals1.BackgroundColor = Color.FromHex("#FFF0C6");
             meals2.BackgroundColor = Color.FromHex("#FFF0C6");
             meals3.BackgroundColor = Color.FromHex("#FFBA00");
@@ -618,6 +622,7 @@ namespace MTYD.ViewModel
 
         private void clickedMeals4(object sender, EventArgs e)
         {
+            SignUpButton.Text = "CHECK PRICE";
             meals1.BackgroundColor = Color.FromHex("#FFF0C6");
             meals2.BackgroundColor = Color.FromHex("#FFF0C6");
             meals3.BackgroundColor = Color.FromHex("#FFF0C6");
@@ -654,6 +659,7 @@ namespace MTYD.ViewModel
 
         private void clickedPayOp1(object sender, EventArgs e)
         {
+            SignUpButton.Text = "CHECK PRICE";
             //payButton1.BackgroundColor = Color.FromHex("#FFF0C6");
             //payButton2.BackgroundColor = Color.Transparent;
             //payButton3.BackgroundColor = Color.Transparent;
@@ -701,6 +707,7 @@ namespace MTYD.ViewModel
 
         private void clickedPayOp2(object sender, EventArgs e)
         {
+            SignUpButton.Text = "CHECK PRICE";
             //payButton1.BackgroundColor = Color.Transparent;
             //payButton2.BackgroundColor = Color.FromHex("#FFF0C6");
             //payButton3.BackgroundColor = Color.Transparent;
@@ -747,6 +754,7 @@ namespace MTYD.ViewModel
 
         private void clickedPayOp3(object sender, EventArgs e)
         {
+            SignUpButton.Text = "CHECK PRICE";
             //payButton1.BackgroundColor = Color.Transparent;
             //payButton2.BackgroundColor = Color.Transparent;
             //payButton3.BackgroundColor = Color.FromHex("#FFF0C6");
@@ -796,71 +804,137 @@ namespace MTYD.ViewModel
                 return;
             }
 
-            int length = (TotalPrice.Text).Length;
-            string price = TotalPrice.Text.Substring(1, length - 1);
-            Preferences.Set("price", price);
-
-            Console.WriteLine("Price selected: " + price);
-
-            PurchaseInfo updated = new PurchaseInfo();
-            updated.password = password;
-            updated.refresh_token = refresh_token;
-            //updated.cc_num = cc_num;
-            //testing
-            updated.cc_num = "4242424242424242";
-            updated.cc_exp_year = cc_exp_year;
-            updated.cc_exp_month = cc_exp_month;
-            updated.cc_cvv = cc_cvv;
-            updated.purchase_id = purchase_id;
-            //updated.purchase_id = "400-000019";
-            updated.new_item_id = new_item_id;
-            updated.customer_id = customer_id;
-            updated.cc_zip = cc_zip;
-
-            List<Item2> list1 = new List<Item2>();
-            Item2 item1 = new Item2();
-            item1.qty = "1";
-            if (Preferences.Get("mealSelected", "") == "1")
+            if (SignUpButton.Text == "CHECK PRICE")
             {
-                item1.name = "5 Meal Plan";
-            }
-            else if (Preferences.Get("mealSelected","") == "2")
-            {
-                item1.name = "10 Meal Plan";
-            }
-            else if (Preferences.Get("mealSelected", "") == "3")
-            {
-                item1.name = "15 Meal Plan";
+                var request2 = new HttpRequestMessage();
+                request2.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/refund_calculator?purchase_uid=" + purchase_id);
+                request2.Method = HttpMethod.Get;
+                var client2 = new HttpClient();
+                HttpResponseMessage response2 = await client2.SendAsync(request2);
+
+                if (response2.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    HttpContent content2 = response2.Content;
+                    var userString2 = await content2.ReadAsStringAsync();
+                    JObject refund_obj = JObject.Parse(userString2);
+
+                    Debug.WriteLine("first start" + refund_obj["result"][0].ToString());
+                    Debug.WriteLine("this is what I'm getting: " + refund_obj["result"][0]["refund_amount"].ToString());
+                    double amt = Double.Parse(refund_obj["result"][0]["refund_amount"].ToString());
+                    double currentPrice = Double.Parse(TotalPrice.Text.ToString().Substring(1));
+                    double correct = amt - currentPrice;
+
+                    if (correct < 0)
+                    {
+                        correct *= -1;
+                        await DisplayAlert("Extra Charge", "You will be charged $" + correct.ToString() + " for this plan change.", "OK");
+                    }
+                    else
+                    {
+                        await DisplayAlert("Reimbursement", "You will be reimbursed $" + correct.ToString() + " for this plan change.", "OK");
+                    }
+
+                    SignUpButton.Text = "SAVE CHANGES";
+                }
             }
             else
             {
-                item1.name = "20 Meal Plan";
+                int length = (TotalPrice.Text).Length;
+                string price = TotalPrice.Text.Substring(1, length - 1);
+                Preferences.Set("price", price);
+
+                Console.WriteLine("Price selected: " + price);
+
+                PurchaseInfo2 updated = new PurchaseInfo2();
+
+                //if direct login
+                if (socialLogin == "NULL")
+                {
+                    var request2 = new HttpRequestMessage();
+                    Console.WriteLine("user_id: " + (string)Application.Current.Properties["user_id"]);
+                    string url2 = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
+                    //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + (string)Application.Current.Properties["user_id"];
+                    //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + "100-000256";
+                    request2.RequestUri = new Uri(url2);
+                    //request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/get_delivery_info/400-000453");
+                    request2.Method = HttpMethod.Get;
+                    var client2 = new HttpClient();
+                    HttpResponseMessage response2 = await client2.SendAsync(request2);
+
+                    if (response2.StatusCode == System.Net.HttpStatusCode.OK)
+                    {
+                        HttpContent content2 = response2.Content;
+                        Console.WriteLine("content: " + content2);
+                        var userString2 = await content2.ReadAsStringAsync();
+                        var info_obj2 = JObject.Parse(userString2);
+
+                        updated.password = (info_obj2["result"])[0]["password_hashed"].ToString();
+                    }
+                }
+                else updated.password = "NULL";
+
+                //updated.password = password;
+                //updated.refresh_token = refresh_token;
+                //updated.cc_num = cc_num;
+                //testing
+                updated.cc_num = "4242424242424242";
+                updated.cc_exp_date = cc_exp_date;
+                //updated.cc_exp_year = cc_exp_year;
+                //updated.cc_exp_month = cc_exp_month;
+                updated.cc_cvv = cc_cvv;
+                updated.purchase_id = purchase_id;
+                //updated.purchase_id = "400-000019";
+                updated.new_item_id = new_item_id;
+                updated.customer_email = cust_email;
+                updated.cc_zip = cc_zip;
+                updated.start_delivery_date = "";
+
+                List<Item2> list1 = new List<Item2>();
+                Item2 item1 = new Item2();
+                item1.qty = "1";
+                if (Preferences.Get("mealSelected", "") == "1")
+                {
+                    item1.name = "5 Meal Plan";
+                }
+                else if (Preferences.Get("mealSelected", "") == "2")
+                {
+                    item1.name = "10 Meal Plan";
+                }
+                else if (Preferences.Get("mealSelected", "") == "3")
+                {
+                    item1.name = "15 Meal Plan";
+                }
+                else
+                {
+                    item1.name = "20 Meal Plan";
+                }
+                item1.price = Preferences.Get("price", "");
+                item1.item_uid = updated.new_item_id;
+                item1.itm_business_uid = itm_business_uid;
+                list1.Add(item1);
+                updated.items = list1;
+
+                var newPaymentJSONString = JsonConvert.SerializeObject(updated);
+                // Console.WriteLine("newPaymentJSONString" + newPaymentJSONString);
+                var content = new StringContent(newPaymentJSONString, Encoding.UTF8, "application/json");
+                Console.WriteLine("Content: " + content);
+                /*var request = new HttpRequestMessage();
+                request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/checkout");
+                request.Method = HttpMethod.Post;
+                request.Content = content;*/
+                var client = new HttpClient();
+                //var response = client.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_purchase_id", content);
+                var response = client.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_purchase", content);
+                // HttpResponseMessage response = await client.SendAsync(request);
+                Console.WriteLine("RESPONSE TO CHECKOUT   " + response.Result);
+                Console.WriteLine("CHECKOUT JSON OBJECT BEING SENT: " + newPaymentJSONString);
+                Console.WriteLine("clickedDone Func ENDED!");
+
+
+                await Navigation.PushAsync(new UserProfile(cust_firstName, cust_lastName, cust_email));
+                //Application.Current.MainPage = new DeliveryBilling();
+                //await NavigationPage.PushAsync(DeliveryBilling());
             }
-            item1.price = Preferences.Get("price", "");
-            item1.item_uid = updated.new_item_id;
-            item1.itm_business_uid = itm_business_uid;
-            list1.Add(item1);
-            updated.items = list1;
-
-            var newPaymentJSONString = JsonConvert.SerializeObject(updated);
-            // Console.WriteLine("newPaymentJSONString" + newPaymentJSONString);
-            var content = new StringContent(newPaymentJSONString, Encoding.UTF8, "application/json");
-            Console.WriteLine("Content: " + content);
-            /*var request = new HttpRequestMessage();
-            request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/checkout");
-            request.Method = HttpMethod.Post;
-            request.Content = content;*/
-            var client = new HttpClient();
-            var response = client.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_purchase_id", content);
-            // HttpResponseMessage response = await client.SendAsync(request);
-            Console.WriteLine("RESPONSE TO CHECKOUT   " + response.Result);
-            Console.WriteLine("CHECKOUT JSON OBJECT BEING SENT: " + newPaymentJSONString);
-            Console.WriteLine("clickedDone Func ENDED!");
-
-
-            await Navigation.PushAsync(new UserProfile(cust_firstName, cust_lastName, cust_email));
-            //Application.Current.MainPage = new DeliveryBilling();
-            //await NavigationPage.PushAsync(DeliveryBilling());
         }
 
         async void clickedPfp(System.Object sender, System.EventArgs e)

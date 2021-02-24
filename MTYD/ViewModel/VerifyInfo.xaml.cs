@@ -53,6 +53,11 @@ namespace MTYD.ViewModel
         string billingState = "billing_state" + (string)Application.Current.Properties["user_id"];
         string billingZip = "billing_zip" + (string)Application.Current.Properties["user_id"];
         string purchaseDescription = "purchase_descr" + (string)Application.Current.Properties["user_id"];
+        Zones[] passingZones;
+        double tax_rate;
+        double service_fee;
+        double delivery_fee;
+
 
         // CREDENTIALS CLASS
         public class Credentials
@@ -66,8 +71,12 @@ namespace MTYD.ViewModel
         private string payPalOrderId = "";
         public static string mode = "";
 
-        public VerifyInfo(string firstName, string lastName, string email, string AptEntry1, string FNameEntry1, string LNameEntry1, string emailEntry1, string PhoneEntry1, string AddressEntry1, string CityEntry1, string StateEntry1, string ZipEntry1, string DeliveryEntry1, string CCEntry1, string CVVEntry1, string ZipCCEntry1, string salt1)
+        public VerifyInfo(Zones[] zones, double taxRate, double serviceFee, double deliveryFee, string firstName, string lastName, string email, string AptEntry1, string FNameEntry1, string LNameEntry1, string emailEntry1, string PhoneEntry1, string AddressEntry1, string CityEntry1, string StateEntry1, string ZipEntry1, string DeliveryEntry1, string CCEntry1, string CVVEntry1, string ZipCCEntry1, string salt1)
         {
+            tax_rate = taxRate;
+            service_fee = serviceFee;
+            delivery_fee = deliveryFee;
+            passingZones = zones;
             cust_firstName = firstName;
             cust_lastName = lastName;
             cust_email = email;
@@ -337,7 +346,7 @@ namespace MTYD.ViewModel
 
                 await setPaymentInfo();
                 Preferences.Set("canChooseSelect", true);
-                await Navigation.PushAsync(new Select(cust_firstName, cust_lastName, cust_email));
+                await Navigation.PushAsync(new Select(passingZones, cust_firstName, cust_lastName, cust_email));
                 
 
             }
@@ -363,9 +372,21 @@ namespace MTYD.ViewModel
         public async void CheckouWithStripe(System.Object sender, System.EventArgs e)
         {
             var total = Preferences.Get("price", "00.00");
+
+            
+
             Debug.WriteLine("STRIPE AMOUNT TO PAY: " + total);
             if (total != "00.00")
             {
+                //applying tax, service and delivery fees
+                double payment = Double.Parse(total) + (Double.Parse(total) * tax_rate);
+                payment += service_fee;
+                payment += delivery_fee;
+                Math.Round(payment, 2);
+                Debug.WriteLine("payment after tax and fees: " + payment.ToString());
+                Preferences.Set("price", payment.ToString());
+                total = payment.ToString();
+
                 headingGrid.IsVisible = false;
                 checkoutButton.IsVisible = false;
                 backButton.IsVisible = false;
@@ -750,6 +771,8 @@ namespace MTYD.ViewModel
                         Charge charge = chargeService.Create(chargeOption);
                         if (charge.Status == "succeeded")
                         {
+                            
+
                             PaymentScreen.HeightRequest = 0;
                             PaymentScreen.Margin = new Thickness(0, 0, 0, 0);
                             StripeScreen.Height = 0;
@@ -772,6 +795,9 @@ namespace MTYD.ViewModel
                                 spacer8.IsVisible = true;
                             }
                             checkoutButton.Text = "CONTINUE";
+                            headingGrid.IsVisible = true;
+                            checkoutButton.IsVisible = true;
+                            backButton.IsVisible = true;
                         }
                         else
                         {
@@ -827,6 +853,15 @@ namespace MTYD.ViewModel
             Debug.WriteLine("PAYPAL AMOUNT TO PAY: " + total);
             if (total != "00.00")
             {
+                //applying tax, service and delivery fees
+                double payment = Double.Parse(total) + (Double.Parse(total) * tax_rate);
+                payment += service_fee;
+                payment += delivery_fee;
+                Math.Round(payment, 2);
+                Debug.WriteLine("payment after tax and fees: " + payment.ToString());
+                Preferences.Set("price", payment.ToString());
+                total = payment.ToString();
+
                 headingGrid.IsVisible = false;
                 checkoutButton.IsVisible = false;
                 backButton.IsVisible = false;

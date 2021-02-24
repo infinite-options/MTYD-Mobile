@@ -93,7 +93,7 @@ namespace MTYD.ViewModel
 
         async void clickedMealSelect(System.Object sender, System.EventArgs e)
         {
-            Navigation.PushAsync(new Select("", "", ""), false);
+            //Navigation.PushAsync(new Select("", "", ""), false);
             Navigation.RemovePage(this.Navigation.NavigationStack[this.Navigation.NavigationStack.Count - 2]);
         }
 

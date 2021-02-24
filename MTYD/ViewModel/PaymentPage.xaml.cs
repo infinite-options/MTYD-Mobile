@@ -124,7 +124,7 @@ namespace MTYD.ViewModel
         private async void clickedDone(object sender, EventArgs e)
         {
             setPaymentInfo();
-            Navigation.PushAsync(new Select(cust_firstName, cust_lastName, cust_email));
+            //Navigation.PushAsync(new Select(cust_firstName, cust_lastName, cust_email));
             //MainPage = PaymentPage();
         }
 

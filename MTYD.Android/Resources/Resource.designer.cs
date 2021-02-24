@@ -12053,10 +12053,13 @@ namespace MTYD.Droid
 			public const int tooltip_frame_light = 2131165379;
 			
 			// aapt resource value: 0x7F0700C4
-			public const int whiteCalendar = 2131165380;
+			public const int trashCan = 2131165380;
 			
 			// aapt resource value: 0x7F0700C5
-			public const int whiteLunch = 2131165381;
+			public const int whiteCalendar = 2131165381;
+			
+			// aapt resource value: 0x7F0700C6
+			public const int whiteLunch = 2131165382;
 			
 			static Drawable()
 			{

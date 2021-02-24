@@ -90,11 +90,13 @@ namespace MTYD.ViewModel
         int addOnCount;
         bool addOnSelected = false;
         string selectedDate;
+        Zones[] passedZones;
 
         WebClient client = new WebClient();
 
-        public Select(string firstName, string lastName, string userEmail)
+        public Select(Zones[] zones, string firstName, string lastName, string userEmail)
         {
+            passedZones = zones;
             InitializeComponent();
 
             //move bar initialization testing
@@ -222,6 +224,14 @@ namespace MTYD.ViewModel
             }
             Debug.WriteLine("checkPlatform done");
         }
+
+        //async void getZones()
+        //{
+        //    //string url3 = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/categoricalOptions/" + longitude + "," + latitude;
+
+        //    var content = client.DownloadString(url3);
+        //    var obj = JsonConvert.DeserializeObject<ZonesDto>(content);
+        //}
 
 
         async void clickedPfp(System.Object sender, System.EventArgs e)
@@ -1168,9 +1178,11 @@ namespace MTYD.ViewModel
                 foreach (var m in mealPlan_obj["result"])
                 {
                     Console.WriteLine("In first foreach loop of getmeal plans func:");
-
-                    itemsArray.Add((m["items"].ToString()));
-                    purchIdArray.Add((m["purchase_id"].ToString()));
+                    if (m["purchase_status"].ToString() != "CANCELLED and REFUNDED")
+                    {
+                        itemsArray.Add((m["items"].ToString()));
+                        purchIdArray.Add((m["purchase_id"].ToString()));
+                    }
                 }
 
                 // Console.WriteLine("itemsArray contents:" + itemsArray[0]);

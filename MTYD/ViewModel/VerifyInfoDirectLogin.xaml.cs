@@ -329,7 +329,7 @@ namespace MTYD.ViewModel
             //-------------validate address end*/
 
             setPaymentInfo();
-            Navigation.PushAsync(new Select(cust_firstName, cust_lastName, cust_email));
+            //Navigation.PushAsync(new Select(cust_firstName, cust_lastName, cust_email));
         }
 
         public static string GetXMLElement(XElement element, string name)

@@ -163,6 +163,20 @@ namespace MTYD.Model
         public string customer_id { get; set; }
     }
 
+    public class PurchaseInfo2
+    {
+        public string cc_cvv { get; set; }
+        public string cc_exp_date { get; set; }
+        public string cc_num { get; set; }
+        public string cc_zip { get; set; }
+        public string customer_email { get; set; }
+        public List<Item2> items { get; set; }
+        public string new_item_id { get; set; }
+        public string password { get; set; }
+        public string purchase_id { get; set; }
+        public string start_delivery_date { get; set; }
+    }
+
     public class ProfileInfo
     {
         public string uid { get; set; }

@@ -197,17 +197,19 @@ namespace MTYD.ViewModel
                 DisplayAlert("Error", "please purchase a meal plan first", "OK");
             else
             {
-                Navigation.PushAsync(new Select(firstName, lastName, email), false);
+                Zones[] zones = new Zones[] { };
+                Navigation.PushAsync(new Select(zones, firstName, lastName, email), false);
                 Navigation.RemovePage(this.Navigation.NavigationStack[this.Navigation.NavigationStack.Count - 2]);
             }
         }
 
-        async void clickedVerify(System.Object sender, System.EventArgs e)
-        {
-            string s1 = "", s2 = "", s3 = "", s4 = "", s5 = "", s6 = "", s7 = "", s8 = "", s9 = "", s10 = "", s11 = "", s12 = "", s13 = "", salt = "";
-            Navigation.PushAsync(new VerifyInfo(firstName, lastName, email, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, salt), false);
-            Navigation.RemovePage(this.Navigation.NavigationStack[this.Navigation.NavigationStack.Count - 2]);
-        }
+        //async void clickedVerify(System.Object sender, System.EventArgs e)
+        //{
+        //    Zones[] zones = new Zones[] { };
+        //    string s1 = "", s2 = "", s3 = "", s4 = "", s5 = "", s6 = "", s7 = "", s8 = "", s9 = "", s10 = "", s11 = "", s12 = "", s13 = "", salt = "";
+        //    Navigation.PushAsync(new VerifyInfo(zones, firstName, lastName, email, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, salt), false);
+        //    Navigation.RemovePage(this.Navigation.NavigationStack[this.Navigation.NavigationStack.Count - 2]);
+        //}
 
         async void clickedSubscriptionTest(System.Object sender, System.EventArgs e)
         {

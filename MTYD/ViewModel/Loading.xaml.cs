@@ -23,7 +23,7 @@ namespace MTYD.ViewModel
         {
             if (Device.RuntimePlatform == Device.iOS)
             {
-                loading.FontSize = width / 15;
+                logo.WidthRequest = width / 3;
             }
         }
     }

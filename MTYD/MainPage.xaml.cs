@@ -399,7 +399,7 @@ namespace MTYD
 
                             Console.WriteLine("string: " + (info_obj2["result"]).ToString());
                             //check if the user hasn't entered any info before, if so put in the placeholders
-                            if ((info_obj2["result"]).ToString() == "[]" || (info_obj2["result"]).ToString() == "204")
+                            if ((info_obj2["result"]).ToString() == "[]" || (info_obj2["result"]).ToString() == "204" || Preferences.Get("canChooseSelect", false) == false)
                             {
 
                                 url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
@@ -457,7 +457,8 @@ namespace MTYD
                                 //Application.Current.MainPage = new NavigationPage(new SubscriptionPage(loginAttempt.result[0].customer_first_name, loginAttempt.result[0].customer_last_name, loginAttempt.result[0].customer_email));
                                 //TEMPORARY
                                 Preferences.Set("canChooseSelect", true);
-                                Application.Current.MainPage = new NavigationPage(new Select(loginAttempt.result[0].customer_first_name, loginAttempt.result[0].customer_last_name, loginAttempt.result[0].customer_email));
+                                Zones[] zones = new Zones[] { };
+                                Application.Current.MainPage = new NavigationPage(new Select(zones, loginAttempt.result[0].customer_first_name, loginAttempt.result[0].customer_last_name, loginAttempt.result[0].customer_email));
                                 directEmailVerified = false;
                             }
                         }
@@ -839,7 +840,7 @@ namespace MTYD
 
                                 Console.WriteLine("string: " + (info_obj["result"]).ToString());
                                 //check if the user hasn't entered any info before, if so put in the placeholders
-                                if ((info_obj["result"]).ToString() == "[]")
+                                if ((info_obj["result"]).ToString() == "[]" || Preferences.Get("canChooseSelect", false) == false)
                                 {
                                     url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
 
@@ -890,7 +891,8 @@ namespace MTYD
                                     Debug.WriteLine("fb profile pic:" + facebookData.picture.data.url);
 
                                     Preferences.Set("canChooseSelect", true);
-                                    Application.Current.MainPage = new NavigationPage(new Select((info_obj2["result"])[0]["customer_first_name"].ToString(), (info_obj2["result"])[0]["customer_last_name"].ToString(), (info_obj2["result"])[0]["customer_email"].ToString()));
+                                    Zones[] zones = new Zones[] { };
+                                    Application.Current.MainPage = new NavigationPage(new Select(zones, (info_obj2["result"])[0]["customer_first_name"].ToString(), (info_obj2["result"])[0]["customer_last_name"].ToString(), (info_obj2["result"])[0]["customer_email"].ToString()));
                                 }
                             }
 
@@ -1241,7 +1243,7 @@ namespace MTYD
 
                                 Console.WriteLine("string: " + (info_obj["result"]).ToString());
                                 //check if the user hasn't entered any info before, if so put in the placeholders
-                                if ((info_obj["result"]).ToString() == "[]" || (info_obj["result"]).ToString() == "204")
+                                if ((info_obj["result"]).ToString() == "[]" || (info_obj["result"]).ToString() == "204" || Preferences.Get("canChooseSelect", false) == false)
                                 {
                                     url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
 
@@ -1332,8 +1334,9 @@ namespace MTYD
                                     Preferences.Set("canChooseSelect", true);
                                     //await Debug.WriteLine("a");
                                     //navToSelect((info_obj2["result"])[0]["customer_first_name"].ToString(), (info_obj2["result"])[0]["customer_last_name"].ToString(), (info_obj2["result"])[0]["customer_email"].ToString());
-                                    Application.Current.MainPage = new NavigationPage(new Select((info_obj2["result"])[0]["customer_first_name"].ToString(), (info_obj2["result"])[0]["customer_last_name"].ToString(), (info_obj2["result"])[0]["customer_email"].ToString()));
-
+                                    Zones[] zones = new Zones[] { };
+                                    Application.Current.MainPage = new NavigationPage(new Select(zones, (info_obj2["result"])[0]["customer_first_name"].ToString(), (info_obj2["result"])[0]["customer_last_name"].ToString(), (info_obj2["result"])[0]["customer_email"].ToString()));
+                                    //Application.Current.MainPage = new NavigationPage(new SubscriptionPage((info_obj2["result"])[0]["customer_first_name"].ToString(), (info_obj2["result"])[0]["customer_last_name"].ToString(), (info_obj2["result"])[0]["customer_email"].ToString()));
                                 }
 
                             }
@@ -1486,7 +1489,8 @@ namespace MTYD
             //Preferences.Set("canChooseSelect", false);
             if (Preferences.Get("canChooseSelect", false) == true)
             {
-                Application.Current.MainPage = new NavigationPage(new Select((info_obj3["result"])[0]["customer_first_name"].ToString(), (info_obj3["result"])[0]["customer_last_name"].ToString(), (info_obj3["result"])[0]["customer_email"].ToString()));
+                Zones[] zones = new Zones[] { };
+                Application.Current.MainPage = new NavigationPage(new Select(zones, (info_obj3["result"])[0]["customer_first_name"].ToString(), (info_obj3["result"])[0]["customer_last_name"].ToString(), (info_obj3["result"])[0]["customer_email"].ToString()));
             }
             else Application.Current.MainPage = new NavigationPage(new SubscriptionPage((info_obj3["result"])[0]["customer_first_name"].ToString(), (info_obj3["result"])[0]["customer_last_name"].ToString(), (info_obj3["result"])[0]["customer_email"].ToString()));
             return;
@@ -1501,7 +1505,8 @@ namespace MTYD
         public void navToSelect(string first, string last, string email)
         {
             Debug.WriteLine("reached navToSelect");
-            Application.Current.MainPage = new NavigationPage(new Select(first, last, email));
+            Zones[] zones = new Zones[] { };
+            Application.Current.MainPage = new NavigationPage(new Select(zones, first, last, email));
         }
 
         public void navToLoading()

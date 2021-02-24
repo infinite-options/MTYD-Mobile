@@ -209,6 +209,7 @@
     <BundleResource Include="Resources\cards.png" />
     <BundleResource Include="Resources\search.png" />
     <BundleResource Include="Resources\coupon.png" />
+    <BundleResource Include="Resources\trashCan.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AppleSignIn\" />

@@ -28,6 +28,11 @@ namespace MTYD.ViewModel
         string fullName; string emailAddress;
         public bool isAddessValidated = false;
         bool withinZones = false;
+        WebClient client = new WebClient();
+        Zones[] passingZones;
+        double tax;
+        double serviceFee;
+        double deliveryFee;
 
         protected async Task setPaymentInfo()
         {
@@ -550,27 +555,35 @@ namespace MTYD.ViewModel
                         //map.Pins.Add(address);
 
                         //https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/categoricalOptions/-121.8866517,37.2270928 long,lat
-                        var request3 = new HttpRequestMessage();
-                        Console.WriteLine("user_id: " + (string)Application.Current.Properties["user_id"]);
-                        Debug.WriteLine("latitude: " + latitude + ", longitude: " + longitude);
+                        //var request3 = new HttpRequestMessage();
+                        //Console.WriteLine("user_id: " + (string)Application.Current.Properties["user_id"]);
+                        //Debug.WriteLine("latitude: " + latitude + ", longitude: " + longitude);
                         string url3 = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/categoricalOptions/" + longitude + "," + latitude;
-                        request3.RequestUri = new Uri(url3);
-                        request3.Method = HttpMethod.Get;
-                        var client3 = new HttpClient();
-                        HttpResponseMessage response3 = await client3.SendAsync(request3);
+                        //request3.RequestUri = new Uri(url3);
+                        //request3.Method = HttpMethod.Get;
+                        //var client3 = new HttpClient();
+                        //HttpResponseMessage response3 = await client3.SendAsync(request3);
 
-                        if (response3.StatusCode == System.Net.HttpStatusCode.OK)
+                        var content = client.DownloadString(url3);
+                        var obj = JsonConvert.DeserializeObject<ZonesDto>(content);
+
+                        //HttpContent content3 = response3.Content;
+                        //Console.WriteLine("content: " + content3);
+                        //var userString3 = await content3.ReadAsStringAsync();
+                        //Debug.WriteLine("userString3: " + userString3);
+                        //JObject info_obj3 = JObject.Parse(userString3);
+                        if (obj.Result.Length == 0)
                         {
-                            HttpContent content3 = response3.Content;
-                            Console.WriteLine("content: " + content3);
-                            var userString3 = await content3.ReadAsStringAsync();
-                            Debug.WriteLine("userString3: " + userString3);
-                            JObject info_obj3 = JObject.Parse(userString3);
-                            if (info_obj3["result"].ToString() == "[]")
-                            {
-                                withinZones = false;
-                            }
-                            else withinZones = true;
+                            withinZones = false;
+                        }
+                        else
+                        {
+                            Debug.WriteLine("first business: " + obj.Result[0].business_name);
+                            tax = obj.Result[0].tax_rate;
+                            deliveryFee = obj.Result[0].delivery_fee;
+                            serviceFee = obj.Result[0].service_fee;
+                            passingZones = obj.Result;
+                            withinZones = true;
                         }
 
                         break;
@@ -631,8 +644,8 @@ namespace MTYD.ViewModel
                 await Application.Current.SavePropertiesAsync();
                 //await tagUser(emailEntry.Text.Trim(), ZipEntry.Text.Trim());
 
-
-                Navigation.PushAsync(new VerifyInfo(cust_firstName, cust_lastName, cust_email, AptEntry.Text, FNameEntry.Text, LNameEntry.Text, emailEntry.Text, PhoneEntry.Text, AddressEntry.Text, CityEntry.Text, StateEntry.Text, ZipEntry.Text, DeliveryEntry.Text, "", "", "", salt));
+                Debug.WriteLine("passed in tax, service fee, and delivery fee: " + tax.ToString() + ", " + serviceFee.ToString() + ", " + deliveryFee.ToString());
+                await Navigation.PushAsync(new VerifyInfo(passingZones, tax, serviceFee, deliveryFee, cust_firstName, cust_lastName, cust_email, AptEntry.Text, FNameEntry.Text, LNameEntry.Text, emailEntry.Text, PhoneEntry.Text, AddressEntry.Text, CityEntry.Text, StateEntry.Text, ZipEntry.Text, DeliveryEntry.Text, "", "", "", salt));
 
             }
 

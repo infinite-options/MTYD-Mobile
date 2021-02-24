@@ -316,7 +316,7 @@ namespace MTYD.Model.Login.LoginClasses.Apple
 
                                 Console.WriteLine("string: " + (info_obj2["result"]).ToString());
                                 //check if the user hasn't entered any info before, if so put in the placeholders
-                                if ((info_obj2["result"]).ToString() == "[]" || (info_obj2["result"]).ToString() == "204")
+                                if ((info_obj2["result"]).ToString() == "[]" || (info_obj2["result"]).ToString() == "204" || Preferences.Get("canChooseSelect", false) == false)
                                 {
                                     url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
                                     var request3 = new HttpRequestMessage();
@@ -358,7 +358,8 @@ namespace MTYD.Model.Login.LoginClasses.Apple
 
                                     Preferences.Set("profilePicLink", "");
                                     Preferences.Set("canChooseSelect", true);
-                                    Application.Current.MainPage = new NavigationPage(new Select((info_obj2["result"])[0]["customer_first_name"].ToString(), (info_obj2["result"])[0]["customer_last_name"].ToString(), (info_obj2["result"])[0]["customer_email"].ToString()));
+                                    Zones[] zones = new Zones[]{ };
+                                    Application.Current.MainPage = new NavigationPage(new Select(zones, (info_obj2["result"])[0]["customer_first_name"].ToString(), (info_obj2["result"])[0]["customer_last_name"].ToString(), (info_obj2["result"])[0]["customer_email"].ToString()));
                                 }
                             }
 
