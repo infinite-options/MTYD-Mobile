@@ -807,6 +807,7 @@ namespace MTYD.ViewModel
             if (SignUpButton.Text == "CHECK PRICE")
             {
                 var request2 = new HttpRequestMessage();
+                Debug.WriteLine("subscriptionModal trying to delete this purchase uid: " + purchase_id.ToString());
                 request2.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/refund_calculator?purchase_uid=" + purchase_id);
                 request2.Method = HttpMethod.Get;
                 var client2 = new HttpClient();

@@ -57,6 +57,7 @@ namespace MTYD.ViewModel
         double tax_rate;
         double service_fee;
         double delivery_fee;
+        double checkoutTotal;
 
 
         // CREDENTIALS CLASS
@@ -71,15 +72,18 @@ namespace MTYD.ViewModel
         private string payPalOrderId = "";
         public static string mode = "";
 
-        public VerifyInfo(Zones[] zones, double taxRate, double serviceFee, double deliveryFee, string firstName, string lastName, string email, string AptEntry1, string FNameEntry1, string LNameEntry1, string emailEntry1, string PhoneEntry1, string AddressEntry1, string CityEntry1, string StateEntry1, string ZipEntry1, string DeliveryEntry1, string CCEntry1, string CVVEntry1, string ZipCCEntry1, string salt1)
+        public VerifyInfo(Zones[] zones, double taxRate, double service, double delivery, string firstName, string lastName, string email, string AptEntry1, string FNameEntry1, string LNameEntry1, string emailEntry1, string PhoneEntry1, string AddressEntry1, string CityEntry1, string StateEntry1, string ZipEntry1, string DeliveryEntry1, string CCEntry1, string CVVEntry1, string ZipCCEntry1, string salt1)
         {
             tax_rate = taxRate;
-            service_fee = serviceFee;
-            delivery_fee = deliveryFee;
+            service_fee = service;
+            delivery_fee = delivery;
             passingZones = zones;
             cust_firstName = firstName;
             cust_lastName = lastName;
             cust_email = email;
+
+            
+
             InitializeComponent();
             if (salt1 == "")
             {
@@ -91,6 +95,24 @@ namespace MTYD.ViewModel
             }
 
             AptEntry = AptEntry1; FNameEntry = FNameEntry1; LNameEntry = LNameEntry1; emailEntry = emailEntry1; PhoneEntry = PhoneEntry1; AddressEntry = AddressEntry1; CityEntry = CityEntry1; StateEntry = StateEntry1; ZipEntry = ZipEntry1; DeliveryEntry = DeliveryEntry1; CCEntry = CCEntry1; CVVEntry = CVVEntry1; ZipCCEntry = ZipCCEntry1;
+
+            Preferences.Set("subtotal", Preferences.Get("price", "00.00"));
+            double payment = Double.Parse(Preferences.Get("price", "00.00")) + (Double.Parse(Preferences.Get("price", "00.00")) * tax_rate);
+            payment += service_fee;
+            payment += delivery_fee;
+            Math.Round(payment, 2);
+            Debug.WriteLine("payment after tax and fees: " + payment.ToString());
+            Preferences.Set("price", payment.ToString());
+            grandTotal.Text = "$" + payment.ToString();
+
+
+            subtotal.Text = "$" + Preferences.Get("subtotal", "00.00").ToString();
+            tax.Text = "$" + taxRate.ToString();
+            serviceFee.Text = "$" + service.ToString();
+            deliveryFee.Text = "$" + delivery.ToString();
+            driverTip.Text = "$0";
+            discount.Text = "$0";
+
             NavigationPage.SetHasBackButton(this, false);
             NavigationPage.SetHasNavigationBar(this, false);
             var width = DeviceDisplay.MainDisplayInfo.Width;
@@ -379,21 +401,32 @@ namespace MTYD.ViewModel
             if (total != "00.00")
             {
                 //applying tax, service and delivery fees
-                double payment = Double.Parse(total) + (Double.Parse(total) * tax_rate);
-                payment += service_fee;
-                payment += delivery_fee;
-                Math.Round(payment, 2);
-                Debug.WriteLine("payment after tax and fees: " + payment.ToString());
-                Preferences.Set("price", payment.ToString());
-                total = payment.ToString();
+                //double payment = Double.Parse(total) + (Double.Parse(total) * tax_rate);
+                //payment += service_fee;
+                //payment += delivery_fee;
+                //Math.Round(payment, 2);
+                //Debug.WriteLine("payment after tax and fees: " + payment.ToString());
+                //Preferences.Set("price", payment.ToString());
+                //total = payment.ToString();
+
+
+                //headingGrid.IsVisible = false;
+
+                //checkoutButton.IsVisible = false;
+                //backButton.IsVisible = false;
+                //PaymentScreen.HeightRequest = this.Height;
+                ////PaymentScreen.HeightRequest = 0;
+                //PaymentScreen.Margin = new Thickness(0, -PaymentScreen.HeightRequest / 2, 0, 0);
+                //PayPalScreen.Height = this.Height - (this.Height / 8);
 
                 headingGrid.IsVisible = false;
+                originalStack.IsVisible = false;
                 checkoutButton.IsVisible = false;
                 backButton.IsVisible = false;
-                PaymentScreen.HeightRequest = this.Height;
-                //PaymentScreen.HeightRequest = 0;
-                PaymentScreen.Margin = new Thickness(0, -PaymentScreen.HeightRequest / 2, 0, 0);
-                PayPalScreen.Height = this.Height - (this.Height / 8);
+                PaymentScreen.HeightRequest = deviceHeight;
+                PayPalScreen.Height = deviceHeight - (deviceHeight / 8);
+
+
                 //PayPalScreen.Height = ;
                 StripeScreen.Height = 0;
                 orangeBox.HeightRequest = 0;
@@ -835,6 +868,7 @@ namespace MTYD.ViewModel
             headingGrid.IsVisible = true;
             checkoutButton.IsVisible = true;
             backButton.IsVisible = true;
+            originalStack.IsVisible = true;
 
             PaymentScreen.HeightRequest = 0;
             PaymentScreen.Margin = new Thickness(0, 0, 0, 0);
@@ -846,7 +880,11 @@ namespace MTYD.ViewModel
         // PAYPAL FUNCTIONS
 
         // FUNCTION  1: SET BROWSER AND PAYPAL SCREEN TO PROCESS PAYMENT
-        //step from carlos' notes: purchase an order via PayPal use the following credentials: Card Type: Visa.Card Number: 4032031027352565 Expiration Date: 02/2024 CVV: 154
+        //step from carlos' notes: purchase an order via PayPal use the following credentials:
+        //Card Type: Visa.
+        //Card Number: 4032031027352565
+        //Expiration Date: 02/2024
+        //CVV: 154
         public async void CheckouWithPayPayl(System.Object sender, System.EventArgs e)
         {
             var total = Preferences.Get("price", "00.00");
@@ -854,23 +892,36 @@ namespace MTYD.ViewModel
             if (total != "00.00")
             {
                 //applying tax, service and delivery fees
-                double payment = Double.Parse(total) + (Double.Parse(total) * tax_rate);
-                payment += service_fee;
-                payment += delivery_fee;
-                Math.Round(payment, 2);
-                Debug.WriteLine("payment after tax and fees: " + payment.ToString());
-                Preferences.Set("price", payment.ToString());
-                total = payment.ToString();
+                //double payment = Double.Parse(total) + (Double.Parse(total) * tax_rate);
+                //payment += service_fee;
+                //payment += delivery_fee;
+                //Math.Round(payment, 2);
+                //Debug.WriteLine("payment after tax and fees: " + payment.ToString());
+                //Preferences.Set("price", payment.ToString());
+                //total = payment.ToString();
 
                 headingGrid.IsVisible = false;
                 checkoutButton.IsVisible = false;
                 backButton.IsVisible = false;
                 PaymentScreen.HeightRequest = this.Height;
-                PaymentScreen.Margin = new Thickness(0, -PaymentScreen.HeightRequest / 2, 0, 0);
+                //PaymentScreen.Margin = new Thickness(0, -PaymentScreen.HeightRequest / 2, 0, 0);
+                PaymentScreen.Margin = new Thickness(0, -originalStack.Height, 0, 0);
                 PayPalScreen.Height = 0;
                 StripeScreen.Height = this.Height;
                 Browser.HeightRequest = this.Height - (this.Height / 8);
                 orangeBox.HeightRequest = 0;
+
+                //new?
+                //headingGrid.IsVisible = false;
+                //originalStack.IsVisible = false;
+                //checkoutButton.IsVisible = false;
+                //backButton.IsVisible = false;
+                //PaymentScreen.HeightRequest = deviceHeight;
+                //StripeScreen.Height = 0;
+                //Browser.HeightRequest = deviceHeight - (deviceHeight / 8);
+                //orangeBox.HeightRequest = 0;
+
+
                 //if ((string)Application.Current.Properties["platform"] == "DIRECT")
                 //{
                 //    spacer6.IsVisible = true;
@@ -921,8 +972,9 @@ namespace MTYD.ViewModel
             Debug.WriteLine("BROWSER CURRENT SOURCE: " + source.Url);
             //old link used to check: https://servingfresh.me/
             //m4me link: https://mealtoyourdoor.netlify.app/home
+            //new m4me link: https://mealsfor.me
             //paypal check info: Card Type: Visa. Card Number: 4032031027352565 Expiration Date: 02/2024 CVV: 154
-            if (source.Url == "https://mealtoyourdoor.netlify.app/home" )
+            if (source.Url == "https://mealsfor.me/home")
             {
                 headingGrid.IsVisible = true;
                 checkoutButton.IsVisible = true;
@@ -1027,8 +1079,8 @@ namespace MTYD.ViewModel
                 },
                 ApplicationContext = new ApplicationContext()
                 {
-                    ReturnUrl = "https://mealtoyourdoor.netlify.app/home",
-                    CancelUrl = "https://mealtoyourdoor.netlify.app/home"
+                    ReturnUrl = "https://mealsfor.me/home",
+                    CancelUrl = "https://mealsfor.me/home"
                 }
             };
 

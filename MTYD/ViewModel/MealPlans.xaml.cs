@@ -138,7 +138,7 @@ namespace MTYD.ViewModel
                 selectPlanFrame.Margin = new Thickness(10, 0, 0, 0);
                 selectPlanFrame.Padding = new Thickness(15, 5);
                 selectPlanFrame.HeightRequest = height / 55;
-                planPicker.FontSize = width / 40;
+                planPicker.FontSize = width / 43;
                 //planPicker.VerticalOptions = LayoutOptions.Fill;
                 planPicker.HorizontalOptions = LayoutOptions.Fill;
                 changeMealPlan.Margin = new Thickness(10, 0, 0, 0);
@@ -415,10 +415,10 @@ namespace MTYD.ViewModel
                     if (m["purchase_status"].ToString() == "ACTIVE")
                     {
                         itemsArray.Add((m["items"].ToString()));
-                        purchIdArray.Add((m["purchase_id"].ToString()));
+                        purchIdArray.Add((m["purchase_uid"].ToString()));
                         activePlans.Add(m);
                     }
-                    else Debug.WriteLine(m["purchase_id"].ToString() + " was skipped");
+                    else Debug.WriteLine(m["purchase_uid"].ToString() + " was skipped");
                 }
 
                 if (purchIdArray.Count == 0)
@@ -450,7 +450,12 @@ namespace MTYD.ViewModel
                         //string price = (string)config["price"];
                         //string mealid = (string)config["item_uid"];
 
-                        namesArray.Add(name);
+                        //only includes meal plan name
+                        //namesArray.Add(name);
+
+                        //adds purchase uid to front of meal plan name
+                        //namesArray.Add(purchIdArray[i].ToString().Substring(4) + " : " + name);
+                        namesArray.Add(name + " : " + purchIdArray[i].ToString().Substring(4));
 
                         string mealid = (string)config["item_uid"];
                         itemUidArray.Add(mealid);
@@ -895,9 +900,31 @@ namespace MTYD.ViewModel
         async void deleteClicked(object sender, System.EventArgs e)
         {
             var client = new HttpClient();
+            string refundAmount = "";
+
             if (chosenPurchUid != null && chosenPurchUid != "" && currentIndex != -1)
             {
-                bool answer = await DisplayAlert("Delete a Plan", "Are you sure you want to delete this " + currentPlan + "?", "Yes", "No");
+                //get the amount that will be refunded
+                var request2 = new HttpRequestMessage();
+                Debug.WriteLine("trying to delete: " + chosenPurchUid.ToString());
+                request2.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/refund_calculator?purchase_uid=" + chosenPurchUid);
+                request2.Method = HttpMethod.Get;
+                var client2 = new HttpClient();
+                HttpResponseMessage response2 = await client2.SendAsync(request2);
+
+                if (response2.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    HttpContent content2 = response2.Content;
+                    var userString2 = await content2.ReadAsStringAsync();
+                    JObject refund_obj = JObject.Parse(userString2);
+
+                    Debug.WriteLine("first start" + refund_obj["result"][0].ToString());
+                    Debug.WriteLine("this is what I'm getting: " + refund_obj["result"][0]["refund_amount"].ToString());
+                    refundAmount = refund_obj["result"][0]["refund_amount"].ToString();
+
+                }
+
+                bool answer = await DisplayAlert("Delete a Plan", "Are you sure you want to delete this " + currentPlan + "? If yes, you will be refunded $" + refundAmount + ".", "Yes", "No");
                 Debug.WriteLine("Answer: " + answer);
 
                 if (answer == true)

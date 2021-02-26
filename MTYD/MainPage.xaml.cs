@@ -36,6 +36,11 @@ using System.Collections.ObjectModel;
 //testing
 namespace MTYD
 {
+    //keys in Preferences
+    //canChooseSelect - boolean - used to know if the user can navigate to the select page from the menu
+
+
+
     public partial class MainPage : ContentPage
     {
         public HttpClient client = new HttpClient();
@@ -399,7 +404,7 @@ namespace MTYD
 
                             Console.WriteLine("string: " + (info_obj2["result"]).ToString());
                             //check if the user hasn't entered any info before, if so put in the placeholders
-                            if ((info_obj2["result"]).ToString() == "[]" || (info_obj2["result"]).ToString() == "204" || Preferences.Get("canChooseSelect", false) == false)
+                            if ((info_obj2["result"]).ToString() == "[]" || (info_obj2["result"]).ToString() == "204" || (info_obj2["result"]).ToString().Contains("ACTIVE") == false)
                             {
 
                                 url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
@@ -839,8 +844,9 @@ namespace MTYD
                                 //ArrayList groupArray = new ArrayList();
 
                                 Console.WriteLine("string: " + (info_obj["result"]).ToString());
+                                Debug.WriteLine("what is canChooseSelect set to?: " + Preferences.Get("canChooseSelect", false).ToString());
                                 //check if the user hasn't entered any info before, if so put in the placeholders
-                                if ((info_obj["result"]).ToString() == "[]" || Preferences.Get("canChooseSelect", false) == false)
+                                if ((info_obj["result"]).ToString() == "[]" || (info_obj["result"]).ToString().Contains("ACTIVE") == false)
                                 {
                                     url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
 
@@ -1243,7 +1249,7 @@ namespace MTYD
 
                                 Console.WriteLine("string: " + (info_obj["result"]).ToString());
                                 //check if the user hasn't entered any info before, if so put in the placeholders
-                                if ((info_obj["result"]).ToString() == "[]" || (info_obj["result"]).ToString() == "204" || Preferences.Get("canChooseSelect", false) == false)
+                                if ((info_obj["result"]).ToString() == "[]" || (info_obj["result"]).ToString() == "204" || (info_obj["result"]).ToString().Contains("ACTIVE") == false)
                                 {
                                     url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
 

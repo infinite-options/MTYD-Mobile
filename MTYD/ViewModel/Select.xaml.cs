@@ -126,6 +126,7 @@ namespace MTYD.ViewModel
             last = lastName;
             email = userEmail;
             checkPlatform(height, width);
+            Preferences.Set("canChooseSelect", true);
 
             ////==========================================
             //// CARLOS PROGRESS BAR INITIALIZATION
@@ -151,7 +152,7 @@ namespace MTYD.ViewModel
             //Debug.WriteLine("height:" + weekOneMenu.Height.ToString());
             //fillGrid();
 
-            
+
             Debug.WriteLine("finished with constructor");
         }
 
@@ -1201,7 +1202,12 @@ namespace MTYD.ViewModel
                         //string price = (string)config["price"];
                         //string mealid = (string)config["item_uid"];
 
-                        namesArray.Add(name);
+                        //only includes meal plan name
+                        //namesArray.Add(name);
+
+                        //adds purchase uid to front of meal plan name
+                        //namesArray.Add(purchIdArray[i].ToString().Substring(4) + " : " + name);
+                        namesArray.Add(name + " : " + purchIdArray[i].ToString().Substring(4));
                     }
                 }
                 Console.WriteLine("Outside foreach in GetmealsPlan func");

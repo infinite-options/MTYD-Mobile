@@ -177,6 +177,7 @@ namespace MTYD.Model.Login.LoginClasses.Apple
                             // HERE YOU NEED TO SUBSTITUTE MY SOCIAL SIGN UP PAGE WITH MTYD SOCIAL SIGN UP
                             // NOTE THAT THIS SOCIAL SIGN UP PAGE NEEDS A CONSTRUCTOR LIKE THE FOLLOWING ONE
                             // SocialSignUp(string socialId, string firstName, string lastName, string emailAddress, string accessToken, string refreshToken, string platform)
+                            Preferences.Set("canChooseSelect", false);
                             Application.Current.MainPage = new CarlosSocialSignUp(appleId, userName, "", appleUserEmail, appleToken, appleToken, "APPLE");
                         }
                     }
@@ -316,7 +317,7 @@ namespace MTYD.Model.Login.LoginClasses.Apple
 
                                 Console.WriteLine("string: " + (info_obj2["result"]).ToString());
                                 //check if the user hasn't entered any info before, if so put in the placeholders
-                                if ((info_obj2["result"]).ToString() == "[]" || (info_obj2["result"]).ToString() == "204" || Preferences.Get("canChooseSelect", false) == false)
+                                if ((info_obj2["result"]).ToString() == "[]" || (info_obj2["result"]).ToString() == "204" || (info_obj2["result"]).ToString().Contains("ACTIVE") == false)
                                 {
                                     url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
                                     var request3 = new HttpRequestMessage();

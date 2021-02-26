@@ -260,7 +260,9 @@ namespace MTYD.ViewModel
                 prepay.Margin = new Thickness(30, 0, 0, 0);
                 prepay.FontSize = width / 37;
 
-                payFrame.HeightRequest = height / 12;
+                payFrame.HeightRequest = height / 8;
+                payFrame.CornerRadius = (int)(height / 16);
+
                 payOp1.FontSize = width / 50;
                 payOp2.FontSize = width / 50;
                 payOp3.FontSize = width / 50;
