@@ -931,8 +931,10 @@ namespace MTYD.ViewModel
                 Console.WriteLine("CHECKOUT JSON OBJECT BEING SENT: " + newPaymentJSONString);
                 Console.WriteLine("clickedDone Func ENDED!");
 
-
-                await Navigation.PushAsync(new UserProfile(cust_firstName, cust_lastName, cust_email));
+                Zones[] zones = new Zones[] { };
+                await Navigation.PushAsync(new Select(zones, cust_firstName, cust_lastName, cust_email));
+                //old nav
+                //await Navigation.PushAsync(new UserProfile(cust_firstName, cust_lastName, cust_email));
                 //Application.Current.MainPage = new DeliveryBilling();
                 //await NavigationPage.PushAsync(DeliveryBilling());
             }

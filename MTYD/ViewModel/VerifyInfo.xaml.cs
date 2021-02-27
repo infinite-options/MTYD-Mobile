@@ -804,7 +804,7 @@ namespace MTYD.ViewModel
                         Charge charge = chargeService.Create(chargeOption);
                         if (charge.Status == "succeeded")
                         {
-                            
+                            await Navigation.PushAsync(new Loading());
 
                             PaymentScreen.HeightRequest = 0;
                             PaymentScreen.Margin = new Thickness(0, 0, 0, 0);
@@ -813,8 +813,9 @@ namespace MTYD.ViewModel
                             orangeBox.HeightRequest = deviceHeight / 2;
 
                             Debug.WriteLine("STRIPE PAYMENT WAS SUCCESSFUL");
+
                             //Preferences.Set("price", "00.00");
-                            DisplayAlert("Payment Completed", "Your payment was successful. Press 'CONTINUE' to select your meals!", "OK");
+                            //DisplayAlert("Payment Completed", "Your payment was successful. Press 'CONTINUE' to select your meals!", "OK");
                             //when purchasing a first meal, might not send to endpoint on time when clicking the continue button as fast as possible, resulting in error on select pg
                             //wait half a second
                             Task.Delay(500).Wait();
@@ -831,6 +832,25 @@ namespace MTYD.ViewModel
                             headingGrid.IsVisible = true;
                             checkoutButton.IsVisible = true;
                             backButton.IsVisible = true;
+
+                            //checkout button clicked functionality added below vv
+                            Preferences.Set(billingEmail, cardHolderEmail.Text);
+                            Preferences.Set(billingName, cardHolderName.Text);
+                            Preferences.Set(billingNum, cardHolderNumber.Text);
+                            Preferences.Set(billingMonth, cardExpMonth.Text);
+                            Preferences.Set(billingYear, cardExpYear.Text);
+                            Preferences.Set(billingCVV, cardCVV.Text);
+                            Preferences.Set(billingAddress, cardHolderAddress.Text);
+                            Preferences.Set(billingUnit, cardHolderUnit.Text);
+                            Preferences.Set(billingCity, cardCity.Text);
+                            Preferences.Set(billingState, cardState.Text);
+                            Preferences.Set(billingZip, cardZip.Text);
+                            Preferences.Set(purchaseDescription, cardDescription.Text);
+
+                            await setPaymentInfo();
+                            Preferences.Set("canChooseSelect", true);
+                            await Navigation.PushAsync(new Select(passingZones, cust_firstName, cust_lastName, cust_email));
+                            //done from checkout button clicked
                         }
                         else
                         {
@@ -887,6 +907,8 @@ namespace MTYD.ViewModel
         //CVV: 154
         public async void CheckouWithPayPayl(System.Object sender, System.EventArgs e)
         {
+            Debug.WriteLine("paypal CheckouWithPayPayl called 1");
+
             var total = Preferences.Get("price", "00.00");
             Debug.WriteLine("PAYPAL AMOUNT TO PAY: " + total);
             if (total != "00.00")
@@ -942,7 +964,8 @@ namespace MTYD.ViewModel
         // FUNCTION  2: CREATES A PAYMENT REQUEST
         public async void PayViaPayPal(System.Object sender, System.EventArgs e)
         {
-            
+            Debug.WriteLine("paypal PayViaPayPal called 2");
+
             var response = await createOrder(Preferences.Get("price", "00.00"));
             var content = response.Result<PayPalCheckoutSdk.Orders.Order>();
             var result = response.Result<PayPalCheckoutSdk.Orders.Order>();
@@ -968,6 +991,8 @@ namespace MTYD.ViewModel
         // FUNCTION  3: SET BROWSER SOURCE WITH PROPER URL TO PROCESS PAYMENT
         private void Browser_Navigated(object sender, WebNavigatedEventArgs e)
         {
+            Debug.WriteLine("paypal Browser_Navigated called 3");
+
             var source = Browser.Source as UrlWebViewSource;
             Debug.WriteLine("BROWSER CURRENT SOURCE: " + source.Url);
             //old link used to check: https://servingfresh.me/
@@ -976,6 +1001,8 @@ namespace MTYD.ViewModel
             //paypal check info: Card Type: Visa. Card Number: 4032031027352565 Expiration Date: 02/2024 CVV: 154
             if (source.Url == "https://mealsfor.me/home")
             {
+                //Navigation.PushAsync(new Loading());
+
                 headingGrid.IsVisible = true;
                 checkoutButton.IsVisible = true;
                 backButton.IsVisible = true;
@@ -991,7 +1018,8 @@ namespace MTYD.ViewModel
         // FUNCTION  4: PAYPAL CLIENT
         public static PayPalHttp.HttpClient client()
         {
-            
+            Debug.WriteLine("paypal client called 4");
+
             Debug.WriteLine("PAYPAL CLIENT ID MTYD: " + clientId);
             Debug.WriteLine("PAYPAL SECRET MTYD   : " + secret);
 
@@ -1013,6 +1041,8 @@ namespace MTYD.ViewModel
         // FUNCTION  5: SET PAYPAL CREDENTIALS
         public async void SetPayPalCredentials()
         {
+            Debug.WriteLine("paypal SetPayPalCredentials called 5");
+
             var clientHttp = new System.Net.Http.HttpClient();
             var paypal = new Credentials();
                 paypal.key = Constant.LiveClientId;
@@ -1060,6 +1090,8 @@ namespace MTYD.ViewModel
         // FUNCTION  6: CREATE ORDER REQUEST
         public async static Task<HttpResponse> createOrder(string amount)
         {
+            Debug.WriteLine("paypal createOrder called 6");
+
             HttpResponse response;
             // Construct a request object and set desired parameters
             // Here, OrdersCreateRequest() creates a POST request to /v2/checkout/orders
@@ -1096,6 +1128,10 @@ namespace MTYD.ViewModel
         // FUNCTION  7: CAPTURE ORDER
         public async Task<HttpResponse> captureOrder(string id)
         {
+            Debug.WriteLine("paypal captureOrder called 7");
+            Debug.WriteLine("passed in id: " + id);
+            //await Navigation.PushAsync(new Loading());
+
             // Construct a request object and set desired parameters
             // Replace ORDER-ID with the approved order id from create order
             var request = new OrdersCaptureRequest(id);
@@ -1113,9 +1149,30 @@ namespace MTYD.ViewModel
 
             if (result.Status == "COMPLETED")
             {
+                await Navigation.PushAsync(new Loading());
                 Debug.WriteLine("PAYPAL PAYMENT WAS SUCCESSFUL");
+
+                //checkout button clicked functionality added below vv
+                Preferences.Set(billingEmail, cardHolderEmail.Text);
+                Preferences.Set(billingName, cardHolderName.Text);
+                Preferences.Set(billingNum, cardHolderNumber.Text);
+                Preferences.Set(billingMonth, cardExpMonth.Text);
+                Preferences.Set(billingYear, cardExpYear.Text);
+                Preferences.Set(billingCVV, cardCVV.Text);
+                Preferences.Set(billingAddress, cardHolderAddress.Text);
+                Preferences.Set(billingUnit, cardHolderUnit.Text);
+                Preferences.Set(billingCity, cardCity.Text);
+                Preferences.Set(billingState, cardState.Text);
+                Preferences.Set(billingZip, cardZip.Text);
+                Preferences.Set(purchaseDescription, cardDescription.Text);
+
+                await setPaymentInfo();
+                Preferences.Set("canChooseSelect", true);
+                await Navigation.PushAsync(new Select(passingZones, cust_firstName, cust_lastName, cust_email));
+                //done from checkout button clicked
+
                 //Preferences.Set("price", "00.00");
-                await DisplayAlert("Payment Completed","Your payment was successful. Press 'CONTINUE' to select your meals!","OK");
+                //await DisplayAlert("Payment Completed","Your payment was successful. Press 'CONTINUE' to select your meals!","OK");
                 orangeBox.HeightRequest = deviceHeight / 2;
                 if ((string)Application.Current.Properties["platform"] == "DIRECT")
                 {
@@ -1127,9 +1184,11 @@ namespace MTYD.ViewModel
                     spacer8.IsVisible = true;
                 }
                 checkoutButton.Text = "CONTINUE";
+
             }
             else
             {
+                Debug.WriteLine("didn't work");
                 await DisplayAlert("Ooops", "You payment was cancel or not sucessful. Please try again", "OK");
             }
 

@@ -386,7 +386,7 @@ namespace MTYD.ViewModel
                 //weekOneMenu.ItemsSource = Meals1;
                 if (mealCount % 2 != 0)
                     mealCount++;
-                weekOneMenu.HeightRequest = 280 * ((mealCount / 2));
+                weekOneMenu.HeightRequest = 310 * ((mealCount / 2));
 
                 if (addOnCount % 2 != 0)
                     addOnCount++;
