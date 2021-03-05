@@ -163,7 +163,7 @@
 
                 <BoxView HeightRequest="3"/>
                     
-                <Label x:Name="sub1" Text="Explore Meal Plans&#x0a;Choose one that is right for you." TextColor="#909090" HorizontalTextAlignment="Center"/>
+                <Label x:Name="sub1" Text="Explore Meals and Cuisines&#x0a;Choose a Meal Plan that is right for you." TextColor="#909090" HorizontalTextAlignment="Center"/>
 
                 <BoxView HeightRequest="50"/>
 

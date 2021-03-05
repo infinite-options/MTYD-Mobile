@@ -103,6 +103,17 @@ namespace MTYD.ViewModel
             Math.Round(payment, 2);
             Debug.WriteLine("payment after tax and fees: " + payment.ToString());
             Preferences.Set("price", payment.ToString());
+
+            //make sure price is formatted correctly
+            var total = Preferences.Get("price", "00.00");
+            if (total.Contains(".") == false)
+                total = total + ".00";
+            else if (total.Substring(total.IndexOf(".") + 1).Length == 1)
+                total = total + "0";
+            else if (total.Substring(total.IndexOf(".") + 1).Length == 0)
+                total = total + "00";
+            Preferences.Set("price", total);
+
             grandTotal.Text = "$" + payment.ToString();
 
 
@@ -394,10 +405,16 @@ namespace MTYD.ViewModel
         public async void CheckouWithStripe(System.Object sender, System.EventArgs e)
         {
             var total = Preferences.Get("price", "00.00");
+            if (total.Contains(".") == false)
+                total = total + ".00";
+            else if (total.Substring(total.IndexOf(".") + 1).Length == 1)
+                total = total + "0";
+            else if (total.Substring(total.IndexOf(".") + 1).Length == 0)
+                total = total + "00";
+            Preferences.Set("price", total);
 
-            
 
-            Debug.WriteLine("STRIPE AMOUNT TO PAY: " + total);
+                Debug.WriteLine("STRIPE AMOUNT TO PAY: " + total);
             if (total != "00.00")
             {
                 //applying tax, service and delivery fees
@@ -450,6 +467,7 @@ namespace MTYD.ViewModel
                 await DisplayAlert("Ooops", "The amount to pay is zero. It must be greater than zero to process a payment", "OK");
             }
         }
+
         // FUNCTION  2:
         public async void PayViaStripe(System.Object sender, System.EventArgs e)
         {
@@ -788,6 +806,8 @@ namespace MTYD.ViewModel
                         // Step 5: Charge option
                         var chargeOption = new ChargeCreateOptions();
                         chargeOption.Amount = (long)RemoveDecimalFromTotalAmount(total);
+                        
+                        Debug.WriteLine("hopefully correct total: " + total);
                         chargeOption.Currency = "usd";
                         chargeOption.ReceiptEmail = cardHolderEmail.Text.ToLower().Trim();
                         chargeOption.Customer = cust.Id;

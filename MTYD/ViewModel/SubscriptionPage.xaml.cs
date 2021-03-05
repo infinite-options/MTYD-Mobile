@@ -61,6 +61,7 @@ namespace MTYD.ViewModel
                 }
                 //Find unique number of meals
                 int first = (int)num_items[1];
+                Debug.WriteLine("first: " + first.ToString());
                 int[] numItemsArray = new int[] { first, 0, 0, 0 };
                 int index = 1;
                 //Fill Unique # of Meals

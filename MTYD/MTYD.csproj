@@ -29,6 +29,7 @@
     <PackageReference Include="Stripe.net" Version="39.31.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Google.Apis.Auth" Version="1.49.0" />
+    <PackageReference Include="Forms9Patch" Version="2.4.9" />
   </ItemGroup>
   
   <ItemGroup>

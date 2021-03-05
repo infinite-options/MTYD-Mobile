@@ -145,6 +145,13 @@ namespace MTYD.ViewModel
 
                 divider5.Margin = new Thickness(24, 10);
 
+                aboutUsButton.Margin = new Thickness(0, -5);
+                aboutUsPic.HeightRequest = width / 15;
+                aboutUsPic.WidthRequest = width / 15;
+                aboutUsPic.Margin = new Thickness(25, 0, 0, 0);
+
+                divider6.Margin = new Thickness(24, 10);
+
                 logoutButton.Margin = new Thickness(0, -5);
                 logoutPic.HeightRequest = width / 15;
                 logoutPic.WidthRequest = width / 15;
@@ -175,19 +182,25 @@ namespace MTYD.ViewModel
 
         async void clickedLanding(System.Object sender, System.EventArgs e)
         {
-            Navigation.PushAsync(new Landing(firstName, lastName, email), false);
+            await Navigation.PushAsync(new Landing(firstName, lastName, email), false);
             Navigation.RemovePage(this.Navigation.NavigationStack[this.Navigation.NavigationStack.Count - 2]);
         }
 
         async void clickedSubscription(System.Object sender, System.EventArgs e)
         {
-            Navigation.PushAsync(new SubscriptionPage(firstName, lastName, email), false);
+            await Navigation.PushAsync(new SubscriptionPage(firstName, lastName, email), false);
             Navigation.RemovePage(this.Navigation.NavigationStack[this.Navigation.NavigationStack.Count - 2]);
         }
 
         async void clickedMealPlan(System.Object sender, System.EventArgs e)
         {
-            Navigation.PushAsync(new MealPlans(firstName, lastName, email), false);
+            await Navigation.PushAsync(new MealPlans(firstName, lastName, email), false);
+            Navigation.RemovePage(this.Navigation.NavigationStack[this.Navigation.NavigationStack.Count - 2]);
+        }
+
+        async void clickedAboutUs(System.Object sender, System.EventArgs e)
+        {
+            await Navigation.PushAsync(new AboutUs(firstName, lastName, email), false);
             Navigation.RemovePage(this.Navigation.NavigationStack[this.Navigation.NavigationStack.Count - 2]);
         }
 

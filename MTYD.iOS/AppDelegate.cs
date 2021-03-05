@@ -32,6 +32,9 @@ namespace MTYD.iOS
             Xamarin.Forms.Forms.SetFlags("Shapes_Experimental");
             global::Xamarin.Forms.Forms.Init();
             Xamarin.FormsMaps.Init();
+
+            //forms9patch
+            Forms9Patch.iOS.Settings.Initialize(this);
             LoadApplication(new App());
 
             base.FinishedLaunching(app, options);

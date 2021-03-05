@@ -28,6 +28,8 @@ namespace MTYD.Droid
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
 
+            //forms9patch
+            Forms9Patch.Droid.Settings.Initialize(this);
             LoadApplication(new App());
 
             if (!IsPlayServiceAvailable())

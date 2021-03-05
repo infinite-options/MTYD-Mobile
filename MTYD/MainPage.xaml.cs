@@ -48,7 +48,8 @@ namespace MTYD
         public bool createAccount = false;
         public ObservableCollection<Plans> NewMainPage = new ObservableCollection<Plans>();
         LoginViewModel vm = new LoginViewModel();
-        bool directEmailVerified = false;
+        //-1 if the email_verified section is not found in the returned message, 0 if false, 1 if true
+        int directEmailVerified = 0;
         string deviceId;
 
         Account account;
@@ -265,7 +266,7 @@ namespace MTYD
                 {
                     var loginAttempt = await LogInUser(loginUsername.Text.ToLower(), loginPassword.Text, accountSalt);
 
-                    if (directEmailVerified == false)
+                    if (directEmailVerified == 0)
                     {
                         DisplayAlert("Please Verify Email", "Please click the link in the email sent to " + loginUsername.Text + ". Check inbox and spam folders.", "OK");
                         loginButton.IsEnabled = true;
@@ -383,7 +384,7 @@ namespace MTYD
 
                                 Debug.WriteLine("email verified:" + (info_obj3["result"])[0]["email_verified"].ToString());
                                 Application.Current.MainPage = new NavigationPage(new SubscriptionPage(loginAttempt.result[0].customer_first_name, loginAttempt.result[0].customer_last_name, loginAttempt.result[0].customer_email));
-                                directEmailVerified = false;
+                                directEmailVerified = 0;
                                 return;
                             }
 
@@ -433,7 +434,7 @@ namespace MTYD
                                 Console.WriteLine("go to SubscriptionPage");
                                 Preferences.Set("canChooseSelect", false);
                                 Application.Current.MainPage = new NavigationPage(new SubscriptionPage(loginAttempt.result[0].customer_first_name, loginAttempt.result[0].customer_last_name, loginAttempt.result[0].customer_email));
-                                directEmailVerified = false;
+                                directEmailVerified = 0;
                             }
                             else
                             {
@@ -464,7 +465,7 @@ namespace MTYD
                                 Preferences.Set("canChooseSelect", true);
                                 Zones[] zones = new Zones[] { };
                                 Application.Current.MainPage = new NavigationPage(new Select(zones, loginAttempt.result[0].customer_first_name, loginAttempt.result[0].customer_last_name, loginAttempt.result[0].customer_email));
-                                directEmailVerified = false;
+                                directEmailVerified = 0;
                             }
                         }
                     }
@@ -508,6 +509,7 @@ namespace MTYD
 
                     if (DRSMessage.Contains(Constant.UseSocialMediaLogin))
                     {
+                        Debug.WriteLine("check if social login already exists for this email");
                         createAccount = true;
                         System.Diagnostics.Debug.WriteLine(DRSMessage);
                         await DisplayAlert("Oops!", data.message, "OK");
@@ -563,7 +565,9 @@ namespace MTYD
                 string emailVerify = message.Substring(message.IndexOf("email_verified") + 18, 1);
                 Debug.WriteLine("emailVerify: " + emailVerify);
                 if (emailVerify == "1")
-                    directEmailVerified = true;
+                    directEmailVerified = 1;
+                if (message.IndexOf("email_verified") == -1)
+                    directEmailVerified = -1;
 
 
                 if (message.Contains(Constant.AutheticatedSuccesful)){
@@ -1361,6 +1365,7 @@ namespace MTYD
                     //else if (responseContent.Contains(Constant.ErrorPlatform))
                     else if (data5.code.ToString() == Constant.ErrorPlatform)
                     {
+                        Debug.WriteLine("google login: check if the user's email is already used elsewhere");
                         //testing with loading page
                         Application.Current.MainPage = new MainPage();
 

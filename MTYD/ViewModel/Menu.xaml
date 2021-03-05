@@ -7,7 +7,7 @@
         <StackLayout>
 
             <!--<Grid x:Name="mainGrid" BackgroundColor="#FF9E19" HeightRequest="650" HorizontalOptions="Fill" VerticalOptions="Start">-->
-            <Grid x:Name="mainGrid" BackgroundColor="#FF9E19" HeightRequest="700" HorizontalOptions="Fill" VerticalOptions="Start">
+            <Grid x:Name="mainGrid" BackgroundColor="#FF9E19" HorizontalOptions="Fill" VerticalOptions="Start">
                 <StackLayout>
 
                 <Grid x:Name="headingGrid">
@@ -173,6 +173,30 @@
                 <BoxView x:Name="divider5" HeightRequest="2" HorizontalOptions="Fill" VerticalOptions="Center" BackgroundColor="White"/>
 
 
+                <Grid x:Name="aboutUsGrid" ColumnSpacing="15">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!--<Button x:Name="placeholderButton" Grid.ColumnSpan="2" HorizontalOptions="Fill" Clicked="clickedPfp"/>-->
+
+
+                    <Label Grid.Column="1" x:Name="aboutUs" Text="ABOUT US" HorizontalOptions="StartAndExpand" VerticalOptions="Center" FontAttributes="Bold" FontSize="25" TextColor="White"/>
+                    
+                    <Image x:Name="aboutUsPic" VerticalOptions="Center" HorizontalOptions="Start" Source="profile.png"/>
+
+                    <Button x:Name="aboutUsButton" BackgroundColor="Transparent" Grid.ColumnSpan="2" HorizontalOptions="Fill" Clicked="clickedAboutUs"/>
+
+
+                </Grid>
+
+                <BoxView x:Name="divider6" HeightRequest="2" HorizontalOptions="Fill" VerticalOptions="Center" BackgroundColor="White"/>
+
+
                 <Grid x:Name="logoutGrid" ColumnSpacing="15">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -197,6 +221,7 @@
 
                 </Grid>
 
+                <BoxView HeightRequest="15" HorizontalOptions="Fill" VerticalOptions="Center" BackgroundColor="Transparent"/>
 
                 </StackLayout>
             </Grid>

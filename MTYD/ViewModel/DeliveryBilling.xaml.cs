@@ -33,6 +33,17 @@ namespace MTYD.ViewModel
         double tax;
         double serviceFee;
         double deliveryFee;
+        string savedFirstName = "firstName" + (string)Application.Current.Properties["user_id"];
+        string savedLastName = "lastName" + (string)Application.Current.Properties["user_id"];
+        string savedEmail = "email" + (string)Application.Current.Properties["user_id"];
+        string savedAdd = "address" + (string)Application.Current.Properties["user_id"];
+        string savedApt = "apt" + (string)Application.Current.Properties["user_id"];
+        string savedCity = "city" + (string)Application.Current.Properties["user_id"];
+        string savedState = "state" + (string)Application.Current.Properties["user_id"];
+        string savedZip = "zip" + (string)Application.Current.Properties["user_id"];
+        string savedPhone = "phone" + (string)Application.Current.Properties["user_id"];
+        string savedInstr = "instructions" + (string)Application.Current.Properties["user_id"];
+
 
         protected async Task setPaymentInfo()
         {
@@ -106,7 +117,65 @@ namespace MTYD.ViewModel
         //auto-populate the delivery info if the user has already previously entered it
         public async void fillEntries()
         {
-            Console.WriteLine("fillEntries entered");
+            //if there is no saved info
+            if (Preferences.Get(savedFirstName, "") == "")
+            {
+                Console.WriteLine("no info");
+                string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
+                Debug.WriteLine("getProfileInfo url: " + url);
+                var request3 = new HttpRequestMessage();
+                request3.RequestUri = new Uri(url);
+                request3.Method = HttpMethod.Get;
+                var client2 = new HttpClient();
+                HttpResponseMessage response2 = await client2.SendAsync(request3);
+                HttpContent content2 = response2.Content;
+                Console.WriteLine("content: " + content2.ToString());
+                var userString2 = await content2.ReadAsStringAsync();
+                Debug.WriteLine("userString: " + userString2);
+                JObject info_obj3 = JObject.Parse(userString2);
+
+                FNameEntry.Text = (info_obj3["result"])[0]["customer_first_name"].ToString();
+                LNameEntry.Text = (info_obj3["result"])[0]["customer_last_name"].ToString();
+                emailEntry.Text = info_obj3["result"][0]["customer_email"].ToString();
+                AddressEntry.Text = info_obj3["result"][0]["customer_address"].ToString();
+                if (info_obj3["result"][0]["customer_unit"].ToString() == null || info_obj3["result"][0]["customer_unit"].ToString() == "")
+                    AptEntry.Placeholder = "Unit";
+                else AptEntry.Text = info_obj3["result"][0]["customer_unit"].ToString();
+                CityEntry.Text = info_obj3["result"][0]["customer_city"].ToString();
+                StateEntry.Text = info_obj3["result"][0]["customer_state"].ToString();
+                ZipEntry.Text = info_obj3["result"][0]["customer_zip"].ToString();
+                PhoneEntry.Text = info_obj3["result"][0]["customer_phone_num"].ToString();
+
+
+                DeliveryEntry.Placeholder = "Delivery Instructions";
+                CCEntry.Placeholder = "Credit Card Number*";
+                CVVEntry.Placeholder = "CVC/CVV*";
+                ZipCCEntry.Placeholder = "Zip*";
+
+                return;
+            }
+            else
+            {
+                FNameEntry.Text = Preferences.Get(savedFirstName, "");
+                LNameEntry.Text = Preferences.Get(savedLastName, "");
+                emailEntry.Text = Preferences.Get(savedEmail, "");
+                AddressEntry.Text = Preferences.Get(savedAdd, "");
+                CityEntry.Text = Preferences.Get(savedCity, "");
+                StateEntry.Text = Preferences.Get(savedState, "");
+                ZipEntry.Text = Preferences.Get(savedZip, "");
+                PhoneEntry.Text = Preferences.Get(savedPhone, "");
+
+                if (Preferences.Get(savedApt, "") != "")
+                    AptEntry.Text = Preferences.Get(savedApt, "");
+                else AptEntry.Placeholder = "Unit";
+                if (Preferences.Get(savedInstr, "") != "")
+                    DeliveryEntry.Text = Preferences.Get(savedInstr, "");
+                else DeliveryEntry.Placeholder = "Delivery Instructions";
+
+            }
+
+
+            /*Console.WriteLine("fillEntries entered");
             var request = new HttpRequestMessage();
             Console.WriteLine("user_id: " + (string)Application.Current.Properties["user_id"]);
             string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + (string)Application.Current.Properties["user_id"];
@@ -184,7 +253,7 @@ namespace MTYD.ViewModel
                 if (emailEntry.Text == "")
                     emailEntry.Placeholder = "Email*";
 
-                AddressEntry.Text = (info_obj["result"])[0]["delivery_address"].ToString();
+                AddressEntry.Text = (info_obj["result"])[(info_obj["result"])]["delivery_address"].ToString();
                 if (AddressEntry.Text == "")
                     AddressEntry.Placeholder = "Street*";
 
@@ -301,7 +370,7 @@ namespace MTYD.ViewModel
             else
             {
 
-            }
+            }*/
         }
 
         public DeliveryBilling(string Fname, string Lname, string email)
@@ -563,6 +632,7 @@ namespace MTYD.ViewModel
                         //request3.Method = HttpMethod.Get;
                         //var client3 = new HttpClient();
                         //HttpResponseMessage response3 = await client3.SendAsync(request3);
+                        Debug.WriteLine("categorical options url: " + url3);
 
                         var content = client.DownloadString(url3);
                         var obj = JsonConvert.DeserializeObject<ZonesDto>(content);
@@ -644,6 +714,7 @@ namespace MTYD.ViewModel
                 await Application.Current.SavePropertiesAsync();
                 //await tagUser(emailEntry.Text.Trim(), ZipEntry.Text.Trim());
 
+                saveInfo();
                 Debug.WriteLine("passed in tax, service fee, and delivery fee: " + tax.ToString() + ", " + serviceFee.ToString() + ", " + deliveryFee.ToString());
                 await Navigation.PushAsync(new VerifyInfo(passingZones, tax, serviceFee, deliveryFee, cust_firstName, cust_lastName, cust_email, AptEntry.Text, FNameEntry.Text, LNameEntry.Text, emailEntry.Text, PhoneEntry.Text, AddressEntry.Text, CityEntry.Text, StateEntry.Text, ZipEntry.Text, DeliveryEntry.Text, "", "", "", salt));
 
@@ -668,6 +739,40 @@ namespace MTYD.ViewModel
             //    Navigation.PushAsync(new VerifyInfoDirectLogin(cust_firstName, cust_lastName, cust_email, AptEntry.Text, FNameEntry.Text, LNameEntry.Text, emailEntry.Text, PhoneEntry.Text, AddressEntry.Text, CityEntry.Text, StateEntry.Text, ZipEntry.Text, DeliveryEntry.Text, "", "", "", salt));
             //}
             //MainPage = PaymentPage();
+        }
+
+        void saveInfo()
+        {
+            if (FNameEntry.Text != null)
+                Preferences.Set(savedFirstName, FNameEntry.Text);
+
+            if (LNameEntry.Text != null)
+                Preferences.Set(savedLastName, LNameEntry.Text);
+
+            if (emailEntry.Text != null)
+                Preferences.Set(savedEmail, emailEntry.Text);
+
+            if (AddressEntry.Text != null)
+                Preferences.Set(savedAdd, AddressEntry.Text);
+
+            if (AptEntry.Text != null)
+                Preferences.Set(savedApt, AptEntry.Text);
+
+            if (CityEntry.Text != null)
+                Preferences.Set(savedCity, CityEntry.Text);
+
+            if (StateEntry.Text != null)
+                Preferences.Set(savedState, StateEntry.Text);
+
+            if (ZipEntry.Text != null)
+                Preferences.Set(savedZip, ZipEntry.Text);
+
+            if (PhoneEntry.Text != null)
+                Preferences.Set(savedPhone, PhoneEntry.Text);
+
+            if (DeliveryEntry.Text != null)
+                Preferences.Set(savedInstr, DeliveryEntry.Text);
+
         }
 
         public static string GetXMLElement(XElement element, string name)

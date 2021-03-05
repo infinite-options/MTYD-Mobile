@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="MTYD.ViewModel.Select" Title="Meal Schedule" BackgroundColor ="#f3f2dc">
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="MTYD.ViewModel.Select" Title="Meal Schedule" xmlns:Forms9Patch="clr-namespace:Forms9Patch;assembly=Forms9Patch" BackgroundColor ="#f3f2dc">
     <ContentPage.Content>
         <ScrollView>
         <StackLayout>
@@ -206,7 +206,7 @@
                                     <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="140"/>
-                                            <RowDefinition Height="15"/>
+                                            <RowDefinition Height="25"/>
                                             <RowDefinition Height="15"/>
                                             <RowDefinition Height="35"/>
                                         </Grid.RowDefinitions>
@@ -239,10 +239,18 @@
                                                 <Button x:Name="increase" FontSize="70" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center" FontAttributes="Bold" Text="+" Clicked="clickIncrease"/>
                                             </Frame>
                                         </Grid>-->
-                                        <Label  Grid.Column="0"
+                                        <!--<Label  Grid.Column="0"
+                                                        Grid.Row="1"
+                                                        Grid.ColumnSpan="2"
+                                                        FontSize="14"
+                                                        VerticalTextAlignment="Center"
+                                                       Text="{Binding MealName}"
+                                                       FontAttributes="Bold" LineBreakMode="WordWrap" />-->
+                                        <Forms9Patch:Label  Grid.Column="0"
                                                         Grid.Row="1"
                                                         Grid.ColumnSpan="2"
                                                         FontSize="Small"
+                                                        VerticalTextAlignment="Center"
                                                        Text="{Binding MealName}"
                                                        FontAttributes="Bold" />
 
@@ -253,7 +261,7 @@
                                                        Text="{Binding MealCalories}"
                                                        VerticalOptions="Start" />
 
-                                        <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,0,-10">
+                                        <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,0,-5">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="1*"/>
                                                 <ColumnDefinition Width="30"/>
