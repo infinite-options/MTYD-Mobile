@@ -604,6 +604,9 @@ namespace MTYD.ViewModel
                         //GetAddressLatitudeLongitude();
                         Geocoder geoCoder = new Geocoder();
 
+                        Debug.WriteLine("$" + AddressEntry.Text.Trim() + "$");
+                        Debug.WriteLine("$" + CityEntry.Text.Trim() + "$");
+                        Debug.WriteLine("$" + StateEntry.Text.Trim() + "$");
                         IEnumerable<Position> approximateLocations = await geoCoder.GetPositionsForAddressAsync(AddressEntry.Text.Trim() + "," + CityEntry.Text.Trim() + "," + StateEntry.Text.Trim());
                         Position position = approximateLocations.FirstOrDefault();
 

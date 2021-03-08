@@ -643,6 +643,8 @@ namespace MTYD.ViewModel
 
         private async void clickedDone(object sender, EventArgs e)
         {
+            //hard coded for testing
+            TotalPrice.Text = "$21.00";
             if (TotalPrice.Text == "$ TOTAL" || TotalPrice.Text == "$00.00" || TotalPrice.Text == "$0")
             {
                 await DisplayAlert("Warning!", "pick a valid plan to continue", "OK");

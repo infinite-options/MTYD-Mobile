@@ -113,6 +113,7 @@ namespace MTYD.ViewModel
 
             Preferences.Set("origMax", 0);
             GetMealPlans();
+            //Task.Delay(1000).Wait();
             setDates();
             getUserMeals();
             setMenu();
@@ -517,6 +518,7 @@ namespace MTYD.ViewModel
 
             //testing setMenu here
             setMenu();
+            
 
             Console.WriteLine("isAlreadySeleced in planchange" + isAlreadySelected);
 
@@ -532,6 +534,7 @@ namespace MTYD.ViewModel
                 surpriseBttn.BackgroundColor = Color.Transparent;
                 surpriseFrame.BackgroundColor = Color.Transparent;
                 surpriseBttn.TextColor = Color.Black;
+                
 
                 string s = SubscriptionPicker.SelectedItem.ToString();
                 s = s.Substring(0, 2);
@@ -582,6 +585,8 @@ namespace MTYD.ViewModel
                 saveFrame.BackgroundColor = Color.Transparent;
                 saveBttn.TextColor = Color.Black;
 
+                
+
                 string s = SubscriptionPicker.SelectedItem.ToString();
                 s = s.Substring(0, 2);
                 Preferences.Set("total", int.Parse(s));
@@ -610,6 +615,8 @@ namespace MTYD.ViewModel
                 saveFrame.BackgroundColor = Color.Transparent;
                 saveBttn.TextColor = Color.Black;
 
+                
+
                 string s = SubscriptionPicker.SelectedItem.ToString();
                 s = s.Substring(0, 2);
                 Preferences.Set("total", int.Parse(s));
@@ -633,6 +640,9 @@ namespace MTYD.ViewModel
                 surpriseBttn.BackgroundColor = Color.Transparent;
                 surpriseFrame.BackgroundColor = Color.Transparent;
                 surpriseBttn.TextColor = Color.Black;
+
+                
+
                 if (isAlreadySelected == false)
                     surprise();
 
@@ -692,6 +702,7 @@ namespace MTYD.ViewModel
             // ms.MealQuantity = 0;
             mealsSaved.Clear(); //New Addition SV
             resetAll(); //New Addition SV
+            //Task.Delay(500).Wait();
             //getUserMeals();
             await GetRecentSelection();
             GetRecentSelection2();
@@ -1162,6 +1173,8 @@ namespace MTYD.ViewModel
             request.Method = HttpMethod.Get;
             var client = new HttpClient();
             HttpResponseMessage response = await client.SendAsync(request);
+            Debug.WriteLine("get meal plans response: " + response.ToString());
+            //Debug.WriteLine("get meal plans content: " + response.Content.ToString());
 
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
