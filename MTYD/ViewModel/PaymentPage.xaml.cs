@@ -28,13 +28,13 @@ namespace MTYD.ViewModel
             Item item1 = new Item();
             item1.name = Preferences.Get("item_name", "");
             item1.price = Preferences.Get("price", "00.00");
-            item1.qty = "1";
+            item1.qty = Preferences.Get("freqSelected", "");
             item1.item_uid = Preferences.Get("item_uid", ""); ;
             List<Item> itemsList = new List<Item> {item1};
             Preferences.Set("unitNum", AptEntry.Text);
 
             newPayment.customer_uid = "100-000082";
-            newPayment.business_uid = "200-000001";
+            newPayment.business_uid = "200-000002";
             newPayment.items = itemsList;
             //newPayment.salt = "64a7f1fb0df93d8f5b9df14077948afa1b75b4c5028d58326fb801d825c9cd24412f88c8b121c50ad5c62073c75d69f14557255da1a21e24b9183bc584efef71";
             newPayment.salt = "cec35d4fc0c5e83527f462aeff579b0c6f098e45b01c8b82e311f87dc6361d752c30293e27027653adbb251dff5d03242c8bec68a3af1abd4e91c5adb799a01b";

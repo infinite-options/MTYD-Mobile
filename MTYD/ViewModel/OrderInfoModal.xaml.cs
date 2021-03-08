@@ -34,9 +34,9 @@ namespace MTYD.ViewModel
             Item item1 = new Item();
             item1.name = Preferences.Get("item_name", "");
             item1.price = Preferences.Get("price", "00.00");
-            item1.qty = "1";
+            item1.qty = Preferences.Get("freqSelected", "");
             item1.item_uid = Preferences.Get("item_uid", "");
-            item1.itm_business_uid = "200-000001";
+            item1.itm_business_uid = "200-000002";
             List<Item> itemsList = new List<Item> { item1 };
             //Preferences.Set("unitNum", AptEntry.Text);
 
@@ -456,7 +456,7 @@ namespace MTYD.ViewModel
             Item2 item1 = new Item2();
             item1.price = mealPrice;
             item1.name = mealSelected;
-            item1.qty = "1";
+            item1.qty = Preferences.Get("freqSelected", "");
             item1.itm_business_uid = itm_business_id;
             item1.item_uid = new_item_id;
             list1.Add(item1);

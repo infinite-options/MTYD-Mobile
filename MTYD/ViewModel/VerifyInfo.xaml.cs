@@ -247,9 +247,9 @@ namespace MTYD.ViewModel
             Item item1 = new Model.Item();
             item1.name = Preferences.Get("item_name", "");
             item1.price = Preferences.Get("price", "00.00");
-            item1.qty = "1";
+            item1.qty = Preferences.Get("freqSelected", "");
             item1.item_uid = Preferences.Get("item_uid", "");
-            item1.itm_business_uid = "200-000001";
+            item1.itm_business_uid = "200-000002";
             List<Item> itemsList = new List<Item> { item1 };
             Preferences.Set("unitNum", AptEntry);
 

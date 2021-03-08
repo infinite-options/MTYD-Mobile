@@ -1227,6 +1227,7 @@ namespace MTYD.ViewModel
         {
             try
             {
+                Console.WriteLine("in getUserMeals");
                 MealInformation jsonobj;
                 // UID = 100-000001 PID = 400-000001
                 var content = client.DownloadString(userMeals);
