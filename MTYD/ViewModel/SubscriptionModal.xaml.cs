@@ -32,7 +32,7 @@ namespace MTYD.ViewModel
         protected async Task GetPlans()
         {
             var request = new HttpRequestMessage();
-            request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/plans?business_uid=200-000001");
+            request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/plans?business_uid=200-000002");
             request.Method = HttpMethod.Get;
             var client = new HttpClient();
             HttpResponseMessage response = await client.SendAsync(request);
@@ -892,7 +892,7 @@ namespace MTYD.ViewModel
 
                 List<Item2> list1 = new List<Item2>();
                 Item2 item1 = new Item2();
-                item1.qty = "1";
+                item1.qty = Preferences.Get("freqSelected", "");
                 if (Preferences.Get("mealSelected", "") == "1")
                 {
                     item1.name = "5 Meal Plan";

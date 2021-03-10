@@ -250,9 +250,9 @@ namespace MTYD.ViewModel
             Item item1 = new Model.Item();
             item1.name = Preferences.Get("item_name", "");
             item1.price = Preferences.Get("price", "00.00");
-            item1.qty = "1";
+            item1.qty = Preferences.Get("freqSelected", "");
             item1.item_uid = Preferences.Get("item_uid", "");
-            item1.itm_business_uid = "200-000001";
+            item1.itm_business_uid = "200-000002";
             List<Item> itemsList = new List<Item> { item1 };
             Preferences.Set("unitNum", AptEntry);
 
@@ -1096,8 +1096,10 @@ namespace MTYD.ViewModel
 
                 if (checkoutButton.Text == "CONTINUE")
                     Debug.WriteLine("checkout was changed");
-
+                
                 _ = captureOrder(payPalOrderId);
+
+                //Navigation.PopAsync();
             }
         }
 
@@ -1214,6 +1216,7 @@ namespace MTYD.ViewModel
         // FUNCTION  7: CAPTURE ORDER
         public async Task<HttpResponse> captureOrder(string id)
         {
+            
             Debug.WriteLine("paypal captureOrder called 7");
             Debug.WriteLine("passed in id: " + id);
             //await Navigation.PushAsync(new Loading());
@@ -1223,10 +1226,18 @@ namespace MTYD.ViewModel
             var request = new OrdersCaptureRequest(id);
                 request.RequestBody(new OrderActionRequest());
 
+            //Navigation.PushAsync(new Loading());
             var response = await client().Execute(request);
+            Debug.WriteLine("response: " + response.ToString());
+            await Navigation.PushAsync(new Loading());
+            Debug.WriteLine("after response");
             var statusCode = response.StatusCode;
+            Debug.WriteLine("after statusCode");
             var code = statusCode.ToString();
+            Debug.WriteLine("after code");
             var result = response.Result<PayPalCheckoutSdk.Orders.Order>();
+
+            //await Navigation.PushAsync(new Loading());
 
             Debug.WriteLine("REQUEST STATUS CODE: " + code);
             Debug.WriteLine("PAYPAL STATUS      : " + result.Status);
@@ -1235,7 +1246,6 @@ namespace MTYD.ViewModel
 
             if (result.Status == "COMPLETED")
             {
-                //await Navigation.PushAsync(new Loading());
                 Debug.WriteLine("PAYPAL PAYMENT WAS SUCCESSFUL");
 
 
@@ -1254,6 +1264,7 @@ namespace MTYD.ViewModel
                     //spacer8.IsVisible = true;
 
                     checkoutButton.Text = "CONTINUE";
+                    await Navigation.PopAsync();
                     return response;
 
                 }
@@ -1295,6 +1306,7 @@ namespace MTYD.ViewModel
             }
             else
             {
+                await Navigation.PopAsync();
                 Debug.WriteLine("didn't work");
                 await DisplayAlert("Ooops", "You payment was cancel or not sucessful. Please try again", "OK");
             }

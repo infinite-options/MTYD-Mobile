@@ -57,9 +57,9 @@
                 <Frame x:Name="password2" Padding="10,5" BackgroundColor="#FFE5B4"
                 HasShadow="False"  IsVisible="true">
 
-                    <Editor x:Name="passwordEntry2"  IsVisible="true" Keyboard="Text" FontAttributes="Bold"
+                    <Entry x:Name="passwordEntry2"  IsVisible="true" Keyboard="Text" FontAttributes="Bold"
                    FontSize="17" Placeholder="Enter Password"
-                   HeightRequest="35"
+                   HeightRequest="35" IsPassword="True"
                    BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"/>
 
                 </Frame>
@@ -354,9 +354,9 @@
                 <Frame x:Name="password" Padding="10,5" BackgroundColor="#FFE5B4"
                 HasShadow="False"  IsVisible="false">
 
-                    <Editor x:Name="passwordEntry"  IsVisible="false" Keyboard="Text" FontAttributes="Bold"
+                    <Entry x:Name="passwordEntry"  IsVisible="false" Keyboard="Text" FontAttributes="Bold"
                    FontSize="17" Placeholder="Enter Password"
-                   HeightRequest="35"
+                   HeightRequest="35" IsPassword="True"
                    BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"/>
 
                 </Frame>
