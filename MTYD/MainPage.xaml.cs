@@ -21,7 +21,7 @@ using MTYD.ViewModel;
 using MTYD.Model.User;
 using System.IO;
 
-﻿using MTYD.ViewModel;
+using MTYD.ViewModel;
 
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -51,6 +51,8 @@ namespace MTYD
         //-1 if the email_verified section is not found in the returned message, 0 if false, 1 if true
         int directEmailVerified = 0;
         string deviceId;
+        List<string> menuNames;
+        List<string> menuImages;
 
         Account account;
         [Obsolete]
@@ -63,10 +65,21 @@ namespace MTYD
             Console.WriteLine("Width = " + width.ToString());
             Console.WriteLine("Height = " + height.ToString());
             InitializeComponent();
+
+            var cvItems = new List<string>
+            {
+                "Who has time?\n\nSave time and money! Ready to heat meals come to your door and you can order up to 10 deliveries in advance so you know what's coming!",
+                "Food when you're hungry\n\nIf you order food when you're hungry, you're starving by the time it arrives! With MealsFor.Me there is always something in the fridge and your next meals are in route!",
+                "Better Value\n\nYou get restaurant quality food at a fraction of the cost plus it is made from the highest quality ingredients by exceptional Chefs."
+            };
+            TheCarousel.ItemsSource = cvItems;
+            TheCarousel.IndicatorView = indicatorView;
+
             store = AccountStore.Create();
             checkPlatform(height, width);
+            setGrid();
             BackgroundImageSource = "landing1.jpg";
-            
+
 
             // APPLE
             //var vm = new LoginViewModel();
@@ -80,14 +93,44 @@ namespace MTYD
             }
         }
 
+        //public ObservableCollection<WhyCarousel> cvItems { get => Load(); }
+
+        //public class WhyCarousel
+        //{
+        //    public string Heading { get; set; }
+        //    public string Content { get; set; }
+        //}
+
+        //private ObservableCollection<WhyCarousel> Load()
+        //{
+        //    return new ObservableCollection<WhyCarousel>(new[]
+        //    {
+        //        new WhyCarousel
+        //        {
+        //            Heading = "Who has time?",
+        //            Content = "Save time and money! Ready to heat meals come to your door and you can order up to 10 deliveries in advance so you know what's coming!"
+        //        },
+        //        new WhyCarousel
+        //        {
+        //            Heading = "Food when you're hungry",
+        //            Content = "If you order food when you're hungry, you're starving by the time it arrives! With MealsFor.Me there is always something in the fridge and your next meals are in route!"
+        //        },
+        //        new WhyCarousel
+        //        {
+        //            Heading = "Better Value",
+        //            Content = "You get restaurant quality food at a fraction of the cost plus it is made from the highest quality ingredients by exceptional Chefs."
+        //        }
+        //    });
+        //}
+
         private async void PlatformError(object sender, EventArgs e)
         {
             if (Application.Current.Properties.ContainsKey("platform"))
             {
-                string platform = (string) Application.Current.Properties["platform"];
+                string platform = (string)Application.Current.Properties["platform"];
                 await DisplayAlert("Alert!", "Our records show that you have an account associated with " + platform + ". Please log in with " + platform, "OK");
             }
-            
+
         }
 
         private async void AppleError(object sender, EventArgs e)
@@ -133,17 +176,17 @@ namespace MTYD
             else if (Device.RuntimePlatform == Device.iOS)
             {
                 //username and password entry
-                grid2.Margin = new Thickness(width / 13, height / 90, width / 13, 0);
+                grid2.Margin = new Thickness(width / 18, height / 90, width / 18, 0);
                 loginUsername.Margin = new Thickness(0, height / (-120), 0, height / (-120));
                 loginPassword.Margin = new Thickness(0, height / (-120), width / 55, height / (-120));
 
                 //login and signup buttons
-                loginButton.HeightRequest = height / 35;
-                signUpButton.HeightRequest = height / 35;
-                loginButton.WidthRequest = width / 7;
-                signUpButton.WidthRequest = width / 7;
-                loginButton.CornerRadius = (int)(height / 70);
-                signUpButton.CornerRadius = (int)(height / 70);
+                loginButton.HeightRequest = height / 50;
+                signUpButton.HeightRequest = height / 50;
+                loginButton.WidthRequest = width / 9;
+                signUpButton.WidthRequest = width / 9;
+                loginButton.CornerRadius = (int)(height / 100);
+                signUpButton.CornerRadius = (int)(height / 100);
 
                 //or divider
                 grid4.Margin = new Thickness(width / 15, height / 80, width / 15, height / 100);
@@ -159,50 +202,39 @@ namespace MTYD
                 appleLoginButton.WidthRequest = width / 13;
                 appleLoginButton.CornerRadius = (int)(width / 26);
 
-
-                introParagraph.FontSize = width / 50;
-
-                searchPic.Margin = new Thickness(width / 5.5, 0);
-                first.FontSize = width / 30;
-                first.HeightRequest = width / 15;
-                first.WidthRequest = width / 15;
-                first.CornerRadius = (int)(width / 30);
-                first.Margin = new Thickness(0, 0, 3, 0);
-                step1.Margin = new Thickness(3, 0, 0, 0);
+                searchPic.WidthRequest = width / 4;
+                first.FontSize = width / 50;
+                first.HeightRequest = width / 20;
+                first.WidthRequest = width / 20;
+                first.CornerRadius = (int)(width / 40);
                 step1.FontSize = width / 30;
-                sub1.FontSize = width / 45;
+                sub1.FontSize = width / 55;
 
-                cardPic.Margin = new Thickness(width / 5.5, 0);
-                second.FontSize = width / 30;
-                second.HeightRequest = width / 15;
-                second.WidthRequest = width / 15;
-                second.CornerRadius = (int)(width / 30);
-                second.Margin = new Thickness(0, 0, 3, 0);
-                step2.Margin = new Thickness(3, 0, 0, 0);
+                cardPic.WidthRequest = width / 4;
+                second.FontSize = width / 50;
+                second.HeightRequest = width / 20;
+                second.WidthRequest = width / 20;
+                second.CornerRadius = (int)(width / 40);
                 step2.FontSize = width / 30;
-                sub2.FontSize = width / 45;
+                sub2.FontSize = width / 55;
 
-                pickPic.Margin = new Thickness(width / 5.5, 0);
-                third.FontSize = width / 30;
-                third.HeightRequest = width / 15;
-                third.WidthRequest = width / 15;
-                third.CornerRadius = (int)(width / 30);
-                third.Margin = new Thickness(0, 0, 3, 0);
-                step3.Margin = new Thickness(3, 0, 0, 0);
+                pickPic.WidthRequest = width / 4;
+                third.FontSize = width / 50;
+                third.HeightRequest = width / 20;
+                third.WidthRequest = width / 20;
+                third.CornerRadius = (int)(width / 40);
                 step3.FontSize = width / 30;
-                sub3.FontSize = width / 45;
+                sub3.FontSize = width / 55;
 
-                delivPic.Margin = new Thickness(width / 5.5, 0);
-                fourth.FontSize = width / 30;
-                fourth.HeightRequest = width / 15;
-                fourth.WidthRequest = width / 15;
-                fourth.CornerRadius = (int)(width / 30);
-                fourth.Margin = new Thickness(0, 0, 3, 0);
-                step4.Margin = new Thickness(3, 0, 0, 0);
+                delivPic.WidthRequest = width / 4;
+                fourth.FontSize = width / 50;
+                fourth.HeightRequest = width / 20;
+                fourth.WidthRequest = width / 20;
+                fourth.CornerRadius = (int)(width / 40);
                 step4.FontSize = width / 30;
-                sub4.FontSize = width / 45;
+                sub4.FontSize = width / 55;
 
-                browseMenu.FontSize = width / 33;
+                //browseMenu.FontSize = width / 33;
             }
             else //android
             {
@@ -210,6 +242,7 @@ namespace MTYD
                 grid2.Margin = new Thickness(width / 20, height / 80, width / 25, 0);
                 loginUsername.Margin = new Thickness(0, height / (-120), 0, height / (-120));
                 loginPassword.Margin = new Thickness(0, height / (-120), 0, height / (-120));
+
                 //login and signup buttons, forgot password
                 loginButton.HeightRequest = height / 40;
                 signUpButton.HeightRequest = height / 40;
@@ -241,6 +274,56 @@ namespace MTYD
             passFrame.HeightRequest = height / 180;
             //userFrame.CornerRadius = 25;
             //passFrame.CornerRadius = 25;
+        }
+
+        protected async Task setGrid()
+        {
+            var request = new HttpRequestMessage();
+            request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/upcoming_menu");
+            request.Method = HttpMethod.Get;
+            var client = new HttpClient();
+            HttpResponseMessage response = await client.SendAsync(request);
+
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                HttpContent content = response.Content;
+                var userString = await content.ReadAsStringAsync();
+                JObject plan_obj = JObject.Parse(userString);
+
+                menuNames = new List<string>();
+                menuImages = new List<string>();
+                HashSet<string> dates = new HashSet<string>();
+                foreach (var m in plan_obj["result"])
+                {
+                    dates.Add(m["menu_date"].ToString());
+                    if (dates.Count > 2) break;
+                    menuNames.Add(m["meal_name"].ToString());
+                    menuImages.Add(m["meal_photo_URL"].ToString());
+                }
+            }
+
+            upcomingMenuGrid.ColumnDefinitions = new ColumnDefinitionCollection();
+            for (int i = 0; i < menuNames.Count; i++)
+            {
+                upcomingMenuGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(120, GridUnitType.Absolute) });
+            }
+            for (int i = 0; i < menuNames.Count; i++)
+            {
+                upcomingMenuGrid.Children.Add(new Label
+                {
+                    Text = menuNames[i],
+                    TextColor = Color.Black,
+                    HorizontalTextAlignment = TextAlignment.Center,
+                    VerticalTextAlignment = TextAlignment.Center
+                }, i, 0);
+                upcomingMenuGrid.Children.Add(new ImageButton
+                {
+                    Source = menuImages[i],
+                    CornerRadius = 10,
+                    IsEnabled = false,
+                    Aspect = Aspect.AspectFill
+                }, i, 1);
+            }
         }
 
         async void clickedWeeksMeals(object sender, EventArgs e)
@@ -513,7 +596,8 @@ namespace MTYD
                         createAccount = true;
                         System.Diagnostics.Debug.WriteLine(DRSMessage);
                         await DisplayAlert("Oops!", data.message, "OK");
-                    }else if (DRSMessage.Contains(Constant.EmailNotFound))
+                    }
+                    else if (DRSMessage.Contains(Constant.EmailNotFound))
                     {
                         await DisplayAlert("Oops!", "Our records show that you don't have an accout. Please sign up!", "OK");
                     }
@@ -570,7 +654,8 @@ namespace MTYD
                     directEmailVerified = -1;
 
 
-                if (message.Contains(Constant.AutheticatedSuccesful)){
+                if (message.Contains(Constant.AutheticatedSuccesful))
+                {
 
                     var responseContent = await response.Content.ReadAsStringAsync();
                     var loginResponse = JsonConvert.DeserializeObject<LogInResponse>(responseContent);
@@ -682,7 +767,7 @@ namespace MTYD
 
             System.Diagnostics.Debug.WriteLine(RDSResponse.IsSuccessStatusCode);  // Response code is Yes/True if successful from httpclient system.net package
             System.Diagnostics.Debug.WriteLine(responseContent);  // Response JSON that RDS returns
-            
+
             if (RDSResponse.IsSuccessStatusCode)
             {
                 if (responseContent != null)
@@ -1351,9 +1436,9 @@ namespace MTYD
 
                             }
 
-                                // THIS IS HOW YOU CAN ACCESS YOUR USER ID FROM THE APP
-                                // string userID = (string)Application.Current.Properties["user_id"];
-                            }
+                            // THIS IS HOW YOU CAN ACCESS YOUR USER ID FROM THE APP
+                            // string userID = (string)Application.Current.Properties["user_id"];
+                        }
                         else
                         {
                             //testing with loading page
@@ -1455,7 +1540,7 @@ namespace MTYD
                 JObject info_obj = JObject.Parse(userString);
                 Debug.WriteLine("info_obj");
             }
-            
+
             //for testing 
             Application.Current.MainPage = new changePassword(loginUsername.Text);
         }

@@ -197,6 +197,30 @@
                 <BoxView x:Name="divider6" HeightRequest="2" HorizontalOptions="Fill" VerticalOptions="Center" BackgroundColor="White"/>
 
 
+                <Grid x:Name="exploreGrid" ColumnSpacing="15">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!--<Button x:Name="placeholderButton" Grid.ColumnSpan="2" HorizontalOptions="Fill" Clicked="clickedPfp"/>-->
+
+
+                    <Label Grid.Column="1" x:Name="explore" Text="EXPLORE MEALS" HorizontalOptions="StartAndExpand" VerticalOptions="Center" FontAttributes="Bold" FontSize="25" TextColor="White"/>
+                    
+                    <Image x:Name="explorePic" VerticalOptions="Center" HorizontalOptions="Start" Source="profile.png"/>
+
+                    <Button x:Name="exploreButton" BackgroundColor="Transparent" Grid.ColumnSpan="2" HorizontalOptions="Fill" Clicked="clickedExplore"/>
+
+
+                </Grid>
+
+                <BoxView x:Name="divider7" HeightRequest="2" HorizontalOptions="Fill" VerticalOptions="Center" BackgroundColor="White"/>
+
+
                 <Grid x:Name="logoutGrid" ColumnSpacing="15">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
