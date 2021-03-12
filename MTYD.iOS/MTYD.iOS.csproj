@@ -216,6 +216,10 @@
     <BundleResource Include="Resources\oliveGarden.png" />
     <BundleResource Include="Resources\paradiseBay.png" />
     <BundleResource Include="Resources\Inchin.png" />
+    <BundleResource Include="Resources\NityaAyurvedaLogo.png" />
+    <BundleResource Include="Resources\PonoHawaiianLogo.png" />
+    <BundleResource Include="Resources\fbOutlineLogo.png" />
+    <BundleResource Include="Resources\insOutlineLogo.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AppleSignIn\" />
