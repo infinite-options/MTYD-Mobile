@@ -70,11 +70,11 @@ namespace MTYD.ViewModel
                     }
                 }
 
-                meals1.Text = numMealsList[4].ToString();
-                meals2.Text = numMealsList[3].ToString();
-                meals3.Text = numMealsList[2].ToString();
-                meals4.Text = numMealsList[1].ToString();
-                meals5.Text = numMealsList[0].ToString();
+                meals1.Text = numMealsList[4].ToString() + " MEALS";
+                meals2.Text = numMealsList[3].ToString() + " MEALS";
+                meals3.Text = numMealsList[2].ToString() + " MEALS";
+                meals4.Text = numMealsList[1].ToString() + " MEALS";
+                meals5.Text = numMealsList[0].ToString() + " MEALS";
             }
         }
 
@@ -117,22 +117,62 @@ namespace MTYD.ViewModel
                 takeoutGrid.Margin = new Thickness(20, 10, 20, 10);
                 takeout.HeightRequest = width / 18;
                 takeout.WidthRequest = width / 18;
-                deliveryDays.FontSize = width / 38;
-                deliveryDays2.FontSize = width / 38;
-                numMeals.FontSize = width / 37;
                 numMeals.Margin = new Thickness(25, 10, 0, 10);
 
                 prepay.Margin = new Thickness(30, 0, 0, 0);
-                prepay.FontSize = width / 37;
 
-                PriceFrame.HeightRequest = height / 30;
-                PriceFrame.WidthRequest = width / 6;
-                PriceFrame.CornerRadius = 30;
-                TotalPrice.FontSize = width / 40;
-                SignUpButton.HeightRequest = height / 30;
-                SignUpButton.WidthRequest = width / 6;
-                SignUpButton.CornerRadius = (int)(height / 60);
-                SignUpButton.FontSize = width / 40;
+                meals1.WidthRequest = width / 5;
+                meals1.HeightRequest = width / 20;
+                meals1.CornerRadius = (int)(width / 40);
+                meals2.WidthRequest = width / 5;
+                meals2.HeightRequest = width / 20;
+                meals2.CornerRadius = (int)(width / 40);
+                meals3.WidthRequest = width / 5;
+                meals3.HeightRequest = width / 20;
+                meals3.CornerRadius = (int)(width / 40);
+                meals4.WidthRequest = width / 5;
+                meals4.HeightRequest = width / 20;
+                meals4.CornerRadius = (int)(width / 40);
+                meals5.WidthRequest = width / 5;
+                meals5.HeightRequest = width / 20;
+                meals5.CornerRadius = (int)(width / 40);
+
+                delivery1.WidthRequest = width / 11;
+                delivery1.HeightRequest = width / 9;
+                delivery1.FontSize = width / 70;
+                delivery2.WidthRequest = width / 11;
+                delivery2.HeightRequest = width / 9;
+                delivery2.FontSize = width / 70;
+                delivery3.WidthRequest = width / 11;
+                delivery3.HeightRequest = width / 9;
+                delivery3.FontSize = width / 70;
+                delivery4.WidthRequest = width / 11;
+                delivery4.HeightRequest = width / 9;
+                delivery4.FontSize = width / 70;
+                delivery5.WidthRequest = width / 11;
+                delivery5.HeightRequest = width / 9;
+                delivery5.FontSize = width / 70;
+                delivery6.WidthRequest = width / 11;
+                delivery6.HeightRequest = width / 9;
+                delivery6.FontSize = width / 70;
+                delivery7.WidthRequest = width / 11;
+                delivery7.HeightRequest = width / 9;
+                delivery7.FontSize = width / 70;
+                delivery8.WidthRequest = width / 11;
+                delivery8.HeightRequest = width / 9;
+                delivery8.FontSize = width / 70;
+                delivery9.WidthRequest = width / 11;
+                delivery9.HeightRequest = width / 9;
+                delivery9.FontSize = width / 70;
+                delivery10.WidthRequest = width / 11;
+                delivery10.HeightRequest = width / 9;
+                delivery10.FontSize = width / 70;
+
+                //SignUpButton.HeightRequest = height / 50;
+                SignUpButton.WidthRequest = width / 4;
+                SignUpButton.HeightRequest = width / 15;
+                SignUpButton.CornerRadius = (int)(width / 30);
+                SignUpButton.FontSize = width / 50;
             }
             else //android
             {
@@ -141,7 +181,6 @@ namespace MTYD.ViewModel
                 orangeBox.CornerRadius = height / 40;
                 heading.FontSize = width / 45;
                 heading.Margin = new Thickness(0, 0, 0, 40);
-                //heading.VerticalOptions = LayoutOptions.Center;
                 pfp.HeightRequest = width / 25;
                 pfp.WidthRequest = width / 25;
                 pfp.CornerRadius = (int)(width / 50);
@@ -161,15 +200,58 @@ namespace MTYD.ViewModel
                 prepay.Margin = new Thickness(30, 0, 0, 0);
                 prepay.FontSize = width / 48;
 
+                meals1.WidthRequest = width / 7;
+                meals1.HeightRequest = height / 60;
+                meals1.CornerRadius = (int)(height / 120);
+                meals2.WidthRequest = width / 7;
+                meals2.HeightRequest = height / 60;
+                meals2.CornerRadius = (int)(height / 120);
+                meals3.WidthRequest = width / 7;
+                meals3.HeightRequest = height / 60;
+                meals3.CornerRadius = (int)(height / 120);
+                meals4.WidthRequest = width / 7;
+                meals4.HeightRequest = height / 60;
+                meals4.CornerRadius = (int)(height / 120);
+                meals5.WidthRequest = width / 7;
+                meals5.HeightRequest = height / 60;
+                meals5.CornerRadius = (int)(height / 120);
+
+                delivery1.WidthRequest = width / 12;
+                delivery1.HeightRequest = width / 10;
+                delivery1.FontSize = width / 70;
+                delivery2.WidthRequest = width / 12;
+                delivery2.HeightRequest = width / 10;
+                delivery2.FontSize = width / 70;
+                delivery3.WidthRequest = width / 12;
+                delivery3.HeightRequest = width / 10;
+                delivery3.FontSize = width / 70;
+                delivery4.WidthRequest = width / 12;
+                delivery4.HeightRequest = width / 10;
+                delivery4.FontSize = width / 70;
+                delivery5.WidthRequest = width / 12;
+                delivery5.HeightRequest = width / 10;
+                delivery5.FontSize = width / 70;
+                delivery6.WidthRequest = width / 12;
+                delivery6.HeightRequest = width / 10;
+                delivery6.FontSize = width / 70;
+                delivery7.WidthRequest = width / 12;
+                delivery7.HeightRequest = width / 10;
+                delivery7.FontSize = width / 70;
+                delivery8.WidthRequest = width / 12;
+                delivery8.HeightRequest = width / 10;
+                delivery8.FontSize = width / 70;
+                delivery9.WidthRequest = width / 12;
+                delivery9.HeightRequest = width / 10;
+                delivery9.FontSize = width / 70;
+                delivery10.WidthRequest = width / 12;
+                delivery10.HeightRequest = width / 10;
+                delivery10.FontSize = width / 70;
+
                 spacer4.HeightRequest = 10;
-                PriceFrame.HeightRequest = height / 33;
-                PriceFrame.WidthRequest = width / 8;
-                PriceFrame.CornerRadius = 33;
-                TotalPrice.FontSize = width / 50;
-                SignUpButton.HeightRequest = height / 33;
-                SignUpButton.WidthRequest = width / 8;
-                SignUpButton.CornerRadius = (int)(height / 66);
-                SignUpButton.FontSize = width / 50;
+                SignUpButton.HeightRequest = height / 50;
+                SignUpButton.WidthRequest = width / 4;
+                SignUpButton.CornerRadius = (int)(height / 100);
+                SignUpButton.FontSize = width / 60;
             }
 
             //common adjustments regardless of platform
@@ -201,77 +283,89 @@ namespace MTYD.ViewModel
         private void clickedMeals1(object sender, EventArgs e)
         {
             meals1.BackgroundColor = Color.FromHex("#FFBA00");
-            meals2.BackgroundColor = Color.FromHex("#ffffff");
-            meals3.BackgroundColor = Color.FromHex("#ffffff");
-            meals4.BackgroundColor = Color.FromHex("#ffffff");
-            meals5.BackgroundColor = Color.FromHex("#ffffff");
+            meals2.BackgroundColor = Color.FromHex("#f5f5f5");
+            meals3.BackgroundColor = Color.FromHex("#f5f5f5");
+            meals4.BackgroundColor = Color.FromHex("#f5f5f5");
+            meals5.BackgroundColor = Color.FromHex("#f5f5f5");
             Preferences.Set("mealSelected", "1");
             mealSelected = int.Parse(meals1.Text.Substring(0,1));
             if (deliverySelected != 0)
             {
                 Preferences.Set("item_name", itemNames[deliverySelected - 1, 6 - mealSelected]);
                 Preferences.Set("item_uid", itemUids[deliverySelected - 1, 6 - mealSelected]);
+                mealNum.Text = mealSelected.ToString();
+                deliveryNum.Text = deliverySelected.ToString();
+                discountPercentage.Text = ((int)discounts[deliverySelected - 1, 6 - mealSelected]).ToString() + "%";
                 TotalPrice.Text = "$" + deliverySelected * itemPrices[deliverySelected - 1, 6 - mealSelected] * (1 - discounts[deliverySelected - 1, 6 - mealSelected] / 100.0);
             }
         }
 
         private void clickedMeals2(object sender, EventArgs e)
         {
-            meals1.BackgroundColor = Color.FromHex("#ffffff");
+            meals1.BackgroundColor = Color.FromHex("#f5f5f5");
             meals2.BackgroundColor = Color.FromHex("#FFBA00");
-            meals3.BackgroundColor = Color.FromHex("#ffffff");
-            meals4.BackgroundColor = Color.FromHex("#ffffff");
-            meals5.BackgroundColor = Color.FromHex("#ffffff");
+            meals3.BackgroundColor = Color.FromHex("#f5f5f5");
+            meals4.BackgroundColor = Color.FromHex("#f5f5f5");
+            meals5.BackgroundColor = Color.FromHex("#f5f5f5");
             Preferences.Set("mealSelected", "2");
             mealSelected = int.Parse(meals2.Text.Substring(0, 1));
             if (deliverySelected != 0)
             {
                 Preferences.Set("item_name", itemNames[deliverySelected - 1, 6 - mealSelected]);
                 Preferences.Set("item_uid", itemUids[deliverySelected - 1, 6 - mealSelected]);
+                mealNum.Text = mealSelected.ToString();
+                deliveryNum.Text = deliverySelected.ToString();
+                discountPercentage.Text = ((int)discounts[deliverySelected - 1, 6 - mealSelected]).ToString() + "%";
                 TotalPrice.Text = "$" + deliverySelected * itemPrices[deliverySelected - 1, 6 - mealSelected] * (1 - discounts[deliverySelected - 1, 6 - mealSelected] / 100.0);
             }
         }
 
         private void clickedMeals3(object sender, EventArgs e)
         {
-            meals1.BackgroundColor = Color.FromHex("#ffffff");
-            meals2.BackgroundColor = Color.FromHex("#ffffff");
+            meals1.BackgroundColor = Color.FromHex("#f5f5f5");
+            meals2.BackgroundColor = Color.FromHex("#f5f5f5");
             meals3.BackgroundColor = Color.FromHex("#FFBA00");
-            meals4.BackgroundColor = Color.FromHex("#ffffff");
-            meals5.BackgroundColor = Color.FromHex("#ffffff");
+            meals4.BackgroundColor = Color.FromHex("#f5f5f5");
+            meals5.BackgroundColor = Color.FromHex("#f5f5f5");
             Preferences.Set("mealSelected", "3");
             mealSelected = int.Parse(meals3.Text.Substring(0, 1));
             if (deliverySelected != 0)
             {
                 Preferences.Set("item_name", itemNames[deliverySelected - 1, 6 - mealSelected]);
                 Preferences.Set("item_uid", itemUids[deliverySelected - 1, 6 - mealSelected]);
+                mealNum.Text = mealSelected.ToString();
+                deliveryNum.Text = deliverySelected.ToString();
+                discountPercentage.Text = ((int)discounts[deliverySelected - 1, 6 - mealSelected]).ToString() + "%";
                 TotalPrice.Text = "$" + deliverySelected * itemPrices[deliverySelected - 1, 6 - mealSelected] * (1 - discounts[deliverySelected - 1, 6 - mealSelected] / 100.0);
             }
         }
 
         private void clickedMeals4(object sender, EventArgs e)
         {
-            meals1.BackgroundColor = Color.FromHex("#ffffff");
-            meals2.BackgroundColor = Color.FromHex("#ffffff");
-            meals3.BackgroundColor = Color.FromHex("#ffffff");
+            meals1.BackgroundColor = Color.FromHex("#f5f5f5");
+            meals2.BackgroundColor = Color.FromHex("#f5f5f5");
+            meals3.BackgroundColor = Color.FromHex("#f5f5f5");
             meals4.BackgroundColor = Color.FromHex("#FFBA00");
-            meals5.BackgroundColor = Color.FromHex("#ffffff");
+            meals5.BackgroundColor = Color.FromHex("#f5f5f5");
             Preferences.Set("mealSelected", "4");
             mealSelected = int.Parse(meals4.Text.Substring(0, 1));
             if (deliverySelected != 0)
             {
                 Preferences.Set("item_name", itemNames[deliverySelected - 1, 6 - mealSelected]);
                 Preferences.Set("item_uid", itemUids[deliverySelected - 1, 6 - mealSelected]);
+                mealNum.Text = mealSelected.ToString();
+                deliveryNum.Text = deliverySelected.ToString();
+                discountPercentage.Text = ((int)discounts[deliverySelected - 1, 6 - mealSelected]).ToString() + "%";
                 TotalPrice.Text = "$" + deliverySelected * itemPrices[deliverySelected - 1, 6 - mealSelected] * (1 - discounts[deliverySelected - 1, 6 - mealSelected] / 100.0);
             }
         }
 
         private void clickedMeals5(object sender, EventArgs e)
         {
-            meals1.BackgroundColor = Color.FromHex("#ffffff");
-            meals2.BackgroundColor = Color.FromHex("#ffffff");
-            meals3.BackgroundColor = Color.FromHex("#ffffff");
-            meals4.BackgroundColor = Color.FromHex("#ffffff");
+            meals1.BackgroundColor = Color.FromHex("#f5f5f5");
+            meals2.BackgroundColor = Color.FromHex("#f5f5f5");
+            meals3.BackgroundColor = Color.FromHex("#f5f5f5");
+            meals4.BackgroundColor = Color.FromHex("#f5f5f5");
             meals5.BackgroundColor = Color.FromHex("#FFBA00");
             Preferences.Set("mealSelected", "5");
             mealSelected = int.Parse(meals5.Text.Substring(0, 1));
@@ -279,6 +373,9 @@ namespace MTYD.ViewModel
             {
                 Preferences.Set("item_name", itemNames[deliverySelected - 1, 6 - mealSelected]);
                 Preferences.Set("item_uid", itemUids[deliverySelected - 1, 6 - mealSelected]);
+                mealNum.Text = mealSelected.ToString();
+                deliveryNum.Text = deliverySelected.ToString();
+                discountPercentage.Text = ((int)discounts[deliverySelected - 1, 6 - mealSelected]).ToString() + "%";
                 TotalPrice.Text = "$" + deliverySelected * itemPrices[deliverySelected - 1, 6 - mealSelected] * (1 - discounts[deliverySelected - 1, 6 - mealSelected] / 100.0);
             }
         }
@@ -287,16 +384,16 @@ namespace MTYD.ViewModel
         {
             Button btn = (Button)sender;
 
-            delivery1.BackgroundColor = Color.FromHex("#ffffff");
-            delivery2.BackgroundColor = Color.FromHex("#ffffff");
-            delivery3.BackgroundColor = Color.FromHex("#ffffff");
-            delivery4.BackgroundColor = Color.FromHex("#ffffff");
-            delivery5.BackgroundColor = Color.FromHex("#ffffff");
-            delivery6.BackgroundColor = Color.FromHex("#ffffff");
-            delivery7.BackgroundColor = Color.FromHex("#ffffff");
-            delivery8.BackgroundColor = Color.FromHex("#ffffff");
-            delivery9.BackgroundColor = Color.FromHex("#ffffff");
-            delivery10.BackgroundColor = Color.FromHex("#ffffff");
+            delivery1.BackgroundColor = Color.FromHex("#f5f5f5");
+            delivery2.BackgroundColor = Color.FromHex("#f5f5f5");
+            delivery3.BackgroundColor = Color.FromHex("#f5f5f5");
+            delivery4.BackgroundColor = Color.FromHex("#f5f5f5");
+            delivery5.BackgroundColor = Color.FromHex("#f5f5f5");
+            delivery6.BackgroundColor = Color.FromHex("#f5f5f5");
+            delivery7.BackgroundColor = Color.FromHex("#f5f5f5");
+            delivery8.BackgroundColor = Color.FromHex("#f5f5f5");
+            delivery9.BackgroundColor = Color.FromHex("#f5f5f5");
+            delivery10.BackgroundColor = Color.FromHex("#f5f5f5");
             btn.BackgroundColor = Color.FromHex("#FFBA00");
 
             if (btn.Equals(delivery1))
@@ -358,13 +455,16 @@ namespace MTYD.ViewModel
             {
                 Preferences.Set("item_name", itemNames[deliverySelected - 1, 6 - mealSelected]);
                 Preferences.Set("item_uid", itemUids[deliverySelected - 1, 6 - mealSelected]);
+                mealNum.Text = mealSelected.ToString();
+                deliveryNum.Text = deliverySelected.ToString();
+                discountPercentage.Text = ((int)discounts[deliverySelected - 1, 6 - mealSelected]).ToString() + "%";
                 TotalPrice.Text = "$" + deliverySelected * itemPrices[deliverySelected - 1, 6 - mealSelected] * (1 - discounts[deliverySelected - 1, 6 - mealSelected] / 100.0);
             }
         }
 
         private async void clickedDone(object sender, EventArgs e)
         {
-            if (TotalPrice.Text == "$ TOTAL" || TotalPrice.Text == "$00.00" || TotalPrice.Text == "$0")
+            if (TotalPrice.Text == "$0" || TotalPrice.Text == "$00.00")
             {
                 await DisplayAlert("Warning!", "pick a valid plan to continue", "OK");
                 return;
