@@ -164,8 +164,10 @@
                     </Grid.ColumnDefinitions>
 
                     <Button x:Name="first" HorizontalOptions="End" VerticalOptions="Center" BackgroundColor="#FFBA00" TextColor="Black" Text="1" FontAttributes="Bold" Margin="0,0,10,0"/>
-
-                    <Label x:Name="step1" Grid.Column="1" Text="EXPLORE" TextColor="Black" FontAttributes="Bold" HorizontalOptions="Start" VerticalOptions="Center"/>
+                    <!--changed label to button-->
+                    <Button x:Name="step1" Grid.Column="1" Text="EXPLORE" TextColor="Black" FontAttributes="Bold" HorizontalOptions="Start" VerticalOptions="Center" BackgroundColor="#FFE8CD" Clicked="clickedExplore"/>
+                    <!--<Label x:Name="step1" Grid.Column="1" Text="EXPLORE" TextColor="Black"
+                    FontAttributes="Bold" HorizontalOptions="Start" VerticalOptions="Center"/>-->
 
                 </Grid>
 

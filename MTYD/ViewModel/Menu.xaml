@@ -197,7 +197,7 @@
                 <BoxView x:Name="divider6" HeightRequest="2" HorizontalOptions="Fill" VerticalOptions="Center" BackgroundColor="White"/>
 
 
-                <Grid x:Name="exploreGrid" ColumnSpacing="15">
+                <Grid x:Name="payGrid" ColumnSpacing="15">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
@@ -206,10 +206,8 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <!--<Button x:Name="placeholderButton" Grid.ColumnSpan="2" HorizontalOptions="Fill" Clicked="clickedPfp"/>-->
 
-
-                    <Label Grid.Column="1" x:Name="explore" Text="EXPLORE MEALS" HorizontalOptions="StartAndExpand" VerticalOptions="Center" FontAttributes="Bold" FontSize="25" TextColor="White"/>
+                    <Label Grid.Column="1" x:Name="explore" Text="TESTING PAYMENTPAGE" HorizontalOptions="StartAndExpand" VerticalOptions="Center" FontAttributes="Bold" FontSize="25" TextColor="White"/>
                     
                     <Image x:Name="explorePic" VerticalOptions="Center" HorizontalOptions="Start" Source="profile.png"/>
 

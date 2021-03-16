@@ -78,13 +78,15 @@
 
                 <BoxView x:Name="spacer2" HeightRequest="10"/>
 
-                <CollectionView x:Name="dateCarousel" ItemsSource="{Binding availableDates}" HeightRequest="80" HorizontalOptions="Start">
+
+                <CollectionView x:Name="dateCarousel" ItemsSource="{Binding availableDates}" HeightRequest="90" HorizontalOptions="Start">
                     <CollectionView.ItemsLayout>
-                        <LinearItemsLayout Orientation="Horizontal" ItemSpacing="20" SnapPointsType="None"/>
+                        <GridItemsLayout Orientation="Horizontal"  SnapPointsType="None"/>
                     </CollectionView.ItemsLayout>
                     <CollectionView.ItemTemplate>
-                        <DataTemplate> 
-                            <Forms9Patch:Frame OutlineRadius="10" VerticalOptions="Start" OutlineWidth="3" HeightRequest="60" WidthRequest="80" OutlineColor="{Binding outlineColor}" BackgroundColor="{Binding fillColor}" Padding="0" HasShadow="False">
+                        <DataTemplate>
+                            <Grid Padding="10, 0, 10, 10" HeightRequest="70" WidthRequest="80" HorizontalOptions="Start" VerticalOptions="Start">
+                            <Forms9Patch:Frame OutlineRadius="10" VerticalOptions="Fill" OutlineWidth="3" HeightRequest="60" WidthRequest="60" OutlineColor="{Binding outlineColor}" BackgroundColor="{Binding fillColor}" Padding="0" HasShadow="False">
                             <!--<Frame CornerRadius="10" HeightRequest="60" WidthRequest="40" HorizontalOptions="Fill" BorderColor="{Binding outlineColor}" BackgroundColor="{Binding fillColor}" Padding="0" HasShadow="False">-->
                                 <Grid Padding="0">
                                 <StackLayout Padding="0">
@@ -102,6 +104,8 @@
                                 <Button HorizontalOptions="Fill" Text="{Binding index}" TextColor="Transparent" VerticalOptions="Fill" BackgroundColor="Transparent" Clicked="dateChangeCar"/>
                                 </Grid>
                             </Forms9Patch:Frame>
+
+                            </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>

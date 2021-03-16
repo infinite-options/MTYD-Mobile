@@ -1610,6 +1610,12 @@ namespace MTYD
             Debug.WriteLine("reached loading");
             Application.Current.MainPage = new Loading();
         }
+
+        //added function
+        async void clickedExplore(System.Object sender, System.EventArgs e)
+        {
+            Application.Current.MainPage = new ExploreMeals();
+        }
         //void Button_Clicked(System.Object sender, System.EventArgs e)
         //{
         //    Application.Current.MainPage = new MainPageExperiment();

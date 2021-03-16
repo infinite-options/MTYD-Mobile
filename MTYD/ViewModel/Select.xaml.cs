@@ -457,6 +457,7 @@ namespace MTYD.ViewModel
                 foreach (var i in hm)
                 {
                     datePicker.Items.Add(i.Key);
+                    Debug.WriteLine("date key: " + i.Key.ToString());
                     //String.Format("MMMM dd, yyyy", i.Key);
 
                     //testing with carouselView
@@ -478,11 +479,12 @@ namespace MTYD.ViewModel
                     index1++;
                     Debug.WriteLine("fullDate: $" + d.fullDateTime + "$");
                     availableDates.Add(d);
+                    Debug.WriteLine("availableDates size: " + availableDates.Count.ToString());
                     //dateDict.Add(d.fullDateTime, d);
                 }
 
                 Debug.WriteLine("after adding to picker reached");
-                dateCarousel.ItemsSource = availableDates; 
+                //dateCarousel.ItemsSource = availableDates; 
                 datePicker.SelectedIndex = 0;
                 availDateIndex = 0;
                 selectedDate = availableDates[0];
@@ -524,7 +526,8 @@ namespace MTYD.ViewModel
                 checkDateStatuses();
                 GetRecentSelection();
                 GetRecentSelection2();
-
+                
+                dateCarousel.ItemsSource = availableDates;
                 //testing setMenu here
                 setMenu();
 
@@ -868,6 +871,7 @@ namespace MTYD.ViewModel
         /////////date change for carousel view
         async private void dateChangeCar(object sender, EventArgs e)
         {
+            dateCarousel.ItemsSource = availableDates;
             qtyDict.Clear();
             qtyDict_addon.Clear();
 

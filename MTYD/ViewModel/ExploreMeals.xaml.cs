@@ -40,10 +40,11 @@ namespace MTYD.ViewModel
         private static string jsonMeals;
         public static ObservableCollection<MealInfo> Meals1 = new ObservableCollection<MealInfo>();
         public static ObservableCollection<MealInfo> Meals2 = new ObservableCollection<MealInfo>();
-        public static string userId = (string)Application.Current.Properties["user_id"];
-        private string postUrl = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selection?customer_uid=" + userId;
+        //public static string userId = (string)Application.Current.Properties["user_id"];
+        public static string userId = "100-000050";
+        //private string postUrl = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selection?customer_uid=" + userId;
         private const string menuUrl = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/upcoming_menu";
-        private string userMeals = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + userId;
+        //private string userMeals = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + userId;
         //private const string userMeals = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=100-000001";
         private static Dictionary<string, string> qtyDict = new Dictionary<string, string>();
         private static Dictionary<string, string> qtyDict_addon = new Dictionary<string, string>();
@@ -72,9 +73,8 @@ namespace MTYD.ViewModel
 
         WebClient client = new WebClient();
 
-        public ExploreMeals(string firstName, string lastName, string emailAdd)
+        public ExploreMeals()
         {
-            first = firstName; last = lastName; email = emailAdd;
             availableDates = new List<Date>();
             dateDict = new Dictionary<string, Date>();
             InitializeComponent();
@@ -156,19 +156,20 @@ namespace MTYD.ViewModel
         //}
 
 
-        async void clickedPfp(System.Object sender, System.EventArgs e)
-        {
-            await Navigation.PushAsync(new UserProfile(first, last, email), false);
-        }
+        //async void clickedPfp(System.Object sender, System.EventArgs e)
+        //{
+        //    await Navigation.PushAsync(new UserProfile(first, last, email), false);
+        //}
 
-        async void clickedMenu(System.Object sender, System.EventArgs e)
-        {
-            await Navigation.PushAsync(new Menu(first, last, email));
-        }
+        //async void clickedMenu(System.Object sender, System.EventArgs e)
+        //{
+        //    await Navigation.PushAsync(new Menu(first, last, email));
+        //}
 
-        async void clickedSub(System.Object sender, System.EventArgs e)
+        void clickedSub(System.Object sender, System.EventArgs e)
         {
-            await Navigation.PushAsync(new SubscriptionPage(first, last, email));
+            //await Navigation.PushAsync(new SubscriptionPage(first, last, email));
+            Application.Current.MainPage = new MainPage();
         }
         /*
         protected async Task SetMealSelect()
