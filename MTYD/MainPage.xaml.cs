@@ -181,12 +181,12 @@ namespace MTYD
                 loginPassword.Margin = new Thickness(0, height / (-120), width / 55, height / (-120));
 
                 //login and signup buttons
-                loginButton.HeightRequest = height / 50;
-                signUpButton.HeightRequest = height / 50;
-                loginButton.WidthRequest = width / 9;
-                signUpButton.WidthRequest = width / 9;
-                loginButton.CornerRadius = (int)(height / 100);
-                signUpButton.CornerRadius = (int)(height / 100);
+                loginButton.HeightRequest = height / 35;
+                signUpButton.HeightRequest = height / 35;
+                loginButton.WidthRequest = width / 7;
+                signUpButton.WidthRequest = width / 7;
+                loginButton.CornerRadius = (int)(height / 70);
+                signUpButton.CornerRadius = (int)(height / 70);
 
                 //or divider
                 grid4.Margin = new Thickness(width / 15, height / 80, width / 15, height / 100);
@@ -201,39 +201,6 @@ namespace MTYD
                 appleLoginButton.HeightRequest = width / 13;
                 appleLoginButton.WidthRequest = width / 13;
                 appleLoginButton.CornerRadius = (int)(width / 26);
-
-                searchPic.WidthRequest = width / 4;
-                first.FontSize = width / 50;
-                first.HeightRequest = width / 20;
-                first.WidthRequest = width / 20;
-                first.CornerRadius = (int)(width / 40);
-                step1.FontSize = width / 30;
-                sub1.FontSize = width / 55;
-
-                cardPic.WidthRequest = width / 4;
-                second.FontSize = width / 50;
-                second.HeightRequest = width / 20;
-                second.WidthRequest = width / 20;
-                second.CornerRadius = (int)(width / 40);
-                step2.FontSize = width / 30;
-                sub2.FontSize = width / 55;
-
-                pickPic.WidthRequest = width / 4;
-                third.FontSize = width / 50;
-                third.HeightRequest = width / 20;
-                third.WidthRequest = width / 20;
-                third.CornerRadius = (int)(width / 40);
-                step3.FontSize = width / 30;
-                sub3.FontSize = width / 55;
-
-                delivPic.WidthRequest = width / 4;
-                fourth.FontSize = width / 50;
-                fourth.HeightRequest = width / 20;
-                fourth.WidthRequest = width / 20;
-                fourth.CornerRadius = (int)(width / 40);
-                step4.FontSize = width / 30;
-                sub4.FontSize = width / 55;
-
                 //browseMenu.FontSize = width / 33;
             }
             else //android
@@ -274,6 +241,44 @@ namespace MTYD
             passFrame.HeightRequest = height / 180;
             //userFrame.CornerRadius = 25;
             //passFrame.CornerRadius = 25;
+
+            searchPic.WidthRequest = width / 4;
+            first.FontSize = width / 50;
+            first.HeightRequest = width / 20;
+            first.WidthRequest = width / 20;
+            first.CornerRadius = (int)(width / 40);
+            step1.FontSize = width / 30;
+            sub1.FontSize = width / 55;
+
+            cardPic.WidthRequest = width / 4;
+            second.FontSize = width / 50;
+            second.HeightRequest = width / 20;
+            second.WidthRequest = width / 20;
+            second.CornerRadius = (int)(width / 40);
+            step2.FontSize = width / 30;
+            sub2.FontSize = width / 55;
+
+            pickPic.WidthRequest = width / 4;
+            third.FontSize = width / 50;
+            third.HeightRequest = width / 20;
+            third.WidthRequest = width / 20;
+            third.CornerRadius = (int)(width / 40);
+            step3.FontSize = width / 30;
+            sub3.FontSize = width / 55;
+
+            delivPic.WidthRequest = width / 4;
+            fourth.FontSize = width / 50;
+            fourth.HeightRequest = width / 20;
+            fourth.WidthRequest = width / 20;
+            fourth.CornerRadius = (int)(width / 40);
+            step4.FontSize = width / 30;
+            sub4.FontSize = width / 55;
+
+            partners.FontSize = width / 60;
+
+            ambassadorBtn.WidthRequest = width / 4;
+            ambassadorBtn.HeightRequest = width / 20;
+            ambassadorBtn.CornerRadius = (int)(width / 40);
         }
 
         protected async Task setGrid()
@@ -1430,7 +1435,8 @@ namespace MTYD
                                     //await Debug.WriteLine("a");
                                     //navToSelect((info_obj2["result"])[0]["customer_first_name"].ToString(), (info_obj2["result"])[0]["customer_last_name"].ToString(), (info_obj2["result"])[0]["customer_email"].ToString());
                                     Zones[] zones = new Zones[] { };
-                                    Application.Current.MainPage = new NavigationPage(new Select(zones, (info_obj2["result"])[0]["customer_first_name"].ToString(), (info_obj2["result"])[0]["customer_last_name"].ToString(), (info_obj2["result"])[0]["customer_email"].ToString()));
+                                    //Application.Current.MainPage = new NavigationPage(new Select(zones, (info_obj2["result"])[0]["customer_first_name"].ToString(), (info_obj2["result"])[0]["customer_last_name"].ToString(), (info_obj2["result"])[0]["customer_email"].ToString()));
+                                    Application.Current.MainPage = new NavigationPage(new SubscriptionPage((info_obj2["result"])[0]["customer_first_name"].ToString(), (info_obj2["result"])[0]["customer_last_name"].ToString(), (info_obj2["result"])[0]["customer_email"].ToString()));
                                     //Application.Current.MainPage = new NavigationPage(new SubscriptionPage((info_obj2["result"])[0]["customer_first_name"].ToString(), (info_obj2["result"])[0]["customer_last_name"].ToString(), (info_obj2["result"])[0]["customer_email"].ToString()));
                                 }
 
@@ -1610,17 +1616,19 @@ namespace MTYD
             Debug.WriteLine("reached loading");
             Application.Current.MainPage = new Loading();
         }
-
-        //added function
-        async void clickedExplore(System.Object sender, System.EventArgs e)
-        {
-            Application.Current.MainPage = new ExploreMeals();
-        }
         //void Button_Clicked(System.Object sender, System.EventArgs e)
         //{
         //    Application.Current.MainPage = new MainPageExperiment();
         //    //Navigation.PushAsync(new MainPageExperiment());
         //}
 
+        //added function
+        async void clickedExplore(System.Object sender, System.EventArgs e)
+        {
+            Application.Current.MainPage = new ExploreMeals();
+        }
+
     }
 }
+
+
