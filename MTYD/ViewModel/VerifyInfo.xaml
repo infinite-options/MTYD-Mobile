@@ -42,6 +42,31 @@
                     <ImageButton x:Name="menu" Source="menu2.png" VerticalOptions="End" HorizontalOptions="Start" BackgroundColor="Transparent" Clicked="clickedMenu"/>
 
                 </Grid>
+
+            <StackLayout x:Name="passStack" IsVisible="false" Margin="15,0">
+            <!--will be used for paypal with direct login-->
+            <BoxView x:Name="spacer10" IsVisible="true" HeightRequest="10"></BoxView>
+
+            <Label x:Name="passLabel2" Text="ENTER PASSWORD TO CONFIRM*" IsVisible="true" HorizontalOptions="Start" FontSize="22"
+                        FontAttributes="Bold"/>
+
+                <BoxView x:Name="spacer11" IsVisible="true" HeightRequest="10"></BoxView>
+
+                <Label x:Name="spacer12" IsVisible="true" HeightRequest="5"/>
+
+                <Frame x:Name="password2" Padding="10,5" BackgroundColor="#FFE5B4"
+                HasShadow="False"  IsVisible="true">
+
+                    <Entry x:Name="passwordEntry2"  IsVisible="true" Keyboard="Text" FontAttributes="Bold"
+                   FontSize="17" Placeholder="Enter Password"
+                   HeightRequest="35" IsPassword="True"
+                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"/>
+
+                </Frame>
+
+                <Label x:Name="spacer13"  IsVisible="true" HeightRequest="5"/>
+            </StackLayout>
+
             <StackLayout x:Name="originalStack">
             <Label x:Name="spacer" HeightRequest="5"/>
 
@@ -225,6 +250,8 @@
                 </Grid>
                 
             </Grid>
+
+                
             </StackLayout>
             <Frame HasShadow="False" x:Name="PaymentScreen" HeightRequest="0" VerticalOptions="Start">
                 <Grid>
@@ -327,9 +354,9 @@
                 <Frame x:Name="password" Padding="10,5" BackgroundColor="#FFE5B4"
                 HasShadow="False"  IsVisible="false">
 
-                    <Editor x:Name="passwordEntry"  IsVisible="false" Keyboard="Text" FontAttributes="Bold"
+                    <Entry x:Name="passwordEntry"  IsVisible="false" Keyboard="Text" FontAttributes="Bold"
                    FontSize="17" Placeholder="Enter Password"
-                   HeightRequest="35"
+                   HeightRequest="35" IsPassword="True"
                    BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"/>
 
                 </Frame>
@@ -369,6 +396,8 @@
                     Text="CHECKOUT" TextColor="White"  FontAttributes="Bold" FontSize="20"
                     WidthRequest="150" HeightRequest="50" Grid.Column="1" Grid.Row="0" Clicked="checkoutButton_Clicked"/>
             </Grid>
+
+            
         </StackLayout>
     </ScrollView>
 </ContentPage>

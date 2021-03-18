@@ -361,7 +361,11 @@
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
-    <AndroidResource Include="Resources\drawable\NityaAyurvedaLogo.png">
+    <AndroidResource Include="Resources\drawable\fbOutlineLogo.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\insOutlineLogo.png">
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
@@ -369,11 +373,19 @@
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
-    <AndroidResource Include="Resources\drawable\fbOutlineLogo.png">
+    <AndroidResource Include="Resources\drawable\NityaAyurvedaLogo.png">
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
-    <AndroidResource Include="Resources\drawable\insOutlineLogo.png">
+    <AndroidResource Include="Resources\drawable\appleicon3.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\facebookicon3.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\googleicon3.png">
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
@@ -392,9 +404,9 @@
   </ItemGroup>
  <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
  <Target Name="_RemoveMdbFiles" BeforeTargets="_Upload">
- <ItemGroup>
-    <_Temp Include="%(_ResolvedSymbols.Identity)" Condition="'%(_ResolvedSymbols.Extension)' == '.mdb'" />
-    <_ResolvedSymbols Remove="@(_Temp)" />
-</ItemGroup>
-</Target>
+    <ItemGroup>
+        <_Temp Include="%(_ResolvedSymbols.Identity)" Condition="'%(_ResolvedSymbols.Extension)' == '.mdb'" />
+        <_ResolvedSymbols Remove="@(_Temp)" />
+    </ItemGroup>
+ </Target>
 </Project>

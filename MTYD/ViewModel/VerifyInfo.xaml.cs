@@ -58,6 +58,8 @@ namespace MTYD.ViewModel
         double service_fee;
         double delivery_fee;
         double checkoutTotal;
+        string paymentMethod;
+        bool paypalPaymentDone = false;
 
 
         // CREDENTIALS CLASS
@@ -186,6 +188,7 @@ namespace MTYD.ViewModel
                 //password.CornerRadius = 22;
                 checkoutButton.CornerRadius = 24;
                 password.CornerRadius = 22;
+                password2.CornerRadius = 22;
             }
             SetPayPalCredentials();
         }
@@ -283,7 +286,12 @@ namespace MTYD.ViewModel
             //newPayment.salt = "64a7f1fb0df93d8f5b9df14077948afa1b75b4c5028d58326fb801d825c9cd24412f88c8b121c50ad5c62073c75d69f14557255da1a21e24b9183bc584efef71";
             //newPayment.salt = "cec35d4fc0c5e83527f462aeff579b0c6f098e45b01c8b82e311f87dc6361d752c30293e27027653adbb251dff5d03242c8bec68a3af1abd4e91c5adb799a01b";
             //newPayment.salt = "2020-09-22 21:55:17";
-            newPayment.salt = hashedPassword;
+            //newPayment.salt = hashedPassword;
+            //testing for paypal
+            if ((string)Application.Current.Properties["platform"] == "DIRECT")
+                newPayment.salt = hashedPassword;
+            else newPayment.salt = "";
+
             newPayment.delivery_first_name = FNameEntry;
             newPayment.delivery_last_name = LNameEntry;
             newPayment.delivery_email = emailEntry;
@@ -293,19 +301,36 @@ namespace MTYD.ViewModel
             newPayment.delivery_city = CityEntry;
             newPayment.delivery_state = StateEntry;
             newPayment.delivery_zip = ZipEntry;
+            //newPayment.delivery_instructions = DeliveryEntry;
             newPayment.delivery_instructions = DeliveryEntry;
             newPayment.delivery_longitude = "";
             newPayment.delivery_latitude = "";
             newPayment.order_instructions = "slow";
-            newPayment.purchase_notes = "new purch";
+            
             newPayment.amount_due = Preferences.Get("price", "00.00");
             newPayment.amount_discount = "00.00";
             newPayment.amount_paid = "00.00";//Preferences.Get("price", "00.00");
-            newPayment.cc_num = "4242424242424242";
-            newPayment.cc_exp_year = "2022";
-            newPayment.cc_exp_month = "08";
-            newPayment.cc_cvv = "123";
-            newPayment.cc_zip = "12345";
+            
+
+            if (paymentMethod == "stripe")
+            {
+                newPayment.purchase_notes = cardDescription.Text;
+                newPayment.cc_num = cardHolderNumber.Text;
+                newPayment.cc_exp_year = "20" + cardExpYear.Text;
+                newPayment.cc_exp_month = cardExpMonth.Text;
+                newPayment.cc_cvv = cardCVV.Text;
+                newPayment.cc_zip = cardZip.Text;
+            }
+            else
+            {
+                newPayment.purchase_notes = "n/a";
+                newPayment.cc_num = "4242424242424242";
+                newPayment.cc_exp_year = "2050";
+                newPayment.cc_exp_month = "08";
+                newPayment.cc_cvv = "222";
+                newPayment.cc_zip = "95132";
+            }
+            
             // OLD IMPLEMENTATION
             //==================================
             //newPayment.cc_num = CCEntry;
@@ -319,7 +344,7 @@ namespace MTYD.ViewModel
 
             //itemsList.Add("1"); //{ "1", "5 Meal Plan", "59.99" };
             var newPaymentJSONString = JsonConvert.SerializeObject(newPayment);
-            // Console.WriteLine("newPaymentJSONString" + newPaymentJSONString);
+            Console.WriteLine("newPaymentJSONString" + newPaymentJSONString);
             var content = new StringContent(newPaymentJSONString, Encoding.UTF8, "application/json");
             Console.WriteLine("Content: " + content);
             /*var request = new HttpRequestMessage();
@@ -361,6 +386,31 @@ namespace MTYD.ViewModel
         {
             if (checkoutButton.Text == "CONTINUE")
             {
+                if (paymentMethod == "paypal" && (string)Application.Current.Properties["platform"] == "DIRECT")
+                {
+                    Console.WriteLine("In set payment info: Hashing Password!");
+                    SHA512 sHA512 = new SHA512Managed();
+                    byte[] data = sHA512.ComputeHash(Encoding.UTF8.GetBytes(passwordEntry2.Text + Preferences.Get("password_salt", "")));
+                    string hashedPassword2 = BitConverter.ToString(data).Replace("-", string.Empty).ToLower();
+                    Debug.WriteLine("hashedPassword: " + hashedPassword2);
+                    //byte[] data2 = sHA512.ComputeHash(Encoding.UTF8.GetBytes(passwordEntry.Text));
+                    //string hashedPassword3 = BitConverter.ToString(data).Replace("-", string.Empty).ToLower();
+                    //Debug.WriteLine("hashedPassword solo: " + hashedPassword2);
+                    //Debug.WriteLine("password_hashed: " + Preferences.Get("password_hashed", ""));
+                    Console.WriteLine("In set payment info:  Password Hashed!");
+                    if (Preferences.Get("password_hashed", "") != hashedPassword2)
+                    {
+                        Debug.WriteLine("wrong password entered");
+                        DisplayAlert("Error", "Wrong password entered.", "OK");
+                        return;
+                    }
+                    else
+                    {
+                        Debug.WriteLine("hash finished and ready");
+                        hashedPassword = hashedPassword2;
+                    }
+                }
+
                 //if (true)
                 //{
 
@@ -404,6 +454,8 @@ namespace MTYD.ViewModel
         // FUNCTION  1:
         public async void CheckouWithStripe(System.Object sender, System.EventArgs e)
         {
+            paymentMethod = "stripe";
+
             var total = Preferences.Get("price", "00.00");
             if (total.Contains(".") == false)
                 total = total + ".00";
@@ -560,7 +612,7 @@ namespace MTYD.ViewModel
                     {
                         cardHolderUnit.Text = "";
                     }
-
+        
                     // Setting request for USPS API
                     XDocument requestDoc = new XDocument(
                         new XElement("AddressValidateRequest",
@@ -702,128 +754,131 @@ namespace MTYD.ViewModel
                     }
                 }
 
-                var total = Preferences.Get("price", "00.00");
-                var clientHttp = new System.Net.Http.HttpClient();
-                var stripe = new Credentials();
-                    stripe.key = Constant.TestPK;
-                    //stripe.key = Constant.LivePK;
+        //start commenting here?
 
-                var stripeObj = JsonConvert.SerializeObject(stripe);
-                var stripeContent = new StringContent(stripeObj, Encoding.UTF8, "application/json");
-                var RDSResponse = await clientHttp.PostAsync(Constant.StripeModeUrl, stripeContent);
-                var content = await RDSResponse.Content.ReadAsStringAsync();
+                //var total = Preferences.Get("price", "00.00");
+                //var clientHttp = new System.Net.Http.HttpClient();
+                //var stripe = new Credentials();
+                //    stripe.key = Constant.TestPK;
+                //    //stripe.key = Constant.LivePK;
 
-                Debug.WriteLine("key to send JSON: " + stripeObj);
-                Debug.WriteLine("Response from key: " + content);
+                //var stripeObj = JsonConvert.SerializeObject(stripe);
+                //var stripeContent = new StringContent(stripeObj, Encoding.UTF8, "application/json");
+                //var RDSResponse = await clientHttp.PostAsync(Constant.StripeModeUrl, stripeContent);
+                //var content = await RDSResponse.Content.ReadAsStringAsync();
 
-                if (RDSResponse.IsSuccessStatusCode)
-                {
-                    //Carlos original code
-                    //if (content != "200")
-                    if (content.Contains("200"))
-                    {
-                        //Debug.WriteLine("error encountered");
-                        string SK = "";
-                        string mode = "";
+                //Debug.WriteLine("key to send JSON: " + stripeObj);
+                //Debug.WriteLine("Response from key: " + content);
 
-                        if (stripeObj.Contains("test"))
-                        {
-                            mode = "TEST";
-                            SK = Constant.TestSK;
-                        }
-                        else if (stripeObj.Contains("live"))
-                        {
-                            mode = "LIVE";
-                            SK = Constant.LiveSK;
-                        }
-                        //Carlos original code
-                        //if (content.Contains("Test"))
-                        //{
-                        //    mode = "TEST";
-                        //    SK = Constant.TestSK;
-                        //}
-                        //else if (content.Contains("Live"))
-                        //{
-                        //    mode = "LIVE";
-                        //    SK = Constant.LiveSK;
-                        //}
+                //if (RDSResponse.IsSuccessStatusCode)
+                //{
+                //    //Carlos original code
+                //    //if (content != "200")
+                //    if (content.Contains("200"))
+                //    {
+                //        //Debug.WriteLine("error encountered");
+                //        string SK = "";
+                //        string mode = "";
 
-                        Debug.WriteLine("MODE          : " + mode);
-                        Debug.WriteLine("STRIPE SECRET : " + SK);
+                //        if (stripeObj.Contains("test"))
+                //        {
+                //            mode = "TEST";
+                //            SK = Constant.TestSK;
+                //        }
+                //        else if (stripeObj.Contains("live"))
+                //        {
+                //            mode = "LIVE";
+                //            SK = Constant.LiveSK;
+                //        }
+                //        //Carlos original code
+                //        //if (content.Contains("Test"))
+                //        //{
+                //        //    mode = "TEST";
+                //        //    SK = Constant.TestSK;
+                //        //}
+                //        //else if (content.Contains("Live"))
+                //        //{
+                //        //    mode = "LIVE";
+                //        //    SK = Constant.LiveSK;
+                //        //}
+
+                //        Debug.WriteLine("MODE          : " + mode);
+                //        Debug.WriteLine("STRIPE SECRET : " + SK);
                        
-                        //Debug.WriteLine("SK" + SK);
-                        StripeConfiguration.ApiKey = SK;
+                //        //Debug.WriteLine("SK" + SK);
+                //        StripeConfiguration.ApiKey = SK;
 
-                        string CardNo = cardHolderNumber.Text.Trim();
-                        string expMonth = cardExpMonth.Text.Trim();
-                        string expYear = cardExpYear.Text.Trim();
-                        string cardCvv = cardCVV.Text.Trim();
+                //        string CardNo = cardHolderNumber.Text.Trim();
+                //        string expMonth = cardExpMonth.Text.Trim();
+                //        string expYear = cardExpYear.Text.Trim();
+                //        string cardCvv = cardCVV.Text.Trim();
 
-                        Debug.WriteLine("step 1 reached");
-                        // Step 1: Create Card
-                        TokenCardOptions stripeOption = new TokenCardOptions();
-                        stripeOption.Number = CardNo;
-                        stripeOption.ExpMonth = Convert.ToInt64(expMonth);
-                        stripeOption.ExpYear = Convert.ToInt64(expYear);
-                        stripeOption.Cvc = cardCvv;
+                //        Debug.WriteLine("step 1 reached");
+                //        // Step 1: Create Card
+                //        TokenCardOptions stripeOption = new TokenCardOptions();
+                //        stripeOption.Number = CardNo;
+                //        stripeOption.ExpMonth = Convert.ToInt64(expMonth);
+                //        stripeOption.ExpYear = Convert.ToInt64(expYear);
+                //        stripeOption.Cvc = cardCvv;
 
-                        Debug.WriteLine("step 2 reached");
-                        // Step 2: Assign card to token object
-                        TokenCreateOptions stripeCard = new TokenCreateOptions();
-                        stripeCard.Card = stripeOption;
+                //        Debug.WriteLine("step 2 reached");
+                //        // Step 2: Assign card to token object
+                //        TokenCreateOptions stripeCard = new TokenCreateOptions();
+                //        stripeCard.Card = stripeOption;
 
-                        TokenService service = new TokenService();
-                        Stripe.Token newToken = service.Create(stripeCard);
+                //        TokenService service = new TokenService();
+                //        Stripe.Token newToken = service.Create(stripeCard);
 
-                        Debug.WriteLine("step 3 reached");
-                        // Step 3: Assign the token to the soruce 
-                        var option = new SourceCreateOptions();
-                        option.Type = SourceType.Card;
-                        option.Currency = "usd";
-                        option.Token = newToken.Id;
+                //        Debug.WriteLine("step 3 reached");
+                //        // Step 3: Assign the token to the soruce 
+                //        var option = new SourceCreateOptions();
+                //        option.Type = SourceType.Card;
+                //        option.Currency = "usd";
+                //        option.Token = newToken.Id;
 
-                        var sourceService = new SourceService();
-                        Source source = sourceService.Create(option);
+                //        var sourceService = new SourceService();
+                //        Source source = sourceService.Create(option);
 
-                        Debug.WriteLine("step 4 reached");
-                        // Step 4: Create customer
-                        CustomerCreateOptions customer = new CustomerCreateOptions();
-                        customer.Name = cardHolderName.Text.Trim();
-                        customer.Email = cardHolderEmail.Text.ToLower().Trim();
-                        if (cardDescription.Text == "" || cardDescription.Text == null)
-                            customer.Description = "";
-                        else customer.Description = cardDescription.Text.Trim();
-                        if (cardHolderUnit.Text == null)
-                        {
-                            cardHolderUnit.Text = "";
-                        }
-                        customer.Address = new AddressOptions { City = cardCity.Text.Trim(), Country = Constant.Contry, Line1 = cardHolderAddress.Text.Trim(), Line2 = cardHolderUnit.Text.Trim(), PostalCode = cardZip.Text.Trim(), State = cardState.Text.Trim() };
+                //        Debug.WriteLine("step 4 reached");
+                //        // Step 4: Create customer
+                //        CustomerCreateOptions customer = new CustomerCreateOptions();
+                //        customer.Name = cardHolderName.Text.Trim();
+                //        customer.Email = cardHolderEmail.Text.ToLower().Trim();
+                //        if (cardDescription.Text == "" || cardDescription.Text == null)
+                //            customer.Description = "";
+                //        else customer.Description = cardDescription.Text.Trim();
+                //        if (cardHolderUnit.Text == null)
+                //        {
+                //            cardHolderUnit.Text = "";
+                //        }
+                //        customer.Address = new AddressOptions { City = cardCity.Text.Trim(), Country = Constant.Contry, Line1 = cardHolderAddress.Text.Trim(), Line2 = cardHolderUnit.Text.Trim(), PostalCode = cardZip.Text.Trim(), State = cardState.Text.Trim() };
 
-                        var customerService = new CustomerService();
-                        var cust = customerService.Create(customer);
+                //        var customerService = new CustomerService();
+                //        var cust = customerService.Create(customer);
 
-                        Debug.WriteLine("step 5 reached");
-                        // Step 5: Charge option
-                        var chargeOption = new ChargeCreateOptions();
-                        chargeOption.Amount = (long)RemoveDecimalFromTotalAmount(total);
+                //        Debug.WriteLine("step 5 reached");
+                //        // Step 5: Charge option
+                //        var chargeOption = new ChargeCreateOptions();
+                //        chargeOption.Amount = (long)RemoveDecimalFromTotalAmount(total);
                         
-                        Debug.WriteLine("hopefully correct total: " + total);
-                        chargeOption.Currency = "usd";
-                        chargeOption.ReceiptEmail = cardHolderEmail.Text.ToLower().Trim();
-                        chargeOption.Customer = cust.Id;
-                        chargeOption.Source = source.Id;
-                        if (cardDescription.Text == "" || cardDescription.Text == null)
-                            chargeOption.Description = "";
-                        else chargeOption.Description = cardDescription.Text.Trim();
+                //        Debug.WriteLine("hopefully correct total: " + total);
+                //        chargeOption.Currency = "usd";
+                //        chargeOption.ReceiptEmail = cardHolderEmail.Text.ToLower().Trim();
+                //        chargeOption.Customer = cust.Id;
+                //        chargeOption.Source = source.Id;
+                //        if (cardDescription.Text == "" || cardDescription.Text == null)
+                //            chargeOption.Description = "";
+                //        else chargeOption.Description = cardDescription.Text.Trim();
 
-                        //chargeOption.Description = cardDescription.Text.Trim();
+                //        //chargeOption.Description = cardDescription.Text.Trim();
 
-                        Debug.WriteLine("step 6 reached");
-                        // Step 6: charge the customer
-                        var chargeService = new ChargeService();
-                        Charge charge = chargeService.Create(chargeOption);
-                        if (charge.Status == "succeeded")
-                        {
+                //        Debug.WriteLine("step 6 reached");
+                        // Step 6: charge the customer COMMENTED OUT FOR TESTING, backend already charges stripe so we don't have to do it here
+                        //var chargeService = new ChargeService();
+                        //Charge charge = chargeService.Create(chargeOption);
+                        //Debug.WriteLine("charge: " + charge.ToString());
+                        //if (charge.Status == "succeeded")
+                        //{
                             await Navigation.PushAsync(new Loading());
 
                             PaymentScreen.HeightRequest = 0;
@@ -833,7 +888,7 @@ namespace MTYD.ViewModel
                             orangeBox.HeightRequest = deviceHeight / 2;
 
                             Debug.WriteLine("STRIPE PAYMENT WAS SUCCESSFUL");
-
+        //stop commenting here?
                             //Preferences.Set("price", "00.00");
                             //DisplayAlert("Payment Completed", "Your payment was successful. Press 'CONTINUE' to select your meals!", "OK");
                             //when purchasing a first meal, might not send to endpoint on time when clicking the continue button as fast as possible, resulting in error on select pg
@@ -871,14 +926,14 @@ namespace MTYD.ViewModel
                             Preferences.Set("canChooseSelect", true);
                             await Navigation.PushAsync(new Select(passingZones, cust_firstName, cust_lastName, cust_email));
                             //done from checkout button clicked
-                        }
-                        else
-                        {
-                            // Fail
-                            await DisplayAlert("Ooops", "Payment was not succesfull. Please try again", "OK");
-                        }
-                    }
-                }
+                        //}
+                        //else
+                        //{
+                        //    // Fail
+                        //    await DisplayAlert("Ooops", "Payment was not succesfull. Please try again", "OK");
+                        //}
+                    //}
+                //}
             }
             catch (Exception ex)
             {
@@ -927,6 +982,8 @@ namespace MTYD.ViewModel
         //CVV: 154
         public async void CheckouWithPayPayl(System.Object sender, System.EventArgs e)
         {
+            paymentMethod = "paypal";
+
             Debug.WriteLine("paypal CheckouWithPayPayl called 1");
 
             var total = Preferences.Get("price", "00.00");
@@ -1022,7 +1079,13 @@ namespace MTYD.ViewModel
             if (source.Url == "https://mealsfor.me/home")
             {
                 //Navigation.PushAsync(new Loading());
-
+                if (paypalPaymentDone == true)
+                {
+                    headingGrid.IsVisible = true;
+                    checkoutButton.IsVisible = true;
+                    backButton.IsVisible = true;
+                    originalStack.IsVisible = false;
+                }
                 headingGrid.IsVisible = true;
                 checkoutButton.IsVisible = true;
                 backButton.IsVisible = true;
@@ -1031,7 +1094,12 @@ namespace MTYD.ViewModel
                 PayPalScreen.Height = 0;
                 StripeScreen.Height = 0;
 
+                if (checkoutButton.Text == "CONTINUE")
+                    Debug.WriteLine("checkout was changed");
+                
                 _ = captureOrder(payPalOrderId);
+
+                //Navigation.PopAsync();
             }
         }
 
@@ -1148,6 +1216,7 @@ namespace MTYD.ViewModel
         // FUNCTION  7: CAPTURE ORDER
         public async Task<HttpResponse> captureOrder(string id)
         {
+            
             Debug.WriteLine("paypal captureOrder called 7");
             Debug.WriteLine("passed in id: " + id);
             //await Navigation.PushAsync(new Loading());
@@ -1157,10 +1226,18 @@ namespace MTYD.ViewModel
             var request = new OrdersCaptureRequest(id);
                 request.RequestBody(new OrderActionRequest());
 
+            //Navigation.PushAsync(new Loading());
             var response = await client().Execute(request);
+            Debug.WriteLine("response: " + response.ToString());
+            await Navigation.PushAsync(new Loading());
+            Debug.WriteLine("after response");
             var statusCode = response.StatusCode;
+            Debug.WriteLine("after statusCode");
             var code = statusCode.ToString();
+            Debug.WriteLine("after code");
             var result = response.Result<PayPalCheckoutSdk.Orders.Order>();
+
+            //await Navigation.PushAsync(new Loading());
 
             Debug.WriteLine("REQUEST STATUS CODE: " + code);
             Debug.WriteLine("PAYPAL STATUS      : " + result.Status);
@@ -1169,45 +1246,67 @@ namespace MTYD.ViewModel
 
             if (result.Status == "COMPLETED")
             {
-                await Navigation.PushAsync(new Loading());
                 Debug.WriteLine("PAYPAL PAYMENT WAS SUCCESSFUL");
 
-                //checkout button clicked functionality added below vv
-                Preferences.Set(billingEmail, cardHolderEmail.Text);
-                Preferences.Set(billingName, cardHolderName.Text);
-                Preferences.Set(billingNum, cardHolderNumber.Text);
-                Preferences.Set(billingMonth, cardExpMonth.Text);
-                Preferences.Set(billingYear, cardExpYear.Text);
-                Preferences.Set(billingCVV, cardCVV.Text);
-                Preferences.Set(billingAddress, cardHolderAddress.Text);
-                Preferences.Set(billingUnit, cardHolderUnit.Text);
-                Preferences.Set(billingCity, cardCity.Text);
-                Preferences.Set(billingState, cardState.Text);
-                Preferences.Set(billingZip, cardZip.Text);
-                Preferences.Set(purchaseDescription, cardDescription.Text);
 
-                await setPaymentInfo();
-                Preferences.Set("canChooseSelect", true);
-                await Navigation.PushAsync(new Select(passingZones, cust_firstName, cust_lastName, cust_email));
-                //done from checkout button clicked
-
-                //Preferences.Set("price", "00.00");
-                //await DisplayAlert("Payment Completed","Your payment was successful. Press 'CONTINUE' to select your meals!","OK");
-                orangeBox.HeightRequest = deviceHeight / 2;
+                //testing with password
                 if ((string)Application.Current.Properties["platform"] == "DIRECT")
                 {
-                    spacer6.IsVisible = true;
-                    passLabel.IsVisible = true;
-                    spacer7.IsVisible = true;
-                    password.IsVisible = true;
-                    passwordEntry.IsVisible = true;
-                    spacer8.IsVisible = true;
-                }
-                checkoutButton.Text = "CONTINUE";
+                    paypalPaymentDone = true;
+                    orangeBox.HeightRequest = deviceHeight / 2;
+                    passStack.IsVisible = true;
+                    originalStack.IsVisible = false;
+                    //spacer6.IsVisible = true;
+                    //passLabel.IsVisible = true;
+                    //spacer7.IsVisible = true;
+                    //password.IsVisible = true;
+                    //passwordEntry.IsVisible = true;
+                    //spacer8.IsVisible = true;
 
+                    checkoutButton.Text = "CONTINUE";
+                    await Navigation.PopAsync();
+                    return response;
+
+                }
+                else
+                {
+                    //checkout button clicked functionality added below vv
+                    Preferences.Set(billingEmail, cardHolderEmail.Text);
+                    Preferences.Set(billingName, cardHolderName.Text);
+                    Preferences.Set(billingNum, cardHolderNumber.Text);
+                    Preferences.Set(billingMonth, cardExpMonth.Text);
+                    Preferences.Set(billingYear, cardExpYear.Text);
+                    Preferences.Set(billingCVV, cardCVV.Text);
+                    Preferences.Set(billingAddress, cardHolderAddress.Text);
+                    Preferences.Set(billingUnit, cardHolderUnit.Text);
+                    Preferences.Set(billingCity, cardCity.Text);
+                    Preferences.Set(billingState, cardState.Text);
+                    Preferences.Set(billingZip, cardZip.Text);
+                    Preferences.Set(purchaseDescription, cardDescription.Text);
+
+                    await setPaymentInfo();
+                    Preferences.Set("canChooseSelect", true);
+                    await Navigation.PushAsync(new Select(passingZones, cust_firstName, cust_lastName, cust_email));
+                    //done from checkout button clicked
+
+                    //Preferences.Set("price", "00.00");
+                    //await DisplayAlert("Payment Completed","Your payment was successful. Press 'CONTINUE' to select your meals!","OK");
+                    //orangeBox.HeightRequest = deviceHeight / 2;
+                    //if ((string)Application.Current.Properties["platform"] == "DIRECT")
+                    //{
+                    //    spacer6.IsVisible = true;
+                    //    passLabel.IsVisible = true;
+                    //    spacer7.IsVisible = true;
+                    //    password.IsVisible = true;
+                    //    passwordEntry.IsVisible = true;
+                    //    spacer8.IsVisible = true;
+                    //}
+                    //checkoutButton.Text = "CONTINUE";
+                }
             }
             else
             {
+                await Navigation.PopAsync();
                 Debug.WriteLine("didn't work");
                 await DisplayAlert("Ooops", "You payment was cancel or not sucessful. Please try again", "OK");
             }

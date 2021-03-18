@@ -24,7 +24,7 @@ namespace MTYD.ViewModel
         int mealSelected;
         int deliverySelected;
         double[,] discounts;
-        double[,] itemPrices; 
+        double[,] itemPrices;
         String[,] itemNames, itemUids;
 
         protected async Task GetPlans()
@@ -58,7 +58,7 @@ namespace MTYD.ViewModel
                     discounts[i, j] = double.Parse(m["delivery_discount"].ToString());
                     itemPrices[i, j] = double.Parse(m["item_price"].ToString());
                     itemNames[i, j] = m["item_name"].ToString();
-                    itemUids[i, j] = m["item_uid"].ToString(); 
+                    itemUids[i, j] = m["item_uid"].ToString();
                     if (j == 4)
                     {
                         i++;
@@ -139,34 +139,52 @@ namespace MTYD.ViewModel
 
                 delivery1.WidthRequest = width / 11;
                 delivery1.HeightRequest = width / 9;
-                delivery1.FontSize = width / 70;
+                delivery1Text1.FontSize = width / 50;
+
                 delivery2.WidthRequest = width / 11;
                 delivery2.HeightRequest = width / 9;
-                delivery2.FontSize = width / 70;
+                delivery2Text1.FontSize = width / 50;
+                delivery2Text2.FontSize = width / 70;
+
                 delivery3.WidthRequest = width / 11;
                 delivery3.HeightRequest = width / 9;
-                delivery3.FontSize = width / 70;
+                delivery3Text1.FontSize = width / 50;
+                delivery3Text2.FontSize = width / 70;
+
                 delivery4.WidthRequest = width / 11;
                 delivery4.HeightRequest = width / 9;
-                delivery4.FontSize = width / 70;
+                delivery4Text1.FontSize = width / 50;
+                delivery4Text2.FontSize = width / 70;
+
                 delivery5.WidthRequest = width / 11;
                 delivery5.HeightRequest = width / 9;
-                delivery5.FontSize = width / 70;
+                delivery5Text1.FontSize = width / 50;
+                delivery5Text2.FontSize = width / 70;
+
                 delivery6.WidthRequest = width / 11;
                 delivery6.HeightRequest = width / 9;
-                delivery6.FontSize = width / 70;
+                delivery6Text1.FontSize = width / 50;
+                delivery6Text2.FontSize = width / 70;
+
                 delivery7.WidthRequest = width / 11;
                 delivery7.HeightRequest = width / 9;
-                delivery7.FontSize = width / 70;
+                delivery7Text1.FontSize = width / 50;
+                delivery7Text2.FontSize = width / 70;
+
                 delivery8.WidthRequest = width / 11;
                 delivery8.HeightRequest = width / 9;
-                delivery8.FontSize = width / 70;
+                delivery8Text1.FontSize = width / 50;
+                delivery8Text2.FontSize = width / 70;
+
                 delivery9.WidthRequest = width / 11;
                 delivery9.HeightRequest = width / 9;
-                delivery9.FontSize = width / 70;
+                delivery9Text1.FontSize = width / 50;
+                delivery9Text2.FontSize = width / 70;
+
                 delivery10.WidthRequest = width / 11;
                 delivery10.HeightRequest = width / 9;
-                delivery10.FontSize = width / 70;
+                delivery10Text1.FontSize = width / 50;
+                delivery10Text2.FontSize = width / 70;
 
                 //SignUpButton.HeightRequest = height / 50;
                 SignUpButton.WidthRequest = width / 4;
@@ -216,36 +234,85 @@ namespace MTYD.ViewModel
                 meals5.HeightRequest = height / 60;
                 meals5.CornerRadius = (int)(height / 120);
 
-                delivery1.WidthRequest = width / 12;
-                delivery1.HeightRequest = width / 10;
-                delivery1.FontSize = width / 70;
-                delivery2.WidthRequest = width / 12;
-                delivery2.HeightRequest = width / 10;
-                delivery2.FontSize = width / 70;
-                delivery3.WidthRequest = width / 12;
-                delivery3.HeightRequest = width / 10;
-                delivery3.FontSize = width / 70;
-                delivery4.WidthRequest = width / 12;
-                delivery4.HeightRequest = width / 10;
-                delivery4.FontSize = width / 70;
-                delivery5.WidthRequest = width / 12;
-                delivery5.HeightRequest = width / 10;
-                delivery5.FontSize = width / 70;
-                delivery6.WidthRequest = width / 12;
-                delivery6.HeightRequest = width / 10;
-                delivery6.FontSize = width / 70;
-                delivery7.WidthRequest = width / 12;
-                delivery7.HeightRequest = width / 10;
-                delivery7.FontSize = width / 70;
-                delivery8.WidthRequest = width / 12;
-                delivery8.HeightRequest = width / 10;
-                delivery8.FontSize = width / 70;
-                delivery9.WidthRequest = width / 12;
-                delivery9.HeightRequest = width / 10;
-                delivery9.FontSize = width / 70;
-                delivery10.WidthRequest = width / 12;
-                delivery10.HeightRequest = width / 10;
-                delivery10.FontSize = width / 70;
+                //delivery1.WidthRequest = width / 12;
+                //delivery1.HeightRequest = width / 10;
+                //delivery1.FontSize = width / 70;
+                //delivery2.WidthRequest = width / 12;
+                //delivery2.HeightRequest = width / 10;
+                //delivery2.FontSize = width / 70;
+                //delivery3.WidthRequest = width / 12;
+                //delivery3.HeightRequest = width / 10;
+                //delivery3.FontSize = width / 70;
+                //delivery4.WidthRequest = width / 12;
+                //delivery4.HeightRequest = width / 10;
+                //delivery4.FontSize = width / 70;
+                //delivery5.WidthRequest = width / 12;
+                //delivery5.HeightRequest = width / 10;
+                //delivery5.FontSize = width / 70;
+                //delivery6.WidthRequest = width / 12;
+                //delivery6.HeightRequest = width / 10;
+                //delivery6.FontSize = width / 70;
+                //delivery7.WidthRequest = width / 12;
+                //delivery7.HeightRequest = width / 10;
+                //delivery7.FontSize = width / 70;
+                //delivery8.WidthRequest = width / 12;
+                //delivery8.HeightRequest = width / 10;
+                //delivery8.FontSize = width / 70;
+                //delivery9.WidthRequest = width / 12;
+                //delivery9.HeightRequest = width / 10;
+                //delivery9.FontSize = width / 70;
+                //delivery10.WidthRequest = width / 12;
+                //delivery10.HeightRequest = width / 10;
+                //delivery10.FontSize = width / 70;
+
+                delivery1.WidthRequest = width / 13;
+                delivery1.HeightRequest = width / 11;
+                delivery1Text1.FontSize = width / 50;
+
+                delivery2.WidthRequest = width / 13;
+                delivery2.HeightRequest = width / 11;
+                delivery2Text1.FontSize = width / 50;
+                delivery2Text2.FontSize = width / 70;
+
+                delivery3.WidthRequest = width / 13;
+                delivery3.HeightRequest = width / 11;
+                delivery3Text1.FontSize = width / 50;
+                delivery3Text2.FontSize = width / 70;
+
+                delivery4.WidthRequest = width / 13;
+                delivery4.HeightRequest = width / 11;
+                delivery4Text1.FontSize = width / 50;
+                delivery4Text2.FontSize = width / 70;
+
+                delivery5.WidthRequest = width / 13;
+                delivery5.HeightRequest = width / 11;
+                delivery5Text1.FontSize = width / 50;
+                delivery5Text2.FontSize = width / 70;
+
+                delivery6.WidthRequest = width / 13;
+                delivery6.HeightRequest = width / 11;
+                delivery6Text1.FontSize = width / 50;
+                delivery6Text2.FontSize = width / 70;
+
+                delivery7.WidthRequest = width / 13;
+                delivery7.HeightRequest = width / 11;
+                delivery7Text1.FontSize = width / 50;
+                delivery7Text2.FontSize = width / 70;
+
+                delivery8.WidthRequest = width / 13;
+                delivery8.HeightRequest = width / 11;
+                delivery8Text1.FontSize = width / 50;
+                delivery8Text2.FontSize = width / 70;
+
+                delivery9.WidthRequest = width / 13;
+                delivery9.HeightRequest = width / 11;
+                delivery9Text1.FontSize = width / 50;
+                delivery9Text2.FontSize = width / 70;
+
+                delivery10.WidthRequest = width / 13;
+                delivery10.HeightRequest = width / 11;
+                delivery10Text1.FontSize = width / 50;
+                delivery10Text2.FontSize = width / 70;
 
                 spacer4.HeightRequest = 10;
                 SignUpButton.HeightRequest = height / 50;
@@ -288,7 +355,7 @@ namespace MTYD.ViewModel
             meals4.BackgroundColor = Color.FromHex("#f5f5f5");
             meals5.BackgroundColor = Color.FromHex("#f5f5f5");
             Preferences.Set("mealSelected", "1");
-            mealSelected = int.Parse(meals1.Text.Substring(0,1));
+            mealSelected = int.Parse(meals1.Text.Substring(0, 1));
             if (deliverySelected != 0)
             {
                 Preferences.Set("item_name", itemNames[deliverySelected - 1, 6 - mealSelected]);
@@ -384,65 +451,74 @@ namespace MTYD.ViewModel
         {
             Button btn = (Button)sender;
 
-            delivery1.BackgroundColor = Color.FromHex("#f5f5f5");
-            delivery2.BackgroundColor = Color.FromHex("#f5f5f5");
-            delivery3.BackgroundColor = Color.FromHex("#f5f5f5");
-            delivery4.BackgroundColor = Color.FromHex("#f5f5f5");
-            delivery5.BackgroundColor = Color.FromHex("#f5f5f5");
-            delivery6.BackgroundColor = Color.FromHex("#f5f5f5");
-            delivery7.BackgroundColor = Color.FromHex("#f5f5f5");
-            delivery8.BackgroundColor = Color.FromHex("#f5f5f5");
-            delivery9.BackgroundColor = Color.FromHex("#f5f5f5");
-            delivery10.BackgroundColor = Color.FromHex("#f5f5f5");
-            btn.BackgroundColor = Color.FromHex("#FFBA00");
+            delivery1Frame.BackgroundColor = Color.FromHex("#f5f5f5");
+            delivery2Frame.BackgroundColor = Color.FromHex("#f5f5f5");
+            delivery3Frame.BackgroundColor = Color.FromHex("#f5f5f5");
+            delivery4Frame.BackgroundColor = Color.FromHex("#f5f5f5");
+            delivery5Frame.BackgroundColor = Color.FromHex("#f5f5f5");
+            delivery6Frame.BackgroundColor = Color.FromHex("#f5f5f5");
+            delivery7Frame.BackgroundColor = Color.FromHex("#f5f5f5");
+            delivery8Frame.BackgroundColor = Color.FromHex("#f5f5f5");
+            delivery9Frame.BackgroundColor = Color.FromHex("#f5f5f5");
+            delivery10Frame.BackgroundColor = Color.FromHex("#f5f5f5");
 
             if (btn.Equals(delivery1))
             {
+                delivery1Frame.BackgroundColor = Color.FromHex("#FFBA00");
                 Preferences.Set("freqSelected", "1");
                 deliverySelected = 1;
             }
             else if (btn.Equals(delivery2))
             {
+                delivery2Frame.BackgroundColor = Color.FromHex("#FFBA00");
                 Preferences.Set("freqSelected", "2");
                 deliverySelected = 2;
             }
             else if (btn.Equals(delivery3))
             {
+                delivery3Frame.BackgroundColor = Color.FromHex("#FFBA00");
                 Preferences.Set("freqSelected", "3");
                 deliverySelected = 3;
             }
             else if (btn.Equals(delivery4))
             {
+                delivery4Frame.BackgroundColor = Color.FromHex("#FFBA00");
                 Preferences.Set("freqSelected", "4");
                 deliverySelected = 4;
             }
             else if (btn.Equals(delivery5))
             {
+                delivery5Frame.BackgroundColor = Color.FromHex("#FFBA00");
                 Preferences.Set("freqSelected", "5");
                 deliverySelected = 5;
             }
             else if (btn.Equals(delivery6))
             {
+                delivery6Frame.BackgroundColor = Color.FromHex("#FFBA00");
                 Preferences.Set("freqSelected", "6");
                 deliverySelected = 6;
             }
             else if (btn.Equals(delivery7))
             {
+                delivery7Frame.BackgroundColor = Color.FromHex("#FFBA00");
                 Preferences.Set("freqSelected", "7");
                 deliverySelected = 7;
             }
             else if (btn.Equals(delivery8))
             {
+                delivery8Frame.BackgroundColor = Color.FromHex("#FFBA00");
                 Preferences.Set("freqSelected", "8");
                 deliverySelected = 8;
             }
             else if (btn.Equals(delivery9))
             {
+                delivery9Frame.BackgroundColor = Color.FromHex("#FFBA00");
                 Preferences.Set("freqSelected", "9");
                 deliverySelected = 9;
             }
             else if (btn.Equals(delivery10))
             {
+                delivery10Frame.BackgroundColor = Color.FromHex("#FFBA00");
                 Preferences.Set("freqSelected", "10");
                 deliverySelected = 10;
             }

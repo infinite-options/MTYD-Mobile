@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="MTYD.ViewModel.Select" Title="Meal Schedule" xmlns:Forms9Patch="clr-namespace:Forms9Patch;assembly=Forms9Patch" BackgroundColor ="#f3f2dc">
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="MTYD.ViewModel.ExploreMeals" xmlns:Forms9Patch="clr-namespace:Forms9Patch;assembly=Forms9Patch" BackgroundColor ="#f3f2dc">
     <ContentPage.Content>
         <ScrollView>
         <StackLayout>
             <StackLayout x:Name="mainStack">
 
-                <Grid x:Name="headingGrid">
+                <!--<Grid x:Name="headingGrid">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
@@ -23,70 +23,24 @@
 
                     <ImageButton x:Name="menu" Source="menu2.png" VerticalOptions="End" HorizontalOptions="Start" BackgroundColor="Transparent" Clicked="clickedMenu"/>
 
-                </Grid>
-                <!--CARLOS UI REARRANGING -->
-                <BoxView x:Name="spacer1" HeightRequest="5"/>
+                </Grid>-->
 
-                <Grid x:Name="pickerGrid" HeightRequest="45" Margin="5,0,5,0">
-
-                    <Frame Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" x:Name="selectPlanFrame"  BorderColor="#FF6505" CornerRadius="22" HasShadow="False">
-                        <Frame BorderColor="White" BackgroundColor="Transparent" HasShadow="False" Padding="0" Margin="25, -10, -10, -10">
-                            <Grid ColumnSpacing="0">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition></RowDefinition>
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <!--<ColumnDefinition Width="20"></ColumnDefinition>-->
-                                    <ColumnDefinition Width="*"></ColumnDefinition>
-                                </Grid.ColumnDefinitions>
-
-                                <!--<Image Grid.Row="0" Grid.Column="0" x:Name="lunchPic" Source="lunch.png" HorizontalOptions="Start" VerticalOptions="Center"  Aspect="AspectFit"/>-->
-                                <Picker Grid.Column="0" x:Name="SubscriptionPicker" SelectedIndexChanged="planChange" Title="SELECT MEAL PLAN" FontSize="Medium"
-                                        HorizontalOptions="Fill" HorizontalTextAlignment="Center" FontAttributes="Bold" TextColor="Black" TitleColor="Black" ></Picker>
-                                    <!--<Image x:Name="lunchPic"  HorizontalOptions="Start" VerticalOptions="Center"/>-->
-                                <!--Source="lunch.png"-->
-                            </Grid>
-                        </Frame>
-                    </Frame>
-
-                    <Image Grid.Column="0" Source="lunch.png" HorizontalOptions="Start" VerticalOptions="Center" Aspect="AspectFit" Margin="15, 0, 0, 0" HeightRequest="25"/>
-
-
-                    <Frame Grid.Row="0" Grid.Column="1" IsVisible="false" x:Name="selectDateFrame"   BorderColor="#FF6505" CornerRadius="22" HasShadow="False" >
-                        <Frame BorderColor="White" BackgroundColor="Transparent" Padding="0" HasShadow="False" Margin="20, -10, -10, -10">
-                            <Grid ColumnSpacing="0">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition></RowDefinition>
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <!--<ColumnDefinition Width="20"></ColumnDefinition>-->
-                                    <ColumnDefinition Width="*"></ColumnDefinition>
-                                </Grid.ColumnDefinitions>
-                              <!--<Image Grid.Row="0" Grid.Column="0" x:Name="calendarPic" Source="Calendar.png" HorizontalOptions="Start" VerticalOptions="Center"/>-->
-                              <Picker Grid.Column="0" x:Name="datePicker" SelectedIndexChanged="dateChange" Title="SELECT DATE" FontSize="Medium"
-                                      HorizontalOptions="Fill" HorizontalTextAlignment="Start" FontAttributes="Bold" TextColor="Black" TitleColor="Black"></Picker>
-                              <!--<Image x:Name="calendarPic" HorizontalOptions="Start" VerticalOptions="Center"/>-->
-                                <!--Source="Calendar.png"-->
-                            </Grid>
-                        </Frame>
-                    </Frame>
-
-                    <Image Grid.Column="1" IsVisible="false" Source="Calendar.png" HorizontalOptions="Start" VerticalOptions="Center" Aspect="AspectFit" Margin="15, 0, 0, 0" HeightRequest="25"/>
-
-                </Grid>
-                <!--=============================-->
+                <Image Source="logo.png" HeightRequest="80" Aspect="AspectFit" HorizontalOptions="Center" VerticalOptions="Start"/>
+                
 
                 <BoxView x:Name="spacer2" HeightRequest="10"/>
 
+                <Button Text="Click to Subscribe" Margin="15,0" BorderColor="Black" BorderWidth="2" BackgroundColor="#FF9E19" HorizontalOptions="Fill" TextColor="Black" HeightRequest="40" CornerRadius="20" Clicked="clickedSub"/>
 
-                <CollectionView x:Name="dateCarousel" ItemsSource="{Binding availableDates}" HeightRequest="90" HorizontalOptions="Start">
+                <BoxView x:Name="spacer" HeightRequest="15"/>
+
+                <CollectionView x:Name="dateCarousel" ItemsSource="{Binding availableDates}" HeightRequest="80" HorizontalOptions="Fill">
                     <CollectionView.ItemsLayout>
-                        <GridItemsLayout Orientation="Horizontal"  SnapPointsType="None"/>
+                        <LinearItemsLayout Orientation="Horizontal" ItemSpacing="20" SnapPointsType="None"/>
                     </CollectionView.ItemsLayout>
                     <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <Grid Padding="10, 0, 10, 10" HeightRequest="70" WidthRequest="80" HorizontalOptions="Start" VerticalOptions="Start">
-                            <Forms9Patch:Frame OutlineRadius="10" VerticalOptions="Fill" OutlineWidth="3" HeightRequest="60" WidthRequest="60" OutlineColor="{Binding outlineColor}" BackgroundColor="{Binding fillColor}" Padding="0" HasShadow="False">
+                        <DataTemplate> 
+                            <Forms9Patch:Frame OutlineRadius="10" VerticalOptions="Start" OutlineWidth="3" HeightRequest="60" WidthRequest="80" OutlineColor="{Binding outlineColor}" BackgroundColor="White" Padding="0" HasShadow="False">
                             <!--<Frame CornerRadius="10" HeightRequest="60" WidthRequest="40" HorizontalOptions="Fill" BorderColor="{Binding outlineColor}" BackgroundColor="{Binding fillColor}" Padding="0" HasShadow="False">-->
                                 <Grid Padding="0">
                                 <StackLayout Padding="0">
@@ -104,19 +58,19 @@
                                 <Button HorizontalOptions="Fill" Text="{Binding index}" TextColor="Transparent" VerticalOptions="Fill" BackgroundColor="Transparent" Clicked="dateChangeCar"/>
                                 </Grid>
                             </Forms9Patch:Frame>
-
-                            </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
 
-                <BoxView HeightRequest="10"/>
+                <BoxView HeightRequest="20"/>
+
+                <Label Margin="15,0" Text="FEATURED MEALS" FontSize="Title" FontAttributes="Bold" HorizontalTextAlignment="Start" TextColor="Black"/>
 
                 <!--<Picker x:Name="SubscriptionPicker" Margin="30,0,30,0" SelectedIndexChanged="planChange" Title="Choose a Meal Plan"></Picker>-->
-                <Grid x:Name="saveSurpSkipGrid" Margin="5,0,5,0">
+                <!--<Grid x:Name="saveSurpSkipGrid" Margin="5,0,5,0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="40" />
-                        <!-- 1 Buttons -->
+                         1 Buttons 
                     </Grid.RowDefinitions>
 
                     <Grid.ColumnDefinitions>
@@ -126,12 +80,12 @@
                     </Grid.ColumnDefinitions>
 
 
-                    <!-- WEEK ONE -->
-                    <!--<Picker x:Name="datePicker" Grid.ColumnSpan="2" Margin="15,0,0,0" SelectedIndexChanged="dateChange"/>
+                     WEEK ONE 
+                    <Picker x:Name="datePicker" Grid.ColumnSpan="2" Margin="15,0,0,0" SelectedIndexChanged="dateChange"/>
                 <Frame OutlineColor="Black" Padding="0" BackgroundColor="Transparent" Grid.Column="3" CornerRadius="15">
                     <Button x:Name="save1" Text = "Save" VerticalOptions="Center" HorizontalOptions="Center" FontSize="Micro" Grid.Row="0" Grid.Column="3" Clicked="saveUserMeals"/>
-                </Frame>-->
-                    <!--<Picker x:Name="datePicker" Grid.ColumnSpan="2" Margin="15,0,0,0" SelectedIndexChanged="dateChange"/>-->
+                </Frame>
+                    <Picker x:Name="datePicker" Grid.ColumnSpan="2" Margin="15,0,0,0" SelectedIndexChanged="dateChange"/>
 
 
                     <Frame x:Name="saveFrame" OutlineColor="Orange" Padding="0" BackgroundColor="Transparent" Grid.Column="0" CornerRadius="20">
@@ -146,16 +100,16 @@
                         <Button x:Name="skipBttn"  ClassId="skipButton" Text = "Skip" VerticalOptions="Center" HorizontalOptions="Center" FontSize="Micro" Grid.Row="2" Grid.Column="3" BackgroundColor="Transparent" BorderColor="Transparent" TextColor="Black"  FontAttributes="Bold" Clicked="skipMealSelection"/>
                     </Frame>
 
-                    <!--<Frame OutlineColor="DarkRed" Padding="0" BackgroundColor="Transparent" Grid.Row = "1"  Grid.Column="1">
+                    <Frame OutlineColor="DarkRed" Padding="0" BackgroundColor="Transparent" Grid.Row = "1"  Grid.Column="1">
                         <Label Text = "Count" x:Name="totalCount" VerticalOptions="Center" HorizontalOptions="Center" FontSize="Medium" Grid.Row="1" Grid.Column="1" BackgroundColor="Transparent" TextColor="Black" FontAttributes="Bold"/>
-                    </Frame>-->
+                    </Frame>
 
-                    <!--<Frame OutlineColor="Black" Padding="0" BackgroundColor="Transparent" Grid.Row = "1" Grid.Column="3" CornerRadius="20">
+                    <Frame OutlineColor="Black" Padding="0" BackgroundColor="Transparent" Grid.Row = "1" Grid.Column="3" CornerRadius="20">
                         <Button x:Name="resetBttn"  ClassId="resetButton" Text = "Reset" VerticalOptions="Center" HorizontalOptions="Center" FontSize="Micro" Grid.Row="1" Grid.Column="3" BackgroundColor="Transparent" BorderColor="Transparent" TextColor="Black"  FontAttributes="Bold" Clicked="resetBttn_Clicked"/>
-                    </Frame>-->
+                    </Frame>
 
-                    <!-- Segmented Progress Bar Grid -->
-                    <!-- <Grid  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3">
+                     Segmented Progress Bar Grid 
+                     <Grid  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="60" />
                         </Grid.RowDefinitions>
@@ -169,14 +123,14 @@
                             </ProgressBar.ScaleY>
                         </ProgressBar>
                        <Image Source="food.png" Margin="-5,3,0,0" WidthRequest="20" HeightRequest="20" VerticalOptions="Start" HorizontalOptions="Start" Grid.Row="0" Grid.Column="1"/> 
-                    </Grid> -->
+                    </Grid> 
 
-                    <!-- End Progress Bar Grid 1-->
-                </Grid>
+                     End Progress Bar Grid 1
+                </Grid>-->
 
                 <BoxView x:Name="spacer3" HeightRequest="5" HorizontalOptions="Fill"/>
 
-                    <Grid x:Name="oldGrid" Margin="15,0" IsVisible="false">
+                    <!--<Grid x:Name="oldGrid" Margin="15,0" IsVisible="false">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*" />
                             <RowDefinition Height="*" />
@@ -192,11 +146,11 @@
                         </Frame>
                     </Grid>
                 
-                <BoxView x:Name="spacer4" HeightRequest="2"/>
+                <BoxView x:Name="spacer4" HeightRequest="2"/>-->
                 <!--<ProgressBar IsVisible="false" Progress="0" x:Name="weekOneProgress" Margin="10,0,10,0" BackgroundColor="Transparent" HeightRequest="40" ></ProgressBar>-->
 
                 <!--CARLOS PROGRESS BAR -->
-                <StackLayout x:Name="progressBarStack" BackgroundColor="#f3f2dc" Padding="5, 0">
+                <!--<StackLayout x:Name="progressBarStack" BackgroundColor="#f3f2dc" Padding="5, 0">
             
                     <CollectionView x:Name="MyCollectionView"  HeightRequest="40">
                         <CollectionView.ItemTemplate >
@@ -211,10 +165,9 @@
                         </CollectionView.ItemTemplate>
                     </CollectionView>
                  
-                </StackLayout>
+                </StackLayout>-->
                 <!--======================-->
 
-                <Grid x:Name="testGrid"></Grid>
 
                 <CollectionView x:Name="weekOneMenu" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" BackgroundColor="#f3f2dc">
                     <CollectionView.ItemsLayout>
@@ -302,9 +255,9 @@
                                                 <ColumnDefinition Width="1*"/>
                                             </Grid.ColumnDefinitions>
 
-                                            <Button FontSize="40" TextColor="Black" HorizontalOptions="Fill" VerticalOptions="Fill" Text="-" Clicked="clickDecrease" BackgroundColor="#FFF0C6"/>
-                                            <Label Grid.Column="1" Text="{Binding MealQuantity}" HorizontalOptions="Center" VerticalOptions="Center" FontSize="15"/>
-                                            <Button x:Name="increase" Grid.Column="2" FontSize="30" TextColor="Black" HorizontalOptions="Fill" VerticalOptions="Fill" FontAttributes="Bold" Text="+" Clicked="clickIncrease" BackgroundColor="#FFBA00"/>
+                                            <!--<Button FontSize="40" TextColor="Black" HorizontalOptions="Fill" VerticalOptions="Fill" Text="-" Clicked="clickDecrease" BackgroundColor="#FFF0C6"/>-->
+                                            <!--<Label Grid.Column="1" Text="{Binding MealQuantity}" HorizontalOptions="Center" VerticalOptions="Center" FontSize="15"/>-->
+                                            <!--<Button x:Name="increase" Grid.Column="2" FontSize="30" TextColor="Black" HorizontalOptions="Fill" VerticalOptions="Fill" FontAttributes="Bold" Text="+" Clicked="clickIncrease" BackgroundColor="#FFBA00"/>-->
 
                                         </Grid>
 
@@ -354,7 +307,7 @@
                                             <Frame Grid.Row="0" Grid.Column="0" ScaleY="0.25" ScaleX="0.25" CornerRadius="40">
                                                 <ImageButton x:Name="heart1_AddOns" Source="heartoutline.png" Clicked="clickedFavorite" />
                                             </Frame>
-                                            <Frame Grid.Row="0" Grid.Column="1" ScaleY="0.25" ScaleX="0.25" CornerRadius="40">
+                                            <!--<Frame Grid.Row="0" Grid.Column="1" ScaleY="0.25" ScaleX="0.25" CornerRadius="40">
                                                 <Label Text="{Binding MealQuantity}" FontSize="50" HorizontalOptions="Center" VerticalOptions="Center" />
                                             </Frame>
                                             <Frame x:Name="week1Dec_AddOns" Grid.Row="1" Grid.Column="0" ScaleY="0.25" ScaleX="0.25" CornerRadius="40">
@@ -362,7 +315,7 @@
                                             </Frame>
                                             <Frame x:Name="week1Inc_AddOns" Grid.Row="1" Grid.Column="1" ScaleY="0.25" ScaleX="0.25" CornerRadius="40">
                                                 <Button x:Name="increase" FontSize="70" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center" Text="+" Clicked="clickIncreaseAddOn"/>
-                                            </Frame>
+                                            </Frame>-->
                                         </Grid>
                                         <Label  Grid.Column="0"
                                                         Grid.Row="2"
@@ -428,7 +381,20 @@
                         </Frame>
                     </RelativeLayout>
                 </StackLayout>-->
-                <BoxView x:Name="spacer5" HeightRequest="30"/>
+                <BoxView x:Name="spacer5" HeightRequest="50"/>
+
+                <Label Text="READY TO START?" FontSize="Subtitle" HorizontalTextAlignment="Center" HorizontalOptions="Fill"/>
+
+                <BoxView x:Name="spacer6" HeightRequest="20"/>
+
+                <Button Text="Explore Subscriptions" Margin="20,0" Padding="25,0" BorderColor="Black" BorderWidth="2" BackgroundColor="#FF9E19" HorizontalOptions="Center" TextColor="Black" HeightRequest="40" CornerRadius="20"/>
+
+                <BoxView x:Name="spacer7" HeightRequest="10"/>
+
+                <Button Text="Enter Your Address" Margin="20,0" Padding="25,0" BorderColor="Black" BorderWidth="2" BackgroundColor="#FF9E19" HorizontalOptions="Center" TextColor="Black" HeightRequest="40" CornerRadius="20"/>
+
+                <BoxView x:Name="spacer8" HeightRequest="30"/>
+
             </StackLayout>
         </StackLayout>
     </ScrollView>
