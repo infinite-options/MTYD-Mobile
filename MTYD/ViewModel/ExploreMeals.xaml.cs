@@ -166,10 +166,20 @@ namespace MTYD.ViewModel
         //    await Navigation.PushAsync(new Menu(first, last, email));
         //}
 
+        void clickedBack(System.Object sender, System.EventArgs e)
+        {
+            Application.Current.MainPage = new MainPage();
+        }
+
         void clickedSub(System.Object sender, System.EventArgs e)
         {
             //await Navigation.PushAsync(new SubscriptionPage(first, last, email));
-            Application.Current.MainPage = new MainPage();
+            //Application.Current.MainPage = new MainPage();
+            Application.Current.Properties["user_id"] = "000-00000";
+            Application.Current.Properties["platform"] = "GUEST";
+            Preferences.Set("user_latitude", "0.0");
+            Preferences.Set("user_longitude", "0.0");
+            Application.Current.MainPage = new NavigationPage(new SubscriptionPage("Welcome", "Guest", "welcome@guest.com"));
         }
         /*
         protected async Task SetMealSelect()

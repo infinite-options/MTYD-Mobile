@@ -88,8 +88,12 @@ namespace MTYD.ViewModel
         //auto-populate the delivery info if the user has already previously entered it
         public async void fillEntriesDeliv()
         {
+            if((string)Application.Current.Properties["platform"] == "GUEST")
+            {
+                return;
+            }
             //if there is no saved info
-            if (Preferences.Get(savedFirstName, "") == "")
+            else if (Preferences.Get(savedFirstName, "") == "")
             {
                 Console.WriteLine("no info");
                 string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];

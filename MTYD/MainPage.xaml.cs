@@ -1732,6 +1732,14 @@ namespace MTYD
             Application.Current.MainPage = new ExploreMeals();
         }
 
+        async void clickedPurchase(System.Object sender, System.EventArgs e)
+        {
+            Application.Current.Properties["user_id"] = "000-00000";
+            Application.Current.Properties["platform"] = "GUEST";
+            Preferences.Set("user_latitude", "0.0");
+            Preferences.Set("user_longitude", "0.0");
+            Application.Current.MainPage = new NavigationPage(new SubscriptionPage("Welcome", "Guest", "welcome@guest.com"));
+        }
     }
 }
 
