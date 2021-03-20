@@ -481,7 +481,8 @@ namespace MTYD.ViewModel
             Console.WriteLine("item_name: " + Preferences.Get("item_name", ""));
             Console.WriteLine("item_uid: " + Preferences.Get("item_uid", ""));
 
-            await Navigation.PushAsync(new DeliveryBilling(cust_firstName, cust_lastName, cust_email));
+            //await Navigation.PushAsync(new DeliveryBilling(cust_firstName, cust_lastName, cust_email));
+            await Navigation.PushAsync(new PaymentPage(cust_firstName, cust_lastName, cust_email));
             //Application.Current.MainPage = new DeliveryBilling();
             //await NavigationPage.PushAsync(DeliveryBilling());
         }

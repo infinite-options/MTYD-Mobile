@@ -179,9 +179,9 @@
                        </Grid.ColumnDefinitions>
 
                        <Image  x:Name="couponImg" Source="coupon.png" Aspect="AspectFit" Margin="15,0,0,0"/>
-                       <Label  x:Name="couponAmt" Text="10%&#x0a;Off" FontAttributes="Bold" Margin="35,0,0,0" VerticalOptions="Center"/>
+                       <Label  x:Name="couponAmt" Text="5%&#x0a;Off" FontAttributes="Bold" Margin="35,0,0,0" VerticalOptions="Center"/>
 
-                       <Label Grid.Column="1" x:Name="couponDesc" Text="Select 2 Weeks Pre-Pay&#x0a;Option and Get 10% off" FontAttributes="Bold" TextColor="DarkGray" VerticalOptions="Center" HorizontalTextAlignment="Start"/>
+                       <Label Grid.Column="1" x:Name="couponDesc" Text="Save 5% When You&#x0a;Select 4 Deliveries" FontAttributes="Bold" TextColor="DarkGray" VerticalOptions="Center" HorizontalTextAlignment="Start"/>
 
                    </Grid>
 
@@ -196,7 +196,7 @@
                        <Image  x:Name="couponImg2" Source="coupon.png" Aspect="AspectFit" Margin="15,0,0,0"/>
                        <Label  x:Name="couponAmt2" Text="15%&#x0a;Off" FontAttributes="Bold" Margin="35,0,0,0" VerticalOptions="Center"/>
 
-                       <Label Grid.Column="1" x:Name="couponDesc2" Text="Select 4 Weeks Pre-Pay&#x0a;Option and Get 15% off" FontAttributes="Bold" TextColor="DarkGray" VerticalOptions="Center" HorizontalTextAlignment="Start"/>
+                       <Label Grid.Column="1" x:Name="couponDesc2" Text="Save 15% When You&#x0a;Select 10 Deliveries" FontAttributes="Bold" TextColor="DarkGray" VerticalOptions="Center" HorizontalTextAlignment="Start"/>
 
                    </Grid>
 

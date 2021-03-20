@@ -140,6 +140,8 @@ namespace MTYD.ViewModel
                     DeliveryEntry.Text = Preferences.Get(savedInstr, "");
                 else DeliveryEntry.Placeholder = "Delivery Instructions";
 
+                EventArgs e = new EventArgs();
+                clickedDeliv(proceedButton, e);
             }
 
         }
@@ -274,7 +276,7 @@ namespace MTYD.ViewModel
 
         
 
-        private async void clickedSaveDeliv(object sender, EventArgs e)
+        private async void clickedDeliv(object sender, EventArgs e)
         {
             string platform = Application.Current.Properties["platform"].ToString();
             //string passwordSalt = Preferences.Get("password_salt", "");
@@ -480,41 +482,52 @@ namespace MTYD.ViewModel
                 Debug.WriteLine("passed in tax, service fee, and delivery fee: " + tax.ToString() + ", " + serviceFee.ToString() + ", " + deliveryFee.ToString());
                 //await Navigation.PushAsync(new VerifyInfo(passingZones, tax, serviceFee, deliveryFee, cust_firstName, cust_lastName, cust_email, AptEntry.Text, FNameEntry.Text, LNameEntry.Text, emailEntry.Text, PhoneEntry.Text, AddressEntry.Text, CityEntry.Text, StateEntry.Text, ZipEntry.Text, DeliveryEntry.Text, "", "", "", salt));
 
+                //only run through the code below if proceed is clicked
+                Button receiving = (Button)sender;
+                if (receiving.Text != "Save")
+                {
+                    subtotalTitle.Text = "Meal Subscription \n(" + Preferences.Get("item_name", "").Substring(0, 1) + " Meals for " + Preferences.Get("freqSelected", "") + " Deliveries): ";
+                    deliveryTitle.Text = "Total Delivery Fee For All " + Preferences.Get("freqSelected", "") + " Deliveries: ";
 
-                subtotalTitle.Text = "Meal Subscription (" + Preferences.Get("item_name", "").Substring(0, 1) + " Meals for " + Preferences.Get("freqSelected", "") + " Deliveries): ";
-                deliveryTitle.Text = "Total Delivery Fee For All " + Preferences.Get("freqSelected", "") + " Deliveries: ";
+                    Preferences.Set("subtotal", Preferences.Get("price", "00.00"));
+                    double payment = Double.Parse(Preferences.Get("price", "00.00")) + (Double.Parse(Preferences.Get("price", "00.00")) * tax_rate);
+                    Debug.WriteLine("payment: " + payment.ToString());
+                    payment += serviceFee;
+                    Debug.WriteLine("payment + service fee: " + payment.ToString());
+                    payment += deliveryFee;
+                    Debug.WriteLine("payment + delivery fee: " + payment.ToString());
+                    payment += Double.Parse(tipOpt2.Text.Substring(1));
+                    Debug.WriteLine("payment + tip: " + payment.ToString());
+                    Math.Round(payment, 2);
+                    Debug.WriteLine("payment after tax and fees: " + payment.ToString());
+                    Preferences.Set("price", payment.ToString());
 
-                Preferences.Set("subtotal", Preferences.Get("price", "00.00"));
-                double payment = Double.Parse(Preferences.Get("price", "00.00")) + (Double.Parse(Preferences.Get("price", "00.00")) * tax_rate);
-                payment += service_fee;
-                payment += delivery_fee;
-                Math.Round(payment, 2);
-                Debug.WriteLine("payment after tax and fees: " + payment.ToString());
-                Preferences.Set("price", payment.ToString());
-
-                //make sure price is formatted correctly
-                var total = Preferences.Get("price", "00.00");
-                if (total.Contains(".") == false)
-                    total = total + ".00";
-                else if (total.Substring(total.IndexOf(".") + 1).Length == 1)
-                    total = total + "0";
-                else if (total.Substring(total.IndexOf(".") + 1).Length == 0)
-                    total = total + "00";
-                Preferences.Set("price", total);
-
-                grandTotalPrice.Text = "$" + payment.ToString();
+                    //make sure price is formatted correctly
+                    var total = Preferences.Get("price", "00.00");
+                    if (total.Contains(".") == false)
+                        total = total + ".00";
+                    else if (total.Substring(total.IndexOf(".") + 1).Length == 1)
+                        total = total + "0";
+                    else if (total.Substring(total.IndexOf(".") + 1).Length == 0)
+                        total = total + "00";
+                    Preferences.Set("price", total);
 
 
-                subtotalPrice.Text = "$" + Preferences.Get("subtotal", "00.00").ToString();
-                taxPrice.Text = "$" + tax.ToString();
-                serviceFeePrice.Text = "$" + serviceFee.ToString();
-                deliveryFeePrice.Text = "$" + deliveryFee.ToString();
-                tipPrice.Text = "$0";
-                addOnsPrice.Text = "$0";
-                //discountPrice.Text = "$0";
 
-                SetPayPalCredentials();
-                paymentStack.IsVisible = true;
+
+                    subtotalPrice.Text = "$" + Preferences.Get("subtotal", "00.00").ToString();
+                    taxPrice.Text = "$" + tax.ToString();
+                    serviceFeePrice.Text = "$" + serviceFee.ToString();
+                    deliveryFeePrice.Text = "$" + deliveryFee.ToString();
+                    tipPrice.Text = tipOpt2.Text;
+                    addOnsPrice.Text = "$0";
+                    discountPrice.Text = "$0";
+                    //discountPrice.Text = "$0";
+
+                    SetPayPalCredentials();
+                    grandTotalPrice.Text = "$" + total.ToString();
+                    paymentStack.IsVisible = true;
+                }
             }
 
         }
@@ -539,6 +552,7 @@ namespace MTYD.ViewModel
             if (DeliveryEntry.Text != null)
                 Preferences.Set(savedInstr, DeliveryEntry.Text);
 
+            DisplayAlert("Success", "delivery info saved.", "OK");
         }
 
         public static string GetXMLElement(XElement element, string name)
@@ -559,6 +573,17 @@ namespace MTYD.ViewModel
         async void clickedMenu(System.Object sender, System.EventArgs e)
         {
             await Navigation.PushAsync(new Menu(cust_firstName, cust_lastName, cust_email));
+        }
+
+        private void DeliveryAdd_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            paymentStack.IsVisible = false;
+        }
+
+        void clickedProceed(object sender, EventArgs e)
+        {
+            clickedSaveContact(sender, e);
+            clickedDeliv(sender, e);
         }
 
         void clickedSaveContact(object sender, EventArgs e)
@@ -605,8 +630,14 @@ namespace MTYD.ViewModel
         {
             Button button1 = (Button)sender;
 
+            double tipValue = Double.Parse(tipPrice.Text.Substring(1));
+            Debug.WriteLine("tipValue1: " + tipValue.ToString());
+            double grandTotalValue = Double.Parse(grandTotalPrice.Text.Substring(1));
+
             if (button1.Text == tipOpt1.Text)
             {
+                grandTotalValue -= tipValue;
+
                 tipOpt1.BackgroundColor = Color.FromHex("#FFBA00");
                 tipOpt2.BackgroundColor = Color.FromHex("#F5F5F5");
                 tipOpt3.BackgroundColor = Color.FromHex("#F5F5F5");
@@ -615,6 +646,8 @@ namespace MTYD.ViewModel
             }
             else if (button1.Text == tipOpt2.Text)
             {
+                grandTotalValue -= tipValue;
+
                 tipOpt1.BackgroundColor = Color.FromHex("#F5F5F5");
                 tipOpt2.BackgroundColor = Color.FromHex("#FFBA00");
                 tipOpt3.BackgroundColor = Color.FromHex("#F5F5F5");
@@ -623,6 +656,8 @@ namespace MTYD.ViewModel
             }
             else if (button1.Text == tipOpt3.Text)
             {
+                grandTotalValue -= tipValue;
+
                 tipOpt1.BackgroundColor = Color.FromHex("#F5F5F5");
                 tipOpt2.BackgroundColor = Color.FromHex("#F5F5F5");
                 tipOpt3.BackgroundColor = Color.FromHex("#FFBA00");
@@ -631,22 +666,75 @@ namespace MTYD.ViewModel
             }
             else
             {
+                grandTotalValue -= tipValue;
+
                 tipOpt1.BackgroundColor = Color.FromHex("#F5F5F5");
                 tipOpt2.BackgroundColor = Color.FromHex("#F5F5F5");
                 tipOpt3.BackgroundColor = Color.FromHex("#F5F5F5");
                 tipOpt4.BackgroundColor = Color.FromHex("#FFBA00");
                 tipPrice.Text = tipOpt4.Text;
             }
+
+
+            tipValue = Double.Parse(tipPrice.Text.Substring(1));
+            Debug.WriteLine("tipValue2: " + tipValue.ToString());
+            //grandTotalValue = Double.Parse(grandTotalPrice.Text.Substring(1));
+            grandTotalValue += tipValue;
+            string grandTotalString = grandTotalValue.ToString();
+            
+
+            if (grandTotalString.Contains(".") == false)
+                grandTotalString = grandTotalString + ".00";
+            else if (grandTotalString.Substring(grandTotalString.IndexOf(".") + 1).Length == 1)
+                grandTotalString = grandTotalString + "0";
+            else if (grandTotalString.Substring(grandTotalString.IndexOf(".") + 1).Length == 0)
+                grandTotalString = grandTotalString + "00";
+            Preferences.Set("price", grandTotalString);
+
+            grandTotalPrice.Text = "$" + grandTotalString;
         }
 
         private void clickedVerifyCode(object sender, EventArgs e)
         {
-            if (verifyCode.Text == "YES")
+            if (discountTitle.Text == "YES")
             {
                 discountPrice.Text = "- $5";
+
+
+                double codeValue = Double.Parse(discountPrice.Text.Substring(discountPrice.Text.IndexOf('$') + 1));
+                double grandTotalValue = Double.Parse(grandTotalPrice.Text.Substring(1));
+                grandTotalValue -= codeValue;
+                string grandTotalString = grandTotalValue.ToString();
+
+
+                if (grandTotalString.Contains(".") == false)
+                    grandTotalString = grandTotalString + ".00";
+                else if (grandTotalString.Substring(grandTotalString.IndexOf(".") + 1).Length == 1)
+                    grandTotalString = grandTotalString + "0";
+                else if (grandTotalString.Substring(grandTotalString.IndexOf(".") + 1).Length == 0)
+                    grandTotalString = grandTotalString + "00";
+                Preferences.Set("price", grandTotalString);
+
+                grandTotalPrice.Text = "$" + grandTotalString;
             }
             else
             {
+                double codeValue = Double.Parse(discountPrice.Text.Substring(discountPrice.Text.IndexOf('$') + 1));
+                double grandTotalValue = Double.Parse(grandTotalPrice.Text.Substring(1));
+                grandTotalValue += codeValue;
+                string grandTotalString = grandTotalValue.ToString();
+
+
+                if (grandTotalString.Contains(".") == false)
+                    grandTotalString = grandTotalString + ".00";
+                else if (grandTotalString.Substring(grandTotalString.IndexOf(".") + 1).Length == 1)
+                    grandTotalString = grandTotalString + "0";
+                else if (grandTotalString.Substring(grandTotalString.IndexOf(".") + 1).Length == 0)
+                    grandTotalString = grandTotalString + "00";
+                Preferences.Set("price", grandTotalString);
+
+                grandTotalPrice.Text = "$" + grandTotalString;
+
                 DisplayAlert("Error", "invalid ambassador code", "OK");
                 discountPrice.Text = "$0";
             }
@@ -1714,6 +1802,8 @@ namespace MTYD.ViewModel
                     //password.IsVisible = true;
                     //passwordEntry.IsVisible = true;
                     //spacer8.IsVisible = true;
+                    checkoutButton.IsVisible = true;
+                    backButton.IsVisible = true;
 
                     checkoutButton.Text = "CONTINUE";
                     //await Navigation.PopAsync();

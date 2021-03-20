@@ -67,7 +67,7 @@
                        Margin="20,0,0,0" FontAttributes="Bold" Grid.Column="0" Grid.Row="0"/>
 
                     <Button BorderColor="Black" BorderWidth="2" Text="Save" FontSize="15" HeightRequest="35" CornerRadius="17" TextColor="Black"
-                            HorizontalOptions="Fill" BackgroundColor="#FFBA00" Grid.Row="0" Grid.Column="1" Margin="0,0,20,0" Clicked="clickedSaveDeliv"/>
+                            HorizontalOptions="Fill" BackgroundColor="#FFBA00" Grid.Row="0" Grid.Column="1" Margin="0,0,20,0" Clicked="clickedDeliv"/>
 
                 </Grid>
                 <!--<Label Text="DELIVERY ADDRESS" HorizontalOptions="Start" FontSize="22"
@@ -85,12 +85,12 @@
                     </Grid.RowDefinitions>
 
                    <Frame x:Name="street" Padding="10,5" Margin="20,0.5" BackgroundColor="#FFE5B4"
-                          Grid.Row="0" Grid.Column="0" HasShadow="False">
+                          Grid.Row="0" Grid.Column="0" HasShadow="False" >
 
                         <Entry x:Name="AddressEntry" Keyboard="Text" FontAttributes="Bold"
                    FontSize="17" 
                    WidthRequest="24"
-                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"/>
+                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4" TextChanged="DeliveryAdd_TextChanged"/>
 
                    </Frame>
 
@@ -113,7 +113,7 @@
                         <Entry x:Name="AptEntry" Keyboard="Text" FontAttributes="Bold"
                    FontSize="17" 
                     WidthRequest="8"
-                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"/>
+                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4" TextChanged="DeliveryAdd_TextChanged"/>
 
                    </Frame>
 
@@ -123,7 +123,7 @@
                         <Entry x:Name="CityEntry" Keyboard="Text" FontAttributes="Bold"
                    FontSize="17" 
                     WidthRequest="12"
-                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"/>
+                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4" TextChanged="DeliveryAdd_TextChanged"/>
 
                    </Frame>
 
@@ -155,7 +155,7 @@
                         <Entry x:Name="StateEntry" Keyboard="Text" FontAttributes="Bold"
                    FontSize="17" 
                     WidthRequest="8"
-                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"/>
+                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4" TextChanged="DeliveryAdd_TextChanged"/>
 
                    </Frame>
 
@@ -165,7 +165,7 @@
                         <Entry x:Name="ZipEntry" Keyboard="Numeric" FontAttributes="Bold"
                    FontSize="17" 
                     WidthRequest="12"
-                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"/>
+                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4" TextChanged="DeliveryAdd_TextChanged"/>
 
                    </Frame>
 
@@ -303,6 +303,8 @@
                    </Frame>
 
                 </Grid>
+                
+                <Button x:Name="proceedButton" Margin="20,15" HeightRequest="50" CornerRadius="25" BackgroundColor="#FFBA00" BorderColor="Black" BorderWidth="2" TextColor="Black" FontSize="Medium" Text="PROCEED TO PAYMENT" HorizontalOptions="Fill" Clicked="clickedDeliv"/>
             </StackLayout>
 
 
@@ -406,7 +408,7 @@
                 <Button x:Name="tipOpt1" CornerRadius="20" Text="No Tip" Grid.Column="0" HorizontalOptions="Fill" VerticalOptions="Fill" TextColor="Black"
                         Margin="3,0" BorderColor="Black" BorderWidth="2" FontSize="Small" BackgroundColor="#F5F5F5" Clicked="clickedTip"/>
                 <Button x:Name="tipOpt2" CornerRadius="20" Text="$2" Grid.Column="1" HorizontalOptions="Fill" VerticalOptions="Fill" Margin="3,0"
-                        BorderColor="Black" BorderWidth="2" FontSize="Small" BackgroundColor="#F5F5F5" Clicked="clickedTip" TextColor="Black"/>
+                        BorderColor="Black" BorderWidth="2" FontSize="Small" BackgroundColor="#FFBA00" Clicked="clickedTip" TextColor="Black"/>
                 <Button x:Name="tipOpt3" CornerRadius="20" Text="$3" Grid.Column="2" HorizontalOptions="Fill" VerticalOptions="Fill" Margin="3,0"
                         BorderColor="Black" BorderWidth="2" FontSize="Small" BackgroundColor="#F5F5F5" Clicked="clickedTip" TextColor="Black"/>
                 <Button x:Name="tipOpt4" CornerRadius="20" Text="$5" Grid.Column="3" HorizontalOptions="Fill" VerticalOptions="Fill" Margin="3,0"
@@ -425,11 +427,22 @@
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
 
-                <Frame Padding="0" HorizontalOptions="Fill" CornerRadius="50" HasShadow="False" BackgroundColor="Black" Grid.Column="0">
-                    <Editor x:Name="discountTitle" Placeholder="Enter Ambassador Code" FontSize="Small" BackgroundColor="LightGray" PlaceholderColor="#F5F5F5" HeightRequest="40" HorizontalOptions="Fill" TextColor="Black"/>
+                <Frame Padding="5,5" HorizontalOptions="Fill" CornerRadius="23" HasShadow="False" BackgroundColor="LightGray" Grid.Column="0" HeightRequest="40">
+                    <Entry x:Name="discountTitle" Placeholder="Enter Ambassador Code" FontSize="Small"
+                           BackgroundColor="LightGray" PlaceholderColor="#F5F5F5" TextColor="Black"/>
                 </Frame>
 
-                <Button Grid.Column="1" x:Name="verifyCode" Text="Verify" HeightRequest="40" CornerRadius="20" TextColor="Black" FontSize="Small" HorizontalOptions="Fill" BackgroundColor="#FFBA00" BorderColor="Black" BorderWidth="2" Margin="10,0,20,0" Clicked="clickedVerifyCode"/>
+                <!--<Frame x:Name="zipCode" Padding="10,5" Margin="1,0.5,20,0.5" BackgroundColor="#FFE5B4"
+                          Grid.Row="0" Grid.Column="1" HasShadow="False">
+
+                        <Entry x:Name="ZipEntry" Keyboard="Numeric" FontAttributes="Bold"
+                   FontSize="17" 
+                    WidthRequest="12"
+                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"/>
+
+                   </Frame>-->
+
+                <Button Grid.Column="1" x:Name="verifyCode" Text="Verify" HeightRequest="35" CornerRadius="25" TextColor="Black" FontSize="Small" HorizontalOptions="Fill" BackgroundColor="#FFBA00" BorderColor="Black" BorderWidth="2" Margin="10,0,20,0" Clicked="clickedVerifyCode"/>
                 <!--<Label Text="Discount" Margin="10,0,0,0" FontSize="14" HorizontalOptions="Start" TextColor="Black" FontAttributes="Bold"/>-->
                 <Label Grid.Column="2" x:Name="discountPrice" FontSize="14" Margin="0,0,10,0" HorizontalOptions="End" TextColor="Black" FontAttributes="Bold" VerticalOptions="Center"/>
 
@@ -670,7 +683,7 @@
 
                 </Grid>-->
 
-            <Grid x:Name="checkoutGrid" HorizontalOptions="Center" VerticalOptions="Center" IsVisible="false">
+            <Grid x:Name="checkoutGrid" HorizontalOptions="Center" VerticalOptions="Center">
 
                 <Grid.RowDefinitions>
                     <RowDefinition Height="16*"/>
@@ -687,7 +700,7 @@
                     Clicked="clickedBack" Grid.Column="0" Grid.Row="0" HorizontalOptions="Center"/>
 
                 <Button x:Name= "checkoutButton" BackgroundColor="#FF9E19" HorizontalOptions="End" Margin="0,10,40,10"
-                    Text="CHECKOUT" TextColor="White"  FontAttributes="Bold" FontSize="20"
+                    Text="CHECKOUT" TextColor="White"  FontAttributes="Bold" FontSize="20" IsVisible="false"
                     WidthRequest="150" HeightRequest="50" Grid.Column="1" Grid.Row="0" Clicked="checkoutButton_Clicked"/>
             </Grid>
                

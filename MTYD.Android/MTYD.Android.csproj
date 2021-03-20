@@ -391,4 +391,11 @@
     <GoogleServicesJson Include="google-services.json" />
   </ItemGroup>
  <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
+    
+<Target Name="_RemoveMdbFiles" BeforeTargets="_Upload">
+ <ItemGroup>
+    <_Temp Include="%(_ResolvedSymbols.Identity)" Condition="'%(_ResolvedSymbols.Extension)' == '.mdb'" />
+    <_ResolvedSymbols Remove="@(_Temp)" />
+</ItemGroup>
+</Target>
 </Project>
