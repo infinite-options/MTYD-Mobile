@@ -21,8 +21,6 @@ using MTYD.ViewModel;
 using MTYD.Model.User;
 using System.IO;
 
-using MTYD.ViewModel;
-
 using System.Collections.Generic;
 using System.ComponentModel;
 using MTYD.Model.Login.LoginClasses.Apple;
@@ -73,7 +71,6 @@ namespace MTYD
                 "Better Value\n\nYou get restaurant quality food at a fraction of the cost plus it is made from the highest quality ingredients by exceptional Chefs."
             };
             TheCarousel.ItemsSource = cvItems;
-            TheCarousel.IndicatorView = indicatorView;
 
             store = AccountStore.Create();
             checkPlatform(height, width);
@@ -173,6 +170,70 @@ namespace MTYD
                 appleLoginButton.WidthRequest = width / 17;
                 appleLoginButton.CornerRadius = (int)(width / 34);
             }
+            else if (width == 1170 && height == 2532) //iPhone 12
+            {
+                //username and password entry
+                grid2.Margin = new Thickness(width / 20, height / 80, width / 25, 0);
+                loginUsername.Margin = new Thickness(0, height / (-120), 0, height / (-120));
+                loginPassword.Margin = new Thickness(0, height / (-120), 0, height / (-120));
+
+                //login and signup buttons
+                loginButton.HeightRequest = height / 40;
+                signUpButton.HeightRequest = height / 40;
+                loginButton.WidthRequest = width / 10;
+                signUpButton.WidthRequest = width / 10;
+                //forgotPass.Margin = new Thickness(0, -30, 10, 0);
+                loginButton.CornerRadius = (int)(height / 80);
+                signUpButton.CornerRadius = (int)(height / 80);
+
+                //or divider
+                grid4.Margin = new Thickness(width / 15, height / 80, width / 15, height / 100);
+
+                //social media buttons
+                googleLoginButton.HeightRequest = width / 18;
+                googleLoginButton.WidthRequest = width / 18;
+                googleLoginButton.CornerRadius = (int)(width / 36);
+                facebookLoginButton.HeightRequest = width / 18;
+                facebookLoginButton.WidthRequest = width / 18;
+                facebookLoginButton.CornerRadius = (int)(width / 36);
+                appleLoginButton.HeightRequest = width / 18;
+                appleLoginButton.WidthRequest = width / 18;
+                appleLoginButton.CornerRadius = (int)(width / 36);
+
+                searchPic.Margin = width / 9;
+                first.FontSize = width / 40;
+                first.HeightRequest = width / 20;
+                first.WidthRequest = width / 20;
+                first.CornerRadius = (int)(width / 40);
+                step1.FontSize = width / 35;
+                sub1.FontSize = width / 60;
+
+                cardPic.WidthRequest = width / 9;
+                second.FontSize = width / 40;
+                second.HeightRequest = width / 20;
+                second.WidthRequest = width / 20;
+                second.CornerRadius = (int)(width / 40);
+                step2.FontSize = width / 35;
+                sub2.FontSize = width / 60;
+
+                pickPic.WidthRequest = width / 9;
+                third.FontSize = width / 40;
+                third.HeightRequest = width / 20;
+                third.WidthRequest = width / 20;
+                third.CornerRadius = (int)(width / 40);
+                step3.FontSize = width / 35;
+                sub3.FontSize = width / 60;
+
+                delivPic.WidthRequest = width / 9;
+                fourth.FontSize = width / 40;
+                fourth.HeightRequest = width / 20;
+                fourth.WidthRequest = width / 20;
+                fourth.CornerRadius = (int)(width / 40);
+                step4.FontSize = width / 35;
+                sub4.FontSize = width / 60;
+
+                partners.FontSize = width / 65;
+            }
             else if (Device.RuntimePlatform == Device.iOS)
             {
                 //username and password entry
@@ -202,6 +263,48 @@ namespace MTYD
                 appleLoginButton.WidthRequest = width / 13;
                 appleLoginButton.CornerRadius = (int)(width / 26);
                 //browseMenu.FontSize = width / 33;
+
+                searchPic.Margin = new Thickness(width / 5.5, 0);
+                first.FontSize = width / 30;
+                first.HeightRequest = width / 15;
+                first.WidthRequest = width / 15;
+                first.CornerRadius = (int)(width / 30);
+                first.Margin = new Thickness(0, 0, 3, 0);
+                step1.Margin = new Thickness(3, 0, 0, 0);
+                step1.FontSize = width / 30;
+                sub1.FontSize = width / 45;
+
+                cardPic.Margin = new Thickness(width / 5.5, 0);
+                second.FontSize = width / 30;
+                second.HeightRequest = width / 15;
+                second.WidthRequest = width / 15;
+                second.CornerRadius = (int)(width / 30);
+                second.Margin = new Thickness(0, 0, 3, 0);
+                step2.Margin = new Thickness(3, 0, 0, 0);
+                step2.FontSize = width / 30;
+                sub2.FontSize = width / 45;
+
+                pickPic.Margin = new Thickness(width / 5.5, 0);
+                third.FontSize = width / 30;
+                third.HeightRequest = width / 15;
+                third.WidthRequest = width / 15;
+                third.CornerRadius = (int)(width / 30);
+                third.Margin = new Thickness(0, 0, 3, 0);
+                step3.Margin = new Thickness(3, 0, 0, 0);
+                step3.FontSize = width / 30;
+                sub3.FontSize = width / 45;
+
+                delivPic.Margin = new Thickness(width / 5.5, 0);
+                fourth.FontSize = width / 30;
+                fourth.HeightRequest = width / 15;
+                fourth.WidthRequest = width / 15;
+                fourth.CornerRadius = (int)(width / 30);
+                fourth.Margin = new Thickness(0, 0, 3, 0);
+                step4.Margin = new Thickness(3, 0, 0, 0);
+                step4.FontSize = width / 30;
+                sub4.FontSize = width / 45;
+
+                partners.FontSize = width / 45;
             }
             else //android
             {
@@ -232,6 +335,40 @@ namespace MTYD
                 appleLoginButton.HeightRequest = width / 18;
                 appleLoginButton.WidthRequest = width / 18;
                 appleLoginButton.CornerRadius = (int)(width / 36);
+
+                searchPic.WidthRequest = width / 9;
+                first.FontSize = width / 40;
+                first.HeightRequest = width / 20;
+                first.WidthRequest = width / 20;
+                first.CornerRadius = (int)(width / 40);
+                step1.FontSize = width / 35;
+                sub1.FontSize = width / 60;
+
+                cardPic.WidthRequest = width / 9;
+                second.FontSize = width / 40;
+                second.HeightRequest = width / 20;
+                second.WidthRequest = width / 20;
+                second.CornerRadius = (int)(width / 40);
+                step2.FontSize = width / 35;
+                sub2.FontSize = width / 60;
+
+                pickPic.WidthRequest = width / 9;
+                third.FontSize = width / 40;
+                third.HeightRequest = width / 20;
+                third.WidthRequest = width / 20;
+                third.CornerRadius = (int)(width / 40);
+                step3.FontSize = width / 35;
+                sub3.FontSize = width / 60;
+
+                delivPic.WidthRequest = width / 9;
+                fourth.FontSize = width / 40;
+                fourth.HeightRequest = width / 20;
+                fourth.WidthRequest = width / 20;
+                fourth.CornerRadius = (int)(width / 40);
+                step4.FontSize = width / 35;
+                sub4.FontSize = width / 60;
+
+                partners.FontSize = width / 60;
             }
 
             //adjustments regardless of device
@@ -241,40 +378,6 @@ namespace MTYD
             passFrame.HeightRequest = height / 180;
             //userFrame.CornerRadius = 25;
             //passFrame.CornerRadius = 25;
-
-            searchPic.WidthRequest = width / 4;
-            first.FontSize = width / 50;
-            first.HeightRequest = width / 20;
-            first.WidthRequest = width / 20;
-            first.CornerRadius = (int)(width / 40);
-            step1.FontSize = width / 30;
-            sub1.FontSize = width / 55;
-
-            cardPic.WidthRequest = width / 4;
-            second.FontSize = width / 50;
-            second.HeightRequest = width / 20;
-            second.WidthRequest = width / 20;
-            second.CornerRadius = (int)(width / 40);
-            step2.FontSize = width / 30;
-            sub2.FontSize = width / 55;
-
-            pickPic.WidthRequest = width / 4;
-            third.FontSize = width / 50;
-            third.HeightRequest = width / 20;
-            third.WidthRequest = width / 20;
-            third.CornerRadius = (int)(width / 40);
-            step3.FontSize = width / 30;
-            sub3.FontSize = width / 55;
-
-            delivPic.WidthRequest = width / 4;
-            fourth.FontSize = width / 50;
-            fourth.HeightRequest = width / 20;
-            fourth.WidthRequest = width / 20;
-            fourth.CornerRadius = (int)(width / 40);
-            step4.FontSize = width / 30;
-            sub4.FontSize = width / 55;
-
-            partners.FontSize = width / 60;
 
             ambassadorBtn.WidthRequest = width / 4;
             ambassadorBtn.HeightRequest = width / 20;
@@ -1436,6 +1539,7 @@ namespace MTYD
                                     //navToSelect((info_obj2["result"])[0]["customer_first_name"].ToString(), (info_obj2["result"])[0]["customer_last_name"].ToString(), (info_obj2["result"])[0]["customer_email"].ToString());
                                     Zones[] zones = new Zones[] { };
                                     Application.Current.MainPage = new NavigationPage(new Select(zones, (info_obj2["result"])[0]["customer_first_name"].ToString(), (info_obj2["result"])[0]["customer_last_name"].ToString(), (info_obj2["result"])[0]["customer_email"].ToString()));
+                                    //Application.Current.MainPage = new NavigationPage(new CongratsPage());
                                     //Application.Current.MainPage = new NavigationPage(new SubscriptionPage((info_obj2["result"])[0]["customer_first_name"].ToString(), (info_obj2["result"])[0]["customer_last_name"].ToString(), (info_obj2["result"])[0]["customer_email"].ToString()));
                                     //Application.Current.MainPage = new NavigationPage(new SubscriptionPage((info_obj2["result"])[0]["customer_first_name"].ToString(), (info_obj2["result"])[0]["customer_last_name"].ToString(), (info_obj2["result"])[0]["customer_email"].ToString()));
                                 }

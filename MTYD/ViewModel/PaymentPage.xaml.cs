@@ -274,7 +274,7 @@ namespace MTYD.ViewModel
             fillEntriesDeliv();
         }
 
-        
+
 
         private async void clickedDeliv(object sender, EventArgs e)
         {
@@ -681,7 +681,7 @@ namespace MTYD.ViewModel
             //grandTotalValue = Double.Parse(grandTotalPrice.Text.Substring(1));
             grandTotalValue += tipValue;
             string grandTotalString = grandTotalValue.ToString();
-            
+
 
             if (grandTotalString.Contains(".") == false)
                 grandTotalString = grandTotalString + ".00";
@@ -738,7 +738,7 @@ namespace MTYD.ViewModel
                 DisplayAlert("Error", "invalid ambassador code", "OK");
                 discountPrice.Text = "$0";
             }
-                
+
         }
 
         //VERIFY INFO FUNCTIONS
@@ -966,8 +966,8 @@ namespace MTYD.ViewModel
 
                 await setPaymentInfo();
                 Preferences.Set("canChooseSelect", true);
-                await Navigation.PushAsync(new Select(passingZones, cust_firstName, cust_lastName, cust_email));
-
+                //await Navigation.PushAsync(new Select(passingZones, cust_firstName, cust_lastName, cust_email));
+                await Navigation.PushAsync(new CongratsPage(passingZones, cust_firstName, cust_lastName, cust_email));
 
             }
             else
@@ -1453,7 +1453,8 @@ namespace MTYD.ViewModel
 
                 await setPaymentInfo();
                 Preferences.Set("canChooseSelect", true);
-                await Navigation.PushAsync(new Select(passingZones, cust_firstName, cust_lastName, cust_email));
+                //await Navigation.PushAsync(new Select(passingZones, cust_firstName, cust_lastName, cust_email));
+                await Navigation.PushAsync(new CongratsPage(passingZones, cust_firstName, cust_lastName, cust_email));
                 //done from checkout button clicked
                 //}
                 //else
@@ -1828,7 +1829,8 @@ namespace MTYD.ViewModel
 
                     await setPaymentInfo();
                     Preferences.Set("canChooseSelect", true);
-                    await Navigation.PushAsync(new Select(passingZones, cust_firstName, cust_lastName, cust_email));
+                    //await Navigation.PushAsync(new Select(passingZones, cust_firstName, cust_lastName, cust_email));
+                    await Navigation.PushAsync(new CongratsPage(passingZones, cust_firstName, cust_lastName, cust_email));
                     //done from checkout button clicked
 
                     //Preferences.Set("price", "00.00");
