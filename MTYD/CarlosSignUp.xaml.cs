@@ -194,7 +194,7 @@ namespace MTYD
                 string password = reenterPasswordEntry.Text.Trim();
                 if (!directSignUp.password.Equals(password))
                 {
-                    await DisplayAlert("Error", "Your email doesn't match", "OK");
+                    await DisplayAlert("Error", "Your password doesn't match", "OK");
                 }
             }
 

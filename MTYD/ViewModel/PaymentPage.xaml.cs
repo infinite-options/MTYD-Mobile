@@ -878,8 +878,8 @@ namespace MTYD.ViewModel
 
                 await setPaymentInfo();
                 Preferences.Set("canChooseSelect", true);
-                await Navigation.PushAsync(new Select(passingZones, cust_firstName, cust_lastName, cust_email));
-
+                //await Navigation.PushAsync(new Select(passingZones, cust_firstName, cust_lastName, cust_email));
+                await Navigation.PushAsync(new CongratsPage(passingZones, cust_firstName, cust_lastName, cust_email));
 
             }
             else
@@ -1365,7 +1365,9 @@ namespace MTYD.ViewModel
 
                 await setPaymentInfo();
                 Preferences.Set("canChooseSelect", true);
-                await Navigation.PushAsync(new Select(passingZones, cust_firstName, cust_lastName, cust_email));
+                //await Navigation.PushAsync(new Select(passingZones, cust_firstName, cust_lastName, cust_email));
+                await Navigation.PushAsync(new CongratsPage(passingZones, cust_firstName, cust_lastName, cust_email));
+
                 //done from checkout button clicked
                 //}
                 //else
@@ -1738,7 +1740,8 @@ namespace MTYD.ViewModel
 
                     await setPaymentInfo();
                     Preferences.Set("canChooseSelect", true);
-                    await Navigation.PushAsync(new Select(passingZones, cust_firstName, cust_lastName, cust_email));
+                    //await Navigation.PushAsync(new Select(passingZones, cust_firstName, cust_lastName, cust_email));
+
                     //done from checkout button clicked
 
                     //Preferences.Set("price", "00.00");
