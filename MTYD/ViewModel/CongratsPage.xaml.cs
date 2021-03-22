@@ -92,45 +92,45 @@ namespace MTYD.ViewModel
 
         private void checkPlatform(double height, double width)
         {
+            Xamarin.Forms.NavigationPage.SetHasNavigationBar(this, false);
+            orangeBox.HeightRequest = height / 2;
+            orangeBox.Margin = new Thickness(0, -height / 2.2, 0, 0);
+            orangeBox.CornerRadius = height / 40;
+            pfp.HeightRequest = width / 20;
+            pfp.WidthRequest = width / 20;
+            pfp.CornerRadius = (int)(width / 40);
+            innerGrid.Margin = new Thickness(0, 0, 23, 27);
+
+            if (Preferences.Get("profilePicLink", "") == "")
+            {
+                string userInitials = "";
+                if (cust_firstName != "" && cust_firstName != null)
+                {
+                    userInitials += cust_firstName.Substring(0, 1);
+                }
+                if (cust_lastName != "" && cust_lastName != null)
+                {
+                    userInitials += cust_lastName.Substring(0, 1);
+                }
+                initials.Text = userInitials.ToUpper();
+                initials.FontSize = width / 38;
+            }
+            else pfp.Source = Preferences.Get("profilePicLink", "");
+
+            menu.HeightRequest = width / 25;
+            menu.WidthRequest = width / 25;
+            menu.Margin = new Thickness(25, 0, 0, 30);
+
             if (Device.RuntimePlatform == Device.iOS)
             {
-                Xamarin.Forms.NavigationPage.SetHasNavigationBar(this, false);
-                orangeBox.HeightRequest = height / 2;
-                orangeBox.Margin = new Thickness(0, -height / 2.2, 0, 0);
-                orangeBox.CornerRadius = height / 40;
                 heading.FontSize = width / 32;
                 heading.Margin = new Thickness(0, 0, 0, 30);
-                pfp.HeightRequest = width / 20;
-                pfp.WidthRequest = width / 20;
-                pfp.CornerRadius = (int)(width / 40);
-                innerGrid.Margin = new Thickness(0, 0, 23, 27);
-
-                if (Preferences.Get("profilePicLink", "") == "")
-                {
-                    string userInitials = "";
-                    if (cust_firstName != "" && cust_firstName != null)
-                    {
-                        userInitials += cust_firstName.Substring(0, 1);
-                    }
-                    if (cust_lastName != "" && cust_lastName != null)
-                    {
-                        userInitials += cust_lastName.Substring(0, 1);
-                    }
-                    initials.Text = userInitials.ToUpper();
-                    initials.FontSize = width / 38;
-                }
-                else pfp.Source = Preferences.Get("profilePicLink", "");
-
-                menu.HeightRequest = width / 25;
-                menu.WidthRequest = width / 25;
-                menu.Margin = new Thickness(25, 0, 0, 30);
 
                 congratsTitle.FontSize = width / 25;
                 expectTitle.FontSize = width / 30;
                 createAccountTitle.FontSize = width / 30;
 
                 expect1.HeightRequest = width / 10;
-
 
                 googleButton.HeightRequest = width / 13;
                 googleButton.WidthRequest = width / 13;
@@ -153,7 +153,33 @@ namespace MTYD.ViewModel
             }
             else //Android
             {
+                heading.FontSize = width / 40;
+                heading.Margin = new Thickness(0, 0, 0, 25);
 
+                congratsTitle.FontSize = width / 35;
+                expectTitle.FontSize = width / 35;
+                createAccountTitle.FontSize = width / 35;
+
+                expect1.HeightRequest = width / 15;
+
+                googleButton.HeightRequest = width / 15;
+                googleButton.WidthRequest = width / 15;
+                googleButton.CornerRadius = (int)(width / 30);
+                fbButton.HeightRequest = width / 15;
+                fbButton.WidthRequest = width / 15;
+                fbButton.CornerRadius = (int)(width / 30);
+                appleButton.HeightRequest = width / 15;
+                appleButton.WidthRequest = width / 15;
+                appleButton.CornerRadius = (int)(width / 30);
+
+                passwordFrame.WidthRequest = width / 3;
+                passwordFrame.HeightRequest = width / 30;
+                confirmPasswordFrame.WidthRequest = width / 3;
+                passwordFrame.HeightRequest = width / 30;
+
+                finishButton.WidthRequest = width / 5;
+                finishButton.HeightRequest = width / 20;
+                finishButton.CornerRadius = (int)(width / 40);
             }
         }
 

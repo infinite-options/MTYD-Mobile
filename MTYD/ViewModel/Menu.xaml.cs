@@ -189,7 +189,8 @@ namespace MTYD.ViewModel
 
         async void clickedLanding(System.Object sender, System.EventArgs e)
         {
-            await Navigation.PushAsync(new Landing(firstName, lastName, email), false);
+            //await Navigation.PushAsync(new Landing(firstName, lastName, email), false);
+            await Navigation.PushAsync(new MainPage(firstName, lastName, email), false);
             Navigation.RemovePage(this.Navigation.NavigationStack[this.Navigation.NavigationStack.Count - 2]);
         }
 

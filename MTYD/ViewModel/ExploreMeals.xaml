@@ -25,7 +25,7 @@
 
                 </Grid>-->
 
-                <Button x:Name="backButton" Text="&lt;  Back" TextColor="Black" FontSize="25" HorizontalOptions="Start" Margin="15,0" Clicked="clickedBack"/>
+                <Button x:Name="backButton" BackgroundColor="Transparent" Text="&lt;  Back" TextColor="Black" FontSize="25" HorizontalOptions="Start" Margin="15,0" Clicked="clickedBack"/>
                 <Image Source="logo.png" HeightRequest="80" Aspect="AspectFit" HorizontalOptions="Center" VerticalOptions="Start"/>
                 
 
