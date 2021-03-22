@@ -349,7 +349,7 @@ namespace MTYD.ViewModel
 
             checkPlatform(height, width);
             GetPlans();
-            Preferences.Set("freqSelected", "");
+            //Preferences.Set("freqSelected", "");
             pfp.Source = Preferences.Get("profilePicLink", "");
         }
 
