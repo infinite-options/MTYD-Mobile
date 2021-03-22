@@ -150,7 +150,7 @@
 
                 <BoxView HeightRequest="50"/>
 
-                <Image x:Name="searchPic" Source="search.png" Aspect="AspectFit"/>
+                <ImageButton x:Name="searchPic" Source="search.png" Aspect="AspectFit" Clicked="clickedExplore"/>
 
                 <BoxView HeightRequest="5"/>
 
@@ -163,9 +163,9 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <Button x:Name="first" HorizontalOptions="End" VerticalOptions="Center" BackgroundColor="#FFBA00" TextColor="Black" Text="1" FontAttributes="Bold" Margin="0,0,10,0"/>
+                    <Button x:Name="first" HorizontalOptions="End" VerticalOptions="Center" BackgroundColor="#FFBA00" TextColor="Black" Text="1" FontAttributes="Bold" Margin="0,0,10,0" Clicked="clickedExplore"/>
 
-                    <Button x:Name="step1" Grid.Column="1" Text="EXPLORE" TextColor="Black" FontAttributes="Bold" HorizontalOptions="Start" VerticalOptions="Center" BackgroundColor="#FFE8CD" Clicked="clickedExplore"/>
+                    <Button x:Name="step1" Grid.Column="1" Text="EXPLORE" TextColor="Black" FontAttributes="Bold" HorizontalOptions="Start" VerticalOptions="Center" Clicked="clickedExplore"/>
                     <!--<Label x:Name="step1" Grid.Column="1" Text="EXPLORE" TextColor="Black" FontAttributes="Bold" HorizontalOptions="Start" VerticalOptions="Center"/>-->
 
                 </Grid>
@@ -177,7 +177,7 @@
 
                 <BoxView HeightRequest="50"/>
 
-                <Image x:Name="cardPic" Source="cards.png" Aspect="AspectFit"/>
+                <ImageButton x:Name="cardPic" Source="cards.png" Aspect="AspectFit" Clicked="clickedPurchase"/>
 
                 <BoxView HeightRequest="5"/>
 
@@ -190,9 +190,10 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <Button x:Name="second" HorizontalOptions="End" VerticalOptions="Center" BackgroundColor="#FFBA00" TextColor="Black" Text="2" FontAttributes="Bold"/>
+                    <Button x:Name="second" HorizontalOptions="End" VerticalOptions="Center" BackgroundColor="#FFBA00" TextColor="Black" Text="2" FontAttributes="Bold" Clicked="clickedPurchase"/>
 
-                    <Label x:Name="step2" Grid.Column="1" Text="PURCHASE" TextColor="Black" FontAttributes="Bold" HorizontalTextAlignment="Start" VerticalOptions="Center"/>
+                    <Button x:Name="step2" Grid.Column="1" Text="PURCHASE" TextColor="Black" FontAttributes="Bold" HorizontalOptions="Start" VerticalOptions="Center" Clicked="clickedPurchase"/>
+                    <!--<Label x:Name="step2" Grid.Column="1" Text="PURCHASE" TextColor="Black" FontAttributes="Bold" HorizontalTextAlignment="Start" VerticalOptions="Center"/>-->
 
                 </Grid>
 
@@ -203,7 +204,7 @@
 
                 <BoxView HeightRequest="50"/>
 
-                <Image x:Name="pickPic" Source="pick.png" Aspect="AspectFit"/>
+                <ImageButton x:Name="pickPic" Source="pick.png" Aspect="AspectFit" Clicked="clickedExplore"/>
 
                 <BoxView HeightRequest="5"/>
 
@@ -216,9 +217,10 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <Button x:Name="third" HorizontalOptions="End" VerticalOptions="Center" BackgroundColor="#FFBA00" TextColor="Black" Text="3" FontAttributes="Bold"/>
+                    <Button x:Name="third" HorizontalOptions="End" VerticalOptions="Center" BackgroundColor="#FFBA00" TextColor="Black" Text="3" FontAttributes="Bold" Clicked="clickedExplore"/>
 
-                    <Label x:Name="step3" Grid.Column="1" Text="CHOOSE" TextColor="Black" FontAttributes="Bold" HorizontalTextAlignment="Start" VerticalOptions="Center"/>
+                    <Button x:Name="step3" Grid.Column="1" Text="CHOOSE" TextColor="Black" FontAttributes="Bold" HorizontalOptions="Start" VerticalOptions="Center" Clicked="clickedExplore"/>
+                    <!--<Label x:Name="step3" Grid.Column="1" Text="CHOOSE" TextColor="Black" FontAttributes="Bold" HorizontalTextAlignment="Start" VerticalOptions="Center"/>-->
 
                 </Grid>
 

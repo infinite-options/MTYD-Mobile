@@ -63,7 +63,7 @@
                                     <ColumnDefinition Width="*"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
                               <!--<Image Grid.Row="0" Grid.Column="0" x:Name="calendarPic" Source="Calendar.png" HorizontalOptions="Start" VerticalOptions="Center"/>-->
-                              <Picker Grid.Column="0" x:Name="datePicker" SelectedIndexChanged="dateChange" Title="SELECT DATE" FontSize="Medium"
+                              <Picker Grid.Column="0" x:Name="datePicker"  Title="SELECT DATE" FontSize="Medium"
                                       HorizontalOptions="Fill" HorizontalTextAlignment="Start" FontAttributes="Bold" TextColor="Black" TitleColor="Black"></Picker>
                               <!--<Image x:Name="calendarPic" HorizontalOptions="Start" VerticalOptions="Center"/>-->
                                 <!--Source="Calendar.png"-->

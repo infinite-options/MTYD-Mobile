@@ -21,6 +21,7 @@ using System.Security.Cryptography;
 using PayPalCheckoutSdk.Core;
 using PayPalHttp;
 using PayPalCheckoutSdk.Orders;
+using MTYD.Model.Login.LoginClasses;
 
 namespace MTYD.ViewModel
 {
@@ -70,6 +71,7 @@ namespace MTYD.ViewModel
         string paymentMethod;
         bool paypalPaymentDone = false;
         double deviceWidth, deviceHeight;
+        public SignUpPost directSignUp = new SignUpPost();
 
 
         // CREDENTIALS CLASS
@@ -88,8 +90,12 @@ namespace MTYD.ViewModel
         //auto-populate the delivery info if the user has already previously entered it
         public async void fillEntriesDeliv()
         {
+            if ((string)Application.Current.Properties["platform"] == "GUEST")
+            {
+                //put placeholders
+            }
             //if there is no saved info
-            if (Preferences.Get(savedFirstName, "") == "")
+            else if (Preferences.Get(savedFirstName, "") == "")
             {
                 Console.WriteLine("no info");
                 string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
@@ -152,6 +158,13 @@ namespace MTYD.ViewModel
             cust_lastName = Lname;
             cust_email = email;
             InitializeComponent();
+
+            if ((string)Application.Current.Properties["platform"] == "GUEST")
+            {
+                menu.IsVisible = false;
+                innerGrid.IsVisible = false;
+            }
+
             Console.WriteLine("hashed password: " + Preferences.Get("hashed_password", ""));
             NavigationPage.SetHasBackButton(this, false);
             NavigationPage.SetHasNavigationBar(this, false);
@@ -159,6 +172,14 @@ namespace MTYD.ViewModel
             var height = DeviceDisplay.MainDisplayInfo.Height;
             deviceHeight = height;
             deviceWidth = width;
+
+            //if no address is saved, use the lat and long of 1408 Dot Ct, San Jose, CA 95120
+            if (Preferences.Get("user_latitude", "").ToString() == "" || Preferences.Get("user_latitude", "").ToString() == "0.0")
+            {
+                Preferences.Set("user_latitude", "37.236666");
+                Preferences.Set("user_longitude", "-121.887399");
+            }
+
 
 
             //initializing the maps tool
@@ -374,6 +395,12 @@ namespace MTYD.ViewModel
                         map.MoveToRegion(mapSpan);
                         map.Pins.Add(address);
 
+                        //used for createaccount endpoint
+                        Preferences.Set("user_latitude", latitude);
+                        Preferences.Set("user_longitude", longitude);
+                        Debug.WriteLine("user latitude: " + latitude);
+                        Debug.WriteLine("user longitude: " + longitude);
+
                         //directSignUp.latitude = latitude;
                         //directSignUp.longitude = longitude;
                         //map.MapType = MapType.Street;
@@ -523,6 +550,11 @@ namespace MTYD.ViewModel
                     addOnsPrice.Text = "$0";
                     discountPrice.Text = "$0";
                     //discountPrice.Text = "$0";
+                    if (DeliveryEntry.Text == "M4METEST" || DeliveryEntry.Text == "M4ME TEST")
+                    {
+                        clientId = Constant.LiveClientId;
+                        secret = Constant.LiveSecret;
+                    }
 
                     SetPayPalCredentials();
                     grandTotalPrice.Text = "$" + total.ToString();
@@ -892,6 +924,80 @@ namespace MTYD.ViewModel
             //newPayment.cc_cvv = CVVEntry;
             //newPayment.cc_zip = ZipCCEntry;
             //==================================
+
+            if ((string)Application.Current.Properties["platform"] == "GUEST")
+            {
+                directSignUp.email = emailEntry.Text;
+                directSignUp.first_name = FNameEntry.Text;
+                directSignUp.last_name = LNameEntry.Text;
+                directSignUp.phone_number = PhoneEntry.Text;
+                directSignUp.address = AddressEntry.Text;
+                directSignUp.unit = AptEntry.Text;
+                directSignUp.city = CityEntry.Text;
+                directSignUp.state = StateEntry.Text;
+                directSignUp.zip_code = ZipEntry.Text;
+                directSignUp.latitude = Preferences.Get("user_latitude", "");
+                directSignUp.longitude = Preferences.Get("user_longitude", "");
+                directSignUp.referral_source = "MOBILE";
+                directSignUp.role = "CUSTOMER";
+                directSignUp.mobile_access_token = "FALSE";
+                directSignUp.mobile_refresh_token = "FALSE";
+                directSignUp.user_access_token = "FALSE";
+                directSignUp.user_refresh_token = "FALSE";
+                directSignUp.social = "FALSE";
+                directSignUp.password = FNameEntry.Text + AddressEntry.Text.Substring(0, AddressEntry.Text.IndexOf(" "));
+                Debug.WriteLine("generated password for guest: " + directSignUp.password);
+                directSignUp.social_id = "NULL";
+
+                var directSignUpSerializedObject = JsonConvert.SerializeObject(directSignUp);
+                var content2 = new StringContent(directSignUpSerializedObject, Encoding.UTF8, "application/json");
+
+                System.Diagnostics.Debug.WriteLine(directSignUpSerializedObject);
+
+                var signUpclient = new System.Net.Http.HttpClient();
+                var RDSResponse = await signUpclient.PostAsync(Constant.SignUpUrl, content2);
+                Debug.WriteLine("RDSResponse: " + RDSResponse.ToString());
+                var RDSMessage = await RDSResponse.Content.ReadAsStringAsync();
+                Debug.WriteLine("RDSMessage: " + RDSMessage.ToString());
+
+                // if Sign up is has successfully ie 200 response code
+                if (RDSResponse.IsSuccessStatusCode)
+                {
+                    var RDSData = JsonConvert.DeserializeObject<SignUpResponse>(RDSMessage);
+                    Debug.WriteLine("RDSData: " + RDSData.ToString());
+
+                    if (RDSData.message.Contains("taken"))
+                    {
+                        await DisplayAlert("Email Address Already In Use", "Please log in with the account that uses this email. If you previously used this email for guest checkout, your password is {first name}{house #}.", "OK");
+
+                        Application.Current.MainPage = new MainPage();
+                        return;
+                    }
+                    else
+                    {
+                        // Local Variables in Xamarin that can be used throughout the App
+                        Application.Current.Properties["user_id"] = RDSData.result.customer_uid;
+                    }
+                }
+
+                var client3 = new System.Net.Http.HttpClient();
+                newPayment.customer_uid = (string)Application.Current.Properties["user_id"];
+                string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
+                var request3 = new HttpRequestMessage();
+                request3.RequestUri = new Uri(url);
+                request3.Method = HttpMethod.Get;
+                var response3 = await client3.SendAsync(request3);
+                var content3 = response3.Content;
+                Console.WriteLine("content: " + content3);
+                var userString2 = await content3.ReadAsStringAsync();
+                JObject info_obj3 = JObject.Parse(userString2);
+                //Preferences.Set("password_salt", (info_obj3["result"])[0]["password_salt"].ToString());
+
+                //the salt in the json object for /checkout actually stores the hashed password
+                newPayment.salt = (info_obj3["result"])[0]["password_hashed"].ToString();
+            }
+
+
 
             //itemsList.Add("1"); //{ "1", "5 Meal Plan", "59.99" };
             var newPaymentJSONString = JsonConvert.SerializeObject(newPayment);
@@ -1687,6 +1793,7 @@ namespace MTYD.ViewModel
             {
                 if (!content.Contains("200"))
                 {
+                    //these checks are probably coming from the paypal server itself
                     if (content.Contains("Test"))
                     {
                         mode = "TEST";
@@ -1702,6 +1809,19 @@ namespace MTYD.ViewModel
                     Debug.WriteLine("MODE:             " + mode);
                     Debug.WriteLine("PAYPAL CLIENT ID: " + clientId);
                     Debug.WriteLine("PAYPAL SECRENT:   " + secret);
+
+                    if (DeliveryEntry.Text == "M4METEST" || DeliveryEntry.Text == "M4ME TEST")
+                    {
+                        mode = "TEST";
+                        clientId = Constant.TestClientId;
+                        secret = Constant.TestSecret;
+                    }
+                    else
+                    {
+                        mode = "LIVE";
+                        clientId = Constant.LiveClientId;
+                        secret = Constant.LiveSecret;
+                    }
                 }
                 else
                 {

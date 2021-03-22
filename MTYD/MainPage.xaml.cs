@@ -460,6 +460,17 @@ namespace MTYD
                     if (directEmailVerified == 0)
                     {
                         DisplayAlert("Please Verify Email", "Please click the link in the email sent to " + loginUsername.Text + ". Check inbox and spam folders.", "OK");
+
+                        //send email to verify email
+                        emailVerifyPost emailVer = new emailVerifyPost();
+                        emailVer.email = loginUsername.Text.Trim();
+                        var emailVerSerializedObj = JsonConvert.SerializeObject(emailVer);
+                        var content4 = new StringContent(emailVerSerializedObj, Encoding.UTF8, "application/json");
+                        var client3 = new HttpClient();
+                        var response3 = client3.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/email_verification", content4);
+                        Console.WriteLine("RESPONSE TO CHECKOUT   " + response3.Result);
+                        Console.WriteLine("CHECKOUT JSON OBJECT BEING SENT: " + emailVerSerializedObj);
+
                         loginButton.IsEnabled = true;
                     }
                     else if (loginAttempt != null && loginAttempt.message != "Request failed, wrong password.")
@@ -764,7 +775,6 @@ namespace MTYD
 
                 if (message.Contains(Constant.AutheticatedSuccesful))
                 {
-
                     var responseContent = await response.Content.ReadAsStringAsync();
                     var loginResponse = JsonConvert.DeserializeObject<LogInResponse>(responseContent);
                     return loginResponse;
@@ -1732,6 +1742,14 @@ namespace MTYD
             Application.Current.MainPage = new ExploreMeals();
         }
 
+        async void clickedPurchase(System.Object sender, System.EventArgs e)
+        {
+            Application.Current.Properties["user_id"] = "000-00000";
+            Application.Current.Properties["platform"] = "GUEST";
+            Preferences.Set("user_latitude", "0.0");
+            Preferences.Set("user_longitude", "0.0");
+            Application.Current.MainPage = new NavigationPage(new SubscriptionPage("Welcome", "Guest", "welcome@guest.com"));
+        }
     }
 }
 

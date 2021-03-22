@@ -50,6 +50,13 @@ namespace MTYD.ViewModel
             var width = DeviceDisplay.MainDisplayInfo.Width;
             var height = DeviceDisplay.MainDisplayInfo.Height;
             InitializeComponent();
+
+            if ((string)Application.Current.Properties["platform"] == "GUEST")
+            {
+                menu.IsVisible = false;
+                innerGrid.IsVisible = false;
+            }
+
             InitializeSignUpPost();
 
             fullAddress += Preferences.Get(savedAdd, "");
