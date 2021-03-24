@@ -110,11 +110,6 @@ namespace MTYD.ViewModel
             passedZones = zones;
             InitializeComponent();
 
-            if ((string)Application.Current.Properties["platform"] == "GUEST")
-            {
-                menu.IsVisible = false;
-                innerGrid.IsVisible = false;
-            }
 
             //move bar initialization testing
             //==========================================

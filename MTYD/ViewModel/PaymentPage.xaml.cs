@@ -44,30 +44,30 @@ namespace MTYD.ViewModel
         double service_fee;
         double delivery_fee;
         double checkoutTotal;
-        string savedFirstName = "firstName" + (string)Application.Current.Properties["user_id"];
-        string savedLastName = "lastName" + (string)Application.Current.Properties["user_id"];
-        string savedEmail = "email" + (string)Application.Current.Properties["user_id"];
-        string savedAdd = "address" + (string)Application.Current.Properties["user_id"];
-        string savedApt = "apt" + (string)Application.Current.Properties["user_id"];
-        string savedCity = "city" + (string)Application.Current.Properties["user_id"];
-        string savedState = "state" + (string)Application.Current.Properties["user_id"];
-        string savedZip = "zip" + (string)Application.Current.Properties["user_id"];
-        string savedPhone = "phone" + (string)Application.Current.Properties["user_id"];
-        string savedInstr = "instructions" + (string)Application.Current.Properties["user_id"];
+        string savedFirstName;
+        string savedLastName;
+        string savedEmail;
+        string savedAdd;
+        string savedApt;
+        string savedCity;
+        string savedState;
+        string savedZip;
+        string savedPhone;
+        string savedInstr;
 
-        string hashedPassword = "";
-        string billingEmail = "billing_email" + (string)Application.Current.Properties["user_id"];
-        string billingName = "billing_name" + (string)Application.Current.Properties["user_id"];
-        string billingNum = "billing_num" + (string)Application.Current.Properties["user_id"];
-        string billingMonth = "billing_month" + (string)Application.Current.Properties["user_id"];
-        string billingYear = "billing_year" + (string)Application.Current.Properties["user_id"];
-        string billingCVV = "billing_cvv" + (string)Application.Current.Properties["user_id"];
-        string billingAddress = "billing_address" + (string)Application.Current.Properties["user_id"];
-        string billingUnit = "billing_unit" + (string)Application.Current.Properties["user_id"];
-        string billingCity = "billing_city" + (string)Application.Current.Properties["user_id"];
-        string billingState = "billing_state" + (string)Application.Current.Properties["user_id"];
-        string billingZip = "billing_zip" + (string)Application.Current.Properties["user_id"];
-        string purchaseDescription = "purchase_descr" + (string)Application.Current.Properties["user_id"];
+        string hashedPassword;
+        string billingEmail;
+        string billingName;
+        string billingNum;
+        string billingMonth;
+        string billingYear;
+        string billingCVV;
+        string billingAddress;
+        string billingUnit;
+        string billingCity;
+        string billingState;
+        string billingZip;
+        string purchaseDescription;
         string paymentMethod;
         bool paypalPaymentDone = false;
         double deviceWidth, deviceHeight;
@@ -154,6 +154,31 @@ namespace MTYD.ViewModel
 
         public PaymentPage(string Fname, string Lname, string email)
         {
+            savedFirstName = "firstName" + (string)Application.Current.Properties["user_id"];
+            savedLastName = "lastName" + (string)Application.Current.Properties["user_id"];
+            savedEmail = "email" + (string)Application.Current.Properties["user_id"];
+            savedAdd = "address" + (string)Application.Current.Properties["user_id"];
+            savedApt = "apt" + (string)Application.Current.Properties["user_id"];
+            savedCity = "city" + (string)Application.Current.Properties["user_id"];
+            savedState = "state" + (string)Application.Current.Properties["user_id"];
+            savedZip = "zip" + (string)Application.Current.Properties["user_id"];
+            savedPhone = "phone" + (string)Application.Current.Properties["user_id"];
+            savedInstr = "instructions" + (string)Application.Current.Properties["user_id"];
+            hashedPassword = "";
+            billingEmail = "billing_email" + (string)Application.Current.Properties["user_id"];
+            billingName = "billing_name" + (string)Application.Current.Properties["user_id"];
+            billingNum = "billing_num" + (string)Application.Current.Properties["user_id"];
+            billingMonth = "billing_month" + (string)Application.Current.Properties["user_id"];
+            billingYear = "billing_year" + (string)Application.Current.Properties["user_id"];
+            billingCVV = "billing_cvv" + (string)Application.Current.Properties["user_id"];
+            billingAddress = "billing_address" + (string)Application.Current.Properties["user_id"];
+            billingUnit = "billing_unit" + (string)Application.Current.Properties["user_id"];
+            billingCity = "billing_city" + (string)Application.Current.Properties["user_id"];
+            billingState = "billing_state" + (string)Application.Current.Properties["user_id"];
+            billingZip = "billing_zip" + (string)Application.Current.Properties["user_id"];
+            purchaseDescription = "purchase_descr" + (string)Application.Current.Properties["user_id"];
+
+
             cust_firstName = Fname;
             cust_lastName = Lname;
             cust_email = email;
@@ -568,6 +593,7 @@ namespace MTYD.ViewModel
         {
             if (AddressEntry.Text != null)
                 Preferences.Set(savedAdd, AddressEntry.Text);
+            Debug.WriteLine("address key used: " + savedAdd);
 
             if (AptEntry.Text != null)
                 Preferences.Set(savedApt, AptEntry.Text);
@@ -583,6 +609,7 @@ namespace MTYD.ViewModel
 
             if (DeliveryEntry.Text != null)
                 Preferences.Set(savedInstr, DeliveryEntry.Text);
+            Debug.WriteLine("delivery entry key used: " + savedAdd);
 
             DisplayAlert("Success", "delivery info saved.", "OK");
         }
@@ -728,7 +755,16 @@ namespace MTYD.ViewModel
 
         private void clickedVerifyCode(object sender, EventArgs e)
         {
-            if (discountTitle.Text == "YES")
+            string url3 = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/brandAmbassador/generate_coupon";
+            Debug.WriteLine("brand ambassador coupon url: " + url3);
+
+            var content = client4.DownloadString(url3);
+            var obj = JsonConvert.DeserializeObject<AmbassadorCouponDto>(content);
+
+            string isValid = obj.Result[0].valid;
+
+
+            if (isValid == "TRUE")
             {
                 discountPrice.Text = "- $5";
 
@@ -822,7 +858,7 @@ namespace MTYD.ViewModel
 
             if (Preferences.Get(purchaseDescription, "") != "")
                 cardDescription.Text = Preferences.Get(purchaseDescription, "");
-
+            
         }
 
         protected async Task setPaymentInfo()
@@ -977,6 +1013,36 @@ namespace MTYD.ViewModel
                     {
                         // Local Variables in Xamarin that can be used throughout the App
                         Application.Current.Properties["user_id"] = RDSData.result.customer_uid;
+
+                        Debug.WriteLine("starting saving new preference strings");
+                        savedFirstName = "firstName" + RDSData.result.customer_uid;
+                        savedLastName = "lastName" + RDSData.result.customer_uid;
+                        savedEmail = "email" + RDSData.result.customer_uid;
+                        savedAdd = "address" + RDSData.result.customer_uid;
+                        savedApt = "apt" + RDSData.result.customer_uid;
+                        savedCity = "city" + RDSData.result.customer_uid;
+                        savedState = "state" + RDSData.result.customer_uid;
+                        savedZip = "zip" + RDSData.result.customer_uid;
+                        savedPhone = "phone" + RDSData.result.customer_uid;
+                        savedInstr = "instructions" + RDSData.result.customer_uid;
+                        billingEmail = "billing_email" + RDSData.result.customer_uid;
+                        billingName = "billing_name" + RDSData.result.customer_uid;
+                        billingNum = "billing_num" + RDSData.result.customer_uid;
+                        billingMonth = "billing_month" + RDSData.result.customer_uid;
+                        billingYear = "billing_year" + RDSData.result.customer_uid;
+                        billingCVV = "billing_cvv" + RDSData.result.customer_uid;
+                        billingAddress = "billing_address" + RDSData.result.customer_uid;
+                        billingUnit = "billing_unit" + RDSData.result.customer_uid;
+                        billingCity = "billing_city" + RDSData.result.customer_uid;
+                        billingState = "billing_state" + RDSData.result.customer_uid;
+                        billingZip = "billing_zip" + RDSData.result.customer_uid;
+                        purchaseDescription = "purchase_descr" + RDSData.result.customer_uid;
+                        Debug.WriteLine("end saving new preference strings");
+
+
+                        EventArgs e = new EventArgs();
+                        saveInfoDeliv();
+                        clickedSaveContact(proceedButton, e);
                     }
                 }
 
@@ -1013,6 +1079,7 @@ namespace MTYD.ViewModel
             // HttpResponseMessage response = await client.SendAsync(request);
             if (response.IsSuccessStatusCode)
             {
+                Preferences.Set("canChooseSelect", true);
                 Debug.WriteLine("RESPONSE TO CHECKOUT           : " + response.IsSuccessStatusCode);
                 Debug.WriteLine("CHECKOUT JSON OBJECT BEING SENT: " + newPaymentJSONString);
                 Debug.WriteLine("SetPaymentInfo Func ENDED!");
