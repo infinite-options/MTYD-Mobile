@@ -8,9 +8,46 @@ namespace MTYD.Model
         int _mealQuantity;
         long _mealPrice;
         string _mealName, _mealCalories, _mealImage;
+        bool _seeDesc, _seeImage;
         public event PropertyChangedEventHandler PropertyChanged;
 
         public string ItemUid { get; set; }
+        public string MealDesc { get; set; }
+
+
+        public bool SeeDesc
+        {
+            set
+            {
+                if (_seeDesc != value)
+                {
+                    _seeDesc = value;
+                    OnPropertyChanged("SeeDesc");
+                }
+            }
+            get
+            {
+                return _seeDesc;
+            }
+
+        }
+
+        public bool SeeImage
+        {
+            set
+            {
+                if (_seeImage != value)
+                {
+                    _seeImage = value;
+                    OnPropertyChanged("SeeImage");
+                }
+            }
+            get
+            {
+                return _seeImage;
+            }
+
+        }
 
         public int MealQuantity
         {

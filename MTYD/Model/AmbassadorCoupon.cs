@@ -3,14 +3,17 @@ using Newtonsoft.Json;
 
 namespace MTYD.Model
 {
+    public class AmbassCodePost
+    {
+        public string amb_email { get; set; }
+        public string cust_email { get; set; }
+    }
+
     public class AmbassadorCouponDto
     {
-        [JsonProperty("message")]
-        public string Message { get; set; }
-        [JsonProperty("code")]
-        public string Code { get; set; }
-        [JsonProperty("result")]
-        public AmbassadorCoupon[] Result { get; set; }
+        public string message { get; set; }
+        public string code { get; set; }
+        public AmbassadorCoupon[] result { get; set; }
     }
 
 

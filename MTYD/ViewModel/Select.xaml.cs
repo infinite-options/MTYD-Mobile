@@ -339,6 +339,9 @@ namespace MTYD.ViewModel
                             MealQuantity = mealQty,
                             MealPrice = obj.Result[i].MealPrice,
                             ItemUid = obj.Result[i].MealUid,
+                            MealDesc = obj.Result[i].MealDesc,
+                            SeeDesc = false,
+                            SeeImage = true
                         });
 
                         weekOneMenu.ItemsSource = Meals1;
@@ -394,6 +397,9 @@ namespace MTYD.ViewModel
                             MealQuantity = mealQty,
                             MealPrice = obj.Result[i].MealPrice,
                             ItemUid = obj.Result[i].MealUid,
+                            MealDesc = obj.Result[i].MealDesc,
+                            SeeDesc = false,
+                            SeeImage = true
                         });
 
                         weekOneAddOns.ItemsSource = Meals2;
@@ -1188,6 +1194,24 @@ namespace MTYD.ViewModel
             {
                 b.Source = "heartoutline.png";
 
+            }
+        }
+
+        //info button
+        private void clickedInfo(object sender, EventArgs e)
+        {
+            ImageButton b = (ImageButton)sender;
+            MealInfo ms = b.BindingContext as MealInfo;
+
+            if (ms.SeeDesc == false)
+            {
+                ms.SeeImage = false;
+                ms.SeeDesc = true;
+            }
+            else
+            {
+                ms.SeeImage = true;
+                ms.SeeDesc = false;
             }
         }
 

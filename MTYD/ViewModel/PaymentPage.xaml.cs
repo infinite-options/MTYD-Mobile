@@ -753,58 +753,95 @@ namespace MTYD.ViewModel
             grandTotalPrice.Text = "$" + grandTotalString;
         }
 
-        private void clickedVerifyCode(object sender, EventArgs e)
+        private async void clickedVerifyCode(object sender, EventArgs e)
         {
-            string url3 = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/brandAmbassador/generate_coupon";
-            Debug.WriteLine("brand ambassador coupon url: " + url3);
+            AmbassCodePost AmbCode = new AmbassCodePost();
+            AmbCode.amb_email = discountTitle.Text.Trim();
+            AmbCode.cust_email = emailEntry.Text.Trim();
+            var AmbSerializedObj = JsonConvert.SerializeObject(AmbCode);
+            var content4 = new StringContent(AmbSerializedObj, Encoding.UTF8, "application/json");
+            var client3 = new System.Net.Http.HttpClient();
+            var response3 = await client3.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/brandAmbassador/generate_coupon", content4);
+            var message = await response3.Content.ReadAsStringAsync();
+            Debug.WriteLine("RESPONSE TO verifyCode   " + response3.ToString());
+            Debug.WriteLine("json object sent:  " + AmbSerializedObj.ToString());
+            Debug.WriteLine("message received:  " + message.ToString());
 
-            var content = client4.DownloadString(url3);
-            var obj = JsonConvert.DeserializeObject<AmbassadorCouponDto>(content);
-
-            string isValid = obj.Result[0].valid;
-
-
-            if (isValid == "TRUE")
+            if (message.Contains("discount_percent") == true)
             {
-                discountPrice.Text = "- $5";
+                var data = JsonConvert.DeserializeObject<AmbassadorCouponDto>(message);
+                //Application.Current.Properties["user_id"] = data.result[0].valid;
 
 
-                double codeValue = Double.Parse(discountPrice.Text.Substring(discountPrice.Text.IndexOf('$') + 1));
-                double grandTotalValue = Double.Parse(grandTotalPrice.Text.Substring(1));
-                grandTotalValue -= codeValue;
-                string grandTotalString = grandTotalValue.ToString();
+                Debug.WriteLine("RESPONSE TO verifyCode   " + response3.ToString());
+                Debug.WriteLine("valid: " + data.result[0].valid);
+
+                //AmbassadorCoupon am = response3.Result;
+
+                string isValid = data.result[0].valid;
+
+                //string isValid = "yes";
+
+                if (isValid == "TRUE")
+                {
+                    double totalDiscount = 0;
+                    double grandTotalValue = Double.Parse(grandTotalPrice.Text.Substring(1));
+
+                    //discountPrice.Text = "- $5";
+
+                    //add back the previous discount before calculating for the new discount
+                    if (discountPrice.Text != null && discountPrice.Text != "")
+                    {
+                        double codeValue = Double.Parse(discountPrice.Text.Substring(discountPrice.Text.IndexOf('$') + 1));
+                        grandTotalValue = Double.Parse(grandTotalPrice.Text.Substring(1));
+                        grandTotalValue += codeValue;
+                    }
+
+                    totalDiscount += Math.Round(grandTotalValue * data.result[0].discount_percent, 2);
+                    totalDiscount += data.result[0].discount_amount;
+                    totalDiscount += data.result[0].discount_shipping;
+
+                    discountPrice.Text = "- $" + totalDiscount.ToString();
+                    grandTotalValue -= totalDiscount;
+
+                    string grandTotalString = grandTotalValue.ToString();
 
 
-                if (grandTotalString.Contains(".") == false)
-                    grandTotalString = grandTotalString + ".00";
-                else if (grandTotalString.Substring(grandTotalString.IndexOf(".") + 1).Length == 1)
-                    grandTotalString = grandTotalString + "0";
-                else if (grandTotalString.Substring(grandTotalString.IndexOf(".") + 1).Length == 0)
-                    grandTotalString = grandTotalString + "00";
-                Preferences.Set("price", grandTotalString);
+                    if (grandTotalString.Contains(".") == false)
+                        grandTotalString = grandTotalString + ".00";
+                    else if (grandTotalString.Substring(grandTotalString.IndexOf(".") + 1).Length == 1)
+                        grandTotalString = grandTotalString + "0";
+                    else if (grandTotalString.Substring(grandTotalString.IndexOf(".") + 1).Length == 0)
+                        grandTotalString = grandTotalString + "00";
+                    Preferences.Set("price", grandTotalString);
 
-                grandTotalPrice.Text = "$" + grandTotalString;
+                    grandTotalPrice.Text = "$" + grandTotalString;
+                }
             }
             else
             {
-                double codeValue = Double.Parse(discountPrice.Text.Substring(discountPrice.Text.IndexOf('$') + 1));
-                double grandTotalValue = Double.Parse(grandTotalPrice.Text.Substring(1));
-                grandTotalValue += codeValue;
-                string grandTotalString = grandTotalValue.ToString();
+                if (discountPrice.Text != null && discountPrice.Text != "")
+                {
+                    double codeValue = Double.Parse(discountPrice.Text.Substring(discountPrice.Text.IndexOf('$') + 1));
+                    double grandTotalValue = Double.Parse(grandTotalPrice.Text.Substring(1));
+                    grandTotalValue += codeValue;
+
+                    string grandTotalString = grandTotalValue.ToString();
 
 
-                if (grandTotalString.Contains(".") == false)
-                    grandTotalString = grandTotalString + ".00";
-                else if (grandTotalString.Substring(grandTotalString.IndexOf(".") + 1).Length == 1)
-                    grandTotalString = grandTotalString + "0";
-                else if (grandTotalString.Substring(grandTotalString.IndexOf(".") + 1).Length == 0)
-                    grandTotalString = grandTotalString + "00";
-                Preferences.Set("price", grandTotalString);
+                    if (grandTotalString.Contains(".") == false)
+                        grandTotalString = grandTotalString + ".00";
+                    else if (grandTotalString.Substring(grandTotalString.IndexOf(".") + 1).Length == 1)
+                        grandTotalString = grandTotalString + "0";
+                    else if (grandTotalString.Substring(grandTotalString.IndexOf(".") + 1).Length == 0)
+                        grandTotalString = grandTotalString + "00";
+                    Preferences.Set("price", grandTotalString);
 
-                grandTotalPrice.Text = "$" + grandTotalString;
+                    grandTotalPrice.Text = "$" + grandTotalString;
 
-                DisplayAlert("Error", "invalid ambassador code", "OK");
-                discountPrice.Text = "$0";
+                    DisplayAlert("Error", "invalid ambassador code", "OK");
+                    discountPrice.Text = "$0";
+                }
             }
 
         }
@@ -1155,6 +1192,7 @@ namespace MTYD.ViewModel
         public async void CheckouWithStripe(System.Object sender, System.EventArgs e)
         {
             paymentMethod = "stripe";
+            fillEntries();
 
             var total = Preferences.Get("price", "00.00");
             if (total.Contains(".") == false)
