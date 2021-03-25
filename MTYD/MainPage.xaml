@@ -6,9 +6,9 @@
     <ScrollView>
         <Grid VerticalOptions="CenterAndExpand">
             <StackLayout>
-                <StackLayout x:Name="LoginPage">
+                <StackLayout x:Name="LoginPage" >
                     <!--heading and subheading-->
-                    <Grid x:Name="grid1" VerticalOptions="Center" HorizontalOptions="Center" Margin="0,50,0,0">
+                    <Grid x:Name="grid1" VerticalOptions="Center" HorizontalOptions="Center" Margin="10,10,10,0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="120*" />
                             <RowDefinition Height="40*" />

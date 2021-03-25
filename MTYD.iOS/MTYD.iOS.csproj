@@ -223,6 +223,9 @@
     <BundleResource Include="Resources\appleicon3.png" />
     <BundleResource Include="Resources\facebookicon3.png" />
     <BundleResource Include="Resources\googleicon3.png" />
+    <BundleResource Include="Resources\Kale Pasta.jpg" />
+    <BundleResource Include="Resources\kalepasta.png" />
+    <BundleResource Include="Resources\kalepasta2.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AppleSignIn\" />

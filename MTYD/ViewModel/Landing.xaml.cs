@@ -271,7 +271,7 @@ namespace MTYD.ViewModel
             }
         }
 
-        async void clickedX(System.Object sender, System.EventArgs e)
+            async void clickedX(System.Object sender, System.EventArgs e)
         {
             fade.IsVisible = false;
             DiscountGrid.IsVisible = false;
