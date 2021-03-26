@@ -851,51 +851,63 @@ namespace MTYD.ViewModel
 
         public void fillEntries()
         {
+            if ((string)Application.Current.Properties["platform"] == "GUEST")
+            {
+                cardHolderEmail.Text = emailEntry.Text;
+                cardHolderName.Text = FNameEntry.Text + " " + LNameEntry.Text;
+                cardHolderAddress.Text = AddressEntry.Text;
+                if (AptEntry.Text != "" && AptEntry.Text != null)
+                    cardHolderUnit.Text = AptEntry.Text;
+                cardCity.Text = CityEntry.Text;
+                cardState.Text = StateEntry.Text;
+                cardZip.Text = ZipEntry.Text;
+            }
+            else
+            {
+                //Debug.WriteLine("billing email: " + Preferences.Get(billingAddress, ""));
+                if (Preferences.Get(billingEmail, "") != "")
+                    cardHolderEmail.Text = Preferences.Get(billingEmail, "");
+                else cardHolderEmail.Text = emailEntry.Text;
 
-            //Debug.WriteLine("billing email: " + Preferences.Get(billingAddress, ""));
-            if (Preferences.Get(billingEmail, "") != "")
-                cardHolderEmail.Text = Preferences.Get(billingEmail, "");
-            else cardHolderEmail.Text = emailEntry.Text;
+                if (Preferences.Get(billingName, "") != "")
+                    cardHolderName.Text = Preferences.Get(billingName, "");
+                else cardHolderName.Text = FNameEntry.Text + " " + LNameEntry.Text;
 
-            if (Preferences.Get(billingName, "") != "")
-                cardHolderName.Text = Preferences.Get(billingName, "");
-            else cardHolderName.Text = FNameEntry + " " + LNameEntry;
+                if (Preferences.Get(billingNum, "") != "")
+                    cardHolderNumber.Text = Preferences.Get(billingNum, "");
 
-            if (Preferences.Get(billingNum, "") != "")
-                cardHolderNumber.Text = Preferences.Get(billingNum, "");
+                if (Preferences.Get(billingMonth, "") != "")
+                    cardExpMonth.Text = Preferences.Get(billingMonth, "");
 
-            if (Preferences.Get(billingMonth, "") != "")
-                cardExpMonth.Text = Preferences.Get(billingMonth, "");
+                if (Preferences.Get(billingYear, "") != "")
+                    cardExpYear.Text = Preferences.Get(billingYear, "");
 
-            if (Preferences.Get(billingYear, "") != "")
-                cardExpYear.Text = Preferences.Get(billingYear, "");
+                if (Preferences.Get(billingCVV, "") != "")
+                    cardCVV.Text = Preferences.Get(billingCVV, "");
 
-            if (Preferences.Get(billingCVV, "") != "")
-                cardCVV.Text = Preferences.Get(billingCVV, "");
+                if (Preferences.Get(billingAddress, "") != "")
+                    cardHolderAddress.Text = Preferences.Get(billingAddress, "");
+                else cardHolderAddress.Text = AddressEntry.Text;
 
-            if (Preferences.Get(billingAddress, "") != "")
-                cardHolderAddress.Text = Preferences.Get(billingAddress, "");
-            else cardHolderAddress.Text = AddressEntry.Text;
+                if (Preferences.Get(billingUnit, "") != "")
+                    cardHolderUnit.Text = Preferences.Get(billingUnit, "");
+                else cardHolderUnit.Text = AptEntry.Text;
 
-            if (Preferences.Get(billingUnit, "") != "")
-                cardHolderUnit.Text = Preferences.Get(billingUnit, "");
-            else cardHolderUnit.Text = AptEntry.Text;
+                if (Preferences.Get(billingCity, "") != "")
+                    cardCity.Text = Preferences.Get(billingCity, "");
+                else cardCity.Text = CityEntry.Text;
 
-            if (Preferences.Get(billingCity, "") != "")
-                cardCity.Text = Preferences.Get(billingCity, "");
-            else cardCity.Text = CityEntry.Text;
+                if (Preferences.Get(billingState, "") != "")
+                    cardState.Text = Preferences.Get(billingState, "");
+                else cardState.Text = StateEntry.Text;
 
-            if (Preferences.Get(billingState, "") != "")
-                cardState.Text = Preferences.Get(billingState, "");
-            else cardState.Text = StateEntry.Text;
+                if (Preferences.Get(billingZip, "") != "")
+                    cardZip.Text = Preferences.Get(billingZip, "");
+                else cardZip.Text = ZipEntry.Text;
 
-            if (Preferences.Get(billingZip, "") != "")
-                cardZip.Text = Preferences.Get(billingZip, "");
-            else cardZip.Text = ZipEntry.Text;
-
-            if (Preferences.Get(purchaseDescription, "") != "")
-                cardDescription.Text = Preferences.Get(purchaseDescription, "");
-            
+                if (Preferences.Get(purchaseDescription, "") != "")
+                    cardDescription.Text = Preferences.Get(purchaseDescription, "");
+            }
         }
 
         protected async Task setPaymentInfo()
@@ -1123,6 +1135,8 @@ namespace MTYD.ViewModel
             }
             else
             {
+                if (paymentMethod == "stripe")
+                    await Navigation.PopAsync(false);
                 await DisplayAlert("Ooops", "Our system is down. We were able to process your request. We are currently working to solve this issue", "OK");
             }
         }

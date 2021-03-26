@@ -239,7 +239,8 @@
                                 <Frame Grid.Column="0" Padding="10" Grid.RowSpan="2" Grid.ColumnSpan="1">
                                     <Grid>
                                         <Grid.RowDefinitions>
-                                            <RowDefinition Height="140"/>
+                                            <RowDefinition Height="42"/>
+                                            <RowDefinition Height="98"/>
                                             <RowDefinition Height="25"/>
                                             <RowDefinition Height="15"/>
                                             <RowDefinition Height="35"/>
@@ -252,6 +253,7 @@
                                                        Grid.ColumnSpan="2"
                                                        Source="{Binding MealImage}"
                                                        Aspect="AspectFill"
+                                                       Grid.RowSpan="2"
                                                        IsVisible="{Binding SeeImage}"
                                                        />
 
@@ -284,23 +286,23 @@
                                                        Text="{Binding MealName}"
                                                        FontAttributes="Bold" LineBreakMode="WordWrap" />-->
                                         <Forms9Patch:Label x:Name="mealName" Grid.Column="0"
-                                                        Grid.Row="1"
+                                                        Grid.Row="2"
                                                         Grid.ColumnSpan="2"
                                                         FontSize="Small"
                                                         VerticalTextAlignment="Center"
                                                        Text="{Binding MealName}"
                                                        FontAttributes="Bold"
-                                                           IsVisible="{Binding SeeImage}"/>
+                                                       />
 
-                                        <Label x:Name="mealCal" Grid.Row="2"
+                                        <Label x:Name="mealCal" Grid.Row="3"
                                                        FontSize="Micro"
                                                        Grid.Column="0"
                                                        Grid.ColumnSpan="2"
                                                        Text="{Binding MealCalories}"
-                                                       IsVisible="{Binding SeeImage}"
+                                                       
                                                        VerticalOptions="Start" />
 
-                                        <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,0,-5" IsVisible="{Binding SeeImage}">
+                                        <Grid Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,0,-5">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="1*"/>
                                                 <ColumnDefinition Width="30"/>
@@ -314,7 +316,7 @@
                                         </Grid>
 
 
-                                        <Label x:Name="mealDesc" Text="{Binding MealDesc}" IsVisible="{Binding SeeDesc}" FontSize="Small" Grid.Row="0" Margin="0, 45, 0, 0" Grid.RowSpan="4" Grid.ColumnSpan="2" BackgroundColor="White" TextColor="Black"/>
+                                        <Forms9Patch:Label x:Name="mealDesc" Text="{Binding MealDesc}" HorizontalTextAlignment="Center" IsVisible="{Binding SeeDesc}" Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="White" TextColor="Black"/>
 
 
                                     </Grid>
