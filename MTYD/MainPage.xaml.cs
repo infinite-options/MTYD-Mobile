@@ -80,7 +80,7 @@ namespace MTYD
             checkPlatform(height, width);
             setGrid();
             BackgroundImageSource = "landing1.jpg";
-
+            //BackgroundImageSource = "kalepasta2.png";
 
             // APPLE
             //var vm = new LoginViewModel();
@@ -1921,7 +1921,7 @@ namespace MTYD
         //added function
         async void clickedExplore(System.Object sender, System.EventArgs e)
         {
-            Application.Current.MainPage = new ExploreMeals();
+            Application.Current.MainPage = new NavigationPage(new ExploreMeals());
         }
 
         async void clickedPurchase(System.Object sender, System.EventArgs e)

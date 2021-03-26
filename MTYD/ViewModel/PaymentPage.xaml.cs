@@ -188,6 +188,7 @@ namespace MTYD.ViewModel
             {
                 menu.IsVisible = false;
                 innerGrid.IsVisible = false;
+                topBackButton.IsVisible = true;
             }
 
             Console.WriteLine("hashed password: " + Preferences.Get("hashed_password", ""));
@@ -253,6 +254,10 @@ namespace MTYD.ViewModel
                 menu.HeightRequest = width / 25;
                 menu.WidthRequest = width / 25;
                 menu.Margin = new Thickness(25, 0, 0, 30);
+
+                topBackButton.HeightRequest = width / 25;
+                topBackButton.WidthRequest = width / 25;
+                topBackButton.Margin = new Thickness(25, 0, 0, 30);
 
                 firstName.CornerRadius = 22;
                 firstName.HeightRequest = 35;
@@ -335,21 +340,25 @@ namespace MTYD.ViewModel
             if (AddressEntry.Text == null)
             {
                 await DisplayAlert("Error", "Please enter your address", "OK");
+                return;
             }
 
             if (CityEntry.Text == null)
             {
                 await DisplayAlert("Error", "Please enter your city", "OK");
+                return;
             }
 
             if (StateEntry.Text == null)
             {
                 await DisplayAlert("Error", "Please enter your state", "OK");
+                return;
             }
 
             if (ZipEntry.Text == null)
             {
                 await DisplayAlert("Error", "Please enter your zipcode", "OK");
+                return;
             }
 
             //if (PhoneEntry.Text == null && PhoneEntry.Text.Length == 10)
@@ -612,6 +621,7 @@ namespace MTYD.ViewModel
             Debug.WriteLine("delivery entry key used: " + savedAdd);
 
             DisplayAlert("Success", "delivery info saved.", "OK");
+            saveDeliv.IsVisible = false;
         }
 
         public static string GetXMLElement(XElement element, string name)
@@ -637,6 +647,12 @@ namespace MTYD.ViewModel
         private void DeliveryAdd_TextChanged(object sender, TextChangedEventArgs e)
         {
             paymentStack.IsVisible = false;
+            saveDeliv.IsVisible = true;
+        }
+
+        private void ContactInfo_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            saveContact.IsVisible = true;
         }
 
         void clickedProceed(object sender, EventArgs e)
@@ -677,6 +693,7 @@ namespace MTYD.ViewModel
             Preferences.Set(savedPhone, PhoneEntry.Text);
 
             DisplayAlert("Success", "Contact info saved.", "OK");
+            saveContact.IsVisible = false;
         }
 
         async void clickedBack(System.Object sender, System.EventArgs e)
@@ -2097,6 +2114,9 @@ namespace MTYD.ViewModel
             return response;
         }
 
+        void menuBackButton_Clicked(System.Object sender, System.EventArgs e)
+        {
+        }
 
     }
 }

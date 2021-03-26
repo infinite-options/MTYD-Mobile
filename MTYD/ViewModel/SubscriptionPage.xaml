@@ -17,12 +17,12 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                    <ImageButton x:Name="pfp" BackgroundColor="LightGray" VerticalOptions="End" HorizontalOptions="End" Clicked="clickedPfp"/>
-                    <Label x:Name="initials" TextColor="Black" FontAttributes="Bold" VerticalOptions="Center"  HorizontalOptions="Center"/>
+                        <ImageButton x:Name="pfp" BackgroundColor="LightGray" VerticalOptions="End" HorizontalOptions="End" Clicked="clickedPfp"/>
+                        <Label x:Name="initials" TextColor="Black" FontAttributes="Bold" VerticalOptions="Center"  HorizontalOptions="Center"/>
 
                     </Grid>
                     <ImageButton x:Name="menu" Source="menu2.png" VerticalOptions="End" HorizontalOptions="Start" BackgroundColor="Transparent" Clicked="clickedMenu"/>
-
+                    <Button x:Name="backButton" BackgroundColor="Transparent" Text="&lt;" TextColor="Black" FontAttributes="Bold" FontSize="25" HorizontalOptions="Start" VerticalOptions="End" IsVisible="false" Clicked="clickedBack"/>
                 </Grid>
 
                 <BoxView HeightRequest="10"/>
@@ -44,13 +44,13 @@
                         <Label x:Name="deliveryDays" Text="MEALS DELIVERIES ARE" FontAttributes="Bold" TextColor="Black"
                                BackgroundColor="Transparent" HorizontalOptions="StartAndExpand" HorizontalTextAlignment="Start"/>
 
-                        <Label x:Name="deliveryDays2" Text="MONDAY, WEDNESDAY, FRIDAY" TextColor="#FF9400" FontAttributes="Bold"
+                        <Label x:Name="deliveryDays2" Text="FRIDAY" TextColor="#FF9400" FontAttributes="Bold"
                                BackgroundColor="Transparent" HorizontalOptions="StartAndExpand" HorizontalTextAlignment="Start"/>
 
                     </StackLayout>
 
                 </Grid>
-
+                
                 <Label x:Name="numMeals" Text="NUMBER OF MEALS PER DELIVERY" HorizontalTextAlignment="Start"
                        HorizontalOptions="StartAndExpand" Margin="20, 0, 20, 0" FontAttributes="Bold" TextColor="Black"/>
 
@@ -90,7 +90,7 @@
 
                 <Label x:Name="spacer2" HeightRequest="5"/>
 
-                <ScrollView Orientation="Horizontal" Margin="0, 5, 0, 5" HorizontalScrollBarVisibility="Always">
+                <ScrollView Orientation="Horizontal" Margin="20, 5, 0, 5" HorizontalScrollBarVisibility="Always">
                     <Grid ColumnSpacing="10">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="3*"/>
@@ -200,7 +200,7 @@
 
                 <Label x:Name="spacer4" HeightRequest="7"/>
 
-                <Grid Margin="15, 5, 15, 10">
+                <Grid Margin="15, 5, 15, 15">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="2*" />
                         <RowDefinition Height="1*" />
@@ -223,13 +223,15 @@
                     <Label Grid.Row="0" Grid.Column="5" Text="=" FontSize="25" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center"/>
                     <Label x:Name="TotalPrice" Grid.Row="0" Grid.Column="6" Text="$0" FontSize="25" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center"/>
 
-                    <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Text="MEALS" FontSize="12" TextColor="Black" HorizontalOptions="Start" VerticalOptions="Center"/>
-                    <Label Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" Text="DELIVERIES" FontSize="12" TextColor="Black" HorizontalOptions="Start" VerticalOptions="Center"/>
-                    <Label Grid.Row="1" Grid.Column="4" Grid.ColumnSpan="2" Text="DISCOUNT" FontSize="12" TextColor="Black" HorizontalOptions="Start" VerticalOptions="Center"/>
-                    <Label Grid.Row="1" Grid.Column="6" Text="TOTAL" FontSize="12" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center"/>
+                    <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Text="MEALS" FontSize="10" TextColor="Black" HorizontalOptions="Start" VerticalOptions="Center"/>
+                    <Label Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" Text="DELIVERIES" FontSize="10" TextColor="Black" HorizontalOptions="Start" VerticalOptions="Center"/>
+                    <Label Grid.Row="1" Grid.Column="4" Grid.ColumnSpan="2" Text="DISCOUNT" FontSize="10" TextColor="Black" HorizontalOptions="Start" VerticalOptions="Center"/>
+                    <Label Grid.Row="1" Grid.Column="6" Text="TOTAL" FontSize="10" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center"/>
                 </Grid>
 
-                <Button x:Name= "SignUpButton" BackgroundColor="#FF9400" Clicked="clickedDone" Text="PROCEED" TextColor="Black" Margin="0, 10, 0, 20"
+                <Label x:Name="pricePerMeal" TextColor="Black" HorizontalOptions="Center" FontSize="25"/>
+
+                <Button x:Name= "SignUpButton" BackgroundColor="#FF9400" Clicked="clickedDone" Text="PROCEED" TextColor="Black" Margin="0, 20, 0, 20"
                         BorderColor="Black" BorderWidth="2" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center"/>
 
                 <!--<Grid>

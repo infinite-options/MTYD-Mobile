@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="MTYD.ViewModel.ExploreMeals" xmlns:Forms9Patch="clr-namespace:Forms9Patch;assembly=Forms9Patch" BackgroundColor ="#f3f2dc">
     <ContentPage.Content>
-        <ScrollView>
-        <StackLayout>
+        <ScrollView x:Name="scroll">
+        <Grid>
             <StackLayout x:Name="mainStack">
 
                 <!--<Grid x:Name="headingGrid">
@@ -35,7 +35,7 @@
 
                 <BoxView x:Name="spacer" HeightRequest="15"/>
 
-                <CollectionView x:Name="dateCarousel" ItemsSource="{Binding availableDates}" HeightRequest="80" HorizontalOptions="Fill">
+                <CollectionView x:Name="dateCarousel" ItemsSource="{Binding availableDates}" HeightRequest="80" HorizontalOptions="Fill" Margin="15, 0, 0, 0">
                     <CollectionView.ItemsLayout>
                         <LinearItemsLayout Orientation="Horizontal" ItemSpacing="20" SnapPointsType="None"/>
                     </CollectionView.ItemsLayout>
@@ -388,16 +388,85 @@
 
                 <BoxView x:Name="spacer6" HeightRequest="20"/>
 
-                <Button Text="Explore Subscriptions" Margin="20,0" Padding="25,0" BorderColor="Black" BorderWidth="2" BackgroundColor="#FF9E19" HorizontalOptions="Center" TextColor="Black" HeightRequest="40" CornerRadius="20"/>
+                <Button Text="Explore Subscriptions" Margin="20,0" Padding="25,0" BorderColor="Black" BorderWidth="2" BackgroundColor="#FF9E19" HorizontalOptions="Center" TextColor="Black" HeightRequest="40" CornerRadius="20" Clicked="clickedSub"/>
 
                 <BoxView x:Name="spacer7" HeightRequest="10"/>
 
-                <Button Text="Enter Your Address" Margin="20,0" Padding="25,0" BorderColor="Black" BorderWidth="2" BackgroundColor="#FF9E19" HorizontalOptions="Center" TextColor="Black" HeightRequest="40" CornerRadius="20"/>
+                <Button Text="Check Delivery Availability" Margin="20,0" Padding="25,0" BorderColor="Black" BorderWidth="2" BackgroundColor="#FF9E19" HorizontalOptions="Center" TextColor="Black" HeightRequest="40" CornerRadius="20" Clicked="clickedCheckAddress"/>
 
                 <BoxView x:Name="spacer8" HeightRequest="30"/>
 
             </StackLayout>
-        </StackLayout>
+
+            <!--Delivery Entry-->
+            <BoxView x:Name="fade" BackgroundColor="White" Opacity="0.6" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" IsVisible="false"/>
+
+            <Grid x:Name="addressGrid" VerticalOptions="Center" IsVisible="false">
+               <BoxView x:Name="outerFrame" Color="#FFBA00" CornerRadius="25" />
+               <BoxView x:Name="innerFrame" Color="White" CornerRadius="24" Margin="5"/>
+
+               <StackLayout>
+
+                   <Button x:Name="xButton" Text="x" FontAttributes="Bold" TextColor="#FFBA00" BackgroundColor="Transparent" HorizontalOptions="End" Padding="0" Margin="0,5,15,0" Clicked="clickedX"/>
+
+                   <Label x:Name="addressHeader" Text="Enter Your Address" TextColor="Black" FontAttributes="Bold" Margin="15,0,0,0" BackgroundColor="Transparent"/>
+                   <BoxView HeightRequest="5"/>
+                   <BoxView HeightRequest="2" HorizontalOptions="FillAndExpand" Margin="15,0" Color="#FFBA00"/>
+                   <BoxView HeightRequest="5"/>
+
+                   <Grid x:Name="entryGrid" RowSpacing="15" Margin="15, 15, 15, 15">
+                       <Grid.RowDefinitions>
+                           <RowDefinition Height="1*"/>
+                           <RowDefinition Height="1*"/>
+                           <RowDefinition Height="1*"/>
+                       </Grid.RowDefinitions>
+
+                       <Frame x:Name="street" Grid.Row="0" Padding="10,5" HasShadow="False" CornerRadius="10" HorizontalOptions="Fill" BorderColor="Black">
+                            <Entry x:Name="AddressEntry" Keyboard="Text" FontAttributes="Bold" TextColor="Black" PlaceholderColor="#B4B4B4" Placeholder="Address*"/>
+                        </Frame>
+
+                        <Grid Grid.Row="1" HorizontalOptions="Fill">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="2*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Frame x:Name="unit" Grid.Column="0" Padding="10,5" HasShadow="False" CornerRadius="10" HorizontalOptions="Fill" BorderColor="Black">
+                                <Entry x:Name="AptEntry" Keyboard="Text" FontAttributes="Bold" TextColor="Black" PlaceholderColor="#B4B4B4" Placeholder="Unit"/>
+                            </Frame>
+
+                            <Frame x:Name="city" Grid.Column="1" Padding="10,5" HasShadow="False" CornerRadius="10" HorizontalOptions="Fill" BorderColor="Black">
+                                <Entry x:Name="CityEntry" Keyboard="Text" FontAttributes="Bold" TextColor="Black" PlaceholderColor="#B4B4B4" Placeholder="City*"/>
+                            </Frame>
+                        </Grid>
+
+                        <Grid Grid.Row="2" HorizontalOptions="Fill">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Frame x:Name="state" Grid.Column="0" Padding="10,5" HasShadow="False" CornerRadius="10" HorizontalOptions="Fill" BorderColor="Black">
+                                <Entry x:Name="StateEntry" Keyboard="Text" FontAttributes="Bold" TextColor="Black" PlaceholderColor="#B4B4B4" Placeholder="State*"/>
+                            </Frame>
+
+                            <Frame x:Name="zipCode" Grid.Column="1" Padding="10,5" HasShadow="False" CornerRadius="10" HorizontalOptions="Fill" BorderColor="Black">
+                                <Entry x:Name="ZipEntry" Keyboard="Numeric" FontAttributes="Bold" TextColor="Black" PlaceholderColor="#B4B4B4" Placeholder="Zip*"/>
+                            </Frame>
+                        </Grid>
+                   </Grid>
+
+                   <Button x:Name="checkAddressButton" BackgroundColor="#F59A28" Text="CHECK" TextColor="White" FontAttributes="Bold" FontSize="20" Margin="0, 0, 0, 25"
+                           HorizontalOptions="Center" Clicked="clickedCheck"/>
+               </StackLayout>
+            </Grid>
+        </Grid>
     </ScrollView>
     </ContentPage.Content>
 </ContentPage>

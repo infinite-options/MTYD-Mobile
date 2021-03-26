@@ -47,7 +47,7 @@
                     </Grid>
 
                     <ImageButton x:Name="menu" Source="menu2.png" VerticalOptions="End" HorizontalOptions="Start" BackgroundColor="Transparent" Clicked="clickedMenu"/>
-
+                    <Button x:Name="topBackButton" BackgroundColor="Transparent" Text="&lt;" TextColor="Black" FontAttributes="Bold" FontSize="25" HorizontalOptions="Start" VerticalOptions="End" IsVisible="false" Clicked="clickedBack"/>
                 </Grid>
 
             <StackLayout x:Name="mainStack">
@@ -66,7 +66,7 @@
                    <Label Text="DELIVERY ADDRESS" HorizontalOptions="Start" FontSize="22"
                        Margin="20,0,0,0" FontAttributes="Bold" Grid.Column="0" Grid.Row="0"/>
 
-                    <Button BorderColor="Black" BorderWidth="2" Text="Save" FontSize="15" HeightRequest="35" CornerRadius="17" TextColor="Black"
+                    <Button x:Name="saveDeliv" BorderColor="Black" BorderWidth="2" Text="Save" FontSize="15" HeightRequest="35" CornerRadius="17" TextColor="Black"
                             HorizontalOptions="Fill" BackgroundColor="#FFBA00" Grid.Row="0" Grid.Column="1" Margin="0,0,20,0" Clicked="clickedDeliv"/>
 
                 </Grid>
@@ -225,7 +225,7 @@
                    <Label Text="CONTACT INFO" HorizontalOptions="Start" FontSize="22"
                        Margin="20,0,0,0" FontAttributes="Bold" Grid.Column="0" Grid.Row="0"/>
 
-                    <Button BorderColor="Black" BorderWidth="2" Text="Save" FontSize="15" HeightRequest="35" CornerRadius="17" TextColor="Black"
+                    <Button x:Name="saveContact" BorderColor="Black" BorderWidth="2" Text="Save" FontSize="15" HeightRequest="35" CornerRadius="17" TextColor="Black"
                             HorizontalOptions="Fill" BackgroundColor="#FFBA00" Grid.Row="0" Grid.Column="1" Margin="0,0,20,0" Clicked="clickedSaveContact"/>
 
                 </Grid>
@@ -248,7 +248,7 @@
                         <Entry x:Name="FNameEntry" Keyboard="Text" FontAttributes="Bold"
                    FontSize="17" TextColor="Black"
                    WidthRequest="12" Placeholder="First Name*"
-                   BackgroundColor="#FFE5B4" />
+                   BackgroundColor="#FFE5B4" TextChanged="ContactInfo_TextChanged"/>
 
                    </Frame>
 
@@ -258,7 +258,7 @@
                         <Entry x:Name="LNameEntry" Keyboard="Text" FontAttributes="Bold"
                    FontSize="17" Placeholder="Last Name*"
                    WidthRequest="12"
-                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"/>
+                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4" TextChanged="ContactInfo_TextChanged"/>
 
                    </Frame>
 
@@ -278,7 +278,7 @@
                    <Entry x:Name="emailEntry" Keyboard="Email" FontAttributes="Bold"
                    FontSize="17" Placeholder="Email*"
                    WidthRequest="24"
-                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"/>
+                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4" TextChanged="ContactInfo_TextChanged"/>
 
                    </Frame>
 
@@ -298,7 +298,7 @@
                         <Entry x:Name="PhoneEntry" MaxLength="10" Keyboard="Numeric" FontAttributes="Bold"
                    FontSize="17" Placeholder="Phone Number*"
                     WidthRequest="12"
-                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"/>
+                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4" TextChanged="ContactInfo_TextChanged"/>
 
                    </Frame>
 
