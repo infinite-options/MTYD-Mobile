@@ -1,5 +1,10 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="MTYD.ViewModel.ExploreMeals" xmlns:Forms9Patch="clr-namespace:Forms9Patch;assembly=Forms9Patch" BackgroundColor ="#f3f2dc">
+<!--<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="MTYD.ViewModel.ExploreMeals" xmlns:Forms9Patch="clr-namespace:Forms9Patch;assembly=Forms9Patch" BackgroundColor ="#f3f2dc">
+                xmlns:custom="clr-namespace:DurianCode.PlacesSearchBar;assembly=PlacesSearchBar"
+		        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		        mc:Ignorable="d"-->
     <ContentPage.Content>
         <ScrollView x:Name="scroll">
         <Grid>
@@ -413,6 +418,23 @@
                    <BoxView HeightRequest="5"/>
                    <BoxView HeightRequest="2" HorizontalOptions="FillAndExpand" Margin="15,0" Color="#FFBA00"/>
                    <BoxView HeightRequest="5"/>
+
+                   <!--
+                   <places:PlacesBar x:Name="search_bar" />
+                   <Image Source="powered_by_google_on_white.png" HeightRequest="30" HorizontalOptions="Center" />
+		            <AbsoluteLayout>
+			            <ActivityIndicator x:Name="spinner" IsRunning="false"
+				            AbsoluteLayout.LayoutBounds="0.5, 0.1, 50, 50" AbsoluteLayout.LayoutFlags="PositionProportional" />
+			            <ListView x:Name="results_list" IsVisible="false"
+				            AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="SizeProportional" >
+				            <ListView.ItemTemplate>
+					            <DataTemplate>
+						            <TextCell d:DataContext="{d:DesignInstance custom:AutoCompletePrediction}" Text="{Binding MainText}" Detail="{Binding SecondaryText}" />
+					            </DataTemplate>
+				            </ListView.ItemTemplate>
+			            </ListView>
+		            </AbsoluteLayout>
+                   -->
 
                    <Grid x:Name="entryGrid" RowSpacing="15" Margin="15, 15, 15, 15">
                        <Grid.RowDefinitions>

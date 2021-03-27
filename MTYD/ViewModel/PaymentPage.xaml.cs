@@ -73,6 +73,7 @@ namespace MTYD.ViewModel
         bool paypalPaymentDone = false;
         double deviceWidth, deviceHeight;
         public SignUpPost directSignUp = new SignUpPost();
+        bool paymentSucceed = false;
 
 
         // CREDENTIALS CLASS
@@ -1162,11 +1163,25 @@ namespace MTYD.ViewModel
                 Debug.WriteLine("RESPONSE TO CHECKOUT           : " + response.IsSuccessStatusCode);
                 Debug.WriteLine("CHECKOUT JSON OBJECT BEING SENT: " + newPaymentJSONString);
                 Debug.WriteLine("SetPaymentInfo Func ENDED!");
+                paymentSucceed = true;
             }
             else
             {
                 if (paymentMethod == "stripe")
+                {
+                    headingGrid.IsVisible = true;
+                    checkoutButton.IsVisible = true;
+                    backButton.IsVisible = true;
+                    mainStack.IsVisible = true;
+                    paymentStack.IsVisible = true;
+
+                    PaymentScreen.HeightRequest = 0;
+                    PaymentScreen.Margin = new Thickness(0, 0, 0, 0);
+                    StripeScreen.Height = 0;
+                    PayPalScreen.Height = 0;
+                    orangeBox.HeightRequest = deviceHeight / 2;
                     await Navigation.PopAsync(false);
+                }
                 await DisplayAlert("Ooops", "Our system is down. We were able to process your request. We are currently working to solve this issue", "OK");
             }
         }
@@ -1201,7 +1216,7 @@ namespace MTYD.ViewModel
                         hashedPassword = hashedPassword2;
                     }
                 }
-
+                
                 //if (true)
                 //{
 
@@ -1221,8 +1236,10 @@ namespace MTYD.ViewModel
                 await setPaymentInfo();
                 Preferences.Set("canChooseSelect", true);
                 //await Navigation.PushAsync(new Select(passingZones, cust_firstName, cust_lastName, cust_email));
-                await Navigation.PushAsync(new CongratsPage(passingZones, cust_firstName, cust_lastName, cust_email));
-
+                if (paymentSucceed)
+                {
+                    await Navigation.PushAsync(new CongratsPage(passingZones, cust_firstName, cust_lastName, cust_email));
+                }
             }
             else
             {
@@ -1712,7 +1729,10 @@ namespace MTYD.ViewModel
                             await setPaymentInfo();
                             Preferences.Set("canChooseSelect", true);
                             //await Navigation.PushAsync(new Select(passingZones, cust_firstName, cust_lastName, cust_email));
-                            await Navigation.PushAsync(new CongratsPage(passingZones, cust_firstName, cust_lastName, cust_email));
+                            if (paymentSucceed)
+                            {
+                                await Navigation.PushAsync(new CongratsPage(passingZones, cust_firstName, cust_lastName, cust_email));
+                            }
                                 //done from checkout button clicked
                         }
                         else
@@ -2102,7 +2122,11 @@ namespace MTYD.ViewModel
                     await setPaymentInfo();
                     Preferences.Set("canChooseSelect", true);
                     //await Navigation.PushAsync(new Select(passingZones, cust_firstName, cust_lastName, cust_email));
-                    await Navigation.PushAsync(new CongratsPage(passingZones, cust_firstName, cust_lastName, cust_email));
+                    if (paymentSucceed)
+                    {
+                        await Navigation.PushAsync(new CongratsPage(passingZones, cust_firstName, cust_lastName, cust_email));
+                    }
+
                     //done from checkout button clicked
 
                     //Preferences.Set("price", "00.00");

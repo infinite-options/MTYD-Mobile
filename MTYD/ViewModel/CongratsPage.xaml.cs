@@ -99,6 +99,11 @@ namespace MTYD.ViewModel
 
         private void checkPlatform(double height, double width)
         {
+            if ((string)Application.Current.Properties["platform"] == "GUEST")
+            {
+                createAccount.IsVisible = true;
+            }
+
             Xamarin.Forms.NavigationPage.SetHasNavigationBar(this, false);
             orangeBox.HeightRequest = height / 2;
             orangeBox.Margin = new Thickness(0, -height / 2.2, 0, 0);
@@ -157,6 +162,12 @@ namespace MTYD.ViewModel
                 finishButton.WidthRequest = width / 5;
                 finishButton.HeightRequest = width / 20;
                 finishButton.CornerRadius = (int)(width / 40);
+
+                divider.Margin = new Thickness(width / 15, height / 80, width / 15, height / 100);
+
+                //skipButton.WidthRequest = width / 2;
+                skipButton.HeightRequest = width / 20;
+                skipButton.CornerRadius = (int)(width / 40);
             }
             else //Android
             {
@@ -187,6 +198,12 @@ namespace MTYD.ViewModel
                 finishButton.WidthRequest = width / 5;
                 finishButton.HeightRequest = width / 20;
                 finishButton.CornerRadius = (int)(width / 40);
+
+                divider.Margin = new Thickness(width / 15, height / 80, width / 15, height / 120);
+
+                skipButton.WidthRequest = width / 2;
+                skipButton.HeightRequest = width / 20;
+                skipButton.CornerRadius = (int)(width / 40);
             }
         }
 
@@ -241,6 +258,13 @@ namespace MTYD.ViewModel
             directSignUp.social_id = "NULL";
         }
 
+        public async void skipClicked(object sender, EventArgs e)
+        {
+            Zones[] passZone = new Zones[0];
+            await DisplayAlert("Success", "Your assigned password is \n" + Preferences.Get(savedFirstName, "") + Preferences.Get(savedAdd, "").Substring(0, Preferences.Get(savedAdd, "").IndexOf(" ")), "continue");
+            await Navigation.PushAsync(new Select(passZone, cust_firstName, cust_lastName, cust_email));
+        }
+
         public async void finishClicked(object sender, EventArgs e)
         {
             if (passwordEntry.Text != null && passwordEntry.Text == confirmPasswordEntry.Text)
@@ -248,7 +272,7 @@ namespace MTYD.ViewModel
                 PasswordInfo passwordUpdate = new PasswordInfo();
                 passwordUpdate.customer_uid = (string)Application.Current.Properties["user_id"];
                 //passwordUpdate.old_password = Preferences.Get("hashed_password", "");
-                passwordUpdate.old_password = Preferences.Get(savedFirstName, "") + Preferences.Get(savedAdd, "").Substring(0, Preferences.Get(savedAdd, "").IndexOf(" ")); ;
+                passwordUpdate.old_password = Preferences.Get(savedFirstName, "") + Preferences.Get(savedAdd, "").Substring(0, Preferences.Get(savedAdd, "").IndexOf(" "));
                 //passwordUpdate.new_password = hashedPassword;
                 passwordUpdate.new_password = passwordEntry.Text;
                 var newPaymentJSONString = JsonConvert.SerializeObject(passwordUpdate);
@@ -257,17 +281,24 @@ namespace MTYD.ViewModel
                 Console.WriteLine("Content: " + content2);
                 var client = new HttpClient();
                 var response = client.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_password", content2);
-                DisplayAlert("Success", "password updated!", "close");
+                await DisplayAlert("Success", "password updated!", "continue");
                 Console.WriteLine("RESPONSE TO CHECKOUT   " + response.Result);
                 Console.WriteLine("CHECKOUT JSON OBJECT BEING SENT: " + newPaymentJSONString);
                 Console.WriteLine("clickedSave Func ENDED!");
                 Zones[] passZone = new Zones[0];
                 await Navigation.PushAsync(new Select(passZone, cust_firstName, cust_lastName, cust_email));
             }
+            else if (passwordEntry.Text != null && passwordEntry.Text != confirmPasswordEntry.Text)
+            {
+                await DisplayAlert("Error", "Your password doesn't match", "OK");
+                return;
+            }
             else
             {
-                Zones[] passZone = new Zones[0];
-                await Navigation.PushAsync(new Select(passZone, cust_firstName, cust_lastName, cust_email));
+                await DisplayAlert("Error", "Please enter a password or click SKIP.", "OK");
+                return;
+                //Zones[] passZone = new Zones[0];
+                //await Navigation.PushAsync(new Select(passZone, cust_firstName, cust_lastName, cust_email));
             }
             //if (passwordEntry.Text != null)
             //{
