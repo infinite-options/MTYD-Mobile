@@ -226,6 +226,7 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -251,6 +252,7 @@
                                HorizontalOptions="Center" VerticalOptions="Center" HasShadow="False" Margin="0, 20, 0, 40">
                             <Image Source="logo.png" HeightRequest="100" Aspect="AspectFit"/>
                         </Frame>
+                        <Label Grid.Row="3" x:Name="appVersion" FontSize="Medium" HorizontalOptions="Center" Margin="0,5,0,0"/>
                     </Grid>
                 </StackLayout>
 

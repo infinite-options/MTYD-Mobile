@@ -405,6 +405,7 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -427,9 +428,10 @@
                         </Grid>
 
                         <Frame Grid.Row="2" HeightRequest="90" WidthRequest="280" BackgroundColor="White" CornerRadius="10" Padding="0"
-                               HorizontalOptions="Center" VerticalOptions="Center" HasShadow="False" Margin="0, 20, 0, 40">
+                               HorizontalOptions="Center" VerticalOptions="Center" HasShadow="False" Margin="0, 20, 0, 30">
                             <Image Source="logo.png" HeightRequest="100" Aspect="AspectFit"/>
                         </Frame>
+                        <Label Grid.Row="3" x:Name="appVersion" VerticalOptions="Center" HorizontalOptions="Center" Margin="0,0,0,20" HeightRequest="20"/>
                     </Grid>
                 </StackLayout>
             </StackLayout>

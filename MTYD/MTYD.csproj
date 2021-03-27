@@ -43,6 +43,7 @@
     <Folder Include="Model\Login\LoginClasses\" />
     <Folder Include="Model\Login\Constants\" />
     <Folder Include="Model\Login\LoginClasses\Apple\" />
+    <Folder Include="Interfaces\" />
   </ItemGroup>
 
   <ItemGroup>

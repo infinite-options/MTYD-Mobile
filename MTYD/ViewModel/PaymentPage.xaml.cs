@@ -22,6 +22,7 @@ using PayPalCheckoutSdk.Core;
 using PayPalHttp;
 using PayPalCheckoutSdk.Orders;
 using MTYD.Model.Login.LoginClasses;
+using Stripe;
 
 namespace MTYD.ViewModel
 {
@@ -90,7 +91,7 @@ namespace MTYD.ViewModel
         //auto-populate the delivery info if the user has already previously entered it
         public async void fillEntriesDeliv()
         {
-            if ((string)Application.Current.Properties["platform"] == "GUEST")
+            if ((string)Xamarin.Forms.Application.Current.Properties["platform"] == "GUEST")
             {
                 //put placeholders
             }
@@ -98,7 +99,7 @@ namespace MTYD.ViewModel
             else if (Preferences.Get(savedFirstName, "") == "")
             {
                 Console.WriteLine("no info");
-                string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
+                string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Xamarin.Forms.Application.Current.Properties["user_id"];
                 Debug.WriteLine("getProfileInfo url: " + url);
                 var request3 = new HttpRequestMessage();
                 request3.RequestUri = new Uri(url);
@@ -154,29 +155,31 @@ namespace MTYD.ViewModel
 
         public PaymentPage(string Fname, string Lname, string email)
         {
-            savedFirstName = "firstName" + (string)Application.Current.Properties["user_id"];
-            savedLastName = "lastName" + (string)Application.Current.Properties["user_id"];
-            savedEmail = "email" + (string)Application.Current.Properties["user_id"];
-            savedAdd = "address" + (string)Application.Current.Properties["user_id"];
-            savedApt = "apt" + (string)Application.Current.Properties["user_id"];
-            savedCity = "city" + (string)Application.Current.Properties["user_id"];
-            savedState = "state" + (string)Application.Current.Properties["user_id"];
-            savedZip = "zip" + (string)Application.Current.Properties["user_id"];
-            savedPhone = "phone" + (string)Application.Current.Properties["user_id"];
-            savedInstr = "instructions" + (string)Application.Current.Properties["user_id"];
+            Preferences.Set("subtotal", Preferences.Get("price", "00.00"));
+
+            savedFirstName = "firstName" + (string)Xamarin.Forms.Application.Current.Properties["user_id"];
+            savedLastName = "lastName" + (string)Xamarin.Forms.Application.Current.Properties["user_id"];
+            savedEmail = "email" + (string)Xamarin.Forms.Application.Current.Properties["user_id"];
+            savedAdd = "address" + (string)Xamarin.Forms.Application.Current.Properties["user_id"];
+            savedApt = "apt" + (string)Xamarin.Forms.Application.Current.Properties["user_id"];
+            savedCity = "city" + (string)Xamarin.Forms.Application.Current.Properties["user_id"];
+            savedState = "state" + (string)Xamarin.Forms.Application.Current.Properties["user_id"];
+            savedZip = "zip" + (string)Xamarin.Forms.Application.Current.Properties["user_id"];
+            savedPhone = "phone" + (string)Xamarin.Forms.Application.Current.Properties["user_id"];
+            savedInstr = "instructions" + (string)Xamarin.Forms.Application.Current.Properties["user_id"];
             hashedPassword = "";
-            billingEmail = "billing_email" + (string)Application.Current.Properties["user_id"];
-            billingName = "billing_name" + (string)Application.Current.Properties["user_id"];
-            billingNum = "billing_num" + (string)Application.Current.Properties["user_id"];
-            billingMonth = "billing_month" + (string)Application.Current.Properties["user_id"];
-            billingYear = "billing_year" + (string)Application.Current.Properties["user_id"];
-            billingCVV = "billing_cvv" + (string)Application.Current.Properties["user_id"];
-            billingAddress = "billing_address" + (string)Application.Current.Properties["user_id"];
-            billingUnit = "billing_unit" + (string)Application.Current.Properties["user_id"];
-            billingCity = "billing_city" + (string)Application.Current.Properties["user_id"];
-            billingState = "billing_state" + (string)Application.Current.Properties["user_id"];
-            billingZip = "billing_zip" + (string)Application.Current.Properties["user_id"];
-            purchaseDescription = "purchase_descr" + (string)Application.Current.Properties["user_id"];
+            billingEmail = "billing_email" + (string)Xamarin.Forms.Application.Current.Properties["user_id"];
+            billingName = "billing_name" + (string)Xamarin.Forms.Application.Current.Properties["user_id"];
+            billingNum = "billing_num" + (string)Xamarin.Forms.Application.Current.Properties["user_id"];
+            billingMonth = "billing_month" + (string)Xamarin.Forms.Application.Current.Properties["user_id"];
+            billingYear = "billing_year" + (string)Xamarin.Forms.Application.Current.Properties["user_id"];
+            billingCVV = "billing_cvv" + (string)Xamarin.Forms.Application.Current.Properties["user_id"];
+            billingAddress = "billing_address" + (string)Xamarin.Forms.Application.Current.Properties["user_id"];
+            billingUnit = "billing_unit" + (string)Xamarin.Forms.Application.Current.Properties["user_id"];
+            billingCity = "billing_city" + (string)Xamarin.Forms.Application.Current.Properties["user_id"];
+            billingState = "billing_state" + (string)Xamarin.Forms.Application.Current.Properties["user_id"];
+            billingZip = "billing_zip" + (string)Xamarin.Forms.Application.Current.Properties["user_id"];
+            purchaseDescription = "purchase_descr" + (string)Xamarin.Forms.Application.Current.Properties["user_id"];
 
 
             cust_firstName = Fname;
@@ -184,7 +187,7 @@ namespace MTYD.ViewModel
             cust_email = email;
             InitializeComponent();
 
-            if ((string)Application.Current.Properties["platform"] == "GUEST")
+            if ((string)Xamarin.Forms.Application.Current.Properties["platform"] == "GUEST")
             {
                 menu.IsVisible = false;
                 innerGrid.IsVisible = false;
@@ -329,7 +332,8 @@ namespace MTYD.ViewModel
 
         private async void clickedDeliv(object sender, EventArgs e)
         {
-            string platform = Application.Current.Properties["platform"].ToString();
+            //Preferences.Set("price", Preferences.Get("subtotal", "00.00"));
+            string platform = Xamarin.Forms.Application.Current.Properties["platform"].ToString();
             //string passwordSalt = Preferences.Get("password_salt", "");
             // Console.WriteLine("Clicked done: The Salt is: " + passwordSalt);
             //setPaymentInfo();
@@ -535,8 +539,10 @@ namespace MTYD.ViewModel
                 }
 
                 isAddessValidated = true;
-                await DisplayAlert("We validated your address", "Please click on the Sign up button to create your account!", "OK");
-                await Application.Current.SavePropertiesAsync();
+                Button b = (Button)sender;
+                if (b.Text == "Save")
+                    await DisplayAlert("We validated your address", "Please click on the proceed button to select a form of payment!", "OK");
+                await Xamarin.Forms.Application.Current.SavePropertiesAsync();
                 //await tagUser(emailEntry.Text.Trim(), ZipEntry.Text.Trim());
 
                 saveInfoDeliv();
@@ -547,10 +553,12 @@ namespace MTYD.ViewModel
                 Button receiving = (Button)sender;
                 if (receiving.Text != "Save")
                 {
+                    Preferences.Set("price", Preferences.Get("subtotal", "00.00"));
                     subtotalTitle.Text = "Meal Subscription \n(" + Preferences.Get("item_name", "").Substring(0, 1) + " Meals for " + Preferences.Get("freqSelected", "") + " Deliveries): ";
                     deliveryTitle.Text = "Total Delivery Fee For All " + Preferences.Get("freqSelected", "") + " Deliveries: ";
 
-                    Preferences.Set("subtotal", Preferences.Get("price", "00.00"));
+                    
+                    //Preferences.Set("subtotal", Preferences.Get("price", "00.00"));
                     double payment = Double.Parse(Preferences.Get("price", "00.00")) + (Double.Parse(Preferences.Get("price", "00.00")) * tax_rate);
                     Debug.WriteLine("payment: " + payment.ToString());
                     payment += serviceFee;
@@ -581,7 +589,7 @@ namespace MTYD.ViewModel
                     serviceFeePrice.Text = "$" + serviceFee.ToString();
                     deliveryFeePrice.Text = "$" + deliveryFee.ToString();
                     tipPrice.Text = tipOpt2.Text;
-                    addOnsPrice.Text = "$0";
+                    //addOnsPrice.Text = "$0";
                     discountPrice.Text = "$0";
                     //discountPrice.Text = "$0";
                     if (DeliveryEntry.Text == "M4METEST" || DeliveryEntry.Text == "M4ME TEST")
@@ -620,7 +628,7 @@ namespace MTYD.ViewModel
                 Preferences.Set(savedInstr, DeliveryEntry.Text);
             Debug.WriteLine("delivery entry key used: " + savedAdd);
 
-            DisplayAlert("Success", "delivery info saved.", "OK");
+            //DisplayAlert("Success", "delivery info saved.", "OK");
             saveDeliv.IsVisible = false;
         }
 
@@ -657,6 +665,8 @@ namespace MTYD.ViewModel
 
         void clickedProceed(object sender, EventArgs e)
         {
+            Preferences.Set("price", Preferences.Get("subtotal", ""));
+
             clickedSaveContact(sender, e);
             clickedDeliv(sender, e);
         }
@@ -692,7 +702,9 @@ namespace MTYD.ViewModel
             Preferences.Set(savedEmail, emailEntry.Text);
             Preferences.Set(savedPhone, PhoneEntry.Text);
 
-            DisplayAlert("Success", "Contact info saved.", "OK");
+            Button b = (Button)sender;
+            if (b.Text == "Save")
+                DisplayAlert("Success", "Contact info saved.", "OK");
             saveContact.IsVisible = false;
         }
 
@@ -801,6 +813,7 @@ namespace MTYD.ViewModel
 
                 if (isValid == "TRUE")
                 {
+                    verifyCode.IsVisible = false;
                     double totalDiscount = 0;
                     double grandTotalValue = Double.Parse(grandTotalPrice.Text.Substring(1));
 
@@ -868,7 +881,7 @@ namespace MTYD.ViewModel
 
         public void fillEntries()
         {
-            if ((string)Application.Current.Properties["platform"] == "GUEST")
+            if ((string)Xamarin.Forms.Application.Current.Properties["platform"] == "GUEST")
             {
                 cardHolderEmail.Text = emailEntry.Text;
                 cardHolderName.Text = FNameEntry.Text + " " + LNameEntry.Text;
@@ -962,7 +975,7 @@ namespace MTYD.ViewModel
             //}
             //else newPayment.salt = "";
 
-            string userID = (string)Application.Current.Properties["user_id"];
+            string userID = (string)Xamarin.Forms.Application.Current.Properties["user_id"];
             Console.WriteLine("YOUR userID is " + userID);
             newPayment.customer_uid = userID;
             //newPayment.customer_uid = "100-000082";
@@ -973,7 +986,7 @@ namespace MTYD.ViewModel
             //newPayment.salt = "2020-09-22 21:55:17";
             //newPayment.salt = hashedPassword;
             //testing for paypal
-            if ((string)Application.Current.Properties["platform"] == "DIRECT")
+            if ((string)Xamarin.Forms.Application.Current.Properties["platform"] == "DIRECT")
                 newPayment.salt = hashedPassword;
             else newPayment.salt = "";
 
@@ -1027,7 +1040,7 @@ namespace MTYD.ViewModel
             //newPayment.cc_zip = ZipCCEntry;
             //==================================
 
-            if ((string)Application.Current.Properties["platform"] == "GUEST")
+            if ((string)Xamarin.Forms.Application.Current.Properties["platform"] == "GUEST")
             {
                 directSignUp.email = emailEntry.Text;
                 directSignUp.first_name = FNameEntry.Text;
@@ -1055,7 +1068,7 @@ namespace MTYD.ViewModel
                 var content2 = new StringContent(directSignUpSerializedObject, Encoding.UTF8, "application/json");
 
                 System.Diagnostics.Debug.WriteLine(directSignUpSerializedObject);
-
+ 
                 var signUpclient = new System.Net.Http.HttpClient();
                 var RDSResponse = await signUpclient.PostAsync(Constant.SignUpUrl, content2);
                 Debug.WriteLine("RDSResponse: " + RDSResponse.ToString());
@@ -1072,13 +1085,13 @@ namespace MTYD.ViewModel
                     {
                         await DisplayAlert("Email Address Already In Use", "Please log in with the account that uses this email. If you previously used this email for guest checkout, your password is {first name}{house #}.", "OK");
 
-                        Application.Current.MainPage = new MainPage();
+                        Xamarin.Forms.Application.Current.MainPage = new MainPage();
                         return;
                     }
                     else
                     {
                         // Local Variables in Xamarin that can be used throughout the App
-                        Application.Current.Properties["user_id"] = RDSData.result.customer_uid;
+                        Xamarin.Forms.Application.Current.Properties["user_id"] = RDSData.result.customer_uid;
 
                         Debug.WriteLine("starting saving new preference strings");
                         savedFirstName = "firstName" + RDSData.result.customer_uid;
@@ -1113,8 +1126,8 @@ namespace MTYD.ViewModel
                 }
 
                 var client3 = new System.Net.Http.HttpClient();
-                newPayment.customer_uid = (string)Application.Current.Properties["user_id"];
-                string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
+                newPayment.customer_uid = (string)Xamarin.Forms.Application.Current.Properties["user_id"];
+                string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Xamarin.Forms.Application.Current.Properties["user_id"];
                 var request3 = new HttpRequestMessage();
                 request3.RequestUri = new Uri(url);
                 request3.Method = HttpMethod.Get;
@@ -1164,7 +1177,7 @@ namespace MTYD.ViewModel
         {
             if (checkoutButton.Text == "CONTINUE")
             {
-                if (paymentMethod == "paypal" && (string)Application.Current.Properties["platform"] == "DIRECT")
+                if (paymentMethod == "paypal" && (string)Xamarin.Forms.Application.Current.Properties["platform"] == "DIRECT")
                 {
                     Console.WriteLine("In set payment info: Hashing Password!");
                     SHA512 sHA512 = new SHA512Managed();
@@ -1269,7 +1282,7 @@ namespace MTYD.ViewModel
                 //PayPalScreen.Height = ;
                 StripeScreen.Height = 0;
                 orangeBox.HeightRequest = 0;
-                if ((string)Application.Current.Properties["platform"] == "DIRECT")
+                if ((string)Xamarin.Forms.Application.Current.Properties["platform"] == "DIRECT")
                 {
                     PaymentScreen.HeightRequest = this.Height * 1.5;
                     PayPalScreen.Height = (this.Height - (this.Height / 8)) * 1.5;
@@ -1369,7 +1382,7 @@ namespace MTYD.ViewModel
                     await DisplayAlert("Error", "Please enter your zipcode", "OK");
                 }
 
-                if (passwordEntry.Text == null && (string)Application.Current.Properties["platform"] == "DIRECT")
+                if (passwordEntry.Text == null && (string)Xamarin.Forms.Application.Current.Properties["platform"] == "DIRECT")
                 {
                     await DisplayAlert("Error", "Please enter your password", "OK");
                 }
@@ -1495,12 +1508,12 @@ namespace MTYD.ViewModel
                     isAddessValidated = true;
                     Debug.WriteLine("we validated your address");
                     //await DisplayAlert("We validated your address", "Please click on the Sign up button to create your account!", "OK");
-                    await Application.Current.SavePropertiesAsync();
+                    await Xamarin.Forms.Application.Current.SavePropertiesAsync();
                     //await tagUser(emailEntry.Text.Trim(), ZipEntry.Text.Trim());
                 }
                 //-------------validate address end
 
-                if ((string)Application.Current.Properties["platform"] == "DIRECT")
+                if ((string)Xamarin.Forms.Application.Current.Properties["platform"] == "DIRECT")
                 {
                     Console.WriteLine("In set payment info: Hashing Password!");
                     SHA512 sHA512 = new SHA512Managed();
@@ -1525,187 +1538,190 @@ namespace MTYD.ViewModel
                     }
                 }
 
-                //start commenting here?
+                //stripe frontend processing start
 
-                //var total = Preferences.Get("price", "00.00");
-                //var clientHttp = new System.Net.Http.HttpClient();
-                //var stripe = new Credentials();
-                //    stripe.key = Constant.TestPK;
-                //    //stripe.key = Constant.LivePK;
+                var total = Preferences.Get("price", "00.00");
+                var clientHttp = new System.Net.Http.HttpClient();
+                var stripe = new Credentials();
+                if (cardDescription.Text == "M4METEST" || cardDescription.Text == "M4ME TEST")
+                    stripe.key = Constant.TestPK;
+                else stripe.key = Constant.LivePK;
 
-                //var stripeObj = JsonConvert.SerializeObject(stripe);
-                //var stripeContent = new StringContent(stripeObj, Encoding.UTF8, "application/json");
-                //var RDSResponse = await clientHttp.PostAsync(Constant.StripeModeUrl, stripeContent);
-                //var content = await RDSResponse.Content.ReadAsStringAsync();
+                var stripeObj = JsonConvert.SerializeObject(stripe);
+                var stripeContent = new StringContent(stripeObj, Encoding.UTF8, "application/json");
+                var RDSResponse = await clientHttp.PostAsync(Constant.StripeModeUrl, stripeContent);
+                var content = await RDSResponse.Content.ReadAsStringAsync();
 
-                //Debug.WriteLine("key to send JSON: " + stripeObj);
-                //Debug.WriteLine("Response from key: " + content);
+                Debug.WriteLine("key to send JSON: " + stripeObj);
+                Debug.WriteLine("Response from key: " + content);
 
-                //if (RDSResponse.IsSuccessStatusCode)
-                //{
-                //    //Carlos original code
-                //    //if (content != "200")
-                //    if (content.Contains("200"))
-                //    {
-                //        //Debug.WriteLine("error encountered");
-                //        string SK = "";
-                //        string mode = "";
-
-                //        if (stripeObj.Contains("test"))
-                //        {
-                //            mode = "TEST";
-                //            SK = Constant.TestSK;
-                //        }
-                //        else if (stripeObj.Contains("live"))
-                //        {
-                //            mode = "LIVE";
-                //            SK = Constant.LiveSK;
-                //        }
-                //        //Carlos original code
-                //        //if (content.Contains("Test"))
-                //        //{
-                //        //    mode = "TEST";
-                //        //    SK = Constant.TestSK;
-                //        //}
-                //        //else if (content.Contains("Live"))
-                //        //{
-                //        //    mode = "LIVE";
-                //        //    SK = Constant.LiveSK;
-                //        //}
-
-                //        Debug.WriteLine("MODE          : " + mode);
-                //        Debug.WriteLine("STRIPE SECRET : " + SK);
-
-                //        //Debug.WriteLine("SK" + SK);
-                //        StripeConfiguration.ApiKey = SK;
-
-                //        string CardNo = cardHolderNumber.Text.Trim();
-                //        string expMonth = cardExpMonth.Text.Trim();
-                //        string expYear = cardExpYear.Text.Trim();
-                //        string cardCvv = cardCVV.Text.Trim();
-
-                //        Debug.WriteLine("step 1 reached");
-                //        // Step 1: Create Card
-                //        TokenCardOptions stripeOption = new TokenCardOptions();
-                //        stripeOption.Number = CardNo;
-                //        stripeOption.ExpMonth = Convert.ToInt64(expMonth);
-                //        stripeOption.ExpYear = Convert.ToInt64(expYear);
-                //        stripeOption.Cvc = cardCvv;
-
-                //        Debug.WriteLine("step 2 reached");
-                //        // Step 2: Assign card to token object
-                //        TokenCreateOptions stripeCard = new TokenCreateOptions();
-                //        stripeCard.Card = stripeOption;
-
-                //        TokenService service = new TokenService();
-                //        Stripe.Token newToken = service.Create(stripeCard);
-
-                //        Debug.WriteLine("step 3 reached");
-                //        // Step 3: Assign the token to the soruce 
-                //        var option = new SourceCreateOptions();
-                //        option.Type = SourceType.Card;
-                //        option.Currency = "usd";
-                //        option.Token = newToken.Id;
-
-                //        var sourceService = new SourceService();
-                //        Source source = sourceService.Create(option);
-
-                //        Debug.WriteLine("step 4 reached");
-                //        // Step 4: Create customer
-                //        CustomerCreateOptions customer = new CustomerCreateOptions();
-                //        customer.Name = cardHolderName.Text.Trim();
-                //        customer.Email = cardHolderEmail.Text.ToLower().Trim();
-                //        if (cardDescription.Text == "" || cardDescription.Text == null)
-                //            customer.Description = "";
-                //        else customer.Description = cardDescription.Text.Trim();
-                //        if (cardHolderUnit.Text == null)
-                //        {
-                //            cardHolderUnit.Text = "";
-                //        }
-                //        customer.Address = new AddressOptions { City = cardCity.Text.Trim(), Country = Constant.Contry, Line1 = cardHolderAddress.Text.Trim(), Line2 = cardHolderUnit.Text.Trim(), PostalCode = cardZip.Text.Trim(), State = cardState.Text.Trim() };
-
-                //        var customerService = new CustomerService();
-                //        var cust = customerService.Create(customer);
-
-                //        Debug.WriteLine("step 5 reached");
-                //        // Step 5: Charge option
-                //        var chargeOption = new ChargeCreateOptions();
-                //        chargeOption.Amount = (long)RemoveDecimalFromTotalAmount(total);
-
-                //        Debug.WriteLine("hopefully correct total: " + total);
-                //        chargeOption.Currency = "usd";
-                //        chargeOption.ReceiptEmail = cardHolderEmail.Text.ToLower().Trim();
-                //        chargeOption.Customer = cust.Id;
-                //        chargeOption.Source = source.Id;
-                //        if (cardDescription.Text == "" || cardDescription.Text == null)
-                //            chargeOption.Description = "";
-                //        else chargeOption.Description = cardDescription.Text.Trim();
-
-                //        //chargeOption.Description = cardDescription.Text.Trim();
-
-                //        Debug.WriteLine("step 6 reached");
-                // Step 6: charge the customer COMMENTED OUT FOR TESTING, backend already charges stripe so we don't have to do it here
-                //var chargeService = new ChargeService();
-                //Charge charge = chargeService.Create(chargeOption);
-                //Debug.WriteLine("charge: " + charge.ToString());
-                //if (charge.Status == "succeeded")
-                //{
-                await Navigation.PushAsync(new Loading());
-
-                PaymentScreen.HeightRequest = 0;
-                PaymentScreen.Margin = new Thickness(0, 0, 0, 0);
-                StripeScreen.Height = 0;
-                PayPalScreen.Height = 0;
-                orangeBox.HeightRequest = deviceHeight / 2;
-
-                Debug.WriteLine("STRIPE PAYMENT WAS SUCCESSFUL");
-                //stop commenting here?
-                //Preferences.Set("price", "00.00");
-                //DisplayAlert("Payment Completed", "Your payment was successful. Press 'CONTINUE' to select your meals!", "OK");
-                //when purchasing a first meal, might not send to endpoint on time when clicking the continue button as fast as possible, resulting in error on select pg
-                //wait half a second
-                Task.Delay(500).Wait();
-                if ((string)Application.Current.Properties["platform"] == "DIRECT")
+                if (RDSResponse.IsSuccessStatusCode)
                 {
-                    spacer6.IsVisible = true;
-                    passLabel.IsVisible = true;
-                    spacer7.IsVisible = true;
-                    password.IsVisible = true;
-                    passwordEntry.IsVisible = true;
-                    spacer8.IsVisible = true;
+                    //Carlos original code
+                    //if (content != "200")
+                    if (content.Contains("200"))
+                    {
+                        //Debug.WriteLine("error encountered");
+                        string SK = "";
+                        string mode = "";
+
+                        if (stripeObj.Contains("test"))
+                        {
+                            mode = "TEST";
+                            SK = Constant.TestSK;
+                        }
+                        else if (stripeObj.Contains("live"))
+                        {
+                            mode = "LIVE";
+                            SK = Constant.LiveSK;
+                        }
+                        //Carlos original code
+                        //if (content.Contains("Test"))
+                        //{
+                        //    mode = "TEST";
+                        //    SK = Constant.TestSK;
+                        //}
+                        //else if (content.Contains("Live"))
+                        //{
+                        //    mode = "LIVE";
+                        //    SK = Constant.LiveSK;
+                        //}
+
+                        Debug.WriteLine("MODE          : " + mode);
+                        Debug.WriteLine("STRIPE SECRET : " + SK);
+
+                        //Debug.WriteLine("SK" + SK);
+                        StripeConfiguration.ApiKey = SK;
+
+                        string CardNo = cardHolderNumber.Text.Trim();
+                        string expMonth = cardExpMonth.Text.Trim();
+                        string expYear = cardExpYear.Text.Trim();
+                        string cardCvv = cardCVV.Text.Trim();
+
+                        Debug.WriteLine("step 1 reached");
+                        // Step 1: Create Card
+                        TokenCardOptions stripeOption = new TokenCardOptions();
+                        stripeOption.Number = CardNo;
+                        stripeOption.ExpMonth = Convert.ToInt64(expMonth);
+                        stripeOption.ExpYear = Convert.ToInt64(expYear);
+                        stripeOption.Cvc = cardCvv;
+
+                        Debug.WriteLine("step 2 reached");
+                        // Step 2: Assign card to token object
+                        TokenCreateOptions stripeCard = new TokenCreateOptions();
+                        stripeCard.Card = stripeOption;
+
+                        TokenService service = new TokenService();
+                        Stripe.Token newToken = service.Create(stripeCard);
+
+                        Debug.WriteLine("step 3 reached");
+                        // Step 3: Assign the token to the soruce 
+                        var option = new SourceCreateOptions();
+                        option.Type = SourceType.Card;
+                        option.Currency = "usd";
+                        option.Token = newToken.Id;
+
+                        var sourceService = new SourceService();
+                        Source source = sourceService.Create(option);
+
+                        Debug.WriteLine("step 4 reached");
+                        // Step 4: Create customer
+                        CustomerCreateOptions customer = new CustomerCreateOptions();
+                        customer.Name = cardHolderName.Text.Trim();
+                        customer.Email = cardHolderEmail.Text.ToLower().Trim();
+                        if (cardDescription.Text == "" || cardDescription.Text == null)
+                            customer.Description = "";
+                        else customer.Description = cardDescription.Text.Trim();
+                        if (cardHolderUnit.Text == null)
+                        {
+                            cardHolderUnit.Text = "";
+                        }
+                        customer.Address = new AddressOptions { City = cardCity.Text.Trim(), Country = Constant.Contry, Line1 = cardHolderAddress.Text.Trim(), Line2 = cardHolderUnit.Text.Trim(), PostalCode = cardZip.Text.Trim(), State = cardState.Text.Trim() };
+
+                        var customerService = new CustomerService();
+                        var cust = customerService.Create(customer);
+
+                        Debug.WriteLine("step 5 reached");
+                        // Step 5: Charge option
+                        var chargeOption = new ChargeCreateOptions();
+                        chargeOption.Amount = (long)RemoveDecimalFromTotalAmount(total);
+
+                        Debug.WriteLine("hopefully correct total: " + total);
+                        chargeOption.Currency = "usd";
+                        chargeOption.ReceiptEmail = cardHolderEmail.Text.ToLower().Trim();
+                        chargeOption.Customer = cust.Id;
+                        chargeOption.Source = source.Id;
+                        if (cardDescription.Text == "" || cardDescription.Text == null)
+                            chargeOption.Description = "";
+                        else chargeOption.Description = cardDescription.Text.Trim();
+
+                        //chargeOption.Description = cardDescription.Text.Trim();
+
+                        Debug.WriteLine("step 6 reached");
+                        // Step 6: charge the customer COMMENTED OUT FOR TESTING, backend already charges stripe so we don't have to do it here
+                        var chargeService = new ChargeService();
+                        Charge charge = chargeService.Create(chargeOption);
+                        Debug.WriteLine("charge: " + charge.ToString());
+                        if (charge.Status == "succeeded")
+                        {
+                            await Navigation.PushAsync(new Loading());
+
+                            PaymentScreen.HeightRequest = 0;
+                            PaymentScreen.Margin = new Thickness(0, 0, 0, 0);
+                            StripeScreen.Height = 0;
+                            PayPalScreen.Height = 0;
+                            orangeBox.HeightRequest = deviceHeight / 2;
+
+                            Debug.WriteLine("STRIPE PAYMENT WAS SUCCESSFUL");
+                            //end of stripe payment frontend processing
+
+
+                            //Preferences.Set("price", "00.00");
+                            //DisplayAlert("Payment Completed", "Your payment was successful. Press 'CONTINUE' to select your meals!", "OK");
+                            //when purchasing a first meal, might not send to endpoint on time when clicking the continue button as fast as possible, resulting in error on select pg
+                            //wait half a second
+                            Task.Delay(500).Wait();
+                            if ((string)Xamarin.Forms.Application.Current.Properties["platform"] == "DIRECT")
+                            {
+                                spacer6.IsVisible = true;
+                                passLabel.IsVisible = true;
+                                spacer7.IsVisible = true;
+                                password.IsVisible = true;
+                                passwordEntry.IsVisible = true;
+                                spacer8.IsVisible = true;
+                            }
+                            checkoutButton.Text = "CONTINUE";
+                            headingGrid.IsVisible = true;
+                            checkoutButton.IsVisible = true;
+                            backButton.IsVisible = true;
+
+                            //checkout button clicked functionality added below vv
+                            Preferences.Set(billingEmail, cardHolderEmail.Text);
+                            Preferences.Set(billingName, cardHolderName.Text);
+                            Preferences.Set(billingNum, cardHolderNumber.Text);
+                            Preferences.Set(billingMonth, cardExpMonth.Text);
+                            Preferences.Set(billingYear, cardExpYear.Text);
+                            Preferences.Set(billingCVV, cardCVV.Text);
+                            Preferences.Set(billingAddress, cardHolderAddress.Text);
+                            Preferences.Set(billingUnit, cardHolderUnit.Text);
+                            Preferences.Set(billingCity, cardCity.Text);
+                            Preferences.Set(billingState, cardState.Text);
+                            Preferences.Set(billingZip, cardZip.Text);
+                            Preferences.Set(purchaseDescription, cardDescription.Text);
+
+                            await setPaymentInfo();
+                            Preferences.Set("canChooseSelect", true);
+                            //await Navigation.PushAsync(new Select(passingZones, cust_firstName, cust_lastName, cust_email));
+                            await Navigation.PushAsync(new CongratsPage(passingZones, cust_firstName, cust_lastName, cust_email));
+                                //done from checkout button clicked
+                        }
+                        else
+                        {
+                            // Fail
+                            await DisplayAlert("Ooops", "Payment was not succesfull. Please try again", "OK");
+                        }
+                    }
                 }
-                checkoutButton.Text = "CONTINUE";
-                headingGrid.IsVisible = true;
-                checkoutButton.IsVisible = true;
-                backButton.IsVisible = true;
-
-                //checkout button clicked functionality added below vv
-                Preferences.Set(billingEmail, cardHolderEmail.Text);
-                Preferences.Set(billingName, cardHolderName.Text);
-                Preferences.Set(billingNum, cardHolderNumber.Text);
-                Preferences.Set(billingMonth, cardExpMonth.Text);
-                Preferences.Set(billingYear, cardExpYear.Text);
-                Preferences.Set(billingCVV, cardCVV.Text);
-                Preferences.Set(billingAddress, cardHolderAddress.Text);
-                Preferences.Set(billingUnit, cardHolderUnit.Text);
-                Preferences.Set(billingCity, cardCity.Text);
-                Preferences.Set(billingState, cardState.Text);
-                Preferences.Set(billingZip, cardZip.Text);
-                Preferences.Set(purchaseDescription, cardDescription.Text);
-
-                await setPaymentInfo();
-                Preferences.Set("canChooseSelect", true);
-                //await Navigation.PushAsync(new Select(passingZones, cust_firstName, cust_lastName, cust_email));
-                await Navigation.PushAsync(new CongratsPage(passingZones, cust_firstName, cust_lastName, cust_email));
-                //done from checkout button clicked
-                //}
-                //else
-                //{
-                //    // Fail
-                //    await DisplayAlert("Ooops", "Payment was not succesfull. Please try again", "OK");
-                //}
-                //}
-                //}
             }
             catch (Exception ex)
             {
@@ -2046,7 +2062,7 @@ namespace MTYD.ViewModel
 
 
                 //testing with password
-                if ((string)Application.Current.Properties["platform"] == "DIRECT")
+                if ((string)Xamarin.Forms.Application.Current.Properties["platform"] == "DIRECT")
                 {
                     paypalPaymentDone = true;
                     orangeBox.HeightRequest = deviceHeight / 2;
