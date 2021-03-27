@@ -428,7 +428,7 @@
                 </Grid.ColumnDefinitions>
 
                 <Frame Padding="5,5" HorizontalOptions="Fill" CornerRadius="23" HasShadow="False" BackgroundColor="LightGray" Grid.Column="0" HeightRequest="40">
-                    <Entry x:Name="discountTitle" Placeholder="Enter Ambassador Code" FontSize="Small"
+                    <Entry x:Name="discountTitle" Placeholder="Enter Ambassador Code" FontSize="Small" IsTextPredictionEnabled="False"
                            BackgroundColor="LightGray" PlaceholderColor="#F5F5F5" TextColor="Black"/>
                 </Frame>
 

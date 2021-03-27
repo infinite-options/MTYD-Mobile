@@ -44,34 +44,35 @@ namespace MTYD.ViewModel
         double service_fee;
         double delivery_fee;
         double checkoutTotal;
-        string savedFirstName = "firstName" + (string)Application.Current.Properties["user_id"];
-        string savedLastName = "lastName" + (string)Application.Current.Properties["user_id"];
-        string savedEmail = "email" + (string)Application.Current.Properties["user_id"];
-        string savedAdd = "address" + (string)Application.Current.Properties["user_id"];
-        string savedApt = "apt" + (string)Application.Current.Properties["user_id"];
-        string savedCity = "city" + (string)Application.Current.Properties["user_id"];
-        string savedState = "state" + (string)Application.Current.Properties["user_id"];
-        string savedZip = "zip" + (string)Application.Current.Properties["user_id"];
-        string savedPhone = "phone" + (string)Application.Current.Properties["user_id"];
-        string savedInstr = "instructions" + (string)Application.Current.Properties["user_id"];
+        string savedFirstName;
+        string savedLastName;
+        string savedEmail;
+        string savedAdd;
+        string savedApt;
+        string savedCity;
+        string savedState;
+        string savedZip;
+        string savedPhone;
+        string savedInstr;
 
-        string hashedPassword = "";
-        string billingEmail = "billing_email" + (string)Application.Current.Properties["user_id"];
-        string billingName = "billing_name" + (string)Application.Current.Properties["user_id"];
-        string billingNum = "billing_num" + (string)Application.Current.Properties["user_id"];
-        string billingMonth = "billing_month" + (string)Application.Current.Properties["user_id"];
-        string billingYear = "billing_year" + (string)Application.Current.Properties["user_id"];
-        string billingCVV = "billing_cvv" + (string)Application.Current.Properties["user_id"];
-        string billingAddress = "billing_address" + (string)Application.Current.Properties["user_id"];
-        string billingUnit = "billing_unit" + (string)Application.Current.Properties["user_id"];
-        string billingCity = "billing_city" + (string)Application.Current.Properties["user_id"];
-        string billingState = "billing_state" + (string)Application.Current.Properties["user_id"];
-        string billingZip = "billing_zip" + (string)Application.Current.Properties["user_id"];
-        string purchaseDescription = "purchase_descr" + (string)Application.Current.Properties["user_id"];
+        string hashedPassword;
+        string billingEmail;
+        string billingName;
+        string billingNum;
+        string billingMonth;
+        string billingYear;
+        string billingCVV;
+        string billingAddress;
+        string billingUnit;
+        string billingCity;
+        string billingState;
+        string billingZip;
+        string purchaseDescription;
         string paymentMethod;
         bool paypalPaymentDone = false;
         double deviceWidth, deviceHeight;
         public SignUpPost directSignUp = new SignUpPost();
+        bool paymentSucceed = false;
 
 
         // CREDENTIALS CLASS
@@ -154,6 +155,31 @@ namespace MTYD.ViewModel
 
         public PaymentPage(string Fname, string Lname, string email)
         {
+            savedFirstName = "firstName" + (string)Application.Current.Properties["user_id"];
+            savedLastName = "lastName" + (string)Application.Current.Properties["user_id"];
+            savedEmail = "email" + (string)Application.Current.Properties["user_id"];
+            savedAdd = "address" + (string)Application.Current.Properties["user_id"];
+            savedApt = "apt" + (string)Application.Current.Properties["user_id"];
+            savedCity = "city" + (string)Application.Current.Properties["user_id"];
+            savedState = "state" + (string)Application.Current.Properties["user_id"];
+            savedZip = "zip" + (string)Application.Current.Properties["user_id"];
+            savedPhone = "phone" + (string)Application.Current.Properties["user_id"];
+            savedInstr = "instructions" + (string)Application.Current.Properties["user_id"];
+            hashedPassword = "";
+            billingEmail = "billing_email" + (string)Application.Current.Properties["user_id"];
+            billingName = "billing_name" + (string)Application.Current.Properties["user_id"];
+            billingNum = "billing_num" + (string)Application.Current.Properties["user_id"];
+            billingMonth = "billing_month" + (string)Application.Current.Properties["user_id"];
+            billingYear = "billing_year" + (string)Application.Current.Properties["user_id"];
+            billingCVV = "billing_cvv" + (string)Application.Current.Properties["user_id"];
+            billingAddress = "billing_address" + (string)Application.Current.Properties["user_id"];
+            billingUnit = "billing_unit" + (string)Application.Current.Properties["user_id"];
+            billingCity = "billing_city" + (string)Application.Current.Properties["user_id"];
+            billingState = "billing_state" + (string)Application.Current.Properties["user_id"];
+            billingZip = "billing_zip" + (string)Application.Current.Properties["user_id"];
+            purchaseDescription = "purchase_descr" + (string)Application.Current.Properties["user_id"];
+
+
             cust_firstName = Fname;
             cust_lastName = Lname;
             cust_email = email;
@@ -577,6 +603,7 @@ namespace MTYD.ViewModel
         {
             if (AddressEntry.Text != null)
                 Preferences.Set(savedAdd, AddressEntry.Text);
+            Debug.WriteLine("address key used: " + savedAdd);
 
             if (AptEntry.Text != null)
                 Preferences.Set(savedApt, AptEntry.Text);
@@ -592,6 +619,7 @@ namespace MTYD.ViewModel
 
             if (DeliveryEntry.Text != null)
                 Preferences.Set(savedInstr, DeliveryEntry.Text);
+            Debug.WriteLine("delivery entry key used: " + savedAdd);
 
             DisplayAlert("Success", "delivery info saved.", "OK");
             saveDeliv.IsVisible = false;
@@ -743,49 +771,95 @@ namespace MTYD.ViewModel
             grandTotalPrice.Text = "$" + grandTotalString;
         }
 
-        private void clickedVerifyCode(object sender, EventArgs e)
+        private async void clickedVerifyCode(object sender, EventArgs e)
         {
-            if (discountTitle.Text == "YES")
+            AmbassCodePost AmbCode = new AmbassCodePost();
+            AmbCode.amb_email = discountTitle.Text.Trim();
+            AmbCode.cust_email = emailEntry.Text.Trim();
+            var AmbSerializedObj = JsonConvert.SerializeObject(AmbCode);
+            var content4 = new StringContent(AmbSerializedObj, Encoding.UTF8, "application/json");
+            var client3 = new System.Net.Http.HttpClient();
+            var response3 = await client3.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/brandAmbassador/generate_coupon", content4);
+            var message = await response3.Content.ReadAsStringAsync();
+            Debug.WriteLine("RESPONSE TO verifyCode   " + response3.ToString());
+            Debug.WriteLine("json object sent:  " + AmbSerializedObj.ToString());
+            Debug.WriteLine("message received:  " + message.ToString());
+
+            if (message.Contains("discount_percent") == true)
             {
-                discountPrice.Text = "- $5";
+                var data = JsonConvert.DeserializeObject<AmbassadorCouponDto>(message);
+                //Application.Current.Properties["user_id"] = data.result[0].valid;
 
 
-                double codeValue = Double.Parse(discountPrice.Text.Substring(discountPrice.Text.IndexOf('$') + 1));
-                double grandTotalValue = Double.Parse(grandTotalPrice.Text.Substring(1));
-                grandTotalValue -= codeValue;
-                string grandTotalString = grandTotalValue.ToString();
+                Debug.WriteLine("RESPONSE TO verifyCode   " + response3.ToString());
+                Debug.WriteLine("valid: " + data.result[0].valid);
+
+                //AmbassadorCoupon am = response3.Result;
+
+                string isValid = data.result[0].valid;
+
+                //string isValid = "yes";
+
+                if (isValid == "TRUE")
+                {
+                    double totalDiscount = 0;
+                    double grandTotalValue = Double.Parse(grandTotalPrice.Text.Substring(1));
+
+                    //discountPrice.Text = "- $5";
+
+                    //add back the previous discount before calculating for the new discount
+                    if (discountPrice.Text != null && discountPrice.Text != "")
+                    {
+                        double codeValue = Double.Parse(discountPrice.Text.Substring(discountPrice.Text.IndexOf('$') + 1));
+                        grandTotalValue = Double.Parse(grandTotalPrice.Text.Substring(1));
+                        grandTotalValue += codeValue;
+                    }
+
+                    totalDiscount += Math.Round(grandTotalValue * data.result[0].discount_percent, 2);
+                    totalDiscount += data.result[0].discount_amount;
+                    totalDiscount += data.result[0].discount_shipping;
+
+                    discountPrice.Text = "- $" + totalDiscount.ToString();
+                    grandTotalValue -= totalDiscount;
+
+                    string grandTotalString = grandTotalValue.ToString();
 
 
-                if (grandTotalString.Contains(".") == false)
-                    grandTotalString = grandTotalString + ".00";
-                else if (grandTotalString.Substring(grandTotalString.IndexOf(".") + 1).Length == 1)
-                    grandTotalString = grandTotalString + "0";
-                else if (grandTotalString.Substring(grandTotalString.IndexOf(".") + 1).Length == 0)
-                    grandTotalString = grandTotalString + "00";
-                Preferences.Set("price", grandTotalString);
+                    if (grandTotalString.Contains(".") == false)
+                        grandTotalString = grandTotalString + ".00";
+                    else if (grandTotalString.Substring(grandTotalString.IndexOf(".") + 1).Length == 1)
+                        grandTotalString = grandTotalString + "0";
+                    else if (grandTotalString.Substring(grandTotalString.IndexOf(".") + 1).Length == 0)
+                        grandTotalString = grandTotalString + "00";
+                    Preferences.Set("price", grandTotalString);
 
-                grandTotalPrice.Text = "$" + grandTotalString;
+                    grandTotalPrice.Text = "$" + grandTotalString;
+                }
             }
             else
             {
-                double codeValue = Double.Parse(discountPrice.Text.Substring(discountPrice.Text.IndexOf('$') + 1));
-                double grandTotalValue = Double.Parse(grandTotalPrice.Text.Substring(1));
-                grandTotalValue += codeValue;
-                string grandTotalString = grandTotalValue.ToString();
+                if (discountPrice.Text != null && discountPrice.Text != "")
+                {
+                    double codeValue = Double.Parse(discountPrice.Text.Substring(discountPrice.Text.IndexOf('$') + 1));
+                    double grandTotalValue = Double.Parse(grandTotalPrice.Text.Substring(1));
+                    grandTotalValue += codeValue;
+
+                    string grandTotalString = grandTotalValue.ToString();
 
 
-                if (grandTotalString.Contains(".") == false)
-                    grandTotalString = grandTotalString + ".00";
-                else if (grandTotalString.Substring(grandTotalString.IndexOf(".") + 1).Length == 1)
-                    grandTotalString = grandTotalString + "0";
-                else if (grandTotalString.Substring(grandTotalString.IndexOf(".") + 1).Length == 0)
-                    grandTotalString = grandTotalString + "00";
-                Preferences.Set("price", grandTotalString);
+                    if (grandTotalString.Contains(".") == false)
+                        grandTotalString = grandTotalString + ".00";
+                    else if (grandTotalString.Substring(grandTotalString.IndexOf(".") + 1).Length == 1)
+                        grandTotalString = grandTotalString + "0";
+                    else if (grandTotalString.Substring(grandTotalString.IndexOf(".") + 1).Length == 0)
+                        grandTotalString = grandTotalString + "00";
+                    Preferences.Set("price", grandTotalString);
 
-                grandTotalPrice.Text = "$" + grandTotalString;
+                    grandTotalPrice.Text = "$" + grandTotalString;
 
-                DisplayAlert("Error", "invalid ambassador code", "OK");
-                discountPrice.Text = "$0";
+                    DisplayAlert("Error", "invalid ambassador code", "OK");
+                    discountPrice.Text = "$0";
+                }
             }
 
         }
@@ -795,51 +869,63 @@ namespace MTYD.ViewModel
 
         public void fillEntries()
         {
+            if ((string)Application.Current.Properties["platform"] == "GUEST")
+            {
+                cardHolderEmail.Text = emailEntry.Text;
+                cardHolderName.Text = FNameEntry.Text + " " + LNameEntry.Text;
+                cardHolderAddress.Text = AddressEntry.Text;
+                if (AptEntry.Text != "" && AptEntry.Text != null)
+                    cardHolderUnit.Text = AptEntry.Text;
+                cardCity.Text = CityEntry.Text;
+                cardState.Text = StateEntry.Text;
+                cardZip.Text = ZipEntry.Text;
+            }
+            else
+            {
+                //Debug.WriteLine("billing email: " + Preferences.Get(billingAddress, ""));
+                if (Preferences.Get(billingEmail, "") != "")
+                    cardHolderEmail.Text = Preferences.Get(billingEmail, "");
+                else cardHolderEmail.Text = emailEntry.Text;
 
-            //Debug.WriteLine("billing email: " + Preferences.Get(billingAddress, ""));
-            if (Preferences.Get(billingEmail, "") != "")
-                cardHolderEmail.Text = Preferences.Get(billingEmail, "");
-            else cardHolderEmail.Text = emailEntry.Text;
+                if (Preferences.Get(billingName, "") != "")
+                    cardHolderName.Text = Preferences.Get(billingName, "");
+                else cardHolderName.Text = FNameEntry.Text + " " + LNameEntry.Text;
 
-            if (Preferences.Get(billingName, "") != "")
-                cardHolderName.Text = Preferences.Get(billingName, "");
-            else cardHolderName.Text = FNameEntry + " " + LNameEntry;
+                if (Preferences.Get(billingNum, "") != "")
+                    cardHolderNumber.Text = Preferences.Get(billingNum, "");
 
-            if (Preferences.Get(billingNum, "") != "")
-                cardHolderNumber.Text = Preferences.Get(billingNum, "");
+                if (Preferences.Get(billingMonth, "") != "")
+                    cardExpMonth.Text = Preferences.Get(billingMonth, "");
 
-            if (Preferences.Get(billingMonth, "") != "")
-                cardExpMonth.Text = Preferences.Get(billingMonth, "");
+                if (Preferences.Get(billingYear, "") != "")
+                    cardExpYear.Text = Preferences.Get(billingYear, "");
 
-            if (Preferences.Get(billingYear, "") != "")
-                cardExpYear.Text = Preferences.Get(billingYear, "");
+                if (Preferences.Get(billingCVV, "") != "")
+                    cardCVV.Text = Preferences.Get(billingCVV, "");
 
-            if (Preferences.Get(billingCVV, "") != "")
-                cardCVV.Text = Preferences.Get(billingCVV, "");
+                if (Preferences.Get(billingAddress, "") != "")
+                    cardHolderAddress.Text = Preferences.Get(billingAddress, "");
+                else cardHolderAddress.Text = AddressEntry.Text;
 
-            if (Preferences.Get(billingAddress, "") != "")
-                cardHolderAddress.Text = Preferences.Get(billingAddress, "");
-            else cardHolderAddress.Text = AddressEntry.Text;
+                if (Preferences.Get(billingUnit, "") != "")
+                    cardHolderUnit.Text = Preferences.Get(billingUnit, "");
+                else cardHolderUnit.Text = AptEntry.Text;
 
-            if (Preferences.Get(billingUnit, "") != "")
-                cardHolderUnit.Text = Preferences.Get(billingUnit, "");
-            else cardHolderUnit.Text = AptEntry.Text;
+                if (Preferences.Get(billingCity, "") != "")
+                    cardCity.Text = Preferences.Get(billingCity, "");
+                else cardCity.Text = CityEntry.Text;
 
-            if (Preferences.Get(billingCity, "") != "")
-                cardCity.Text = Preferences.Get(billingCity, "");
-            else cardCity.Text = CityEntry.Text;
+                if (Preferences.Get(billingState, "") != "")
+                    cardState.Text = Preferences.Get(billingState, "");
+                else cardState.Text = StateEntry.Text;
 
-            if (Preferences.Get(billingState, "") != "")
-                cardState.Text = Preferences.Get(billingState, "");
-            else cardState.Text = StateEntry.Text;
+                if (Preferences.Get(billingZip, "") != "")
+                    cardZip.Text = Preferences.Get(billingZip, "");
+                else cardZip.Text = ZipEntry.Text;
 
-            if (Preferences.Get(billingZip, "") != "")
-                cardZip.Text = Preferences.Get(billingZip, "");
-            else cardZip.Text = ZipEntry.Text;
-
-            if (Preferences.Get(purchaseDescription, "") != "")
-                cardDescription.Text = Preferences.Get(purchaseDescription, "");
-
+                if (Preferences.Get(purchaseDescription, "") != "")
+                    cardDescription.Text = Preferences.Get(purchaseDescription, "");
+            }
         }
 
         protected async Task setPaymentInfo()
@@ -995,32 +1081,34 @@ namespace MTYD.ViewModel
                         // Local Variables in Xamarin that can be used throughout the App
                         Application.Current.Properties["user_id"] = RDSData.result.customer_uid;
 
-                        string savedFirstName = "firstName" + (string)Application.Current.Properties["user_id"];
-                        string savedLastName = "lastName" + (string)Application.Current.Properties["user_id"];
-                        string savedEmail = "email" + (string)Application.Current.Properties["user_id"];
-                        string savedAdd = "address" + (string)Application.Current.Properties["user_id"];
-                        string savedApt = "apt" + (string)Application.Current.Properties["user_id"];
-                        string savedCity = "city" + (string)Application.Current.Properties["user_id"];
-                        string savedState = "state" + (string)Application.Current.Properties["user_id"];
-                        string savedZip = "zip" + (string)Application.Current.Properties["user_id"];
-                        string savedPhone = "phone" + (string)Application.Current.Properties["user_id"];
-                        string savedInstr = "instructions" + (string)Application.Current.Properties["user_id"];
+                        Debug.WriteLine("starting saving new preference strings");
+                        savedFirstName = "firstName" + RDSData.result.customer_uid;
+                        savedLastName = "lastName" + RDSData.result.customer_uid;
+                        savedEmail = "email" + RDSData.result.customer_uid;
+                        savedAdd = "address" + RDSData.result.customer_uid;
+                        savedApt = "apt" + RDSData.result.customer_uid;
+                        savedCity = "city" + RDSData.result.customer_uid;
+                        savedState = "state" + RDSData.result.customer_uid;
+                        savedZip = "zip" + RDSData.result.customer_uid;
+                        savedPhone = "phone" + RDSData.result.customer_uid;
+                        savedInstr = "instructions" + RDSData.result.customer_uid;
+                        billingEmail = "billing_email" + RDSData.result.customer_uid;
+                        billingName = "billing_name" + RDSData.result.customer_uid;
+                        billingNum = "billing_num" + RDSData.result.customer_uid;
+                        billingMonth = "billing_month" + RDSData.result.customer_uid;
+                        billingYear = "billing_year" + RDSData.result.customer_uid;
+                        billingCVV = "billing_cvv" + RDSData.result.customer_uid;
+                        billingAddress = "billing_address" + RDSData.result.customer_uid;
+                        billingUnit = "billing_unit" + RDSData.result.customer_uid;
+                        billingCity = "billing_city" + RDSData.result.customer_uid;
+                        billingState = "billing_state" + RDSData.result.customer_uid;
+                        billingZip = "billing_zip" + RDSData.result.customer_uid;
+                        purchaseDescription = "purchase_descr" + RDSData.result.customer_uid;
+                        Debug.WriteLine("end saving new preference strings");
 
-                        string billingEmail = "billing_email" + (string)Application.Current.Properties["user_id"];
-                        string billingName = "billing_name" + (string)Application.Current.Properties["user_id"];
-                        string billingNum = "billing_num" + (string)Application.Current.Properties["user_id"];
-                        string billingMonth = "billing_month" + (string)Application.Current.Properties["user_id"];
-                        string billingYear = "billing_year" + (string)Application.Current.Properties["user_id"];
-                        string billingCVV = "billing_cvv" + (string)Application.Current.Properties["user_id"];
-                        string billingAddress = "billing_address" + (string)Application.Current.Properties["user_id"];
-                        string billingUnit = "billing_unit" + (string)Application.Current.Properties["user_id"];
-                        string billingCity = "billing_city" + (string)Application.Current.Properties["user_id"];
-                        string billingState = "billing_state" + (string)Application.Current.Properties["user_id"];
-                        string billingZip = "billing_zip" + (string)Application.Current.Properties["user_id"];
-                        string purchaseDescription = "purchase_descr" + (string)Application.Current.Properties["user_id"];
 
-                        saveInfoDeliv();
                         EventArgs e = new EventArgs();
+                        saveInfoDeliv();
                         clickedSaveContact(proceedButton, e);
                     }
                 }
@@ -1058,12 +1146,29 @@ namespace MTYD.ViewModel
             // HttpResponseMessage response = await client.SendAsync(request);
             if (response.IsSuccessStatusCode)
             {
+                Preferences.Set("canChooseSelect", true);
                 Debug.WriteLine("RESPONSE TO CHECKOUT           : " + response.IsSuccessStatusCode);
                 Debug.WriteLine("CHECKOUT JSON OBJECT BEING SENT: " + newPaymentJSONString);
                 Debug.WriteLine("SetPaymentInfo Func ENDED!");
+                paymentSucceed = true;
             }
             else
             {
+                if (paymentMethod == "stripe")
+                {
+                    headingGrid.IsVisible = true;
+                    checkoutButton.IsVisible = true;
+                    backButton.IsVisible = true;
+                    mainStack.IsVisible = true;
+                    paymentStack.IsVisible = true;
+
+                    PaymentScreen.HeightRequest = 0;
+                    PaymentScreen.Margin = new Thickness(0, 0, 0, 0);
+                    StripeScreen.Height = 0;
+                    PayPalScreen.Height = 0;
+                    orangeBox.HeightRequest = deviceHeight / 2;
+                    await Navigation.PopAsync(false);
+                }
                 await DisplayAlert("Ooops", "Our system is down. We were able to process your request. We are currently working to solve this issue", "OK");
             }
         }
@@ -1098,7 +1203,7 @@ namespace MTYD.ViewModel
                         hashedPassword = hashedPassword2;
                     }
                 }
-
+                
                 //if (true)
                 //{
 
@@ -1118,8 +1223,10 @@ namespace MTYD.ViewModel
                 await setPaymentInfo();
                 Preferences.Set("canChooseSelect", true);
                 //await Navigation.PushAsync(new Select(passingZones, cust_firstName, cust_lastName, cust_email));
-                await Navigation.PushAsync(new CongratsPage(passingZones, cust_firstName, cust_lastName, cust_email));
-
+                if (paymentSucceed)
+                {
+                    await Navigation.PushAsync(new CongratsPage(passingZones, cust_firstName, cust_lastName, cust_email));
+                }
             }
             else
             {
@@ -1133,6 +1240,7 @@ namespace MTYD.ViewModel
         public async void CheckouWithStripe(System.Object sender, System.EventArgs e)
         {
             paymentMethod = "stripe";
+            fillEntries();
 
             var total = Preferences.Get("price", "00.00");
             if (total.Contains(".") == false)
@@ -1605,7 +1713,11 @@ namespace MTYD.ViewModel
                 await setPaymentInfo();
                 Preferences.Set("canChooseSelect", true);
                 //await Navigation.PushAsync(new Select(passingZones, cust_firstName, cust_lastName, cust_email));
-                await Navigation.PushAsync(new CongratsPage(passingZones, cust_firstName, cust_lastName, cust_email));
+                if (paymentSucceed)
+                {
+                    await Navigation.PushAsync(new CongratsPage(passingZones, cust_firstName, cust_lastName, cust_email));
+                }
+                
                 //done from checkout button clicked
                 //}
                 //else
@@ -1995,7 +2107,11 @@ namespace MTYD.ViewModel
                     await setPaymentInfo();
                     Preferences.Set("canChooseSelect", true);
                     //await Navigation.PushAsync(new Select(passingZones, cust_firstName, cust_lastName, cust_email));
-                    await Navigation.PushAsync(new CongratsPage(passingZones, cust_firstName, cust_lastName, cust_email));
+                    if (paymentSucceed)
+                    {
+                        await Navigation.PushAsync(new CongratsPage(passingZones, cust_firstName, cust_lastName, cust_email));
+                    }
+
                     //done from checkout button clicked
 
                     //Preferences.Set("price", "00.00");

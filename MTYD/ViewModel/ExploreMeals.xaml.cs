@@ -20,6 +20,9 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Xml.Linq;
 
+//auto-complete
+//using DurianCode.PlacesSearchBar;
+
 namespace MTYD.ViewModel
 {
     public partial class ExploreMeals : ContentPage
@@ -74,8 +77,11 @@ namespace MTYD.ViewModel
         bool withinZones = false;
         WebClient client4 = new WebClient();
         Zones[] passingZones;
-
         WebClient client = new WebClient();
+
+        //auto-complete API key
+        //string ApiKey = GooglePlacesApiKey = Keys.ApiKey;
+
 
         public ExploreMeals()
         {
@@ -83,7 +89,6 @@ namespace MTYD.ViewModel
             dateDict = new Dictionary<string, Date>();
             InitializeComponent();
 
-            
             //===========================================
             Debug.WriteLine("bar initialization done");
 
@@ -128,6 +133,15 @@ namespace MTYD.ViewModel
             //Debug.WriteLine("height:" + weekOneMenu.Height.ToString());
             //fillGrid();
 
+            /* auto-complete
+            search_bar.ApiKey = GooglePlacesApiKey;
+            search_bar.Type = PlaceType.Address;
+            search_bar.Components = new Components("country:au|country:nz"); // Restrict results to Australia and New Zealand
+            search_bar.PlacesRetrieved += Search_Bar_PlacesRetrieved;
+            search_bar.TextChanged += Search_Bar_TextChanged;
+            search_bar.MinimumSearchText = 2;
+            results_list.ItemSelected += Results_List_ItemSelected;
+            */
 
             Debug.WriteLine("finished with constructor");
         }
@@ -143,10 +157,10 @@ namespace MTYD.ViewModel
 
                 //weekOneAddOns.HeightRequest = height / 6.8;
 
-                fade.Margin = new Thickness(0, -height / 3, 0, 0);
+                fade.Margin = new Thickness(0, -height / 3, 0, -height / 3);
 
                 xButton.FontSize = width / 37;
-                addressGrid.Margin = new Thickness(width / 30, height / 1.5, width / 30, 0);
+                addressGrid.Margin = new Thickness(width / 30, height / 8, width / 30, 0);
                 addressGrid.HeightRequest = height / 4.5;
                 addressGrid.WidthRequest = width / 2.3;
 
@@ -1308,6 +1322,50 @@ namespace MTYD.ViewModel
 
             }
         }
+
+        /* auto-complete functions
+        void Search_Bar_PlacesRetrieved(object sender, AutoCompleteResult result)
+        {
+            results_list.ItemsSource = result.AutoCompletePlaces;
+            spinner.IsRunning = false;
+            spinner.IsVisible = false;
+
+            if (result.AutoCompletePlaces != null && result.AutoCompletePlaces.Count > 0)
+                results_list.IsVisible = true;
+        }
+
+        void Search_Bar_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(e.NewTextValue))
+            {
+                results_list.IsVisible = false;
+                spinner.IsVisible = true;
+                spinner.IsRunning = true;
+            }
+            else
+            {
+                results_list.IsVisible = true;
+                spinner.IsRunning = false;
+                spinner.IsVisible = false;
+            }
+        }
+
+        async void Results_List_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+        {
+            if (e.SelectedItem == null)
+                return;
+
+            var prediction = (AutoCompletePrediction)e.SelectedItem;
+            results_list.SelectedItem = null;
+
+            var place = await Places.GetPlace(prediction.Place_ID, GooglePlacesApiKey);
+
+            if (place != null)
+                await DisplayAlert(
+                    place.Name, string.Format("Lat: {0}\nLon: {1}", place.Latitude, place.Longitude), "OK");
+        }
+        */
+
 
         //private void resetBttn_Clicked(object sender, EventArgs e)
         //{

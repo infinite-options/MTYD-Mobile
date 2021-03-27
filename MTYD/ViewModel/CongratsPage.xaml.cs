@@ -59,7 +59,7 @@ namespace MTYD.ViewModel
 
             InitializeSignUpPost();
 
-            fullAddress += Preferences.Get(savedAdd, "");
+            fullAddress = Preferences.Get(savedAdd, "");
             fullAddress += ", ";
             fullAddress += Preferences.Get(savedApt, "");
             if (fullAddress.Substring(fullAddress.Length - 2) != ", ")
@@ -99,6 +99,11 @@ namespace MTYD.ViewModel
 
         private void checkPlatform(double height, double width)
         {
+            if ((string)Application.Current.Properties["platform"] == "GUEST")
+            {
+                createAccount.IsVisible = true;
+            }
+
             Xamarin.Forms.NavigationPage.SetHasNavigationBar(this, false);
             orangeBox.HeightRequest = height / 2;
             orangeBox.Margin = new Thickness(0, -height / 2.2, 0, 0);
@@ -157,6 +162,12 @@ namespace MTYD.ViewModel
                 finishButton.WidthRequest = width / 5;
                 finishButton.HeightRequest = width / 20;
                 finishButton.CornerRadius = (int)(width / 40);
+
+                divider.Margin = new Thickness(width / 15, height / 80, width / 15, height / 100);
+
+                //skipButton.WidthRequest = width / 2;
+                skipButton.HeightRequest = width / 20;
+                skipButton.CornerRadius = (int)(width / 40);
             }
             else //Android
             {
@@ -187,6 +198,12 @@ namespace MTYD.ViewModel
                 finishButton.WidthRequest = width / 5;
                 finishButton.HeightRequest = width / 20;
                 finishButton.CornerRadius = (int)(width / 40);
+
+                divider.Margin = new Thickness(width / 15, height / 80, width / 15, height / 120);
+
+                skipButton.WidthRequest = width / 2;
+                skipButton.HeightRequest = width / 20;
+                skipButton.CornerRadius = (int)(width / 40);
             }
         }
 
@@ -241,117 +258,157 @@ namespace MTYD.ViewModel
             directSignUp.social_id = "NULL";
         }
 
+        public async void skipClicked(object sender, EventArgs e)
+        {
+            Zones[] passZone = new Zones[0];
+            await DisplayAlert("Success", "Your assigned password is \n" + Preferences.Get(savedFirstName, "") + Preferences.Get(savedAdd, "").Substring(0, Preferences.Get(savedAdd, "").IndexOf(" ")), "continue");
+            await Navigation.PushAsync(new Select(passZone, cust_firstName, cust_lastName, cust_email));
+        }
+
         public async void finishClicked(object sender, EventArgs e)
         {
-            if (passwordEntry.Text != null)
+            if (passwordEntry.Text != null && passwordEntry.Text == confirmPasswordEntry.Text)
             {
-                directSignUp.password = passwordEntry.Text.Trim();
+                PasswordInfo passwordUpdate = new PasswordInfo();
+                passwordUpdate.customer_uid = (string)Application.Current.Properties["user_id"];
+                //passwordUpdate.old_password = Preferences.Get("hashed_password", "");
+                passwordUpdate.old_password = Preferences.Get(savedFirstName, "") + Preferences.Get(savedAdd, "").Substring(0, Preferences.Get(savedAdd, "").IndexOf(" "));
+                //passwordUpdate.new_password = hashedPassword;
+                passwordUpdate.new_password = passwordEntry.Text;
+                var newPaymentJSONString = JsonConvert.SerializeObject(passwordUpdate);
+                // Console.WriteLine("newPaymentJSONString" + newPaymentJSONString);
+                var content2 = new StringContent(newPaymentJSONString, Encoding.UTF8, "application/json");
+                Console.WriteLine("Content: " + content2);
+                var client = new HttpClient();
+                var response = client.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_password", content2);
+                await DisplayAlert("Success", "password updated!", "continue");
+                Console.WriteLine("RESPONSE TO CHECKOUT   " + response.Result);
+                Console.WriteLine("CHECKOUT JSON OBJECT BEING SENT: " + newPaymentJSONString);
+                Console.WriteLine("clickedSave Func ENDED!");
+                Zones[] passZone = new Zones[0];
+                await Navigation.PushAsync(new Select(passZone, cust_firstName, cust_lastName, cust_email));
             }
-            else
-            {
-                await DisplayAlert("Error", "Please enter a password", "OK");
-                return;
-            }
-            if (confirmPasswordEntry.Text != null)
-            {
-                string password = confirmPasswordEntry.Text.Trim();
-                if (!directSignUp.password.Equals(password))
-                {
-                    await DisplayAlert("Error", "Your password doesn't match", "OK");
-                    return;
-                }
-            }
-            else
+            else if (passwordEntry.Text != null && passwordEntry.Text != confirmPasswordEntry.Text)
             {
                 await DisplayAlert("Error", "Your password doesn't match", "OK");
                 return;
             }
-
-            // Setting request for USPS API
-            XDocument requestDoc = new XDocument(
-                new XElement("AddressValidateRequest",
-                new XAttribute("USERID", "400INFIN1745"),
-                new XElement("Revision", "1"),
-                new XElement("Address",
-                new XAttribute("ID", "0"),
-                new XElement("Address1", directSignUp.address),
-                new XElement("Address2", directSignUp.unit),
-                new XElement("City", directSignUp.city),
-                new XElement("State", directSignUp.state),
-                new XElement("Zip5", directSignUp.zip_code),
-                new XElement("Zip4", "")
-                     )
-                 )
-             );
-            var url = "http://production.shippingapis.com/ShippingAPI.dll?API=Verify&XML=" + requestDoc;
-            Console.WriteLine(url);
-            var client = new WebClient();
-            var response = client.DownloadString(url);
-
-            var xdoc = XDocument.Parse(response.ToString());
-            Console.WriteLine(xdoc);
-            string latitude = "0";
-            string longitude = "0";
-            foreach (XElement element in xdoc.Descendants("Address"))
-            {
-                if (GetXMLElement(element, "Error").Equals(""))
-                {
-                    if (GetXMLElement(element, "DPVConfirmation").Equals("Y") && GetXMLElement(element, "Zip5").Equals(directSignUp.zip_code) && GetXMLElement(element, "City").Equals(directSignUp.city.ToUpper())) // Best case
-                    {
-                        // Get longitude and latitide because we can make a deliver here. Move on to next page.
-                        // Console.WriteLine("The address you entered is valid and deliverable by USPS. We are going to get its latitude & longitude");
-                        //GetAddressLatitudeLongitude();
-                        Geocoder geoCoder = new Geocoder();
-
-                        IEnumerable<Position> approximateLocations = await geoCoder.GetPositionsForAddressAsync(directSignUp.address + "," + directSignUp.city + "," + directSignUp.state);
-                        Position position = approximateLocations.FirstOrDefault();
-
-                        latitude = $"{position.Latitude}";
-                        longitude = $"{position.Longitude}";
-
-                        directSignUp.latitude = latitude;
-                        directSignUp.longitude = longitude;
-                        //map.MapType = MapType.Street;
-                        //var mapSpan = new MapSpan(position, 0.001, 0.001);
-
-                        //Pin address = new Pin();
-                        //address.Label = "Delivery Address";
-                        //address.Type = PinType.SearchResult;
-                        //address.Position = position;
-
-                        //map.MoveToRegion(mapSpan);
-                        //map.Pins.Add(address);
-
-                        break;
-                    }
-                    else if (GetXMLElement(element, "DPVConfirmation").Equals("D"))
-                    {
-                        //await DisplayAlert("Alert!", "Address is missing information like 'Apartment number'.", "Ok");
-                        //return;
-                    }
-                    else
-                    {
-                        //await DisplayAlert("Alert!", "Seems like your address is invalid.", "Ok");
-                        //return;
-                    }
-                }
-                else
-                {   // USPS sents an error saying address not found in there records. In other words, this address is not valid because it does not exits.
-                    //Console.WriteLine("Seems like your address is invalid.");
-                    //await DisplayAlert("Alert!", "Error from USPS. The address you entered was not found.", "Ok");
-                    //return;
-                }
-            }
-            if (latitude == "0" || longitude == "0")
-            {
-                await DisplayAlert("We couldn't find your address", "Please check for errors.", "Ok");
-            }
             else
             {
-                await Application.Current.SavePropertiesAsync();
-                await tagUser(Preferences.Get(savedEmail, ""), Preferences.Get(savedZip, ""));
-                SignUpNewUser(sender, e);
+                await DisplayAlert("Error", "Please enter a password or click SKIP.", "OK");
+                return;
+                //Zones[] passZone = new Zones[0];
+                //await Navigation.PushAsync(new Select(passZone, cust_firstName, cust_lastName, cust_email));
             }
+            //if (passwordEntry.Text != null)
+            //{
+            //    directSignUp.password = passwordEntry.Text.Trim();
+            //}
+            //else
+            //{
+            //    await DisplayAlert("Error", "Please enter a password", "OK");
+            //    return;
+            //}
+            //if (confirmPasswordEntry.Text != null)
+            //{
+            //    string password = confirmPasswordEntry.Text.Trim();
+            //    if (!directSignUp.password.Equals(password))
+            //    {
+            //        await DisplayAlert("Error", "Your password doesn't match", "OK");
+            //        return;
+            //    }
+            //}
+            //else
+            //{
+            //    await DisplayAlert("Error", "Your password doesn't match", "OK");
+            //    return;
+            //}
+
+            //// Setting request for USPS API
+            //XDocument requestDoc = new XDocument(
+            //    new XElement("AddressValidateRequest",
+            //    new XAttribute("USERID", "400INFIN1745"),
+            //    new XElement("Revision", "1"),
+            //    new XElement("Address",
+            //    new XAttribute("ID", "0"),
+            //    new XElement("Address1", directSignUp.address),
+            //    new XElement("Address2", directSignUp.unit),
+            //    new XElement("City", directSignUp.city),
+            //    new XElement("State", directSignUp.state),
+            //    new XElement("Zip5", directSignUp.zip_code),
+            //    new XElement("Zip4", "")
+            //         )
+            //     )
+            // );
+            //var url = "http://production.shippingapis.com/ShippingAPI.dll?API=Verify&XML=" + requestDoc;
+            //Console.WriteLine(url);
+            //var client = new WebClient();
+            //var response = client.DownloadString(url);
+
+            //var xdoc = XDocument.Parse(response.ToString());
+            //Console.WriteLine(xdoc);
+            //string latitude = "0";
+            //string longitude = "0";
+            //foreach (XElement element in xdoc.Descendants("Address"))
+            //{
+            //    if (GetXMLElement(element, "Error").Equals(""))
+            //    {
+            //        if (GetXMLElement(element, "DPVConfirmation").Equals("Y") && GetXMLElement(element, "Zip5").Equals(directSignUp.zip_code) && GetXMLElement(element, "City").Equals(directSignUp.city.ToUpper())) // Best case
+            //        {
+            //            // Get longitude and latitide because we can make a deliver here. Move on to next page.
+            //            // Console.WriteLine("The address you entered is valid and deliverable by USPS. We are going to get its latitude & longitude");
+            //            //GetAddressLatitudeLongitude();
+            //            Geocoder geoCoder = new Geocoder();
+
+            //            IEnumerable<Position> approximateLocations = await geoCoder.GetPositionsForAddressAsync(directSignUp.address + "," + directSignUp.city + "," + directSignUp.state);
+            //            Position position = approximateLocations.FirstOrDefault();
+
+            //            latitude = $"{position.Latitude}";
+            //            longitude = $"{position.Longitude}";
+
+            //            directSignUp.latitude = latitude;
+            //            directSignUp.longitude = longitude;
+            //            //map.MapType = MapType.Street;
+            //            //var mapSpan = new MapSpan(position, 0.001, 0.001);
+
+            //            //Pin address = new Pin();
+            //            //address.Label = "Delivery Address";
+            //            //address.Type = PinType.SearchResult;
+            //            //address.Position = position;
+
+            //            //map.MoveToRegion(mapSpan);
+            //            //map.Pins.Add(address);
+
+            //            break;
+            //        }
+            //        else if (GetXMLElement(element, "DPVConfirmation").Equals("D"))
+            //        {
+            //            //await DisplayAlert("Alert!", "Address is missing information like 'Apartment number'.", "Ok");
+            //            //return;
+            //        }
+            //        else
+            //        {
+            //            //await DisplayAlert("Alert!", "Seems like your address is invalid.", "Ok");
+            //            //return;
+            //        }
+            //    }
+            //    else
+            //    {   // USPS sents an error saying address not found in there records. In other words, this address is not valid because it does not exits.
+            //        //Console.WriteLine("Seems like your address is invalid.");
+            //        //await DisplayAlert("Alert!", "Error from USPS. The address you entered was not found.", "Ok");
+            //        //return;
+            //    }
+            //}
+            //if (latitude == "0" || longitude == "0")
+            //{
+            //    await DisplayAlert("We couldn't find your address", "Please check for errors.", "Ok");
+            //}
+            //else
+            //{
+            //    //await Application.Current.SavePropertiesAsync();
+            //    //await tagUser(Preferences.Get(savedEmail, ""), Preferences.Get(savedZip, ""));
+            //    //SignUpNewUser(sender, e);
+            //}
         }
 
         public static string GetXMLElement(XElement element, string name)

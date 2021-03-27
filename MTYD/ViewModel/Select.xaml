@@ -239,7 +239,8 @@
                                 <Frame Grid.Column="0" Padding="10" Grid.RowSpan="2" Grid.ColumnSpan="1">
                                     <Grid>
                                         <Grid.RowDefinitions>
-                                            <RowDefinition Height="140"/>
+                                            <RowDefinition Height="42"/>
+                                            <RowDefinition Height="98"/>
                                             <RowDefinition Height="25"/>
                                             <RowDefinition Height="15"/>
                                             <RowDefinition Height="35"/>
@@ -248,17 +249,21 @@
                                             <ColumnDefinition Width="1.25*"/>
                                         </Grid.ColumnDefinitions>
 
-                                        <Image 
+                                        <Image x:Name="mealImage"
                                                        Grid.ColumnSpan="2"
                                                        Source="{Binding MealImage}"
                                                        Aspect="AspectFill"
+                                                       Grid.RowSpan="2"
+                                                       IsVisible="{Binding SeeImage}"
                                                        />
 
                                         <!--<Frame Grid.Row="0" Grid.Column="0" ScaleY="0.5" ScaleX="0.5" VerticalOptions="Start" HorizontalOptions="Start">
                                                 <ImageButton x:Name="heart1" Source="heartoutline.png" Clicked="clickedFavorite" />
                                             </Frame>-->
 
-                                        <ImageButton x:Name="heart1" HorizontalOptions="Start" VerticalOptions="Start" Aspect="AspectFit" HeightRequest="25" WidthRequest="25" Source="heartoutline.png" Clicked="clickedFavorite" BackgroundColor="White" CornerRadius="0"/>
+                                        <ImageButton x:Name="heart1" HorizontalOptions="Start" VerticalOptions="Start" Margin="5,5,0,0" Aspect="AspectFit" Padding="5" HeightRequest="35" WidthRequest="35" Source="heartoutline.png" Clicked="clickedFavorite" BackgroundColor="White" CornerRadius="17"/>
+                                        <ImageButton Grid.Column="1" x:Name="info1" HorizontalOptions="End" VerticalOptions="Start" Margin="0,5,5,0" Padding="5" Aspect="AspectFit" HeightRequest="35" WidthRequest="35" Source="heartoutline.png" BackgroundColor="White" CornerRadius="17" Clicked="clickedInfo"/>
+
                                         <!--<Grid Margin="-29,-27,-29,-27" Grid.Row="0" Grid.ColumnSpan="2" >
                                             <Frame Grid.Row="0" Grid.Column="0" ScaleY="0.4" ScaleX="0.4" CornerRadius="40">
                                                 <ImageButton x:Name="heart1" Source="heartoutline.png" Clicked="clickedFavorite" />
@@ -280,22 +285,24 @@
                                                         VerticalTextAlignment="Center"
                                                        Text="{Binding MealName}"
                                                        FontAttributes="Bold" LineBreakMode="WordWrap" />-->
-                                        <Forms9Patch:Label  Grid.Column="0"
-                                                        Grid.Row="1"
+                                        <Forms9Patch:Label x:Name="mealName" Grid.Column="0"
+                                                        Grid.Row="2"
                                                         Grid.ColumnSpan="2"
                                                         FontSize="Small"
                                                         VerticalTextAlignment="Center"
                                                        Text="{Binding MealName}"
-                                                       FontAttributes="Bold" />
+                                                       FontAttributes="Bold"
+                                                       />
 
-                                        <Label Grid.Row="2"
+                                        <Label x:Name="mealCal" Grid.Row="3"
                                                        FontSize="Micro"
                                                        Grid.Column="0"
                                                        Grid.ColumnSpan="2"
                                                        Text="{Binding MealCalories}"
+                                                       
                                                        VerticalOptions="Start" />
 
-                                        <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,0,-5">
+                                        <Grid Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,0,-5">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="1*"/>
                                                 <ColumnDefinition Width="30"/>
@@ -307,6 +314,10 @@
                                             <Button x:Name="increase" Grid.Column="2" FontSize="30" TextColor="Black" HorizontalOptions="Fill" VerticalOptions="Fill" FontAttributes="Bold" Text="+" Clicked="clickIncrease" BackgroundColor="#FFBA00"/>
 
                                         </Grid>
+
+
+                                        <Forms9Patch:Label x:Name="mealDesc" Text="{Binding MealDesc}" HorizontalTextAlignment="Center" IsVisible="{Binding SeeDesc}" Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="White" TextColor="Black"/>
+
 
                                     </Grid>
                                 </Frame>

@@ -64,53 +64,77 @@
 
                     <BoxView HeightRequest="40"/>
 
-                    <Label x:Name="createAccountTitle" Text="CREATE AN ACCOUNT" TextColor="Black" FontAttributes="Bold"/>
-                    <Label x:Name="createAccountSub" Text="You are one step away from creating an account and saving time and money!"
-                           TextColor="Black"/>
-                    <Label x:Name="socialMediaTitle" Text="USE SOCIAL MEDIA (RECOMMENDED)" TextColor="Black" FontAttributes="Bold" Margin="0, 20, 0, 0"/>
+                    <StackLayout x:Name="createAccount" IsVisible="false">
+                        <Label x:Name="createAccountTitle" Text="CREATE AN ACCOUNT" TextColor="Black" FontAttributes="Bold"/>
+                        <Label x:Name="createAccountSub" Text="You are one step away from creating an account and saving time and money!"
+                               TextColor="Black"/>
+                        <Label x:Name="socialMediaTitle" Text="USE SOCIAL MEDIA (RECOMMENDED)" TextColor="Black" FontAttributes="Bold" Margin="0, 20, 0, 0"/>
 
-                    <Grid HorizontalOptions="Fill" ColumnSpacing="20" Margin="0, 10, 0, 20">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="1*"/>
-                        </Grid.ColumnDefinitions>
+                        <Grid HorizontalOptions="Fill" ColumnSpacing="20" Margin="0, 10, 0, 20">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
 
-                        <ImageButton x:Name="googleButton" Grid.Column="0"  Source="googleicon2.png" HorizontalOptions="End" Aspect="AspectFill"
-                                     BackgroundColor="#DD4B39" Clicked="googleSignupButtonClicked"/>
-                        <ImageButton x:Name="fbButton" Grid.Column="1" Source="fbicon.png" HorizontalOptions="Center" Aspect="AspectFill"
-                                     BackgroundColor="#6C9BE8" Clicked="fbSignupButtonClicked"/>
-                        <ImageButton x:Name="appleButton" Grid.Column="2" Source="appleicon2.png" HorizontalOptions="Start" Aspect="AspectFill"
-                                     BackgroundColor="#E4E4E4" Clicked="appleSignupButtonClicked"/>
-                    </Grid>
+                            <ImageButton x:Name="googleButton" Grid.Column="0"  Source="googleicon2.png" HorizontalOptions="End" Aspect="AspectFill"
+                                         BackgroundColor="#DD4B39" Clicked="googleSignupButtonClicked"/>
+                            <ImageButton x:Name="fbButton" Grid.Column="1" Source="fbicon.png" HorizontalOptions="Center" Aspect="AspectFill"
+                                         BackgroundColor="#6C9BE8" Clicked="fbSignupButtonClicked"/>
+                            <ImageButton x:Name="appleButton" Grid.Column="2" Source="appleicon2.png" HorizontalOptions="Start" Aspect="AspectFill"
+                                         BackgroundColor="#E4E4E4" Clicked="appleSignupButtonClicked"/>
+                        </Grid>
 
-                    <Label x:Name="orPasswordTitle" Text="OR CREATE PASSWORD" TextColor="Black" FontAttributes="Bold"/>
+                        <Label x:Name="orPasswordTitle" Text="OR CREATE PASSWORD" TextColor="Black" FontAttributes="Bold"/>
 
-                    <Grid HorizontalOptions="Fill">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="1*"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
+                        <Grid HorizontalOptions="Fill">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
 
-                        <Frame x:Name="passwordFrame" Grid.Row="0" HorizontalOptions="Center" BackgroundColor="#f5f5f5" BorderColor="Black" HasShadow="False"
-                               CornerRadius="10" Padding="10,5">
-                            <Entry x:Name="passwordEntry" Placeholder="PASSWORD" PlaceholderColor="Red" IsPassword="True" Keyboard="Text" TextColor="Black"/>
-                        </Frame>
+                            <Frame x:Name="passwordFrame" Grid.Row="0" HorizontalOptions="Center" BackgroundColor="#f5f5f5" BorderColor="Black" HasShadow="False"
+                                   CornerRadius="10" Padding="10,5">
+                                <Entry x:Name="passwordEntry" Placeholder="PASSWORD" PlaceholderColor="Red" IsPassword="True" Keyboard="Text" TextColor="Black"/>
+                            </Frame>
 
-                        <Frame x:Name="confirmPasswordFrame" Grid.Row="1" HorizontalOptions="Center" BackgroundColor="#f5f5f5" BorderColor="Black" HasShadow="False"
-                               CornerRadius="10" Padding="10,5">
-                            <Entry x:Name="confirmPasswordEntry" Placeholder="CONFIRM PASSWORD" PlaceholderColor="Red" IsPassword="True" Keyboard="Text" TextColor="Black"/>
-                        </Frame>
-                    </Grid>
+                            <Frame x:Name="confirmPasswordFrame" Grid.Row="1" HorizontalOptions="Center" BackgroundColor="#f5f5f5" BorderColor="Black" HasShadow="False"
+                                   CornerRadius="10" Padding="10,5">
+                                <Entry x:Name="confirmPasswordEntry" Placeholder="CONFIRM PASSWORD" PlaceholderColor="Red" IsPassword="True" Keyboard="Text" TextColor="Black"/>
+                            </Frame>
+                        </Grid>
 
-                    <Button x:Name="finishButton" BackgroundColor="#f0a13f" BorderColor="Black" BorderWidth="2" Margin="0,20"
-                            Text="FINISH" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Center" Clicked="finishClicked"/>
+                        <Button x:Name="finishButton" BackgroundColor="#f0a13f" BorderColor="Black" BorderWidth="2" Margin="0,10"
+                                Text="SIGN UP" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Center" Clicked="finishClicked"/>
+
+                        <!-- or divider -->
+                        <Grid x:Name="divider" VerticalOptions="Center" ColumnSpacing="15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="1*" />
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Column="1" Text="or" FontSize="15" TextColor="Black"
+                                   HorizontalTextAlignment="Center"/>
+
+                            <BoxView BackgroundColor="#C49F3F" HeightRequest="1" Grid.Column="0"
+                                     VerticalOptions="Center" HorizontalOptions="Fill"/>
+                            <BoxView BackgroundColor="#C49F3F" HeightRequest="1" Grid.Column="2"
+                                     VerticalOptions="Center" HorizontalOptions="Fill"/>
+
+                        </Grid>
+
+                        <Button x:Name="skipButton" BackgroundColor="#f0a13f" BorderColor="Black" BorderWidth="2" Margin="0, 10, 0, 20"
+                                Text="SKIP TO MEAL SELECTION" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Center" Clicked="skipClicked"/>
+
+                    </StackLayout>
                 </StackLayout>
             </StackLayout>
         </ScrollView>
