@@ -30,6 +30,7 @@ using MTYD.LogInClasses;
 using Newtonsoft.Json.Linq;
 using MTYD.Model;
 using System.Collections.ObjectModel;
+using MTYD.Interfaces;
 
 //testing
 namespace MTYD
@@ -64,6 +65,13 @@ namespace MTYD
             Console.WriteLine("Width = " + width.ToString());
             Console.WriteLine("Height = " + height.ToString());
             InitializeComponent();
+
+            string version = "";
+            string build = "";
+            version = DependencyService.Get<IAppVersionAndBuild>().GetVersionNumber();
+            build = DependencyService.Get<IAppVersionAndBuild>().GetBuildNumber();
+
+            appVersion.Text = "App version: " + version + ", App build: " + build;
 
             var cvItems = new List<string>
             {

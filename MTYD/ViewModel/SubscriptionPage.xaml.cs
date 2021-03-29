@@ -246,37 +246,6 @@ namespace MTYD.ViewModel
                 meals5.HeightRequest = height / 60;
                 meals5.CornerRadius = (int)(height / 120);
 
-                //delivery1.WidthRequest = width / 12;
-                //delivery1.HeightRequest = width / 10;
-                //delivery1.FontSize = width / 70;
-                //delivery2.WidthRequest = width / 12;
-                //delivery2.HeightRequest = width / 10;
-                //delivery2.FontSize = width / 70;
-                //delivery3.WidthRequest = width / 12;
-                //delivery3.HeightRequest = width / 10;
-                //delivery3.FontSize = width / 70;
-                //delivery4.WidthRequest = width / 12;
-                //delivery4.HeightRequest = width / 10;
-                //delivery4.FontSize = width / 70;
-                //delivery5.WidthRequest = width / 12;
-                //delivery5.HeightRequest = width / 10;
-                //delivery5.FontSize = width / 70;
-                //delivery6.WidthRequest = width / 12;
-                //delivery6.HeightRequest = width / 10;
-                //delivery6.FontSize = width / 70;
-                //delivery7.WidthRequest = width / 12;
-                //delivery7.HeightRequest = width / 10;
-                //delivery7.FontSize = width / 70;
-                //delivery8.WidthRequest = width / 12;
-                //delivery8.HeightRequest = width / 10;
-                //delivery8.FontSize = width / 70;
-                //delivery9.WidthRequest = width / 12;
-                //delivery9.HeightRequest = width / 10;
-                //delivery9.FontSize = width / 70;
-                //delivery10.WidthRequest = width / 12;
-                //delivery10.HeightRequest = width / 10;
-                //delivery10.FontSize = width / 70;
-
                 delivery1.WidthRequest = width / 13;
                 delivery1.HeightRequest = width / 11;
                 delivery1Text1.FontSize = width / 50;
@@ -336,6 +305,40 @@ namespace MTYD.ViewModel
             //common adjustments regardless of platform
         }
 
+        protected async Task GetDeliveryDates()
+        {
+            var request = new HttpRequestMessage();
+            request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/delivery_weekdays");
+            request.Method = HttpMethod.Get;
+            var client = new HttpClient();
+            HttpResponseMessage response = await client.SendAsync(request);
+
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                HttpContent content = response.Content;
+                var userString = await content.ReadAsStringAsync();
+                JObject dates_obj = JObject.Parse(userString);
+                HashSet<String> dates = new HashSet<String>();
+                foreach (var m in dates_obj["result"])
+                {
+                    Console.WriteLine(m["weekday(menu_date)"].ToString());
+                    dates.Add(m["weekday(menu_date)"].ToString());
+                }
+                String deliveryDatesText = "";
+                if (dates.Contains("0")) deliveryDatesText += "Monday, ";
+                if (dates.Contains("1")) deliveryDatesText += "Tuesday, ";
+                if (dates.Contains("2")) deliveryDatesText += "Wednesday, ";
+                if (dates.Contains("3")) deliveryDatesText += "Thursday, ";
+                if (dates.Contains("4")) deliveryDatesText += "Friday, ";
+                if (dates.Contains("5")) deliveryDatesText += "Saturday, ";
+                if (dates.Contains("6")) deliveryDatesText += "Sunday, ";
+                if (deliveryDatesText.Length != 0)
+                {
+                    deliveryDays2.Text = deliveryDatesText.Substring(0, deliveryDatesText.Length - 2);
+                }
+            }
+        }
+
         public SubscriptionPage(string firstName, string lastName, string email)
         {
             Console.WriteLine("subscription page");
@@ -361,6 +364,7 @@ namespace MTYD.ViewModel
             NavigationPage.SetHasNavigationBar(this, false);
 
             checkPlatform(height, width);
+            GetDeliveryDates();
             GetPlans();
             //Preferences.Set("freqSelected", "");
             pfp.Source = Preferences.Get("profilePicLink", "");
@@ -383,7 +387,7 @@ namespace MTYD.ViewModel
                 mealNum.Text = mealSelected.ToString();
                 deliveryNum.Text = deliverySelected.ToString();
                 discountPercentage.Text = ((int)discounts[deliverySelected - 1, 6 - mealSelected]).ToString() + "%";
-                total = 12 * deliverySelected * itemPrices[deliverySelected - 1, 6 - mealSelected] * (1 - discounts[deliverySelected - 1, 6 - mealSelected] / 100.0);
+                total = deliverySelected * itemPrices[deliverySelected - 1, 6 - mealSelected] * (1 - discounts[deliverySelected - 1, 6 - mealSelected] / 100.0);
                 TotalPrice.Text = "$" + total.ToString();
                 pricePerMeal.Text = "That's Less Than $" + Math.Ceiling(total / mealSelected / deliverySelected) + " per Meal!";
             }
@@ -405,7 +409,7 @@ namespace MTYD.ViewModel
                 mealNum.Text = mealSelected.ToString();
                 deliveryNum.Text = deliverySelected.ToString();
                 discountPercentage.Text = ((int)discounts[deliverySelected - 1, 6 - mealSelected]).ToString() + "%";
-                total = 12 * deliverySelected * itemPrices[deliverySelected - 1, 6 - mealSelected] * (1 - discounts[deliverySelected - 1, 6 - mealSelected] / 100.0);
+                total = deliverySelected * itemPrices[deliverySelected - 1, 6 - mealSelected] * (1 - discounts[deliverySelected - 1, 6 - mealSelected] / 100.0);
                 TotalPrice.Text = "$" + total.ToString();
                 pricePerMeal.Text = "That's Less Than $" + Math.Ceiling(total / mealSelected / deliverySelected) + " per Meal!";
             }
@@ -427,7 +431,7 @@ namespace MTYD.ViewModel
                 mealNum.Text = mealSelected.ToString();
                 deliveryNum.Text = deliverySelected.ToString();
                 discountPercentage.Text = ((int)discounts[deliverySelected - 1, 6 - mealSelected]).ToString() + "%";
-                total = 12 * deliverySelected * itemPrices[deliverySelected - 1, 6 - mealSelected] * (1 - discounts[deliverySelected - 1, 6 - mealSelected] / 100.0);
+                total = deliverySelected * itemPrices[deliverySelected - 1, 6 - mealSelected] * (1 - discounts[deliverySelected - 1, 6 - mealSelected] / 100.0);
                 TotalPrice.Text = "$" + total.ToString();
                 pricePerMeal.Text = "That's Less Than $" + Math.Ceiling(total / mealSelected / deliverySelected) + " per Meal!";
             }
@@ -449,7 +453,7 @@ namespace MTYD.ViewModel
                 mealNum.Text = mealSelected.ToString();
                 deliveryNum.Text = deliverySelected.ToString();
                 discountPercentage.Text = ((int)discounts[deliverySelected - 1, 6 - mealSelected]).ToString() + "%";
-                total = 12 * deliverySelected * itemPrices[deliverySelected - 1, 6 - mealSelected] * (1 - discounts[deliverySelected - 1, 6 - mealSelected] / 100.0);
+                total = deliverySelected * itemPrices[deliverySelected - 1, 6 - mealSelected] * (1 - discounts[deliverySelected - 1, 6 - mealSelected] / 100.0);
                 TotalPrice.Text = "$" + total.ToString();
                 pricePerMeal.Text = "That's Less Than $" + Math.Ceiling(total / mealSelected / deliverySelected) + " per Meal!";
             }
@@ -471,7 +475,7 @@ namespace MTYD.ViewModel
                 mealNum.Text = mealSelected.ToString();
                 deliveryNum.Text = deliverySelected.ToString();
                 discountPercentage.Text = ((int)discounts[deliverySelected - 1, 6 - mealSelected]).ToString() + "%";
-                total = 12 * deliverySelected * itemPrices[deliverySelected - 1, 6 - mealSelected] * (1 - discounts[deliverySelected - 1, 6 - mealSelected] / 100.0);
+                total = deliverySelected * itemPrices[deliverySelected - 1, 6 - mealSelected] * (1 - discounts[deliverySelected - 1, 6 - mealSelected] / 100.0);
                 TotalPrice.Text = "$" + total.ToString();
                 pricePerMeal.Text = "That's Less Than $" + Math.Ceiling(total / mealSelected / deliverySelected) + " per Meal!";
             }
@@ -564,7 +568,7 @@ namespace MTYD.ViewModel
                 mealNum.Text = mealSelected.ToString();
                 deliveryNum.Text = deliverySelected.ToString();
                 discountPercentage.Text = ((int)discounts[deliverySelected - 1, 6 - mealSelected]).ToString() + "%";
-                total = 12 * deliverySelected * itemPrices[deliverySelected - 1, 6 - mealSelected] * (1 - discounts[deliverySelected - 1, 6 - mealSelected] / 100.0);
+                total = deliverySelected * itemPrices[deliverySelected - 1, 6 - mealSelected] * (1 - discounts[deliverySelected - 1, 6 - mealSelected] / 100.0);
                 TotalPrice.Text = "$" + total.ToString();
                 pricePerMeal.Text = "That's Less Than $" + Math.Ceiling(total / mealSelected / deliverySelected) + " per Meal!";
             }

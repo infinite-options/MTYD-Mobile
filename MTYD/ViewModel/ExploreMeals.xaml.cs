@@ -19,6 +19,8 @@ using Xamarin.Essentials;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Xml.Linq;
+using System.Threading;
+using MTYD.Constants;
 
 //auto-complete
 //using DurianCode.PlacesSearchBar;
@@ -79,9 +81,11 @@ namespace MTYD.ViewModel
         Zones[] passingZones;
         WebClient client = new WebClient();
 
-        //auto-complete API key
-        //string ApiKey = GooglePlacesApiKey = Keys.ApiKey;
-
+        // address auto-complete
+        public const string GooglePlacesApiAutoCompletePath = "https://maps.googleapis.com/maps/api/place/autocomplete/json?key={0}&input={1}&components=country:us"; //Adding country:us limits results to us
+        private static HttpClient _httpClientInstance;
+        public static HttpClient HttpClientInstance => _httpClientInstance ?? (_httpClientInstance = new HttpClient());
+        private ObservableCollection<AddressAutocomplete> _addresses;
 
         public ExploreMeals()
         {
@@ -150,7 +154,6 @@ namespace MTYD.ViewModel
         {
             if (Device.RuntimePlatform == Device.iOS)
             {
-
                 //weekOneMenu.HeightRequest = height / 6.8;
 
                 addOns.FontSize = width / 32;
@@ -167,7 +170,7 @@ namespace MTYD.ViewModel
                 outerFrame.HeightRequest = height/ 4.5;
 
                 addressHeader.FontSize = width / 35;
-                street.HeightRequest = width / 20;
+                //street.HeightRequest = width / 20;
 
                 checkAddressButton.WidthRequest = width / 5;
                 checkAddressButton.HeightRequest = width / 20;
@@ -785,8 +788,6 @@ namespace MTYD.ViewModel
             }
         }
 
-
-
         /*private bool isAlreadySelected()
         {
             for (int i = 0; i < Meals1.Count; i++)
@@ -1323,49 +1324,99 @@ namespace MTYD.ViewModel
             }
         }
 
-        /* auto-complete functions
-        void Search_Bar_PlacesRetrieved(object sender, AutoCompleteResult result)
+        // Auto-complete
+        public ObservableCollection<AddressAutocomplete> Addresses
         {
-            results_list.ItemsSource = result.AutoCompletePlaces;
-            spinner.IsRunning = false;
-            spinner.IsVisible = false;
-
-            if (result.AutoCompletePlaces != null && result.AutoCompletePlaces.Count > 0)
-                results_list.IsVisible = true;
-        }
-
-        void Search_Bar_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (!string.IsNullOrEmpty(e.NewTextValue))
+            get => _addresses ?? (_addresses = new ObservableCollection<AddressAutocomplete>());
+            set
             {
-                results_list.IsVisible = false;
-                spinner.IsVisible = true;
-                spinner.IsRunning = true;
-            }
-            else
-            {
-                results_list.IsVisible = true;
-                spinner.IsRunning = false;
-                spinner.IsVisible = false;
+                if (_addresses != value)
+                {
+                    _addresses = value;
+                    OnPropertyChanged();
+                }
             }
         }
 
-        async void Results_List_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+        private string _addressText;
+        public string AddressText
         {
-            if (e.SelectedItem == null)
-                return;
-
-            var prediction = (AutoCompletePrediction)e.SelectedItem;
-            results_list.SelectedItem = null;
-
-            var place = await Places.GetPlace(prediction.Place_ID, GooglePlacesApiKey);
-
-            if (place != null)
-                await DisplayAlert(
-                    place.Name, string.Format("Lat: {0}\nLon: {1}", place.Latitude, place.Longitude), "OK");
+            get => _addressText;
+            set
+            {
+                if (_addressText != value)
+                {
+                    _addressText = value;
+                    OnPropertyChanged();
+                }
+            }
         }
-        */
 
+        public async Task GetPlacesPredictionsAsync()
+        {
+
+            // TODO: Add throttle logic, Google begins denying requests if too many are made in a short amount of time
+
+            CancellationToken cancellationToken = new CancellationTokenSource(TimeSpan.FromMinutes(2)).Token;
+
+            using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, string.Format(GooglePlacesApiAutoCompletePath, Constant.GooglePlacesApiKey, WebUtility.UrlEncode(_addressText))))
+            { //Be sure to UrlEncode the search term they enter
+
+                using (HttpResponseMessage message = await HttpClientInstance.SendAsync(request, HttpCompletionOption.ResponseContentRead, cancellationToken).ConfigureAwait(false))
+                {
+                    if (message.IsSuccessStatusCode)
+                    {
+                        string json = await message.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+                        PlacesLocationPredictions predictionList = await Task.Run(() => JsonConvert.DeserializeObject<PlacesLocationPredictions>(json)).ConfigureAwait(false);
+
+                        if (predictionList.Status == "OK")
+                        {
+
+                            Addresses.Clear();
+
+                            if (predictionList.Predictions.Count > 0)
+                            {
+                                int rows = 0;
+                                foreach (Prediction prediction in predictionList.Predictions)
+                                {
+                                    if (rows > 2) break; // show maximum 3 addresses
+                                    Addresses.Add(new AddressAutocomplete
+                                    {
+                                        Address = prediction.Description
+                                    });
+                                    rows++;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            throw new Exception(predictionList.Status);
+                        }
+                    }
+                }
+            }
+        }
+
+        private async void OnAddressChanged(object sender, EventArgs eventArgs)
+        {
+            if (!string.IsNullOrWhiteSpace(AddressText))
+            {
+                await GetPlacesPredictionsAsync();
+            }
+        }
+
+        private async void addressEntryFocused(object sender, EventArgs eventArgs)
+        {
+            addressList.IsVisible = true;
+        }
+
+        void addressSelected(System.Object sender, System.EventArgs e)
+        {
+            addressList.IsVisible = false;
+            
+            AddressEntry.Text = addressList.SelectedItem.ToString();
+        }
 
         //private void resetBttn_Clicked(object sender, EventArgs e)
         //{

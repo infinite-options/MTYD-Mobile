@@ -334,7 +334,7 @@
 
             <BoxView HeightRequest="3" Margin="5,2"/>
 
-            <Grid>
+            <!--<Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="4*"/>
                     <ColumnDefinition Width="1*"/>
@@ -345,7 +345,7 @@
 
             </Grid>
 
-            <BoxView HeightRequest="3" Margin="5,2" />
+            <BoxView HeightRequest="3" Margin="5,2" />-->
 
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -531,7 +531,7 @@
                         </Frame>
 
                         <Frame  Padding="10,5" Margin="0,0.5,1,0.5" BackgroundColor="#FFE5B4" HasShadow="False" CornerRadius="24">
-                             <Entry Placeholder="Card Number*" x:Name="cardHolderNumber" MaxLength="16" FontAttributes="Bold" FontSize="17"  BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4" HeightRequest="35"></Entry>
+                             <Entry Placeholder="Card Number*" x:Name="cardHolderNumber" Keyboard="Numeric" MaxLength="16" FontAttributes="Bold" FontSize="17"  BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4" HeightRequest="35"></Entry>
                         </Frame>
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -544,13 +544,13 @@
                             </Grid.RowDefinitions>
 
                             <Frame Grid.Row="0" Grid.Column="0" Padding="10,5" Margin="0,0.5,1,0.5" BackgroundColor="#FFE5B4" HasShadow="False" CornerRadius="24" HeightRequest="35">
-                                <Entry Placeholder="Exp MM*" x:Name="cardExpMonth" MaxLength="2" FontAttributes="Bold" FontSize="17"  BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"></Entry>
+                                <Entry Placeholder="Exp MM*" x:Name="cardExpMonth" MaxLength="2" Keyboard="Numeric" FontAttributes="Bold" FontSize="17"  BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"></Entry>
                             </Frame>
                             <Frame Grid.Row="0" Grid.Column="1" Padding="10,5" Margin="0,0.5,1,0.5" BackgroundColor="#FFE5B4" HasShadow="False" CornerRadius="24" HeightRequest="35">
-                                <Entry Placeholder="Exp YY*" x:Name="cardExpYear" MaxLength="2" FontAttributes="Bold" FontSize="17"  BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"></Entry>
+                                <Entry Placeholder="Exp YY*" x:Name="cardExpYear" MaxLength="2" Keyboard="Numeric" FontAttributes="Bold" FontSize="17"  BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"></Entry>
                             </Frame>
                             <Frame Grid.Row="0" Grid.Column="2" Padding="10,5" Margin="0,0.5,1,0.5" BackgroundColor="#FFE5B4" HasShadow="False" CornerRadius="24" HeightRequest="35">
-                                <Entry Placeholder="CVV*" x:Name="cardCVV" MaxLength="3" FontAttributes="Bold" FontSize="17"  BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"></Entry>
+                                <Entry Placeholder="CVV*" x:Name="cardCVV" MaxLength="3" Keyboard="Numeric" FontAttributes="Bold" FontSize="17"  BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"></Entry>
                             </Frame>
 
                         </Grid>

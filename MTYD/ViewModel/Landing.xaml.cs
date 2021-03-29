@@ -5,6 +5,7 @@ using Xamarin.Forms;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
+using MTYD.Interfaces;
 
 namespace MTYD.ViewModel
 {
@@ -20,6 +21,13 @@ namespace MTYD.ViewModel
             cust_lastName = lastName;
             cust_email = email;
             InitializeComponent();
+
+            string version = "";
+            string build = "";
+            version = DependencyService.Get<IAppVersionAndBuild>().GetVersionNumber();
+            build = DependencyService.Get<IAppVersionAndBuild>().GetBuildNumber();
+
+            appVersion.Text = "App version: " + version + ", App build: " + build;
 
             var width = DeviceDisplay.MainDisplayInfo.Width;
             var height = DeviceDisplay.MainDisplayInfo.Height;

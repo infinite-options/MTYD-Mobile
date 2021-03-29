@@ -100,6 +100,7 @@ namespace MTYD.ViewModel
         int availDateIndex;
         Date selectedDate;
         Dictionary<string, Date> dateDict;
+        Dictionary<string, bool> favDict;
 
         WebClient client = new WebClient();
 
@@ -107,6 +108,7 @@ namespace MTYD.ViewModel
         {
             availableDates = new List<Date>();
             dateDict = new Dictionary<string, Date>();
+            favDict = new Dictionary<string, bool>();
             passedZones = zones;
             InitializeComponent();
 
@@ -124,6 +126,7 @@ namespace MTYD.ViewModel
             Debug.WriteLine("bar initialization done");
 
             Preferences.Set("origMax", 0);
+            getFavorites();
             GetMealPlans();
             //Task.Delay(1000).Wait();
             setDates();
@@ -251,6 +254,40 @@ namespace MTYD.ViewModel
         //    var obj = JsonConvert.DeserializeObject<ZonesDto>(content);
         //}
 
+        async void getFavorites()
+        {
+            GetFavPost getFav = new GetFavPost();
+            getFav.customer_uid = (string)Application.Current.Properties["user_id"];
+            var getFavSerializedObj = JsonConvert.SerializeObject(getFav);
+            var content4 = new StringContent(getFavSerializedObj, Encoding.UTF8, "application/json");
+            var client3 = new System.Net.Http.HttpClient();
+            var response3 = await client3.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/favourite_food/get", content4);
+            var message = await response3.Content.ReadAsStringAsync();
+            Debug.WriteLine("RESPONSE TO getfavs   " + response3.ToString());
+            Debug.WriteLine("json object sent:  " + getFavSerializedObj.ToString());
+            Debug.WriteLine("message received:  " + message.ToString());
+
+            //if there are any favorites stored
+            if (message.Contains("840") == true)
+            {
+                var data = JsonConvert.DeserializeObject<FavsDto>(message);
+                Debug.WriteLine("RESPONSE TO getfavs   " + response3.ToString());
+                Debug.WriteLine("favorites: " + data.result[0].favorites);
+
+                string favoritesList = data.result[0].favorites;
+
+                while (favoritesList.Contains(",") != false)
+                {
+                    Debug.WriteLine("favorite: " + favoritesList.Substring(0, favoritesList.IndexOf(",")));
+                    favDict.Add(favoritesList.Substring(0, favoritesList.IndexOf(",")), true);
+                    favoritesList = favoritesList.Substring(favoritesList.IndexOf(",") + 1);
+                }
+
+                Debug.WriteLine("favorite: " + favoritesList);
+                favDict.Add(favoritesList, true);
+
+            }
+        }
 
         async void clickedPfp(System.Object sender, System.EventArgs e)
         {
@@ -331,6 +368,17 @@ namespace MTYD.ViewModel
                             mealQty = 0;
                         }
 
+                        Debug.WriteLine("itemuid: " + obj.Result[i].MealUid + " and meal name: " + obj.Result[i].MealName);
+
+                        //b.Source = "filledHeart.png";
+                        //b.Source = "emptyHeart.png";
+
+                        string source;
+                        if (favDict.ContainsKey(obj.Result[i].MealUid) == true)
+                            source = "filledHeart.png";
+                        else source = "emptyHeart.png";
+
+
                         Meals1.Add(new MealInfo
                         {
                             MealName = obj.Result[i].MealName,
@@ -341,7 +389,8 @@ namespace MTYD.ViewModel
                             ItemUid = obj.Result[i].MealUid,
                             MealDesc = obj.Result[i].MealDesc,
                             SeeDesc = false,
-                            SeeImage = true
+                            SeeImage = true,
+                            HeartSource = source
                         });
 
                         weekOneMenu.ItemsSource = Meals1;
@@ -389,6 +438,11 @@ namespace MTYD.ViewModel
                             mealQty = 0;
                         }
 
+                        string source;
+                        if (favDict.ContainsKey(obj.Result[i].MealUid) == true)
+                            source = "filledHeart.png";
+                        else source = "emptyHeart.png";
+
                         Meals2.Add(new MealInfo
                         {
                             MealName = obj.Result[i].MealName,
@@ -399,7 +453,8 @@ namespace MTYD.ViewModel
                             ItemUid = obj.Result[i].MealUid,
                             MealDesc = obj.Result[i].MealDesc,
                             SeeDesc = false,
-                            SeeImage = true
+                            SeeImage = true,
+                            HeartSource = source
                         });
 
                         weekOneAddOns.ItemsSource = Meals2;
@@ -1186,13 +1241,113 @@ namespace MTYD.ViewModel
         private async void clickedFavorite(object sender, EventArgs e)
         {
             ImageButton b = (ImageButton)sender;
-            if (b.Source.ToString().Equals("File: heartoutline.png"))
+            MealInfo ms = b.BindingContext as MealInfo;
+            //ms.MealQuantity++;
+
+            //favoriting
+            if (b.Source.ToString().Equals("File: emptyHeart.png"))
             {
-                b.Source = "heart.png";
+                favDict.Add(ms.ItemUid, true);
+                UpdateFavPost updateFav = new UpdateFavPost();
+                updateFav.customer_uid = (string)Application.Current.Properties["user_id"];
+                updateFav.favorite = ms.ItemUid;
+                var updateFavSerializedObj = JsonConvert.SerializeObject(updateFav);
+                var content4 = new StringContent(updateFavSerializedObj, Encoding.UTF8, "application/json");
+                var client3 = new System.Net.Http.HttpClient();
+                //post endpoint passes in 1 favorite and appends it to the end of the list of favorites for the user
+                var response3 = await client3.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/favourite_food/post", content4);
+                var message = await response3.Content.ReadAsStringAsync();
+                Debug.WriteLine("RESPONSE TO updatefavs   " + response3.ToString());
+                Debug.WriteLine("json object sent:  " + updateFavSerializedObj.ToString());
+                Debug.WriteLine("message received:  " + message.ToString());
+                //b.Source = "heart.png";
+                ms.HeartSource = "filledHeart.png";
+
             }
+            //unfavoriting
             else
             {
-                b.Source = "heartoutline.png";
+                favDict.Remove(ms.ItemUid);
+
+                //if there are no favorites to be saved, send in a blank list of favorites
+                if (favDict.Count == 0)
+                {
+                    UpdateFavPost updateFav = new UpdateFavPost();
+                    updateFav.customer_uid = (string)Application.Current.Properties["user_id"];
+                    updateFav.favorite = "";
+                    var updateFavSerializedObj = JsonConvert.SerializeObject(updateFav);
+                    var content4 = new StringContent(updateFavSerializedObj, Encoding.UTF8, "application/json");
+                    var client3 = new System.Net.Http.HttpClient();
+                    //overwrites the entire favorites list and only keep the favorite that is passed in
+                    var response3 = await client3.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/favourite_food/update", content4);
+                    var message = await response3.Content.ReadAsStringAsync();
+                    Debug.WriteLine("RESPONSE TO updatefavs   " + response3.ToString());
+                    Debug.WriteLine("json object sent:  " + updateFavSerializedObj.ToString());
+                    Debug.WriteLine("message received:  " + message.ToString());
+                }
+                else if (favDict.Count == 1)
+                {
+                    UpdateFavPost updateFav = new UpdateFavPost();
+                    updateFav.customer_uid = (string)Application.Current.Properties["user_id"];
+                    updateFav.favorite = favDict.Keys.First();
+                    var updateFavSerializedObj = JsonConvert.SerializeObject(updateFav);
+                    var content4 = new StringContent(updateFavSerializedObj, Encoding.UTF8, "application/json");
+                    var client3 = new System.Net.Http.HttpClient();
+                    //update overwrites the entire favorites list and only keep the favorite that is passed in
+                    var response3 = await client3.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/favourite_food/update", content4);
+                    var message = await response3.Content.ReadAsStringAsync();
+                    Debug.WriteLine("RESPONSE TO updatefavs   " + response3.ToString());
+                    Debug.WriteLine("json object sent:  " + updateFavSerializedObj.ToString());
+                    Debug.WriteLine("message received:  " + message.ToString());
+                }
+                else if (favDict.Count > 1)
+                {
+                    UpdateFavPost updateFav = new UpdateFavPost();
+                    updateFav.customer_uid = (string)Application.Current.Properties["user_id"];
+                    updateFav.favorite = favDict.Keys.First();
+                    //var updateFavSerializedObj = JsonConvert.SerializeObject(updateFav);
+                    //var content4 = new StringContent(updateFavSerializedObj, Encoding.UTF8, "application/json");
+                    //var client3 = new System.Net.Http.HttpClient();
+                    ////update overwrites the entire favorites list and only keep the favorite that is passed in
+                    //var response3 = await client3.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/favourite_food/update", content4);
+                    //var message = await response3.Content.ReadAsStringAsync();
+                    //Debug.WriteLine("RESPONSE TO updatefavs   " + response3.ToString());
+                    //Debug.WriteLine("json object sent:  " + updateFavSerializedObj.ToString());
+                    //Debug.WriteLine("message received:  " + message.ToString());
+
+                    foreach (string uid in favDict.Keys)
+                    {
+                        if (uid == favDict.Keys.First())
+                            continue;
+                        else updateFav.favorite += "," + uid;
+
+
+                        //UpdateFavPost updateFav2 = new UpdateFavPost();
+                        //updateFav2.customer_uid = (string)Application.Current.Properties["user_id"];
+                        //updateFav2.favorite = uid;
+                        //var updateFavSerializedObj2 = JsonConvert.SerializeObject(updateFav);
+                        //var content2 = new StringContent(updateFavSerializedObj2, Encoding.UTF8, "application/json");
+                        //var client2 = new System.Net.Http.HttpClient();
+                        ////post endpoint passes in 1 favorite and appends it to the end of the list of favorites for the user
+                        //var response2 = await client2.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/favourite_food/post", content2);
+                        //var message2 = await response2.Content.ReadAsStringAsync();
+                        //Debug.WriteLine("RESPONSE TO updatefavs   " + response2.ToString());
+                        //Debug.WriteLine("json object sent:  " + updateFavSerializedObj2.ToString());
+                        //Debug.WriteLine("message received:  " + message2.ToString());
+                    }
+                    var updateFavSerializedObj = JsonConvert.SerializeObject(updateFav);
+                    var content4 = new StringContent(updateFavSerializedObj, Encoding.UTF8, "application/json");
+                    var client3 = new System.Net.Http.HttpClient();
+                    //update overwrites the entire favorites list and only keep the favorite that is passed in
+                    var response3 = await client3.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/favourite_food/update", content4);
+                    var message = await response3.Content.ReadAsStringAsync();
+                    Debug.WriteLine("RESPONSE TO updatefavs   " + response3.ToString());
+                    Debug.WriteLine("json object sent:  " + updateFavSerializedObj.ToString());
+                    Debug.WriteLine("message received:  " + message.ToString());
+                }
+
+                //b.Source = "heartoutline.png";
+                ms.HeartSource = "emptyHeart.png";
 
             }
         }

@@ -44,7 +44,7 @@
                         <Label x:Name="deliveryDays" Text="MEALS DELIVERIES ARE" FontAttributes="Bold" TextColor="Black"
                                BackgroundColor="Transparent" HorizontalOptions="StartAndExpand" HorizontalTextAlignment="Start"/>
 
-                        <Label x:Name="deliveryDays2" Text="FRIDAY" TextColor="#FF9400" FontAttributes="Bold"
+                        <Label x:Name="deliveryDays2" TextColor="#FF9400" FontAttributes="Bold"
                                BackgroundColor="Transparent" HorizontalOptions="StartAndExpand" HorizontalTextAlignment="Start"/>
 
                     </StackLayout>

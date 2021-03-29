@@ -152,12 +152,12 @@ namespace MTYD.ViewModel
 
                 divider6.Margin = new Thickness(24, 10);
 
-                exploreButton.Margin = new Thickness(0, -5);
-                explorePic.HeightRequest = width / 15;
-                explorePic.WidthRequest = width / 15;
-                explorePic.Margin = new Thickness(25, 0, 0, 0);
+                //exploreButton.Margin = new Thickness(0, -5);
+                //explorePic.HeightRequest = width / 15;
+                //explorePic.WidthRequest = width / 15;
+                //explorePic.Margin = new Thickness(25, 0, 0, 0);
 
-                divider7.Margin = new Thickness(24, 10);
+                //divider7.Margin = new Thickness(24, 10);
 
                 logoutButton.Margin = new Thickness(0, -5);
                 logoutPic.HeightRequest = width / 15;

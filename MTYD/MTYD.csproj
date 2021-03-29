@@ -18,12 +18,12 @@
 
   <ItemGroup>
     <!-- <PackageReference Include="Xamarin.Forms" Version="4.8.0.1269" /> -->
-    <PackageReference Include="Xamarin.Forms" Version="4.8.0.1687" />
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2012" />
     <PackageReference Include="Xamarin.Essentials" Version="1.5.3.2" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="sqlite-net-pcl" Version="1.7.335" />
     <PackageReference Include="Xamarin.Auth" Version="1.7.0" />
-    <PackageReference Include="Xamarin.Forms.Maps" Version="4.8.0.1687" />
+    <PackageReference Include="Xamarin.Forms.Maps" Version="5.0.0.2012" />
     <PackageReference Include="PayPalCheckoutSdk" Version="1.0.3" />
     <PackageReference Include="PayPalHttp" Version="1.0.0" />
     <PackageReference Include="Stripe.net" Version="39.31.0" />
@@ -43,6 +43,7 @@
     <Folder Include="Model\Login\LoginClasses\" />
     <Folder Include="Model\Login\Constants\" />
     <Folder Include="Model\Login\LoginClasses\Apple\" />
+    <Folder Include="Interfaces\" />
   </ItemGroup>
 
   <ItemGroup>
