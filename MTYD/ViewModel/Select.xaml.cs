@@ -1370,23 +1370,23 @@ namespace MTYD.ViewModel
             }
         }
 
-        //info button
-        private void clickedInfo(object sender, EventArgs e)
-        {
-            ImageButton b = (ImageButton)sender;
-            MealInfo ms = b.BindingContext as MealInfo;
+        ////info button
+        //private void clickedInfo(object sender, EventArgs e)
+        //{
+        //    ImageButton b = (ImageButton)sender;
+        //    MealInfo ms = b.BindingContext as MealInfo;
 
-            if (ms.SeeDesc == false)
-            {
-                ms.SeeImage = false;
-                ms.SeeDesc = true;
-            }
-            else
-            {
-                ms.SeeImage = true;
-                ms.SeeDesc = false;
-            }
-        }
+        //    if (ms.SeeDesc == false)
+        //    {
+        //        ms.SeeImage = false;
+        //        ms.SeeDesc = true;
+        //    }
+        //    else
+        //    {
+        //        ms.SeeImage = true;
+        //        ms.SeeDesc = false;
+        //    }
+        //}
 
         private async void clickIncrease(object sender, EventArgs e)
         {

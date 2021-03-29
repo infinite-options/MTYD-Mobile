@@ -68,6 +68,7 @@ namespace MTYD.ViewModel
         string billingCity;
         string billingState;
         string billingZip;
+        string chargeId = "";
         string purchaseDescription;
         string paymentMethod;
         bool paypalPaymentDone = false;
@@ -593,15 +594,17 @@ namespace MTYD.ViewModel
                     //addOnsPrice.Text = "$0";
                     discountPrice.Text = "$0";
                     //discountPrice.Text = "$0";
-                    if (DeliveryEntry.Text == "M4METEST" || DeliveryEntry.Text == "M4ME TEST")
-                    {
-                        clientId = Constant.LiveClientId;
-                        secret = Constant.LiveSecret;
-                    }
+                    //if (DeliveryEntry.Text == "M4METEST" || DeliveryEntry.Text == "M4ME TEST")
+                    //{
+                    //    clientId = Constant.LiveClientId;
+                    //    secret = Constant.LiveSecret;
+                    //}
 
                     SetPayPalCredentials();
                     grandTotalPrice.Text = "$" + total.ToString();
                     paymentStack.IsVisible = true;
+                    Debug.WriteLine("clientId after setpaypalcredentials: " + clientId.ToString());
+                    Debug.WriteLine("secret after setpaypalcredentials: " + secret.ToString());
                 }
             }
 
@@ -1009,9 +1012,12 @@ namespace MTYD.ViewModel
             newPayment.amount_due = Preferences.Get("price", "00.00");
             newPayment.amount_discount = "00.00";
             newPayment.amount_paid = "00.00";//Preferences.Get("price", "00.00");
+            //new items in json object
+            newPayment.payment_type = paymentMethod;
+            newPayment.charge_id = chargeId;
 
 
-            if (paymentMethod == "stripe")
+            if (paymentMethod == "STRIPE")
             {
                 newPayment.purchase_notes = cardDescription.Text;
                 newPayment.cc_num = cardHolderNumber.Text;
@@ -1145,6 +1151,14 @@ namespace MTYD.ViewModel
 
 
 
+            //var StripeIntentJSONString = JsonConvert.SerializeObject(newPayment);
+            //Console.WriteLine("StripeIntentJSONString" + StripeIntentJSONString);
+            //var content2 = new StringContent(StripeIntentJSONString, Encoding.UTF8, "application/json");
+            //Console.WriteLine("Content: " + content2);
+            //var client2 = new System.Net.Http.HttpClient();
+            //var response2 = await client2.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/checkout", content2);
+
+
             //itemsList.Add("1"); //{ "1", "5 Meal Plan", "59.99" };
             var newPaymentJSONString = JsonConvert.SerializeObject(newPayment);
             Console.WriteLine("newPaymentJSONString" + newPaymentJSONString);
@@ -1167,7 +1181,7 @@ namespace MTYD.ViewModel
             }
             else
             {
-                if (paymentMethod == "stripe")
+                if (paymentMethod == "STRIPE")
                 {
                     headingGrid.IsVisible = true;
                     checkoutButton.IsVisible = true;
@@ -1192,7 +1206,7 @@ namespace MTYD.ViewModel
         {
             if (checkoutButton.Text == "CONTINUE")
             {
-                if (paymentMethod == "paypal" && (string)Xamarin.Forms.Application.Current.Properties["platform"] == "DIRECT")
+                if (paymentMethod == "PAYPAL" && (string)Xamarin.Forms.Application.Current.Properties["platform"] == "DIRECT")
                 {
                     Console.WriteLine("In set payment info: Hashing Password!");
                     SHA512 sHA512 = new SHA512Managed();
@@ -1252,7 +1266,7 @@ namespace MTYD.ViewModel
         // FUNCTION  1:
         public async void CheckouWithStripe(System.Object sender, System.EventArgs e)
         {
-            paymentMethod = "stripe";
+            paymentMethod = "STRIPE";
             fillEntries();
 
             var total = Preferences.Get("price", "00.00");
@@ -1327,6 +1341,7 @@ namespace MTYD.ViewModel
             Debug.WriteLine("PayViaStripe entered");
             try
             {
+                //await Navigation.PushAsync(new Loading());
                 //-----------validate address start
                 if (cardHolderName.Text == null)
                 {
@@ -1403,6 +1418,8 @@ namespace MTYD.ViewModel
                 {
                     await DisplayAlert("Error", "Please enter your password", "OK");
                 }
+
+                await Navigation.PushAsync(new Loading());
 
                 //if (PhoneEntry.Text == null && PhoneEntry.Text.Length == 10)
                 //{
@@ -1494,6 +1511,7 @@ namespace MTYD.ViewModel
                 }
                 if (latitude == "0" || longitude == "0")
                 {
+                    await Navigation.PopAsync(false);
                     await DisplayAlert("We couldn't find your address", "Please check for errors.", "Ok");
                     return;
                 }
@@ -1544,6 +1562,7 @@ namespace MTYD.ViewModel
                     Console.WriteLine("In set payment info:  Password Hashed!");
                     if (Preferences.Get("password_hashed", "") != hashedPassword2)
                     {
+                        await Navigation.PopAsync(false);
                         Debug.WriteLine("wrong password entered");
                         DisplayAlert("Error", "Wrong password entered.", "OK");
                         return;
@@ -1571,13 +1590,13 @@ namespace MTYD.ViewModel
 
                 Debug.WriteLine("key to send JSON: " + stripeObj);
                 Debug.WriteLine("Response from key: " + content);
-
+                Debug.WriteLine("RDSResponse" + RDSResponse.IsSuccessStatusCode.ToString());
                 if (RDSResponse.IsSuccessStatusCode)
                 {
                     //Carlos original code
                     //if (content != "200")
-                    if (content.Contains("200"))
-                    {
+                    //if (content.Contains("200"))
+                    //{
                         //Debug.WriteLine("error encountered");
                         string SK = "";
                         string mode = "";
@@ -1679,9 +1698,13 @@ namespace MTYD.ViewModel
                         var chargeService = new ChargeService();
                         Charge charge = chargeService.Create(chargeOption);
                         Debug.WriteLine("charge: " + charge.ToString());
+                        Debug.WriteLine("charge id: " + charge.ToString().Substring(charge.ToString().IndexOf("id") + 3, charge.ToString().IndexOf(">") - charge.ToString().IndexOf("id") - 3));
+                        //chargeId = charge.ToString().Substring(charge.ToString().IndexOf("id") + 3, charge.ToString().IndexOf(">") - charge.ToString().IndexOf("id") - 3);
                         if (charge.Status == "succeeded")
                         {
-                            await Navigation.PushAsync(new Loading());
+                            chargeId = charge.ToString().Substring(charge.ToString().IndexOf("id") + 3, charge.ToString().IndexOf(">") - charge.ToString().IndexOf("id") - 3);
+
+                            //await Navigation.PushAsync(new Loading());
 
                             PaymentScreen.HeightRequest = 0;
                             PaymentScreen.Margin = new Thickness(0, 0, 0, 0);
@@ -1737,14 +1760,16 @@ namespace MTYD.ViewModel
                         }
                         else
                         {
+                            await Navigation.PopAsync(false);
                             // Fail
                             await DisplayAlert("Ooops", "Payment was not succesfull. Please try again", "OK");
                         }
-                    }
+                    //}
                 }
             }
             catch (Exception ex)
             {
+                await Navigation.PopAsync(false);
                 await DisplayAlert("Alert!", ex.Message, "OK");
             }
         }
@@ -1791,7 +1816,8 @@ namespace MTYD.ViewModel
         //CVV: 154
         public async void CheckouWithPayPayl(System.Object sender, System.EventArgs e)
         {
-            paymentMethod = "paypal";
+            //SetPayPalCredentials();
+            paymentMethod = "PAYPAL";
 
             Debug.WriteLine("paypal CheckouWithPayPayl called 1");
 
@@ -1982,6 +2008,7 @@ namespace MTYD.ViewModel
                     Debug.WriteLine("PAYPAL CLIENT ID: " + clientId);
                     Debug.WriteLine("PAYPAL SECRENT:   " + secret);
 
+                    Debug.WriteLine("deliveryentry: " + DeliveryEntry.Text);
                     if (DeliveryEntry.Text == "M4METEST" || DeliveryEntry.Text == "M4ME TEST")
                     {
                         mode = "TEST";
@@ -1994,6 +2021,10 @@ namespace MTYD.ViewModel
                         clientId = Constant.LiveClientId;
                         secret = Constant.LiveSecret;
                     }
+
+                    Debug.WriteLine("MODE:             " + mode);
+                    Debug.WriteLine("PAYPAL CLIENT ID: " + clientId);
+                    Debug.WriteLine("PAYPAL SECRENT:   " + secret);
                 }
                 else
                 {

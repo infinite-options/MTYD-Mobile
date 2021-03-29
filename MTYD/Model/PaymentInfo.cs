@@ -52,6 +52,8 @@ namespace MTYD.Model
         public string cc_exp_month { get; set; }
         public string cc_cvv { get; set; }
         public string cc_zip { get; set; }
+        public string charge_id { get; set; }
+        public string payment_type { get; set; }
         /*
         public string customer_uid { get; set; }
         public string business_id { get; set; }
@@ -197,5 +199,11 @@ namespace MTYD.Model
         public string customer_uid { get; set; }
         public string old_password { get; set; }
         public string new_password { get; set; }
+    }
+
+
+    public class StripeIntentPost
+    {
+        public string note { get; set; }
     }
 }
