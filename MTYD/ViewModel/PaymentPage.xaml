@@ -225,7 +225,7 @@
                    <Label Text="CONTACT INFO" HorizontalOptions="Start" FontSize="22"
                        Margin="20,0,0,0" FontAttributes="Bold" Grid.Column="0" Grid.Row="0"/>
 
-                    <Button x:Name="saveContact" BorderColor="Black" BorderWidth="2" Text="Save" FontSize="15" HeightRequest="35" CornerRadius="17" TextColor="Black"
+                    <Button x:Name="saveContact" BorderColor="Black" BorderWidth="2" Text="Save" IsVisible="false" FontSize="15" HeightRequest="35" CornerRadius="17" TextColor="Black"
                             HorizontalOptions="Fill" BackgroundColor="#FFBA00" Grid.Row="0" Grid.Column="1" Margin="0,0,20,0" Clicked="clickedSaveContact"/>
 
                 </Grid>
@@ -353,6 +353,19 @@
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
 
+                <Label x:Name="discountTitle" Text="Discount: " Margin="10,0,0,0" FontSize="14" HorizontalOptions="Start" TextColor="Black" FontAttributes="Bold"/>
+                <Label Grid.Column="1" x:Name="discountPrice" FontSize="14" Margin="0,0,10,0" HorizontalOptions="End" TextColor="Black" FontAttributes="Bold"/>
+
+            </Grid>
+
+            <BoxView HeightRequest="3" Margin="5,2" />
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="4*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+
                 <Label x:Name="deliveryTitle" Text="Delivery Fee: " Margin="10,0,0,0" FontSize="14" HorizontalOptions="Start" TextColor="Black" FontAttributes="Bold"/>
                 <Label Grid.Column="1" x:Name="deliveryFeePrice" FontSize="14" Margin="0,0,10,0" HorizontalOptions="End" TextColor="Black" FontAttributes="Bold"/>
 
@@ -428,7 +441,7 @@
                 </Grid.ColumnDefinitions>
 
                 <Frame Padding="5,5" HorizontalOptions="Fill" CornerRadius="23" HasShadow="False" BackgroundColor="LightGray" Grid.Column="0" HeightRequest="40">
-                    <Entry x:Name="discountTitle" Placeholder="Enter Ambassador Code" FontSize="Small" IsTextPredictionEnabled="False"
+                    <Entry x:Name="ambassTitle" Placeholder="Enter Ambassador Code" FontSize="Small" IsTextPredictionEnabled="False"
                            BackgroundColor="LightGray" PlaceholderColor="#F5F5F5" TextColor="Black"/>
                 </Frame>
 
@@ -444,7 +457,7 @@
 
                 <Button Grid.Column="1" x:Name="verifyCode" Text="Verify" HeightRequest="35" CornerRadius="25" TextColor="Black" FontSize="Small" HorizontalOptions="Fill" BackgroundColor="#FFBA00" BorderColor="Black" BorderWidth="2" Margin="10,0,20,0" Clicked="clickedVerifyCode"/>
                 <!--<Label Text="Discount" Margin="10,0,0,0" FontSize="14" HorizontalOptions="Start" TextColor="Black" FontAttributes="Bold"/>-->
-                <Label Grid.Column="2" x:Name="discountPrice" FontSize="14" Margin="0,0,10,0" HorizontalOptions="End" TextColor="Black" FontAttributes="Bold" VerticalOptions="Center"/>
+                <Label Grid.Column="2" x:Name="ambassDisc" FontSize="14" Margin="0,0,10,0" HorizontalOptions="End" TextColor="Black" FontAttributes="Bold" VerticalOptions="Center"/>
 
             </Grid>
 
@@ -554,7 +567,7 @@
                             </Frame>
 
                         </Grid>
-                        <Frame  Padding="10,5" Margin="0,0.5,1,0.5" BackgroundColor="#FFE5B4" HasShadow="False" CornerRadius="24">
+                        <Frame x:Name="cardAddFrame" Padding="10,5" Margin="0,0.5,1,0.5" BackgroundColor="#FFE5B4" HasShadow="False" CornerRadius="24">
                             <Entry Placeholder="Address*" x:Name="cardHolderAddress" FontAttributes="Bold" FontSize="17"  BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4" HeightRequest="35"></Entry>
                         </Frame>
 
@@ -582,9 +595,9 @@
                                 <Entry Placeholder="Zip*" x:Name="cardZip" FontAttributes="Bold" FontSize="17"  BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4" ></Entry>
                             </Frame>
                         </Grid>
-                        <Frame x:Name="purchDescFrame" Padding="10,5" Margin="0,0.5,1,0.5" BackgroundColor="#FFE5B4" HasShadow="False" CornerRadius="24">
+                        <!--<Frame x:Name="purchDescFrame" Padding="10,5" Margin="0,0.5,1,0.5" BackgroundColor="#FFE5B4" HasShadow="False" CornerRadius="24">
                             <Entry Placeholder="Purchase Description*" x:Name="cardDescription" FontAttributes="Bold" FontSize="17"  BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4" HeightRequest="35"></Entry>
-                        </Frame>
+                        </Frame>-->
 
                         <BoxView x:Name="spacer6"  HeightRequest="10"></BoxView>
 

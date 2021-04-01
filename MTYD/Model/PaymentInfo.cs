@@ -54,6 +54,10 @@ namespace MTYD.Model
         public string cc_zip { get; set; }
         public string charge_id { get; set; }
         public string payment_type { get; set; }
+        public string tax { get; set; }
+        public string tip { get; set; }
+        public string service_fee { get; set; }
+        public string delivery_fee { get; set; }
         /*
         public string customer_uid { get; set; }
         public string business_id { get; set; }

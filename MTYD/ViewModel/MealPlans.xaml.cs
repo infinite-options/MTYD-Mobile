@@ -482,6 +482,11 @@ namespace MTYD.ViewModel
             }
 
             string itemsStr = activePlans[planPicker.SelectedIndex]["items"].ToString();
+            string qty = itemsStr.Substring(itemsStr.IndexOf("qty") + 7);
+            qty = qty.Substring(0, qty.IndexOf("\""));
+            string numMeal = itemsStr.Substring(itemsStr.IndexOf("name") + 8);
+            numMeal = numMeal.Substring(0, numMeal.IndexOf(" "));
+            Debug.WriteLine("qty: " + qty);
             string expDate = activePlans[planPicker.SelectedIndex]["cc_exp_date"].ToString();
             //var testing = (info_obj["result"])[1];
             //string zip = testing["cc_zip"].ToString();
@@ -489,7 +494,7 @@ namespace MTYD.ViewModel
             await Navigation.PushAsync(new SubscriptionModal(cust_firstName, cust_lastName, cust_email, activePlans[planPicker.SelectedIndex]["user_social_media"].ToString(), activePlans[planPicker.SelectedIndex]["mobile_refresh_token"].ToString(), activePlans[planPicker.SelectedIndex]["cc_num"].ToString(),
                 expDate.Substring(0, 10), 
                 activePlans[planPicker.SelectedIndex]["cc_cvv"].ToString(), activePlans[planPicker.SelectedIndex]["cc_zip"].ToString(), activePlans[planPicker.SelectedIndex]["purchase_uid"].ToString(), itemsStr.Substring(itemsStr.IndexOf("itm_business_uid") + 20, 10),
-                itemsStr.Substring(itemsStr.IndexOf("item_uid") + 12, 10), activePlans[planPicker.SelectedIndex]["pur_customer_uid"].ToString()), false);
+                itemsStr.Substring(itemsStr.IndexOf("item_uid") + 12, 10), activePlans[planPicker.SelectedIndex]["pur_customer_uid"].ToString(), qty, numMeal), false);
         }
 
         async void clickedInfo(System.Object sender, System.EventArgs e)
@@ -907,20 +912,31 @@ namespace MTYD.ViewModel
                 //get the amount that will be refunded
                 var request2 = new HttpRequestMessage();
                 Debug.WriteLine("trying to delete: " + chosenPurchUid.ToString());
-                request2.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/refund_calculator?purchase_uid=" + chosenPurchUid);
+
+                //sample (get) endpoint: https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_purchase/400-000209
+                /*
+                sample output: {
+                                    "week_remaining": 2,
+                                    "refund_amount": 19.68
+                                }
+                */
+
+
+                //request2.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/refund_calculator?purchase_uid=" + chosenPurchUid);
+                request2.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_purchase/" + chosenPurchUid);
                 request2.Method = HttpMethod.Get;
                 var client2 = new HttpClient();
                 HttpResponseMessage response2 = await client2.SendAsync(request2);
-
+                Debug.WriteLine("response from refund calc: " + response2.ToString());
                 if (response2.StatusCode == System.Net.HttpStatusCode.OK)
                 {
                     HttpContent content2 = response2.Content;
                     var userString2 = await content2.ReadAsStringAsync();
                     JObject refund_obj = JObject.Parse(userString2);
 
-                    Debug.WriteLine("first start" + refund_obj["result"][0].ToString());
-                    Debug.WriteLine("this is what I'm getting: " + refund_obj["result"][0]["refund_amount"].ToString());
-                    refundAmount = refund_obj["result"][0]["refund_amount"].ToString();
+                    Debug.WriteLine("first start" + refund_obj.ToString());
+                    Debug.WriteLine("this is what I'm getting: " + refund_obj["refund_amount"].ToString());
+                    refundAmount = refund_obj["refund_amount"].ToString();
 
                 }
 
@@ -939,7 +955,7 @@ namespace MTYD.ViewModel
 
                     var clientResponse = await client.PutAsync(Constant.DeletePlanUrl, deleteContent);
 
-                    Debug.WriteLine("Status code: " + clientResponse);
+                    Debug.WriteLine("Status code from deleting plan: " + clientResponse);
                     //await DisplayAlert("Deleted Plan", currentPlan + " was cancelled and refunded.", "OK");
 
                     await Navigation.PushAsync(new MealPlans(cust_firstName, cust_lastName, cust_email), false);

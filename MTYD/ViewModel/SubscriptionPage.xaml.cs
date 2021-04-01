@@ -388,6 +388,15 @@ namespace MTYD.ViewModel
                 deliveryNum.Text = deliverySelected.ToString();
                 discountPercentage.Text = ((int)discounts[deliverySelected - 1, 6 - mealSelected]).ToString() + "%";
                 total = deliverySelected * itemPrices[deliverySelected - 1, 6 - mealSelected] * (1 - discounts[deliverySelected - 1, 6 - mealSelected] / 100.0);
+                double basePrice_dub = deliverySelected * itemPrices[deliverySelected - 1, 6 - mealSelected];
+                double discountAmt_dub = deliverySelected * itemPrices[deliverySelected - 1, 6 - mealSelected] * discounts[deliverySelected - 1, 6 - mealSelected] / 100.0;
+                string basePrice = "";
+                string discountAmt = "";
+                basePrice = basePrice_dub.ToString();
+                discountAmt = discountAmt_dub.ToString();
+                Debug.WriteLine("base price: " + basePrice + " , discount amount: " + discountAmt);
+                Preferences.Set("basePrice", basePrice_dub);
+                Preferences.Set("discountAmt", discountAmt_dub);
                 TotalPrice.Text = "$" + total.ToString();
                 pricePerMeal.Text = "That's Less Than $" + Math.Ceiling(total / mealSelected / deliverySelected) + " per Meal!";
             }
@@ -410,6 +419,11 @@ namespace MTYD.ViewModel
                 deliveryNum.Text = deliverySelected.ToString();
                 discountPercentage.Text = ((int)discounts[deliverySelected - 1, 6 - mealSelected]).ToString() + "%";
                 total = deliverySelected * itemPrices[deliverySelected - 1, 6 - mealSelected] * (1 - discounts[deliverySelected - 1, 6 - mealSelected] / 100.0);
+                double basePrice = deliverySelected * itemPrices[deliverySelected - 1, 6 - mealSelected];
+                double discountAmt = deliverySelected * itemPrices[deliverySelected - 1, 6 - mealSelected] * discounts[deliverySelected - 1, 6 - mealSelected] / 100.0; 
+                Debug.WriteLine("base price: " + basePrice + " , discount amount: " + discountAmt);
+                Preferences.Set("basePrice", basePrice);
+                Preferences.Set("discountAmt", discountAmt);
                 TotalPrice.Text = "$" + total.ToString();
                 pricePerMeal.Text = "That's Less Than $" + Math.Ceiling(total / mealSelected / deliverySelected) + " per Meal!";
             }
@@ -432,6 +446,11 @@ namespace MTYD.ViewModel
                 deliveryNum.Text = deliverySelected.ToString();
                 discountPercentage.Text = ((int)discounts[deliverySelected - 1, 6 - mealSelected]).ToString() + "%";
                 total = deliverySelected * itemPrices[deliverySelected - 1, 6 - mealSelected] * (1 - discounts[deliverySelected - 1, 6 - mealSelected] / 100.0);
+                double basePrice = deliverySelected * itemPrices[deliverySelected - 1, 6 - mealSelected];
+                double discountAmt = deliverySelected * itemPrices[deliverySelected - 1, 6 - mealSelected] * discounts[deliverySelected - 1, 6 - mealSelected] / 100.0;
+                Debug.WriteLine("base price: " + basePrice + " , discount amount: " + discountAmt);
+                Preferences.Set("basePrice", basePrice);
+                Preferences.Set("discountAmt", discountAmt);
                 TotalPrice.Text = "$" + total.ToString();
                 pricePerMeal.Text = "That's Less Than $" + Math.Ceiling(total / mealSelected / deliverySelected) + " per Meal!";
             }
@@ -454,6 +473,11 @@ namespace MTYD.ViewModel
                 deliveryNum.Text = deliverySelected.ToString();
                 discountPercentage.Text = ((int)discounts[deliverySelected - 1, 6 - mealSelected]).ToString() + "%";
                 total = deliverySelected * itemPrices[deliverySelected - 1, 6 - mealSelected] * (1 - discounts[deliverySelected - 1, 6 - mealSelected] / 100.0);
+                double basePrice = deliverySelected * itemPrices[deliverySelected - 1, 6 - mealSelected];
+                double discountAmt = deliverySelected * itemPrices[deliverySelected - 1, 6 - mealSelected] * discounts[deliverySelected - 1, 6 - mealSelected] / 100.0;
+                Debug.WriteLine("base price: " + basePrice + " , discount amount: " + discountAmt);
+                Preferences.Set("basePrice", basePrice);
+                Preferences.Set("discountAmt", discountAmt);
                 TotalPrice.Text = "$" + total.ToString();
                 pricePerMeal.Text = "That's Less Than $" + Math.Ceiling(total / mealSelected / deliverySelected) + " per Meal!";
             }
@@ -476,6 +500,11 @@ namespace MTYD.ViewModel
                 deliveryNum.Text = deliverySelected.ToString();
                 discountPercentage.Text = ((int)discounts[deliverySelected - 1, 6 - mealSelected]).ToString() + "%";
                 total = deliverySelected * itemPrices[deliverySelected - 1, 6 - mealSelected] * (1 - discounts[deliverySelected - 1, 6 - mealSelected] / 100.0);
+                double basePrice = deliverySelected * itemPrices[deliverySelected - 1, 6 - mealSelected];
+                double discountAmt = deliverySelected * itemPrices[deliverySelected - 1, 6 - mealSelected] * discounts[deliverySelected - 1, 6 - mealSelected] / 100.0;
+                Debug.WriteLine("base price: " + basePrice + " , discount amount: " + discountAmt);
+                Preferences.Set("basePrice", basePrice);
+                Preferences.Set("discountAmt", discountAmt);
                 TotalPrice.Text = "$" + total.ToString();
                 pricePerMeal.Text = "That's Less Than $" + Math.Ceiling(total / mealSelected / deliverySelected) + " per Meal!";
             }
@@ -569,6 +598,11 @@ namespace MTYD.ViewModel
                 deliveryNum.Text = deliverySelected.ToString();
                 discountPercentage.Text = ((int)discounts[deliverySelected - 1, 6 - mealSelected]).ToString() + "%";
                 total = deliverySelected * itemPrices[deliverySelected - 1, 6 - mealSelected] * (1 - discounts[deliverySelected - 1, 6 - mealSelected] / 100.0);
+                double basePrice = deliverySelected * itemPrices[deliverySelected - 1, 6 - mealSelected];
+                double discountAmt = deliverySelected * itemPrices[deliverySelected - 1, 6 - mealSelected] * discounts[deliverySelected - 1, 6 - mealSelected] / 100.0;
+                Debug.WriteLine("base price: " + basePrice + " , discount amount: " + discountAmt);
+                Preferences.Set("basePrice", basePrice);
+                Preferences.Set("discountAmt", discountAmt);
                 TotalPrice.Text = "$" + total.ToString();
                 pricePerMeal.Text = "That's Less Than $" + Math.Ceiling(total / mealSelected / deliverySelected) + " per Meal!";
             }
