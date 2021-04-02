@@ -379,7 +379,7 @@
                         </Grid>
                     </Grid>
 
-                    <Label Text="WHY TRY Mealsfor.Me" HorizontalOptions="Center" FontSize="30" TextColor="Black"
+                    <Label Text="WHY TRY MealsFor.Me" HorizontalOptions="Center" FontSize="30" TextColor="Black"
                            FontAttributes="Bold" Margin="20, 20, 20, 20"/>
 
                 
@@ -394,8 +394,8 @@
                         </CarouselView.ItemTemplate>
                     </CarouselView>
 
-                    <IndicatorView x:Name="indicatorView" HorizontalOptions="Center" IndicatorsShape="Circle" 
-                                   IndicatorColor="LightGray" IndicatorSize="10" SelectedIndicatorColor="Black"  Margin="0, 0, 0, 0"/>
+                    <IndicatorView x:Name="indicatorView" HorizontalOptions="Fill" IndicatorsShape="Circle"
+                                   IndicatorColor="LightGray" IndicatorSize="10" SelectedIndicatorColor="Black"  Margin="30, 0, 30, 0"/>
 
                     <BoxView HeightRequest="5"/>
 
@@ -411,8 +411,8 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <Button x:Name="ambassadorBtn" Grid.Row="0" BackgroundColor="White" BorderColor="Black" BorderWidth="1" HorizontalOptions="CenterAndExpand"
-                                Text="Become an Ambassador" TextColor="Black" Margin="0, 30, 0, 20"/>
+                        <!--<Button x:Name="ambassadorBtn" Grid.Row="0" BackgroundColor="White" BorderColor="Black" BorderWidth="1" HorizontalOptions="CenterAndExpand"
+                                Text="Become an Ambassador" TextColor="Black" Margin="0, 30, 0, 20"/>-->
 
                         <Grid Grid.Row="1" HorizontalOptions="Center" ColumnSpacing="30" Margin="0, 20, 0, 20">
                             <Grid.RowDefinitions>
@@ -423,8 +423,8 @@
                                 <ColumnDefinition Width="1*"/>
                             </Grid.ColumnDefinitions>
 
-                            <ImageButton Grid.Column="0" Source="fbOutlineLogo.png" WidthRequest="70" HorizontalOptions="End"/>
-                            <ImageButton Grid.Column="1" Source="insOutlineLogo.png" WidthRequest="70" HorizontalOptions="Start"/>
+                            <ImageButton Grid.Column="0" Source="fbOutlineLogo.png" WidthRequest="70" HorizontalOptions="End" Clicked="clickedFb"/>
+                            <ImageButton Grid.Column="1" Source="insOutlineLogo.png" WidthRequest="70" HorizontalOptions="Start" Clicked="clickedIns"/>
                         </Grid>
 
                         <Frame Grid.Row="2" HeightRequest="90" WidthRequest="280" BackgroundColor="White" CornerRadius="10" Padding="0"
@@ -458,9 +458,9 @@
                             </Grid.ColumnDefinitions>
 
                             <Image x:Name="couponImg" Source="coupon.png" Aspect="AspectFit" Margin="15,0,0,0"/>
-                            <Label x:Name="couponAmt" Text="10%&#x0a;Off" TextColor="Black" FontAttributes="Bold" Margin="35,0,0,0" VerticalOptions="Center"/>
+                            <Label x:Name="couponAmt" Text="5%&#x0a;Off" TextColor="Black" FontAttributes="Bold" Margin="35,0,0,0" VerticalOptions="Center"/>
 
-                            <Label Grid.Column="1" x:Name="couponDesc" Text="Select 2 Weeks Pre-Pay&#x0a;Option and Get 10% off" FontAttributes="Bold" TextColor="DarkGray" VerticalOptions="Center" HorizontalTextAlignment="Start"/>
+                            <Label Grid.Column="1" x:Name="couponDesc" Text="Select 4 Deliveries Pre-Pay&#x0a;Option and Get 5% off" FontAttributes="Bold" TextColor="DarkGray" VerticalOptions="Center" HorizontalTextAlignment="Start"/>
 
                         </Grid>
 
@@ -472,10 +472,25 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
 
-                            <Image  x:Name="couponImg2" Source="coupon.png" Aspect="AspectFit" Margin="15,0,0,0"/>
-                            <Label  x:Name="couponAmt2" Text="15%&#x0a;Off" TextColor="Black" FontAttributes="Bold" Margin="35,0,0,0" VerticalOptions="Center"/>
+                            <Image x:Name="couponImg2" Source="coupon.png" Aspect="AspectFit" Margin="15,0,0,0"/>
+                            <Label x:Name="couponAmt2" Text="12%&#x0a;Off" TextColor="Black" FontAttributes="Bold" Margin="35,0,0,0" VerticalOptions="Center"/>
 
-                            <Label Grid.Column="1" x:Name="couponDesc2" Text="Select 4 Weeks Pre-Pay&#x0a;Option and Get 15% off" FontAttributes="Bold" TextColor="DarkGray" VerticalOptions="Center" HorizontalTextAlignment="Start"/>
+                            <Label Grid.Column="1" x:Name="couponDesc2" Text="Select 8 Deliveries Pre-Pay&#x0a;Option and Get 12% off" FontAttributes="Bold" TextColor="DarkGray" VerticalOptions="Center" HorizontalTextAlignment="Start"/>
+
+                        </Grid>
+
+                        <BoxView HeightRequest="3"/>
+
+                        <Grid x:Name="couponGrid3" ColumnSpacing="4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Image x:Name="couponImg3" Source="coupon.png" Aspect="AspectFit" Margin="15,0,0,0"/>
+                            <Label x:Name="couponAmt3" Text="15%&#x0a;Off" TextColor="Black" FontAttributes="Bold" Margin="35,0,0,0" VerticalOptions="Center"/>
+
+                            <Label Grid.Column="1" x:Name="couponDesc3" Text="Select 10 Deliveries Pre-Pay&#x0a;Option and Get 15% off" FontAttributes="Bold" TextColor="DarkGray" VerticalOptions="Center" HorizontalTextAlignment="Start"/>
 
                         </Grid>
 

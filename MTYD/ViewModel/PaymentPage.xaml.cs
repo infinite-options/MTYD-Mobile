@@ -1241,6 +1241,14 @@ namespace MTYD.ViewModel
             //var response2 = await client2.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/checkout", content2);
 
 
+            //var StripeIntentJSONString = JsonConvert.SerializeObject(newPayment);
+            //Console.WriteLine("StripeIntentJSONString" + StripeIntentJSONString);
+            //var content2 = new StringContent(StripeIntentJSONString, Encoding.UTF8, "application/json");
+            //Console.WriteLine("Content: " + content2);
+            //var client2 = new System.Net.Http.HttpClient();
+            //var response2 = await client2.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/checkout", content2);
+
+
             //itemsList.Add("1"); //{ "1", "5 Meal Plan", "59.99" };
             var newPaymentJSONString = JsonConvert.SerializeObject(newPayment);
             Console.WriteLine("newPaymentJSONString" + newPaymentJSONString);

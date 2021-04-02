@@ -35,13 +35,14 @@
 
                 <BoxView x:Name="spacer" HeightRequest="15"/>
 
-                <CollectionView x:Name="dateCarousel" ItemsSource="{Binding availableDates}" HeightRequest="80" HorizontalOptions="Fill" Margin="15, 0, 0, 0">
+                <CollectionView x:Name="dateCarousel" ItemsSource="{Binding availableDates}" HeightRequest="90" HorizontalOptions="Start">
                     <CollectionView.ItemsLayout>
-                        <LinearItemsLayout Orientation="Horizontal" ItemSpacing="20" SnapPointsType="None"/>
+                        <LinearItemsLayout Orientation="Horizontal" SnapPointsType="None"/>
                     </CollectionView.ItemsLayout>
                     <CollectionView.ItemTemplate>
                         <DataTemplate> 
-                            <Forms9Patch:Frame OutlineRadius="10" VerticalOptions="Start" OutlineWidth="3" HeightRequest="60" WidthRequest="80" OutlineColor="{Binding outlineColor}" BackgroundColor="White" Padding="0" HasShadow="False">
+                            <Grid Padding="10, 0, 10, 10" HeightRequest="70" WidthRequest="80" HorizontalOptions="Start" VerticalOptions="Start">
+                            <Forms9Patch:Frame OutlineRadius="10" VerticalOptions="Fill" OutlineWidth="3" HeightRequest="60" WidthRequest="60" OutlineColor="{Binding outlineColor}" BackgroundColor="{Binding fillColor}" Padding="0" HasShadow="False">
                             <!--<Frame CornerRadius="10" HeightRequest="60" WidthRequest="40" HorizontalOptions="Fill" BorderColor="{Binding outlineColor}" BackgroundColor="{Binding fillColor}" Padding="0" HasShadow="False">-->
                                 <Grid Padding="0">
                                 <StackLayout Padding="0">
@@ -59,11 +60,12 @@
                                 <Button HorizontalOptions="Fill" Text="{Binding index}" TextColor="Transparent" VerticalOptions="Fill" BackgroundColor="Transparent" Clicked="dateChangeCar"/>
                                 </Grid>
                             </Forms9Patch:Frame>
+                            </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
 
-                <BoxView HeightRequest="20"/>
+                <BoxView HeightRequest="10"/>
 
                 <Label Margin="15,0" Text="FEATURED MEALS" FontSize="Title" FontAttributes="Bold" HorizontalTextAlignment="Start" TextColor="Black"/>
 
@@ -405,7 +407,7 @@
             <!--Delivery Entry-->
             <BoxView x:Name="fade" BackgroundColor="White" Opacity="0.6" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" IsVisible="false"/>
 
-            <Grid x:Name="addressGrid" VerticalOptions="Center" IsVisible="false">
+            <Grid x:Name="addressGrid" VerticalOptions="End" IsVisible="false" Margin="30, 0, 30, 220">
                <BoxView x:Name="outerFrame" Color="#FFBA00" CornerRadius="25" />
                <BoxView x:Name="innerFrame" Color="White" CornerRadius="24" Margin="5"/>
 
@@ -435,12 +437,12 @@
 		            </AbsoluteLayout>
                    -->
 
-                   <Frame x:Name="street" Grid.Row="0" Padding="10,5" HasShadow="False" CornerRadius="10" HorizontalOptions="Fill" BorderColor="Black" Margin="15, 15, 15, 3">
+                   <Frame x:Name="street" Grid.Row="0" Padding="10,5" HasShadow="False" CornerRadius="10" HorizontalOptions="Fill" BorderColor="Black" Margin="15, 15, 15, 5">
                        <Entry x:Name="AddressEntry" Text="{Binding AddressText}" TextChanged="OnAddressChanged" TextColor="Black" PlaceholderColor="#B4B4B4" Placeholder="Address*"
-                              Focused="addressEntryFocused"/>
+                              Focused="addressEntryFocused" Unfocused="addressEntryUnfocused"/>
                    </Frame>
 
-                   <ListView x:Name="addressList" Grid.Row="1" Grid.RowSpan="2" ItemsSource="{Binding Addresses}" IsVisible="false" Margin="15, 0, 15, 0" ItemSelected="addressSelected">
+                   <ListView x:Name="addressList" ItemsSource="{Binding Addresses}" IsVisible="false" Margin="15, 0, 15, 0" ItemSelected="addressSelected">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <TextCell Text="{Binding Address}"/>
@@ -448,33 +450,33 @@
                         </ListView.ItemTemplate>
                    </ListView>
 
-                   <Grid HorizontalOptions="Fill" Margin="15, 0, 15, 0">
+                   <Grid x:Name="UnitCity" HorizontalOptions="Fill" Margin="15, 5, 15, 5" ColumnSpacing="10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="1*"/>
                             <ColumnDefinition Width="2*"/>
                         </Grid.ColumnDefinitions>
 
                         <Frame x:Name="unit" Grid.Column="0" Padding="10,5" HasShadow="False" CornerRadius="10" HorizontalOptions="Fill" BorderColor="Black">
-                            <Entry x:Name="AptEntry" Keyboard="Text" FontAttributes="Bold" TextColor="Black" PlaceholderColor="#B4B4B4" Placeholder="Unit"/>
+                            <Entry x:Name="AptEntry" Keyboard="Text" TextColor="Black" PlaceholderColor="#B4B4B4" Placeholder="Unit"/>
                         </Frame>
 
                         <Frame x:Name="city" Grid.Column="1" Padding="10,5" HasShadow="False" CornerRadius="10" HorizontalOptions="Fill" BorderColor="Black">
-                            <Entry x:Name="CityEntry" Keyboard="Text" FontAttributes="Bold" TextColor="Black" PlaceholderColor="#B4B4B4" Placeholder="City*"/>
+                            <Entry x:Name="CityEntry" Keyboard="Text" TextColor="Black" PlaceholderColor="#B4B4B4" Placeholder="City*"/>
                         </Frame>
                    </Grid>
 
-                   <Grid HorizontalOptions="Fill" Margin="15, 3, 15, 15">
+                   <Grid x:Name="StateZip" HorizontalOptions="Fill" Margin="15, 5, 15, 30" ColumnSpacing="10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="1*"/>
                             <ColumnDefinition Width="1*"/>
                         </Grid.ColumnDefinitions>
 
                         <Frame x:Name="state" Grid.Column="0" Padding="10,5" HasShadow="False" CornerRadius="10" HorizontalOptions="Fill" BorderColor="Black">
-                            <Entry x:Name="StateEntry" Keyboard="Text" FontAttributes="Bold" TextColor="Black" PlaceholderColor="#B4B4B4" Placeholder="State*"/>
+                            <Entry x:Name="StateEntry" Keyboard="Text" TextColor="Black" PlaceholderColor="#B4B4B4" Placeholder="State*"/>
                         </Frame>
 
                         <Frame x:Name="zipCode" Grid.Column="1" Padding="10,5" HasShadow="False" CornerRadius="10" HorizontalOptions="Fill" BorderColor="Black">
-                            <Entry x:Name="ZipEntry" Keyboard="Numeric" FontAttributes="Bold" TextColor="Black" PlaceholderColor="#B4B4B4" Placeholder="Zip*"/>
+                            <Entry x:Name="ZipEntry" Keyboard="Numeric" TextColor="Black" PlaceholderColor="#B4B4B4" Placeholder="Zip*"/>
                         </Frame>
                    </Grid>
 

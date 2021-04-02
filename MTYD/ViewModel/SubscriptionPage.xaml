@@ -22,7 +22,6 @@
 
                     </Grid>
                     <ImageButton x:Name="menu" Source="menu2.png" VerticalOptions="End" HorizontalOptions="Start" BackgroundColor="Transparent" Clicked="clickedMenu"/>
-                    <Button x:Name="backButton" BackgroundColor="Transparent" Text="&lt;" TextColor="Black" FontAttributes="Bold" FontSize="25" HorizontalOptions="Start" VerticalOptions="End" IsVisible="false" Clicked="clickedBack"/>
                 </Grid>
 
                 <BoxView HeightRequest="10"/>
@@ -231,7 +230,7 @@
 
                 <Label x:Name="pricePerMeal" TextColor="Black" HorizontalOptions="Center" FontSize="25"/>
 
-                <Button x:Name= "SignUpButton" BackgroundColor="#FF9400" Clicked="clickedDone" Text="PROCEED" TextColor="Black" Margin="0, 20, 0, 20"
+                <Button x:Name= "SignUpButton" BackgroundColor="#FF9E19" Clicked="clickedDone" Text="Proceed" TextColor="Black" Margin="0, 20"
                         BorderColor="Black" BorderWidth="2" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center"/>
 
                 <!--<Grid>
@@ -250,6 +249,9 @@
                     <Button x:Name= "SignUpButton" Grid.Row="0" Grid.Column="1" BackgroundColor="#FF9400" Clicked="clickedDone"
                             Text="PROCEED" TextColor="White" HorizontalOptions="Center" FontAttributes="Bold" VerticalOptions="Center"/>
                 </Grid>-->
+
+                <Button x:Name="backButton" BackgroundColor="#FF9E19" Clicked="clickedBack" Text="Return to Home Page" BorderColor="Black" BorderWidth="2"
+                        FontAttributes="Bold" HorizontalOptions="Center" TextColor="Black"/>
 
                 <Label x:Name="spacer5" HeightRequest="10"/>
 
