@@ -163,14 +163,17 @@ namespace MTYD.ViewModel
                 fade.Margin = new Thickness(0, -height / 3, 0, -height / 3);
 
                 xButton.FontSize = width / 37;
-                addressGrid.Margin = new Thickness(width / 30, height / 8, width / 30, 0);
+                //addressGrid.Margin = new Thickness(width / 30, height / 8, width / 30, 0);
                 addressGrid.HeightRequest = height / 4.5;
                 addressGrid.WidthRequest = width / 2.3;
 
                 outerFrame.HeightRequest = height/ 4.5;
 
                 addressHeader.FontSize = width / 35;
-                //street.HeightRequest = width / 20;
+
+                street.HeightRequest = width / 30;
+                UnitCity.HeightRequest = width / 24;
+                StateZip.HeightRequest = width / 24;
 
                 checkAddressButton.WidthRequest = width / 5;
                 checkAddressButton.HeightRequest = width / 20;
@@ -387,7 +390,7 @@ namespace MTYD.ViewModel
             }
             else
             {
-                bool subscribe = await DisplayAlert("Valid Address", "Your address is within our zone.", "Subscribe", "OK");
+                bool subscribe = await DisplayAlert("Valid Address", "Your address is within our zone.", "Sign Up", "Continue Exploring");
                 if (subscribe)
                 {
                     fade.IsVisible = false;
@@ -1381,9 +1384,14 @@ namespace MTYD.ViewModel
                                 foreach (Prediction prediction in predictionList.Predictions)
                                 {
                                     if (rows > 2) break; // show maximum 3 addresses
+                                    Console.WriteLine(prediction.Description);
+                                    string[] predictionSplit = prediction.Description.Split(',');
                                     Addresses.Add(new AddressAutocomplete
                                     {
-                                        Address = prediction.Description
+                                        Address = prediction.Description,
+                                        Street = predictionSplit[0],
+                                        City = predictionSplit[1],
+                                        State = predictionSplit[2],
                                     });
                                     rows++;
                                 }
@@ -1406,16 +1414,30 @@ namespace MTYD.ViewModel
             }
         }
 
-        private async void addressEntryFocused(object sender, EventArgs eventArgs)
+        private void addressEntryFocused(object sender, EventArgs eventArgs)
         {
             addressList.IsVisible = true;
+            UnitCity.IsVisible = false;
+            StateZip.IsVisible = false;
+        }
+
+        private void addressEntryUnfocused(object sender, EventArgs eventArgs)
+        {
+            addressList.IsVisible = false;
+            UnitCity.IsVisible = true;
+            StateZip.IsVisible = true;
         }
 
         void addressSelected(System.Object sender, System.EventArgs e)
         {
             addressList.IsVisible = false;
-            
-            AddressEntry.Text = addressList.SelectedItem.ToString();
+            UnitCity.IsVisible = true;
+            StateZip.IsVisible = true;
+
+            AddressEntry.Text = ((AddressAutocomplete)addressList.SelectedItem).Street;
+            CityEntry.Text = ((AddressAutocomplete)addressList.SelectedItem).City;
+            StateEntry.Text = ((AddressAutocomplete)addressList.SelectedItem).State;
+            ZipEntry.Text = ((AddressAutocomplete)addressList.SelectedItem).ZipCode;
         }
 
         //private void resetBttn_Clicked(object sender, EventArgs e)

@@ -118,10 +118,6 @@ namespace MTYD.ViewModel
                 menu.WidthRequest = width / 25;
                 menu.Margin = new Thickness(25, 0, 0, 30);
 
-                backButton.HeightRequest = width / 25;
-                backButton.WidthRequest = width / 25;
-                backButton.Margin = new Thickness(25, 0, 0, 30);
-
                 takeoutGrid.Margin = new Thickness(20, 10, 20, 10);
                 takeout.HeightRequest = width / 18;
                 takeout.WidthRequest = width / 18;
@@ -146,59 +142,63 @@ namespace MTYD.ViewModel
                 meals5.CornerRadius = (int)(width / 40);
 
                 delivery1.WidthRequest = width / 10;
-                delivery1.HeightRequest = width / 9;
+                delivery1.HeightRequest = width / 11;
                 delivery1Text1.FontSize = width / 50;
 
                 delivery2.WidthRequest = width / 10;
-                delivery2.HeightRequest = width / 9;
+                delivery2.HeightRequest = width / 11;
                 delivery2Text1.FontSize = width / 50;
                 delivery2Text2.FontSize = width / 65;
 
                 delivery3.WidthRequest = width / 10;
-                delivery3.HeightRequest = width / 9;
+                delivery3.HeightRequest = width / 11;
                 delivery3Text1.FontSize = width / 50;
                 delivery3Text2.FontSize = width / 65;
 
                 delivery4.WidthRequest = width / 10;
-                delivery4.HeightRequest = width / 9;
+                delivery4.HeightRequest = width / 11;
                 delivery4Text1.FontSize = width / 50;
                 delivery4Text2.FontSize = width / 65;
 
                 delivery5.WidthRequest = width / 10;
-                delivery5.HeightRequest = width / 9;
+                delivery5.HeightRequest = width / 11;
                 delivery5Text1.FontSize = width / 50;
                 delivery5Text2.FontSize = width / 65;
 
                 delivery6.WidthRequest = width / 10;
-                delivery6.HeightRequest = width / 9;
+                delivery6.HeightRequest = width / 11;
                 delivery6Text1.FontSize = width / 50;
                 delivery6Text2.FontSize = width / 65;
 
                 delivery7.WidthRequest = width / 10;
-                delivery7.HeightRequest = width / 9;
+                delivery7.HeightRequest = width / 11;
                 delivery7Text1.FontSize = width / 50;
                 delivery7Text2.FontSize = width / 65;
 
                 delivery8.WidthRequest = width / 10;
-                delivery8.HeightRequest = width / 9;
+                delivery8.HeightRequest = width / 11;
                 delivery8Text1.FontSize = width / 50;
                 delivery8Text2.FontSize = width / 65;
 
                 delivery9.WidthRequest = width / 10;
-                delivery9.HeightRequest = width / 9;
+                delivery9.HeightRequest = width / 11;
                 delivery9Text1.FontSize = width / 50;
                 delivery9Text2.FontSize = width / 65;
 
                 delivery10.WidthRequest = width / 10;
-                delivery10.HeightRequest = width / 9;
+                delivery10.HeightRequest = width / 11;
                 delivery10Text1.FontSize = width / 50;
                 delivery10Text2.FontSize = width / 65;
 
-                //SignUpButton.HeightRequest = height / 50;
                 SignUpButton.WidthRequest = width / 4;
-                SignUpButton.HeightRequest = width / 15;
-                SignUpButton.CornerRadius = (int)(width / 30);
+                SignUpButton.HeightRequest = width / 18;
+                SignUpButton.CornerRadius = (int)(width / 36);
                 SignUpButton.FontSize = width / 50;
+
+                backButton.WidthRequest = width / 4;
+                backButton.HeightRequest = width / 18;
+                backButton.CornerRadius = (int)(width / 36);
+                backButton.FontSize = width / 55;
             }
             else //android
             {
@@ -214,10 +214,6 @@ namespace MTYD.ViewModel
                 menu.HeightRequest = width / 30;
                 menu.WidthRequest = width / 30;
                 menu.Margin = new Thickness(25, 0, 0, 40);
-
-                backButton.HeightRequest = width / 30;
-                backButton.WidthRequest = width / 30;
-                backButton.Margin = new Thickness(25, 0, 0, 40);
 
                 takeoutGrid.Margin = new Thickness(20, 10, 20, 10);
                 takeout.HeightRequest = width / 22;
@@ -606,16 +602,22 @@ namespace MTYD.ViewModel
 
         async void clickedBack(System.Object sender, System.EventArgs e)
         {
-            Console.WriteLine("navigation stack count: " + Navigation.NavigationStack.Count);
-            if (Navigation.NavigationStack.Count == 1)
+            if ((string)Application.Current.Properties["platform"] == "GUEST")
             {
                 Application.Current.MainPage = new MainPage();
             }
             else
             {
-                await Navigation.PopAsync(false);
+                await Navigation.PushAsync(new MainPage(cust_firstName, cust_lastName, cust_email));
             }
-            //await Navigation.PushAsync(new MainPage());
+            //if (Navigation.NavigationStack.Count == 1)
+            //{
+            //    Application.Current.MainPage = new MainPage();
+            //}
+            //else
+            //{
+            //    await Navigation.PopAsync(false);
+            //}
         }
 
         async void clickedMenu(System.Object sender, System.EventArgs e)

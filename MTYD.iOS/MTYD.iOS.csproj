@@ -174,8 +174,6 @@
     <BundleResource Include="Resources\landing.jpg" />
     <BundleResource Include="Resources\food.png" />
     <BundleResource Include="Resources\defaultfood.jpeg" />
-    <BundleResource Include="Resources\heart.png" />
-    <BundleResource Include="Resources\heartoutline.png" />
     <BundleResource Include="Resources\googleicon.png" />
     <BundleResource Include="Resources\fbicon.png" />
     <BundleResource Include="Resources\appleicon.png" />
@@ -230,6 +228,8 @@
     <BundleResource Include="Resources\filledHeart.png" />
     <BundleResource Include="Resources\emptyHeart.png" />
     <BundleResource Include="Resources\info.png" />
+    <BundleResource Include="Resources\heartoutline.png" />
+    <BundleResource Include="Resources\heart.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AppleSignIn\" />

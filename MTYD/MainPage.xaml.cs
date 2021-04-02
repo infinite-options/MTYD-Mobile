@@ -100,6 +100,11 @@ namespace MTYD
             {
                 appleLoginButton.IsEnabled = false;
             }
+
+            Application.Current.Properties["user_id"] = "000-00000";
+            Application.Current.Properties["platform"] = "GUEST";
+            Preferences.Set("user_latitude", "0.0");
+            Preferences.Set("user_longitude", "0.0");
         }
 
         public MainPage(string firstName, string lastName, string email)
@@ -386,9 +391,9 @@ namespace MTYD
             //userFrame.CornerRadius = 25;
             //passFrame.CornerRadius = 25;
 
-            ambassadorBtn.WidthRequest = width / 4;
-            ambassadorBtn.HeightRequest = width / 20;
-            ambassadorBtn.CornerRadius = (int)(width / 40);
+            //ambassadorBtn.WidthRequest = width / 4;
+            //ambassadorBtn.HeightRequest = width / 20;
+            //ambassadorBtn.CornerRadius = (int)(width / 40);
         }
 
         protected async Task setGrid()
@@ -474,9 +479,9 @@ namespace MTYD
 
             //partners.FontSize = width / 60;
 
-            ambassadorBtn.WidthRequest = width / 4;
-            ambassadorBtn.HeightRequest = width / 20;
-            ambassadorBtn.CornerRadius = (int)(width / 40);
+            //ambassadorBtn.WidthRequest = width / 4;
+            //ambassadorBtn.HeightRequest = width / 20;
+            //ambassadorBtn.CornerRadius = (int)(width / 40);
 
             if (Device.RuntimePlatform == Device.iOS)
             {
@@ -494,24 +499,29 @@ namespace MTYD
 
                 xButton.FontSize = width / 37;
                 DiscountGrid.Margin = new Thickness(width / 30, height / 9, width / 30, 0);
-                DiscountGrid.HeightRequest = height / 5.2;
+                DiscountGrid.HeightRequest = height / 4.5;
                 DiscountGrid.WidthRequest = width / 2.3;
-                couponGrid.HeightRequest = height / 5.2;
+                couponGrid.HeightRequest = height / 4.5;
                 couponGrid.WidthRequest = width / 2.3;
 
-                outerFrame.HeightRequest = height / 5.2;
+                outerFrame.HeightRequest = height / 4.5;
 
                 discHeader.FontSize = width / 35;
 
                 couponGrid.HeightRequest = height / 30;
                 couponImg.HeightRequest = height / 30;
                 couponAmt.FontSize = width / 50;
-                couponDesc.FontSize = width / 43;
+                couponDesc.FontSize = width / 50;
 
                 couponGrid2.HeightRequest = height / 30;
                 couponImg2.HeightRequest = height / 30;
                 couponAmt2.FontSize = width / 50;
-                couponDesc2.FontSize = width / 43;
+                couponDesc2.FontSize = width / 50;
+
+                couponGrid3.HeightRequest = height / 30;
+                couponImg3.HeightRequest = height / 30;
+                couponAmt3.FontSize = width / 50;
+                couponDesc3.FontSize = width / 50;
 
                 searchPic.Margin = new Thickness(width / 5.5, 0);
                 first.FontSize = width / 30;
@@ -587,6 +597,11 @@ namespace MTYD
                 couponImg2.HeightRequest = height / 40;
                 couponAmt2.FontSize = width / 60;
                 couponDesc2.FontSize = width / 60;
+
+                couponGrid3.HeightRequest = height / 30;
+                couponImg3.HeightRequest = height / 40;
+                couponAmt3.FontSize = width / 60;
+                couponDesc3.FontSize = width / 60;
 
                 searchPic.WidthRequest = width / 9;
                 first.FontSize = width / 40;
@@ -1929,16 +1944,40 @@ namespace MTYD
         //added function
         async void clickedExplore(System.Object sender, System.EventArgs e)
         {
-            Application.Current.MainPage = new NavigationPage(new ExploreMeals());
+            if ((string)Application.Current.Properties["platform"] == "GUEST")
+            {
+                Application.Current.MainPage = new NavigationPage(new ExploreMeals());
+            }
+            else
+            {
+                if (Preferences.Get("canChooseSelect", false) == false)
+                    DisplayAlert("Error", "please purchase a meal plan first", "OK");
+                else
+                {
+                    Zones[] zones = new Zones[] { };
+                    await Navigation.PushAsync(new Select(zones, cust_firstName, cust_lastName, cust_email), false);
+                }
+            }
         }
 
         async void clickedPurchase(System.Object sender, System.EventArgs e)
         {
-            Application.Current.Properties["user_id"] = "000-00000";
-            Application.Current.Properties["platform"] = "GUEST";
-            Preferences.Set("user_latitude", "0.0");
-            Preferences.Set("user_longitude", "0.0");
-            Application.Current.MainPage = new NavigationPage(new SubscriptionPage("Welcome", "Guest", "welcome@guest.com"));
+            if ((string)Application.Current.Properties["platform"] == "GUEST")
+            {
+                Application.Current.Properties["user_id"] = "000-00000";
+                Preferences.Set("user_latitude", "0.0");
+                Preferences.Set("user_longitude", "0.0");
+                Application.Current.MainPage = new NavigationPage(new SubscriptionPage("Welcome", "Guest", "welcome@guest.com"));
+            }
+            else
+            {
+                await Navigation.PushAsync(new SubscriptionPage(cust_firstName, cust_lastName, cust_email), false);
+            }
+            //Application.Current.Properties["user_id"] = "000-00000";
+            //Application.Current.Properties["platform"] = "GUEST";
+            //Preferences.Set("user_latitude", "0.0");
+            //Preferences.Set("user_longitude", "0.0");
+            //Application.Current.MainPage = new NavigationPage(new SubscriptionPage("Welcome", "Guest", "welcome@guest.com"));
         }
 
         async void clickedX(System.Object sender, System.EventArgs e)
@@ -1966,6 +2005,14 @@ namespace MTYD
         async void clickedStarted(System.Object sender, System.EventArgs e)
         {
             await Navigation.PushAsync(new SubscriptionPage(cust_firstName, cust_lastName, cust_email));
+        }
+
+        void clickedFb(System.Object sender, System.EventArgs e)
+        {
+        }
+
+        void clickedIns(System.Object sender, System.EventArgs e)
+        {
         }
     }
 }
