@@ -39,14 +39,16 @@ namespace MTYD.ViewModel
         string savedPhone = "phone" + (string)Application.Current.Properties["user_id"];
         string savedInstr = "instructions" + (string)Application.Current.Properties["user_id"];
         public static string userId = (string)Application.Current.Properties["user_id"];
+        string new_purch_id;
 
 
-        public CongratsPage(Zones[] zones, string Fname, string Lname, string email)
+        public CongratsPage(Zones[] zones, string Fname, string Lname, string email, string newPurchId)
         {
             cust_firstName = Fname;
             cust_lastName = Lname;
             cust_email = email;
             passingZones = zones;
+            new_purch_id = newPurchId;
             var width = DeviceDisplay.MainDisplayInfo.Width;
             var height = DeviceDisplay.MainDisplayInfo.Height;
             InitializeComponent();
@@ -80,7 +82,9 @@ namespace MTYD.ViewModel
         protected async Task getDeliveryTime()
         {
             var request = new HttpRequestMessage();
-            request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + userId);
+            //request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + userId);
+            request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/lplp_specific/" + new_purch_id);
+
             request.Method = HttpMethod.Get;
             var client = new HttpClient();
             HttpResponseMessage response = await client.SendAsync(request);

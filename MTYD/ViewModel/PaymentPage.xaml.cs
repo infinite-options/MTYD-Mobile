@@ -75,6 +75,7 @@ namespace MTYD.ViewModel
         double deviceWidth, deviceHeight;
         public SignUpPost directSignUp = new SignUpPost();
         bool paymentSucceed = false;
+        string new_purchase_id = "";
 
 
         // CREDENTIALS CLASS
@@ -127,7 +128,7 @@ namespace MTYD.ViewModel
                 PhoneEntry.Text = info_obj3["result"][0]["customer_phone_num"].ToString();
 
 
-                DeliveryEntry.Placeholder = "Delivery Instructions";
+                DeliveryEntry.Placeholder = "Delivery Instructions (for example:\ngate code, or where to put\nyour meals if you're not home)";
 
                 return;
             }
@@ -147,7 +148,7 @@ namespace MTYD.ViewModel
                 else AptEntry.Placeholder = "Unit";
                 if (Preferences.Get(savedInstr, "") != "")
                     DeliveryEntry.Text = Preferences.Get(savedInstr, "");
-                else DeliveryEntry.Placeholder = "Delivery Instructions";
+                else DeliveryEntry.Placeholder = "Delivery Instructions (for example:\n gate code, or where to put\nyour meals if you're not home)";
 
                 EventArgs e = new EventArgs();
                 clickedDeliv(proceedButton, e);
@@ -560,9 +561,13 @@ namespace MTYD.ViewModel
                     subtotalTitle.Text = "Meal Subscription \n(" + Preferences.Get("item_name", "").Substring(0, 1) + " Meals for " + Preferences.Get("freqSelected", "") + " Deliveries): ";
                     deliveryTitle.Text = "Total Delivery Fee For All " + Preferences.Get("freqSelected", "") + " Deliveries: ";
 
-                    
+
                     //Preferences.Set("subtotal", Preferences.Get("price", "00.00"));
-                    double payment = Double.Parse(Preferences.Get("price", "00.00")) + (Double.Parse(Preferences.Get("price", "00.00")) * tax_rate);
+                    Debug.WriteLine("price before tax: " + Preferences.Get("price", "00.00"));
+                    double payment = Double.Parse(Preferences.Get("price", "00.00")) + Math.Round((Double.Parse(Preferences.Get("price", "00.00")) * tax / 100), 2);
+                    Debug.WriteLine("price before tax: " + (Double.Parse(Preferences.Get("price", "00.00")) * tax / 100).ToString());
+                    double totalTax = Math.Round(Double.Parse(Preferences.Get("price", "00.00")) * tax / 100, 2);
+                    taxPrice.Text = "$" + totalTax.ToString();
                     Debug.WriteLine("payment: " + payment.ToString());
                     payment += serviceFee;
                     Debug.WriteLine("payment + service fee: " + payment.ToString());
@@ -573,7 +578,7 @@ namespace MTYD.ViewModel
                     Math.Round(payment, 2);
                     Debug.WriteLine("payment after tax and fees: " + payment.ToString());
                     Preferences.Set("price", payment.ToString());
-                    discountPrice.Text = "$" + Preferences.Get("discountAmt", "0");
+                    discountPrice.Text = "- $" + Preferences.Get("discountAmt", "0");
                     //make sure price is formatted correctly
                     var total = Preferences.Get("price", "00.00");
                     if (total.Contains(".") == false)
@@ -588,12 +593,12 @@ namespace MTYD.ViewModel
 
 
                     subtotalPrice.Text = "$" + Preferences.Get("basePrice", "0.00").ToString();
-                    taxPrice.Text = "$" + tax.ToString();
+                    //taxPrice.Text = "$" + tax.ToString();
                     serviceFeePrice.Text = "$" + serviceFee.ToString();
                     deliveryFeePrice.Text = "$" + deliveryFee.ToString();
                     tipPrice.Text = tipOpt2.Text;
                     //addOnsPrice.Text = "$0";
-                    ambassDisc.Text = "$0";
+                    ambassDisc.Text = "- $0.00";
                     //discountPrice.Text = "$0";
                     //if (DeliveryEntry.Text == "M4METEST" || DeliveryEntry.Text == "M4ME TEST")
                     //{
@@ -601,8 +606,66 @@ namespace MTYD.ViewModel
                     //    secret = Constant.LiveSecret;
                     //}
 
-                    SetPayPalCredentials();
+                    if (subtotalPrice.Text.Contains(".") == false)
+                        subtotalPrice.Text = subtotalPrice.Text + ".00";
+                    else if (subtotalPrice.Text.Substring(subtotalPrice.Text.IndexOf(".") + 1).Length == 1)
+                        subtotalPrice.Text = subtotalPrice.Text + "0";
+                    else if (subtotalPrice.Text.Substring(subtotalPrice.Text.IndexOf(".") + 1).Length == 0)
+                        subtotalPrice.Text = subtotalPrice.Text + "00";
+
+                    if (discountPrice.Text.Contains(".") == false)
+                        discountPrice.Text = discountPrice.Text + ".00";
+                    else if (discountPrice.Text.Substring(discountPrice.Text.IndexOf(".") + 1).Length == 1)
+                        discountPrice.Text = discountPrice.Text + "0";
+                    else if (discountPrice.Text.Substring(discountPrice.Text.IndexOf(".") + 1).Length == 0)
+                        discountPrice.Text = discountPrice.Text + "00";
+
+                    if (taxPrice.Text.Contains(".") == false)
+                        taxPrice.Text = taxPrice.Text + ".00";
+                    else if (taxPrice.Text.Substring(taxPrice.Text.IndexOf(".") + 1).Length == 1)
+                        taxPrice.Text = taxPrice.Text + "0";
+                    else if (taxPrice.Text.Substring(taxPrice.Text.IndexOf(".") + 1).Length == 0)
+                        taxPrice.Text = taxPrice.Text + "00";
+
+                    if (serviceFeePrice.Text.Contains(".") == false)
+                        serviceFeePrice.Text = serviceFeePrice.Text + ".00";
+                    else if (serviceFeePrice.Text.Substring(serviceFeePrice.Text.IndexOf(".") + 1).Length == 1)
+                        serviceFeePrice.Text = serviceFeePrice.Text + "0";
+                    else if (serviceFeePrice.Text.Substring(serviceFeePrice.Text.IndexOf(".") + 1).Length == 0)
+                        serviceFeePrice.Text = serviceFeePrice.Text + "00";
+
+                    if (deliveryFeePrice.Text.Contains(".") == false)
+                        deliveryFeePrice.Text = deliveryFeePrice.Text + ".00";
+                    else if (deliveryFeePrice.Text.Substring(deliveryFeePrice.Text.IndexOf(".") + 1).Length == 1)
+                        deliveryFeePrice.Text = deliveryFeePrice.Text + "0";
+                    else if (deliveryFeePrice.Text.Substring(deliveryFeePrice.Text.IndexOf(".") + 1).Length == 0)
+                        deliveryFeePrice.Text = deliveryFeePrice.Text + "00";
+
+                    if (tipPrice.Text.Contains(".") == false)
+                        tipPrice.Text = tipPrice.Text + ".00";
+                    else if (tipPrice.Text.Substring(tipPrice.Text.IndexOf(".") + 1).Length == 1)
+                        tipPrice.Text = tipPrice.Text + "0";
+                    else if (tipPrice.Text.Substring(tipPrice.Text.IndexOf(".") + 1).Length == 0)
+                        tipPrice.Text = tipPrice.Text + "00";
+
+                    //if (ambassDisc.Text.Contains(".") == false)
+                    //    ambassDisc.Text = ambassDisc.Text + ".00";
+                    //else if (ambassDisc.Text.Substring(ambassDisc.Text.IndexOf(".") + 1).Length == 1)
+                    //    ambassDisc.Text = ambassDisc.Text + "0";
+                    //else if (ambassDisc.Text.Substring(ambassDisc.Text.IndexOf(".") + 1).Length == 0)
+                    //    ambassDisc.Text = ambassDisc.Text + "00";
+
                     grandTotalPrice.Text = "$" + total.ToString();
+
+                    if (grandTotalPrice.Text.Contains(".") == false)
+                        grandTotalPrice.Text = grandTotalPrice.Text + ".00";
+                    else if (grandTotalPrice.Text.Substring(grandTotalPrice.Text.IndexOf(".") + 1).Length == 1)
+                        grandTotalPrice.Text = grandTotalPrice.Text + "0";
+                    else if (grandTotalPrice.Text.Substring(grandTotalPrice.Text.IndexOf(".") + 1).Length == 0)
+                        grandTotalPrice.Text = grandTotalPrice.Text + "00";
+
+                    SetPayPalCredentials();
+                    //grandTotalPrice.Text = "$" + total.ToString();
                     paymentStack.IsVisible = true;
                     Debug.WriteLine("clientId after setpaypalcredentials: " + clientId.ToString());
                     Debug.WriteLine("secret after setpaypalcredentials: " + secret.ToString());
@@ -775,6 +838,12 @@ namespace MTYD.ViewModel
             grandTotalValue += tipValue;
             string grandTotalString = grandTotalValue.ToString();
 
+            if (tipPrice.Text.Contains(".") == false)
+                tipPrice.Text = tipPrice.Text + ".00";
+            else if (tipPrice.Text.Substring(tipPrice.Text.IndexOf(".") + 1).Length == 1)
+                tipPrice.Text = tipPrice.Text + "0";
+            else if (tipPrice.Text.Substring(tipPrice.Text.IndexOf(".") + 1).Length == 0)
+                tipPrice.Text = tipPrice.Text + "00";
 
             if (grandTotalString.Contains(".") == false)
                 grandTotalString = grandTotalString + ".00";
@@ -840,6 +909,13 @@ namespace MTYD.ViewModel
                     grandTotalValue -= totalDiscount;
 
                     string grandTotalString = grandTotalValue.ToString();
+
+                    if (ambassDisc.Text.Contains(".") == false)
+                        ambassDisc.Text = ambassDisc.Text + ".00";
+                    else if (ambassDisc.Text.Substring(ambassDisc.Text.IndexOf(".") + 1).Length == 1)
+                        ambassDisc.Text = ambassDisc.Text + "0";
+                    else if (ambassDisc.Text.Substring(ambassDisc.Text.IndexOf(".") + 1).Length == 0)
+                        ambassDisc.Text = ambassDisc.Text + "00";
 
 
                     if (grandTotalString.Contains(".") == false)
@@ -952,7 +1028,7 @@ namespace MTYD.ViewModel
             //need to add item_business_id
             Model.Item item1 = new Model.Item();
             item1.name = Preferences.Get("item_name", "");
-            item1.price = Preferences.Get("basePrice", "00.00");
+            item1.price = Preferences.Get("itemPrice", "00.00");
             item1.qty = Preferences.Get("freqSelected", "");
             item1.item_uid = Preferences.Get("item_uid", "");
             item1.itm_business_uid = "200-000002";
@@ -1017,6 +1093,7 @@ namespace MTYD.ViewModel
             newPayment.tip = tipPrice.Text.Substring(tipPrice.Text.IndexOf("$") + 1);
             newPayment.service_fee = serviceFeePrice.Text.Substring(serviceFeePrice.Text.IndexOf("$") + 1);
             newPayment.delivery_fee = deliveryFeePrice.Text.Substring(deliveryFeePrice.Text.IndexOf("$") + 1);
+            newPayment.subtotal = subtotalPrice.Text.Substring(subtotalPrice.Text.IndexOf("$") + 1);
             //new items in json object
             newPayment.payment_type = paymentMethod;
             newPayment.charge_id = chargeId;
@@ -1175,6 +1252,24 @@ namespace MTYD.ViewModel
             request.Content = content;*/
             var client = new System.Net.Http.HttpClient();
             var response = await client.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/checkout", content);
+            var message2 = await response.Content.ReadAsStringAsync();
+            var data = JsonConvert.DeserializeObject<checkoutDto>(message2);
+            string newPurchId = data.purchase_id;
+            new_purchase_id = newPurchId;
+            //Preferences.Set("new_purch_id", newPurchId);
+
+            //add_surprise
+            filler fill = new filler();
+            var fillerJSONString = JsonConvert.SerializeObject(fill);
+            var content5 = new StringContent(fillerJSONString, Encoding.UTF8, "application/json");
+            var client5 = new System.Net.Http.HttpClient();
+            var response5 = await client5.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/add_surprise/" + newPurchId, content5);
+            var message5 = await response5.Content.ReadAsStringAsync();
+
+            Debug.WriteLine("response from add_surprise: " + response5.ToString());
+            Debug.WriteLine("json object being sent: " + content5.ToString());
+
+            Debug.WriteLine("response from checkout: " + response.ToString());
             // HttpResponseMessage response = await client.SendAsync(request);
             if (response.IsSuccessStatusCode)
             {
@@ -1257,7 +1352,7 @@ namespace MTYD.ViewModel
                 //await Navigation.PushAsync(new Select(passingZones, cust_firstName, cust_lastName, cust_email));
                 if (paymentSucceed)
                 {
-                    await Navigation.PushAsync(new CongratsPage(passingZones, cust_firstName, cust_lastName, cust_email));
+                    await Navigation.PushAsync(new CongratsPage(passingZones, cust_firstName, cust_lastName, cust_email, new_purchase_id));
                 }
             }
             else
@@ -1759,7 +1854,7 @@ namespace MTYD.ViewModel
                             //await Navigation.PushAsync(new Select(passingZones, cust_firstName, cust_lastName, cust_email));
                             if (paymentSucceed)
                             {
-                                await Navigation.PushAsync(new CongratsPage(passingZones, cust_firstName, cust_lastName, cust_email));
+                                await Navigation.PushAsync(new CongratsPage(passingZones, cust_firstName, cust_lastName, cust_email, new_purchase_id));
                             }
                                 //done from checkout button clicked
                         }
@@ -2161,7 +2256,7 @@ namespace MTYD.ViewModel
                     //await Navigation.PushAsync(new Select(passingZones, cust_firstName, cust_lastName, cust_email));
                     if (paymentSucceed)
                     {
-                        await Navigation.PushAsync(new CongratsPage(passingZones, cust_firstName, cust_lastName, cust_email));
+                        await Navigation.PushAsync(new CongratsPage(passingZones, cust_firstName, cust_lastName, cust_email, new_purchase_id));
                     }
 
                     //done from checkout button clicked

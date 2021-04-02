@@ -194,7 +194,7 @@
                           Grid.Row="0" Grid.Column="0" HasShadow="False" >
 
                         <Editor x:Name="DeliveryEntry" Keyboard="Text" FontAttributes="Bold"
-                   FontSize="17" TextColor="Black" PlaceholderColor="#B4B4B4" Placeholder="Delivery Instructions"
+                   FontSize="17" TextColor="Black" PlaceholderColor="#B4B4B4" Placeholder="Delivery Instructions (for example:&#x0a;gate code, or where to put&#x0a;your meals if you're not home)"
                    HeightRequest="100" WidthRequest="24" Margin="0,2,0,0" TextChanged="DeliveryAdd_TextChanged"
                    BackgroundColor="#FFE5B4"  />
 

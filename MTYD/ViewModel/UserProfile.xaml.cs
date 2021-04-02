@@ -599,13 +599,13 @@ namespace MTYD.ViewModel
                     //return;
                 }
             }
-            if (withinZones == false)
-            {
-                await DisplayAlert("Invalid address", "The address you entered is not in any of our delivery zones", "OK");
-            }
-            else if (latitude == "0" || longitude == "0")
+            if (latitude == "0" || longitude == "0")
             {
                 await DisplayAlert("We couldn't find your address", "Please check for errors.", "Ok");
+            }
+            else if (withinZones == false)
+            {
+                await DisplayAlert("Invalid address", "The address you entered is not in any of our delivery zones", "OK");
             }
             //else if (withinZones == false)
             //{
