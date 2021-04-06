@@ -422,9 +422,9 @@
                                                 <ColumnDefinition Width="1*"/>
                                             </Grid.ColumnDefinitions>
 
-                                            <Button FontSize="40" TextColor="Black" HorizontalOptions="Fill" VerticalOptions="Fill" Text="-" Clicked="clickDecrease" BackgroundColor="#FFF0C6"/>
+                                            <Button FontSize="40" TextColor="Black" HorizontalOptions="Fill" VerticalOptions="Fill" Text="-" Clicked="clickDecreaseAddOn" BackgroundColor="#FFF0C6"/>
                                             <Label Grid.Column="1" Text="{Binding MealQuantity}" HorizontalOptions="Center" VerticalOptions="Center" FontSize="15"/>
-                                            <Button x:Name="increase_AddOns" Grid.Column="2" FontSize="30" TextColor="Black" HorizontalOptions="Fill" VerticalOptions="Fill" FontAttributes="Bold" Text="+" Clicked="clickIncrease" BackgroundColor="#FFBA00"/>
+                                            <Button x:Name="increase_AddOns" Grid.Column="2" FontSize="30" TextColor="Black" HorizontalOptions="Fill" VerticalOptions="Fill" FontAttributes="Bold" Text="+" Clicked="clickIncreaseAddOn" BackgroundColor="#FFBA00"/>
 
                                         </Grid>
 

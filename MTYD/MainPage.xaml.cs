@@ -64,6 +64,7 @@ namespace MTYD
             var height = DeviceDisplay.MainDisplayInfo.Height;
             Console.WriteLine("Width = " + width.ToString());
             Console.WriteLine("Height = " + height.ToString());
+            //DisplayAlert("Hello", "main page constructor called", "OK");
             InitializeComponent();
 
             string version = "";
@@ -101,10 +102,11 @@ namespace MTYD
                 appleLoginButton.IsEnabled = false;
             }
 
-            Application.Current.Properties["user_id"] = "000-00000";
-            Application.Current.Properties["platform"] = "GUEST";
-            Preferences.Set("user_latitude", "0.0");
-            Preferences.Set("user_longitude", "0.0");
+            //Application.Current.Properties["user_id"] = "000-00000";
+            //Application.Current.Properties["platform"] = "GUEST";
+            //Preferences.Set("user_latitude", "0.0");
+            //Preferences.Set("user_longitude", "0.0");
+            //Application.Current.SavePropertiesAsync();
         }
 
         public MainPage(string firstName, string lastName, string email)
@@ -416,7 +418,10 @@ namespace MTYD
                 foreach (var m in plan_obj["result"])
                 {
                     dates.Add(m["menu_date"].ToString());
+                    Debug.WriteLine("dates menu_date: " + m["menu_date"].ToString());
                     if (dates.Count > 2) break;
+                    if (m["meal_cat"].ToString() == "Add-On")
+                        continue;
                     menuNames.Add(m["meal_name"].ToString());
                     menuImages.Add(m["meal_photo_URL"].ToString());
                 }
@@ -790,6 +795,7 @@ namespace MTYD
                                 Preferences.Set("canChooseSelect", false);
 
                                 Debug.WriteLine("email verified:" + (info_obj3["result"])[0]["email_verified"].ToString());
+                                await Application.Current.SavePropertiesAsync();
                                 Application.Current.MainPage = new NavigationPage(new SubscriptionPage(loginAttempt.result[0].customer_first_name, loginAttempt.result[0].customer_last_name, loginAttempt.result[0].customer_email));
                                 directEmailVerified = 0;
                                 return;
@@ -840,6 +846,7 @@ namespace MTYD
 
                                 Console.WriteLine("go to SubscriptionPage");
                                 Preferences.Set("canChooseSelect", false);
+                                await Application.Current.SavePropertiesAsync();
                                 Application.Current.MainPage = new NavigationPage(new SubscriptionPage(loginAttempt.result[0].customer_first_name, loginAttempt.result[0].customer_last_name, loginAttempt.result[0].customer_email));
                                 directEmailVerified = 0;
                             }
@@ -871,6 +878,7 @@ namespace MTYD
                                 //TEMPORARY
                                 Preferences.Set("canChooseSelect", true);
                                 Zones[] zones = new Zones[] { };
+                                await Application.Current.SavePropertiesAsync();
                                 Application.Current.MainPage = new NavigationPage(new Select(zones, loginAttempt.result[0].customer_first_name, loginAttempt.result[0].customer_last_name, loginAttempt.result[0].customer_email));
                                 directEmailVerified = 0;
                             }
@@ -1243,6 +1251,7 @@ namespace MTYD
 
                                     Console.WriteLine("go to SubscriptionPage");
                                     Preferences.Set("canChooseSelect", false);
+                                    await Application.Current.SavePropertiesAsync();
                                     Application.Current.MainPage = new NavigationPage(new SubscriptionPage((info_obj2["result"])[0]["customer_first_name"].ToString(), (info_obj2["result"])[0]["customer_last_name"].ToString(), (info_obj2["result"])[0]["customer_email"].ToString()));
                                     return;
                                 }
@@ -1283,6 +1292,7 @@ namespace MTYD
 
                                     Console.WriteLine("go to SubscriptionPage");
                                     Preferences.Set("canChooseSelect", false);
+                                    await Application.Current.SavePropertiesAsync();
                                     Application.Current.MainPage = new NavigationPage(new SubscriptionPage((info_obj2["result"])[0]["customer_first_name"].ToString(), (info_obj2["result"])[0]["customer_last_name"].ToString(), (info_obj2["result"])[0]["customer_email"].ToString()));
                                 }
                                 else
@@ -1310,6 +1320,7 @@ namespace MTYD
 
                                     Preferences.Set("canChooseSelect", true);
                                     Zones[] zones = new Zones[] { };
+                                    await Application.Current.SavePropertiesAsync();
                                     Application.Current.MainPage = new NavigationPage(new Select(zones, (info_obj2["result"])[0]["customer_first_name"].ToString(), (info_obj2["result"])[0]["customer_last_name"].ToString(), (info_obj2["result"])[0]["customer_email"].ToString()));
                                 }
                             }
@@ -1635,6 +1646,7 @@ namespace MTYD
 
                                     Console.WriteLine("go to SubscriptionPage");
                                     Preferences.Set("canChooseSelect", false);
+                                    await Application.Current.SavePropertiesAsync();
                                     Application.Current.MainPage = new NavigationPage(new SubscriptionPage((info_obj2["result"])[0]["customer_first_name"].ToString(), (info_obj2["result"])[0]["customer_last_name"].ToString(), (info_obj2["result"])[0]["customer_email"].ToString()));
                                     return;
                                 }
@@ -1703,6 +1715,7 @@ namespace MTYD
                                     Console.WriteLine("go to SubscriptionPage");
                                     DisplayAlert("navigation", "sending to subscription", "close");
                                     Preferences.Set("canChooseSelect", false);
+                                    await Application.Current.SavePropertiesAsync();
                                     Application.Current.MainPage = new NavigationPage(new SubscriptionPage((info_obj2["result"])[0]["customer_first_name"].ToString(), (info_obj2["result"])[0]["customer_last_name"].ToString(), (info_obj2["result"])[0]["customer_email"].ToString()));
                                 }
                                 else
@@ -1753,6 +1766,7 @@ namespace MTYD
                                     //await Debug.WriteLine("a");
                                     //navToSelect((info_obj2["result"])[0]["customer_first_name"].ToString(), (info_obj2["result"])[0]["customer_last_name"].ToString(), (info_obj2["result"])[0]["customer_email"].ToString());
                                     Zones[] zones = new Zones[] { };
+                                    await Application.Current.SavePropertiesAsync();
                                     Application.Current.MainPage = new NavigationPage(new Select(zones, (info_obj2["result"])[0]["customer_first_name"].ToString(), (info_obj2["result"])[0]["customer_last_name"].ToString(), (info_obj2["result"])[0]["customer_email"].ToString()));
                                     //Application.Current.MainPage = new NavigationPage(new CongratsPage());
                                     //Application.Current.MainPage = new NavigationPage(new SubscriptionPage((info_obj2["result"])[0]["customer_first_name"].ToString(), (info_obj2["result"])[0]["customer_last_name"].ToString(), (info_obj2["result"])[0]["customer_email"].ToString()));
@@ -1843,31 +1857,37 @@ namespace MTYD
         {
             //reset password (get): https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/reset_password?email=welks@gmail.com
             //change password (post): https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_password
-
-            if (loginUsername.Text == "" || loginUsername.Text == null)
+            try
             {
-                DisplayAlert("Error", "please enter your email into the username box first", "OK");
-                return;
-            }
-            //if endpoint returns email not found, display an alert
-            else
-            {
-                string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/reset_password?email=" + loginUsername.Text;
-                var request = new HttpRequestMessage();
-                request.RequestUri = new Uri(url);
-                request.Method = HttpMethod.Get;
-                var client = new HttpClient();
-                HttpResponseMessage response = await client.SendAsync(request);
-                HttpContent content = response.Content;
-                Console.WriteLine("content: " + content.ToString());
-                var userString = await content.ReadAsStringAsync();
-                Debug.WriteLine("userString: " + userString);
-                JObject info_obj = JObject.Parse(userString);
-                Debug.WriteLine("info_obj");
-            }
+                if (loginUsername.Text == "" || loginUsername.Text == null)
+                {
+                    DisplayAlert("Error", "please enter your email into the username box first", "OK");
+                    return;
+                }
+                //if endpoint returns email not found, display an alert
+                else
+                {
+                    string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/reset_password?email=" + loginUsername.Text;
+                    var request = new HttpRequestMessage();
+                    request.RequestUri = new Uri(url);
+                    request.Method = HttpMethod.Get;
+                    var client = new HttpClient();
+                    HttpResponseMessage response = await client.SendAsync(request);
+                    HttpContent content = response.Content;
+                    Console.WriteLine("content: " + content.ToString());
+                    var userString = await content.ReadAsStringAsync();
+                    Debug.WriteLine("userString: " + userString);
+                    JObject info_obj = JObject.Parse(userString);
+                    Debug.WriteLine("info_obj");
+                }
 
-            //for testing 
-            Application.Current.MainPage = new changePassword(loginUsername.Text);
+                //for testing 
+                Application.Current.MainPage = new changePassword(loginUsername.Text);
+            }
+            catch
+            {
+                await DisplayAlert("Error", "Email not found in our database.", "OK");
+            }
         }
 
         void clickedSeePassword(System.Object sender, System.EventArgs e)
@@ -1884,37 +1904,55 @@ namespace MTYD
 
         async public void getProfileInfo()
         {
-            string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
-
-            //old db
-            //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
-            Debug.WriteLine("getProfileInfo url: " + url);
-            var request3 = new HttpRequestMessage();
-            request3.RequestUri = new Uri(url);
-            request3.Method = HttpMethod.Get;
-            var client2 = new HttpClient();
-            HttpResponseMessage response = await client2.SendAsync(request3);
-            HttpContent content = response.Content;
-            Console.WriteLine("content: " + content.ToString());
-            var userString = await content.ReadAsStringAsync();
-            Debug.WriteLine("userString: " + userString);
-            JObject info_obj3 = JObject.Parse(userString);
-            Debug.WriteLine("info_obj3: " + info_obj3.ToString());
-            this.NewMainPage.Clear();
-            Preferences.Set("user_latitude", (info_obj3["result"])[0]["customer_lat"].ToString());
-            Debug.WriteLine("user latitude" + Preferences.Get("user_latitude", ""));
-            Preferences.Set("user_longitude", (info_obj3["result"])[0]["customer_long"].ToString());
-            Debug.WriteLine("user longitude" + Preferences.Get("user_longitude", ""));
-
-            //Preferences.Set("profilePicLink", "");
-            //Preferences.Set("canChooseSelect", false);
-            if (Preferences.Get("canChooseSelect", false) == true)
+            try
             {
-                Zones[] zones = new Zones[] { };
-                Application.Current.MainPage = new NavigationPage(new Select(zones, (info_obj3["result"])[0]["customer_first_name"].ToString(), (info_obj3["result"])[0]["customer_last_name"].ToString(), (info_obj3["result"])[0]["customer_email"].ToString()));
+                //await DisplayAlert("success", "reached inside of getprofileinfo with this user id: " + (string)Application.Current.Properties["user_id"], "OK");
+                string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
+
+                //old db
+                //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
+                Debug.WriteLine("getProfileInfo url: " + url);
+                var request3 = new HttpRequestMessage();
+                request3.RequestUri = new Uri(url);
+                request3.Method = HttpMethod.Get;
+                var client2 = new HttpClient();
+                HttpResponseMessage response = await client2.SendAsync(request3);
+                HttpContent content = response.Content;
+                Console.WriteLine("content: " + content.ToString());
+                var userString = await content.ReadAsStringAsync();
+                Debug.WriteLine("userString: " + userString);
+                //await DisplayAlert("success", "reached after userString: " + userString, "OK");
+                JObject info_obj3 = JObject.Parse(userString);
+                Debug.WriteLine("info_obj3: " + info_obj3.ToString());
+                //await DisplayAlert("success", "reached after info_obj: " + info_obj3.ToString(), "OK");
+                this.NewMainPage.Clear();
+                Preferences.Set("user_latitude", (info_obj3["result"])[0]["customer_lat"].ToString());
+                Debug.WriteLine("user latitude" + Preferences.Get("user_latitude", ""));
+                Preferences.Set("user_longitude", (info_obj3["result"])[0]["customer_long"].ToString());
+                Debug.WriteLine("user longitude" + Preferences.Get("user_longitude", ""));
+
+                //Preferences.Set("profilePicLink", "");
+                //Preferences.Set("canChooseSelect", false);
+                if (Preferences.Get("canChooseSelect", false) == true)
+                {
+                    //await DisplayAlert("success", "going to select page", "OK");
+                    Zones[] zones = new Zones[] { };
+                    Application.Current.MainPage = new NavigationPage(new Select(zones, (info_obj3["result"])[0]["customer_first_name"].ToString(), (info_obj3["result"])[0]["customer_last_name"].ToString(), (info_obj3["result"])[0]["customer_email"].ToString()));
+                }
+                else
+                {
+                    //await DisplayAlert("success", "going to subscription page", "OK");
+                    Application.Current.MainPage = new NavigationPage(new SubscriptionPage((info_obj3["result"])[0]["customer_first_name"].ToString(), (info_obj3["result"])[0]["customer_last_name"].ToString(), (info_obj3["result"])[0]["customer_email"].ToString()));
+
+                }
+                return;
             }
-            else Application.Current.MainPage = new NavigationPage(new SubscriptionPage((info_obj3["result"])[0]["customer_first_name"].ToString(), (info_obj3["result"])[0]["customer_last_name"].ToString(), (info_obj3["result"])[0]["customer_email"].ToString()));
-            return;
+            catch
+            {
+                Application.Current.MainPage = new MainPage();
+                await DisplayAlert("Error", "something went wrong when trying to log you in automatically", "OK");
+                //Application.Current.MainPage = new MainPage();
+            }
         }
 
         public void navToSub(string first, string last, string email)
@@ -1967,6 +2005,7 @@ namespace MTYD
                 Application.Current.Properties["user_id"] = "000-00000";
                 Preferences.Set("user_latitude", "0.0");
                 Preferences.Set("user_longitude", "0.0");
+                await Application.Current.SavePropertiesAsync();
                 Application.Current.MainPage = new NavigationPage(new SubscriptionPage("Welcome", "Guest", "welcome@guest.com"));
             }
             else

@@ -485,6 +485,11 @@ namespace MTYD.ViewModel
                             mealQty = 0;
                         }
 
+                        //string source;
+                        //if (favDict.ContainsKey(obj.Result[i].MealUid) == true)
+                        //    source = "filledHeart.png";
+                        //else source = "emptyHeart.png";
+
                         Meals1.Add(new MealInfo
                         {
                             MealName = obj.Result[i].MealName,
@@ -493,6 +498,10 @@ namespace MTYD.ViewModel
                             MealQuantity = mealQty,
                             MealPrice = obj.Result[i].MealPrice,
                             ItemUid = obj.Result[i].MealUid,
+                            MealDesc = obj.Result[i].MealDesc,
+                            SeeDesc = false,
+                            SeeImage = true,
+                            HeartSource = "emptyHeart.png"
                         });
 
                         weekOneMenu.ItemsSource = Meals1;
@@ -540,6 +549,11 @@ namespace MTYD.ViewModel
                             mealQty = 0;
                         }
 
+                        //string source;
+                        //if (favDict.ContainsKey(obj.Result[i].MealUid) == true)
+                        //    source = "filledHeart.png";
+                        //else source = "emptyHeart.png";
+
                         Meals2.Add(new MealInfo
                         {
                             MealName = obj.Result[i].MealName,
@@ -548,6 +562,10 @@ namespace MTYD.ViewModel
                             MealQuantity = mealQty,
                             MealPrice = obj.Result[i].MealPrice,
                             ItemUid = obj.Result[i].MealUid,
+                            MealDesc = obj.Result[i].MealDesc,
+                            SeeDesc = false,
+                            SeeImage = true,
+                            HeartSource = "emptyHeart.png"
                         });
 
                         weekOneAddOns.ItemsSource = Meals2;
@@ -694,6 +712,29 @@ namespace MTYD.ViewModel
             }
 
         }
+
+        //info button
+        private void clickedInfo(object sender, EventArgs e)
+        {
+            ImageButton b = (ImageButton)sender;
+            MealInfo ms = b.BindingContext as MealInfo;
+
+            if (ms.SeeDesc == false)
+            {
+                ms.SeeImage = false;
+                ms.SeeDesc = true;
+            }
+            else
+            {
+                ms.SeeImage = true;
+                ms.SeeDesc = false;
+            }
+        }
+
+        //private async void clickedFavorite(object sender, EventArgs e)
+        //{
+
+        //}
 
 
         /////////date change for carousel view
