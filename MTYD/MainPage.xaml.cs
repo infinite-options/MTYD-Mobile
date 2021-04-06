@@ -2048,10 +2048,12 @@ namespace MTYD
 
         void clickedFb(System.Object sender, System.EventArgs e)
         {
+            Launcher.OpenAsync(new Uri("https://www.facebook.com/Meals-For-Me-101737768566584"));
         }
 
         void clickedIns(System.Object sender, System.EventArgs e)
         {
+            Launcher.OpenAsync(new Uri("https://www.instagram.com/mealsfor.me/"));
         }
     }
 }
