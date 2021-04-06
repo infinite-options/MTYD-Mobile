@@ -286,8 +286,24 @@
 
                 </Grid>
 
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
 
-                <Grid x:Name="monthYear" HorizontalOptions="Center" VerticalOptions="Center">
+                    <Frame Grid.Row="0" Grid.Column="0" Padding="10,5" Margin="20,0.5,1,0.5" BackgroundColor="#FFE5B4" HasShadow="False" CornerRadius="22" HeightRequest="35">
+                        <Entry Placeholder="Exp MM*" x:Name="cardExpMonth" MaxLength="2" Keyboard="Numeric" FontAttributes="Bold" FontSize="17"  BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"></Entry>
+                    </Frame>
+                    <Frame Grid.Row="0" Grid.Column="1" Padding="10,5" Margin="1,0.5,20,0.5" BackgroundColor="#FFE5B4" HasShadow="False" CornerRadius="22" HeightRequest="35">
+                        <Entry Placeholder="Exp YY*" x:Name="cardExpYear" MaxLength="2" Keyboard="Numeric" FontAttributes="Bold" FontSize="17"  BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"></Entry>
+                    </Frame>
+                </Grid>
+
+                <!--<Grid x:Name="monthYear" HorizontalOptions="Center" VerticalOptions="Center">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="18*"/>
                         <ColumnDefinition Width="16*"/>
@@ -352,7 +368,7 @@
 
                    </Frame>
 
-                </Grid>
+                </Grid>-->
 
 
 

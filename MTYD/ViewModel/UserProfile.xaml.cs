@@ -559,6 +559,25 @@ namespace MTYD.ViewModel
                         //    }
                         //    else withinZones = true;
                         //}
+                        string url3 = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/categoricalOptions/" + longitude + "," + latitude;
+                        Debug.WriteLine("categorical options url: " + url3);
+                        var client4 = new WebClient();
+                        var content = client4.DownloadString(url3);
+                        var obj = JsonConvert.DeserializeObject<ZonesDto>(content);
+
+                        if (obj.Result.Length == 0)
+                        {
+                            withinZones = false;
+                            //await DisplayAlert("Invalid address", "The address you entered is not in any of our delivery zones", "OK");
+                            break;
+                        }
+                        else
+                        {
+
+                            Debug.WriteLine("first business: " + obj.Result[0].business_name);
+                            
+                            withinZones = true;
+                        }
 
                         break;
                     }
@@ -583,6 +602,10 @@ namespace MTYD.ViewModel
             if (latitude == "0" || longitude == "0")
             {
                 await DisplayAlert("We couldn't find your address", "Please check for errors.", "Ok");
+            }
+            else if (withinZones == false)
+            {
+                await DisplayAlert("Invalid address", "The address you entered is not in any of our delivery zones", "OK");
             }
             //else if (withinZones == false)
             //{

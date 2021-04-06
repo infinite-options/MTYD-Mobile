@@ -27,7 +27,43 @@ namespace MTYD.ViewModel
         string m1f1uid = "", m1f2uid = "", m1f3uid = "", m2f1uid = "", m2f2uid = "", m2f3uid = "", m3f1uid = "", m3f2uid = "", m3f3uid = "", m4f1uid = "", m4f2uid = "", m4f3uid = "";
 
         string socialLogin; string refresh_token; string cc_num; string cc_exp_year; string cc_exp_month; string cc_cvv; string purchase_id;
-        string new_item_id; string customer_id; string itm_business_uid; string cc_zip; string cc_exp_date;
+        string new_item_id; string customer_id; string itm_business_uid; string cc_zip; string cc_exp_date; string qty; string numMeal;
+
+        int mealSelected;
+        int deliverySelected;
+        double[,] discounts;
+        double[,] itemPrices;
+        String[,] itemNames, itemUids;
+        double total;
+
+        public object NavigationStack { get; private set; }
+
+
+        public SubscriptionModal(string firstName, string lastName, string email, string social, string token, string num, string expDate, string cvv, string zip, string purchaseID, string businessID, string itemID, string customerID, string quantity, string numOfMeals)
+        {
+            cust_firstName = firstName;
+            cust_lastName = lastName;
+            cust_email = email;
+            Console.WriteLine("SubscriptionModal entered");
+            var width = DeviceDisplay.MainDisplayInfo.Width;
+            var height = DeviceDisplay.MainDisplayInfo.Height;
+
+            Console.WriteLine("next entered");
+            socialLogin = social; refresh_token = token; cc_num = num; cc_exp_date = expDate; cc_cvv = cvv; purchase_id = purchaseID;
+            new_item_id = itemID; customer_id = customerID; cc_zip = zip; itm_business_uid = businessID; qty = quantity; numMeal = numOfMeals;
+            Debug.WriteLine("new_item_id: " + new_item_id);
+
+            Console.WriteLine("next2 entered");
+
+            InitializeComponent();
+            NavigationPage.SetHasBackButton(this, false);
+            NavigationPage.SetHasNavigationBar(this, false);
+            checkPlatform(height, width);
+            GetDeliveryDates();
+            GetPlans();
+            Preferences.Set("freqSelected", "");
+        }
+
 
         protected async Task GetPlans()
         {
@@ -44,280 +80,155 @@ namespace MTYD.ViewModel
                 JObject plan_obj = JObject.Parse(userString);
                 this.NewPlan.Clear();
 
-                ArrayList item_price = new ArrayList();
-                ArrayList num_items = new ArrayList();
-                ArrayList payment_frequency = new ArrayList();
-                ArrayList groupArray = new ArrayList();
-
-                double doub;
+                ArrayList numMealsList = new ArrayList();
+                int i = 0, j = 0;
+                discounts = new double[10, 5];
+                itemPrices = new double[10, 5];
+                itemNames = new String[10, 5];
+                itemUids = new String[10, 5];
                 foreach (var m in plan_obj["result"])
                 {
-                    //Console.WriteLine("PARSING DATA FROM DB: ITEM_UID: " + m["item_uid"].ToString());
-                    item_price.Add(double.Parse(m["item_price"].ToString()));
-                    num_items.Add(int.Parse(m["num_items"].ToString()));
-                    payment_frequency.Add(int.Parse(m["payment_frequency"].ToString()));
-                    groupArray.Add(int.Parse(m["num_items"].ToString()));
-                    groupArray.Add(int.Parse(m["payment_frequency"].ToString()));
-                    double.TryParse(m["item_price"].ToString(), out doub);
-                    groupArray.Add(doub);
-                    groupArray.Add(m["item_name"].ToString());
-                    groupArray.Add(m["item_uid"].ToString());
-                }
-                //Find unique number of meals
-                int first = (int)num_items[1];
-                int[] numItemsArray = new int[] { first, 0, 0, 0 };
-                int index = 1;
-                //Fill Unique # of Meals
-                for (int i = 2; i < num_items.Count; i++)
-                {
-                    if (((int)num_items[i] != first) && ((int)num_items[i] != numItemsArray[1]) && ((int)num_items[i] != numItemsArray[2]) && ((int)num_items[i] != numItemsArray[3]))
+                    int num_meals = int.Parse(m["num_items"].ToString());
+                    if (!numMealsList.Contains(num_meals))
                     {
-                        numItemsArray[index] = (int)num_items[i];
-                        index++;
+                        numMealsList.Add(num_meals);
+                    }
+                    discounts[i, j] = double.Parse(m["delivery_discount"].ToString());
+                    itemPrices[i, j] = double.Parse(m["item_price"].ToString());
+                    itemNames[i, j] = m["item_name"].ToString();
+                    itemUids[i, j] = m["item_uid"].ToString();
+                    Debug.WriteLine("received item_uid: " + m["item_uid"].ToString());
+                    Debug.WriteLine("item name: " + m["item_name"].ToString());
+                    //if (itemUids[i, j] == new_item_id)
+                    //{
+                    //    Debug.WriteLine("row (# of deliveries):" + i.ToString());
+                    //    Debug.WriteLine("column (# of meals):" + j.ToString());
+                    //    EventArgs ev = new EventArgs();
+                    //    if (qty == "1")
+                    //        clickedDeliveryNum(delivery1, ev);
+                    //    else if (qty == "2")
+                    //        clickedDeliveryNum(delivery2, ev);
+                    //    else if (qty == "3")
+                    //        clickedDeliveryNum(delivery3, ev);
+                    //    else if (qty == "4")
+                    //        clickedDeliveryNum(delivery4, ev);
+                    //    else if (qty == "5")
+                    //        clickedDeliveryNum(delivery5, ev);
+                    //    else if (qty == "6")
+                    //        clickedDeliveryNum(delivery6, ev);
+                    //    else if (qty == "7")
+                    //        clickedDeliveryNum(delivery7, ev);
+                    //    else if (qty == "8")
+                    //        clickedDeliveryNum(delivery8, ev);
+                    //    else if (qty == "9")
+                    //        clickedDeliveryNum(delivery9, ev);
+                    //    else clickedDeliveryNum(delivery10, ev);
+
+                    //    if (j == 0)
+                    //        clickedMeals1(meals1, ev);
+                    //    else if (j == 1)
+                    //        clickedMeals2(meals2, ev);
+                    //    else if (j == 2)
+                    //        clickedMeals3(meals3, ev);
+                    //    else if (j == 3)
+                    //        clickedMeals4(meals4, ev);
+                    //    else clickedMeals5(meals5, ev);
+
+                    //}
+
+                    if (j == 4)
+                    {
+                        i++;
+                        j = 0;
+                    }
+                    else
+                    {
+                        j++;
                     }
                 }
-                meals1.Text = numItemsArray[0].ToString() + " MEALS";
-                meals2.Text = numItemsArray[1].ToString() + " MEALS";
-                meals3.Text = numItemsArray[2].ToString() + " MEALS";
-                meals4.Text = numItemsArray[3].ToString() + " MEALS";
 
-                //Fill Payment Frequency
-                int[] payFreqArray = new int[] { (int)payment_frequency[1], 0, 0 };
-                index = 1;
-                for (int i = 2; i < payment_frequency.Count; i++)
-                {
-                    if (((int)payment_frequency[i] != payFreqArray[0]) && ((int)payment_frequency[i] != payFreqArray[1]) && ((int)payment_frequency[i] != payFreqArray[2]))
-                    {
-                        payFreqArray[index] = (int)payment_frequency[i];
-                        index++;
-                    }
-                }
-                Array.Sort(payFreqArray, 0, 3);
+                meals1.Text = numMealsList[4].ToString() + " MEALS";
+                meals2.Text = numMealsList[3].ToString() + " MEALS";
+                meals3.Text = numMealsList[2].ToString() + " MEALS";
+                meals4.Text = numMealsList[1].ToString() + " MEALS";
+                meals5.Text = numMealsList[0].ToString() + " MEALS";
 
-                payOp1.Text = payFreqArray[0].ToString();
+                //for (int k = 0; k < 5; k++)
+                //{
+                //    if (itemUids[0, k] == new_item_id)
+                //    {
+                //        EventArgs ev = new EventArgs();
+                //        if (qty == "1")
+                //            clickedDeliveryNum(delivery1, ev);
+                //        else if (qty == "2")
+                //            clickedDeliveryNum(delivery2, ev);
+                //        else if (qty == "3")
+                //            clickedDeliveryNum(delivery3, ev);
+                //        else if (qty == "4")
+                //            clickedDeliveryNum(delivery4, ev);
+                //        else if (qty == "5")
+                //            clickedDeliveryNum(delivery5, ev);
+                //        else if (qty == "6")
+                //            clickedDeliveryNum(delivery6, ev);
+                //        else if (qty == "7")
+                //            clickedDeliveryNum(delivery7, ev);
+                //        else if (qty == "8")
+                //            clickedDeliveryNum(delivery8, ev);
+                //        else if (qty == "9")
+                //            clickedDeliveryNum(delivery9, ev);
+                //        else clickedDeliveryNum(delivery10, ev);
 
-                if (payOp1.Text == "1")
-                    payOp1.Text = "WEEKLY";
-                else payOp1.Text = payFreqArray[0].ToString() + " WEEKS";
+                //        if (k == 0)
+                //            clickedMeals1(meals1, ev);
+                //        else if (k == 1)
+                //            clickedMeals2(meals2, ev);
+                //        else if (k == 2)
+                //            clickedMeals3(meals3, ev);
+                //        else if (k == 3)
+                //            clickedMeals4(meals4, ev);
+                //        else clickedMeals5(meals5, ev);
 
-                payOp2.Text = payFreqArray[1].ToString() + " WEEKS";
-                payOp3.Text = payFreqArray[2].ToString() + " WEEKS";
-                //cat1.Text = catArray[0];
-                //VenueCatListView.ItemsSource = VenueCat;
-                int m1 = numItemsArray[0];
-                int m2 = numItemsArray[1];
-                int m3 = numItemsArray[2];
-                int m4 = numItemsArray[3];
-                int p1 = payFreqArray[0];
-                int p2 = payFreqArray[1];
-                int p3 = payFreqArray[2];
+                //        return;
+                //    }
+                //}
 
-                Console.WriteLine("START OF GET PLANS FUNCTION");
-                for (int i = 5; i < (groupArray.Count) - 4; i += 5)
-                {
-                    if ((int)groupArray[i] == m1 && (int)groupArray[i + 1] == p1)
-                    {
-                        m1price_f1 = (double)groupArray[i + 2];
-                        m1f1name = (string)groupArray[i + 3];
-                        m1f1uid = (string)groupArray[i + 4];
+                EventArgs ev = new EventArgs();
+                if (qty == "1")
+                    clickedDeliveryNum(delivery1, ev);
+                else if (qty == "2")
+                    clickedDeliveryNum(delivery2, ev);
+                else if (qty == "3")
+                    clickedDeliveryNum(delivery3, ev);
+                else if (qty == "4")
+                    clickedDeliveryNum(delivery4, ev);
+                else if (qty == "5")
+                    clickedDeliveryNum(delivery5, ev);
+                else if (qty == "6")
+                    clickedDeliveryNum(delivery6, ev);
+                else if (qty == "7")
+                    clickedDeliveryNum(delivery7, ev);
+                else if (qty == "8")
+                    clickedDeliveryNum(delivery8, ev);
+                else if (qty == "9")
+                    clickedDeliveryNum(delivery9, ev);
+                else clickedDeliveryNum(delivery10, ev);
 
-                        if (new_item_id == m1f1uid)
-                        {
-                            Preferences.Set("freqSelected", "1");
-                            Preferences.Set("mealSelected", "1");
-                            TotalPrice.Text = "$" + m1price_f1.ToString();
-                            meals1.BackgroundColor = Color.FromHex("#FFBA00");
-                            payButton2.Opacity = 0.3;
-                            payButton3.Opacity = 0.3;
-                        }
-                    }
-                    else if ((int)groupArray[i] == m1 && (int)groupArray[i + 1] == p2)
-                    {
-                        m1price_f2 = (double)groupArray[i + 2];
-                        m1f2name = (string)groupArray[i + 3];
-                        m1f2uid = (string)groupArray[i + 4];
-
-                        if (new_item_id == m1f2uid)
-                        {
-                            Preferences.Set("freqSelected", "2");
-                            Preferences.Set("mealSelected", "1");
-                            TotalPrice.Text = "$" + m1price_f2.ToString();
-                            meals1.BackgroundColor = Color.FromHex("#FFBA00");
-                            payButton1.Opacity = 0.3;
-                            payButton3.Opacity = 0.3;
-                        }
-                    }
-                    else if ((int)groupArray[i] == m1 && (int)groupArray[i + 1] == p3)
-                    {
-                        m1price_f3 = (double)groupArray[i + 2];
-                        m1f3name = (string)groupArray[i + 3];
-                        m1f3uid = (string)groupArray[i + 4];
-
-                        if (new_item_id == m1f3uid)
-                        {
-                            Preferences.Set("freqSelected", "3");
-                            Preferences.Set("mealSelected", "1");
-                            TotalPrice.Text = "$" + m1price_f3.ToString();
-                            meals1.BackgroundColor = Color.FromHex("#FFBA00");
-                            payButton1.Opacity = 0.3;
-                            payButton2.Opacity = 0.3;
-                        }
-                    }
-                    //
-                    else if ((int)groupArray[i] == m2 && (int)groupArray[i + 1] == p1)
-                    {
-                        m2price_f1 = (double)groupArray[i + 2];
-                        m2f1name = (string)groupArray[i + 3];
-                        m2f1uid = (string)groupArray[i + 4];
-
-                        if (new_item_id == m2f1uid)
-                        {
-                            Preferences.Set("freqSelected", "1");
-                            Preferences.Set("mealSelected", "2");
-                            TotalPrice.Text = "$" + m2price_f1.ToString();
-                            meals2.BackgroundColor = Color.FromHex("#FFBA00");
-                            payButton2.Opacity = 0.3;
-                            payButton3.Opacity = 0.3;
-                        }
-                    }
-                    else if ((int)groupArray[i] == m2 && (int)groupArray[i + 1] == p2)
-                    {
-                        m2price_f2 = (double)groupArray[i + 2];
-                        m2f2name = (string)groupArray[i + 3];
-                        m2f2uid = (string)groupArray[i + 4];
-
-                        if (new_item_id == m2f2uid)
-                        {
-                            Preferences.Set("freqSelected", "2");
-                            Preferences.Set("mealSelected", "2");
-                            TotalPrice.Text = "$" + m2price_f2.ToString();
-                            meals2.BackgroundColor = Color.FromHex("#FFBA00");
-                            payButton1.Opacity = 0.3;
-                            payButton3.Opacity = 0.3;
-                        }
-                    }
-                    else if ((int)groupArray[i] == m2 && (int)groupArray[i + 1] == p3)
-                    {
-                        m2price_f3 = (double)groupArray[i + 2];
-                        m2f3name = (string)groupArray[i + 3];
-                        m2f3uid = (string)groupArray[i + 4];
-
-                        if (new_item_id == m2f3uid)
-                        {
-                            Preferences.Set("freqSelected", "3");
-                            Preferences.Set("mealSelected", "2");
-                            TotalPrice.Text = "$" + m2price_f3.ToString();
-                            meals2.BackgroundColor = Color.FromHex("#FFBA00");
-                            payButton1.Opacity = 0.3;
-                            payButton2.Opacity = 0.3;
-                        }
-                    }
-                    //
-                    else if ((int)groupArray[i] == m3 && (int)groupArray[i + 1] == p1)
-                    {
-                        m3price_f1 = (double)groupArray[i + 2];
-                        m3f1name = (string)groupArray[i + 3];
-                        m3f1uid = (string)groupArray[i + 4];
-
-                        if (new_item_id == m3f1uid)
-                        {
-                            Preferences.Set("freqSelected", "1");
-                            Preferences.Set("mealSelected", "3");
-                            TotalPrice.Text = "$" + m3price_f1.ToString();
-                            meals3.BackgroundColor = Color.FromHex("#FFBA00");
-                            payButton2.Opacity = 0.3;
-                            payButton3.Opacity = 0.3;
-                        }
-                    }
-                    else if ((int)groupArray[i] == m3 && (int)groupArray[i + 1] == p2)
-                    {
-                        m3price_f2 = (double)groupArray[i + 2];
-                        m3f2name = (string)groupArray[i + 3];
-                        m3f2uid = (string)groupArray[i + 4];
-
-                        if (new_item_id == m3f2uid)
-                        {
-                            Preferences.Set("freqSelected", "2");
-                            Preferences.Set("mealSelected", "3");
-                            TotalPrice.Text = "$" + m3price_f2.ToString();
-                            meals3.BackgroundColor = Color.FromHex("#FFBA00");
-                            payButton1.Opacity = 0.3;
-                            payButton3.Opacity = 0.3;
-                        }
-                    }
-                    else if ((int)groupArray[i] == m3 && (int)groupArray[i + 1] == p3)
-                    {
-                        m3price_f3 = (double)groupArray[i + 2];
-                        m3f3name = (string)groupArray[i + 3];
-                        m3f3uid = (string)groupArray[i + 4];
-
-                        if (new_item_id == m3f3uid)
-                        {
-                            Preferences.Set("freqSelected", "3");
-                            Preferences.Set("mealSelected", "3");
-                            TotalPrice.Text = "$" + m3price_f3.ToString();
-                            meals3.BackgroundColor = Color.FromHex("#FFBA00");
-                            payButton2.Opacity = 0.3;
-                            payButton1.Opacity = 0.3;
-                        }
-                    }
-                    //
-                    else if ((int)groupArray[i] == m4 && (int)groupArray[i + 1] == p1)
-                    {
-                        m4price_f1 = (double)groupArray[i + 2];
-                        m4f1name = (string)groupArray[i + 3];
-                        m4f1uid = (string)groupArray[i + 4];
-
-                        if (new_item_id == m4f1uid)
-                        {
-                            Preferences.Set("freqSelected", "1");
-                            Preferences.Set("mealSelected", "4");
-                            TotalPrice.Text = "$" + m4price_f1.ToString();
-                            meals4.BackgroundColor = Color.FromHex("#FFBA00");
-                            payButton2.Opacity = 0.3;
-                            payButton3.Opacity = 0.3;
-                        }
-                    }
-                    else if ((int)groupArray[i] == m4 && (int)groupArray[i + 1] == p2)
-                    {
-                        m4price_f2 = (double)groupArray[i + 2];
-                        m4f2name = (string)groupArray[i + 3];
-                        m4f2uid = (string)groupArray[i + 4];
-
-                        if (new_item_id == m4f2uid)
-                        {
-                            Preferences.Set("freqSelected", "2");
-                            Preferences.Set("mealSelected", "4");
-                            TotalPrice.Text = "$" + m4price_f2.ToString();
-                            meals4.BackgroundColor = Color.FromHex("#FFBA00");
-                            payButton1.Opacity = 0.3;
-                            payButton3.Opacity = 0.3;
-                        }
-                    }
-                    else if ((int)groupArray[i] == m4 && (int)groupArray[i + 1] == p3)
-                    {
-                        m4price_f3 = (double)groupArray[i + 2];
-                        m4f3name = (string)groupArray[i + 3];
-                        m4f3uid = (string)groupArray[i + 4];
-
-                        if (new_item_id == m4f3uid)
-                        {
-                            Preferences.Set("freqSelected", "3");
-                            Preferences.Set("mealSelected", "4");
-                            TotalPrice.Text = "$" + m4price_f3.ToString();
-                            meals4.BackgroundColor = Color.FromHex("#FFBA00");
-                            payButton2.Opacity = 0.3;
-                            payButton1.Opacity = 0.3;
-                        }
-                    }
-                }
-                Console.WriteLine("END OF GET PLANS FUNCTION");
+                if (numMeal == "2")
+                    clickedMeals1(meals1, ev);
+                else if (numMeal == "3")
+                    clickedMeals2(meals2, ev);
+                else if (numMeal == "4")
+                    clickedMeals3(meals3, ev);
+                else if (numMeal == "5")
+                    clickedMeals4(meals4, ev);
+                else clickedMeals5(meals5, ev);
             }
         }
 
 
         void checkPlatform(double height, double width)
         {
+            Xamarin.Forms.NavigationPage.SetHasNavigationBar(this, false);
             if (Device.RuntimePlatform == Device.iOS)
             {
                 orangeBox.HeightRequest = height / 2;
@@ -330,7 +241,6 @@ namespace MTYD.ViewModel
                 pfp.CornerRadius = (int)(width / 40);
                 //pfp.Margin = new Thickness(0, 0, 23, 27);
                 innerGrid.Margin = new Thickness(0, 0, 23, 27);
-
 
                 if (Preferences.Get("profilePicLink", "") == "")
                 {
@@ -352,61 +262,87 @@ namespace MTYD.ViewModel
                 menu.WidthRequest = width / 25;
                 menu.Margin = new Thickness(25, 0, 0, 30);
 
+                backButton.HeightRequest = width / 25;
+                backButton.WidthRequest = width / 25;
+                backButton.Margin = new Thickness(25, 0, 0, 30);
+
                 takeoutGrid.Margin = new Thickness(20, 10, 20, 10);
                 takeout.HeightRequest = width / 18;
                 takeout.WidthRequest = width / 18;
-                deliveryDays.FontSize = width / 38;
-                deliveryDays2.FontSize = width / 38;
-                numMeals.FontSize = width / 37;
                 numMeals.Margin = new Thickness(25, 10, 0, 10);
 
-                meals1.HeightRequest = height / 30;
-                meals1.WidthRequest = width / 4;
-                meals1.CornerRadius = (int)(height / 60);
-                meals1.FontSize = width / 40;
-                meals1.Margin = new Thickness(30, 0, 15, 0);
-                meals2.HeightRequest = height / 30;
-                meals2.WidthRequest = width / 4;
-                meals2.CornerRadius = (int)(height / 60);
-                meals2.FontSize = width / 40;
-                meals2.Margin = new Thickness(30, 0, 15, 0);
-
-                meals3.HeightRequest = height / 30;
-                meals3.WidthRequest = width / 4;
-                meals3.CornerRadius = (int)(height / 60);
-                meals3.FontSize = width / 40;
-                meals3.Margin = new Thickness(15, 0, 30, 0);
-                meals4.HeightRequest = height / 30;
-                meals4.WidthRequest = width / 4;
-                meals4.CornerRadius = (int)(height / 60);
-                meals4.FontSize = width / 40;
-                meals4.Margin = new Thickness(15, 0, 30, 0);
-
                 prepay.Margin = new Thickness(30, 0, 0, 0);
-                prepay.FontSize = width / 37;
 
-                payFrame.HeightRequest = height / 12;
-                payOp1.FontSize = width / 50;
-                payOp2.FontSize = width / 50;
-                payOp3.FontSize = width / 50;
-                payButton1.HeightRequest = width / 11;
-                payButton1.WidthRequest = width / 11;
-                payButton1.CornerRadius = (int)(width / 22);
-                payButton2.HeightRequest = width / 11;
-                payButton2.WidthRequest = width / 11;
-                payButton2.CornerRadius = (int)(width / 22);
-                payButton3.HeightRequest = width / 11;
-                payButton3.WidthRequest = width / 11;
-                payButton3.CornerRadius = (int)(width / 22);
+                meals1.WidthRequest = width / 5;
+                meals1.HeightRequest = width / 20;
+                meals1.CornerRadius = (int)(width / 40);
+                meals2.WidthRequest = width / 5;
+                meals2.HeightRequest = width / 20;
+                meals2.CornerRadius = (int)(width / 40);
+                meals3.WidthRequest = width / 5;
+                meals3.HeightRequest = width / 20;
+                meals3.CornerRadius = (int)(width / 40);
+                meals4.WidthRequest = width / 5;
+                meals4.HeightRequest = width / 20;
+                meals4.CornerRadius = (int)(width / 40);
+                meals5.WidthRequest = width / 5;
+                meals5.HeightRequest = width / 20;
+                meals5.CornerRadius = (int)(width / 40);
 
-                PriceFrame.HeightRequest = height / 30;
-                PriceFrame.WidthRequest = width / 6;
-                PriceFrame.CornerRadius = 30;
-                TotalPrice.FontSize = width / 40;
-                SignUpButton.HeightRequest = height / 30;
-                SignUpButton.WidthRequest = width / 5;
-                SignUpButton.CornerRadius = (int)(height / 60);
-                SignUpButton.FontSize = width / 43;
+                delivery1.WidthRequest = width / 10;
+                delivery1.HeightRequest = width / 9;
+                delivery1Text1.FontSize = width / 50;
+
+                delivery2.WidthRequest = width / 10;
+                delivery2.HeightRequest = width / 9;
+                delivery2Text1.FontSize = width / 50;
+                delivery2Text2.FontSize = width / 65;
+
+                delivery3.WidthRequest = width / 10;
+                delivery3.HeightRequest = width / 9;
+                delivery3Text1.FontSize = width / 50;
+                delivery3Text2.FontSize = width / 65;
+
+                delivery4.WidthRequest = width / 10;
+                delivery4.HeightRequest = width / 9;
+                delivery4Text1.FontSize = width / 50;
+                delivery4Text2.FontSize = width / 65;
+
+                delivery5.WidthRequest = width / 10;
+                delivery5.HeightRequest = width / 9;
+                delivery5Text1.FontSize = width / 50;
+                delivery5Text2.FontSize = width / 65;
+
+                delivery6.WidthRequest = width / 10;
+                delivery6.HeightRequest = width / 9;
+                delivery6Text1.FontSize = width / 50;
+                delivery6Text2.FontSize = width / 65;
+
+                delivery7.WidthRequest = width / 10;
+                delivery7.HeightRequest = width / 9;
+                delivery7Text1.FontSize = width / 50;
+                delivery7Text2.FontSize = width / 65;
+
+                delivery8.WidthRequest = width / 10;
+                delivery8.HeightRequest = width / 9;
+                delivery8Text1.FontSize = width / 50;
+                delivery8Text2.FontSize = width / 65;
+
+                delivery9.WidthRequest = width / 10;
+                delivery9.HeightRequest = width / 9;
+                delivery9Text1.FontSize = width / 50;
+                delivery9Text2.FontSize = width / 65;
+
+                delivery10.WidthRequest = width / 10;
+                delivery10.HeightRequest = width / 9;
+                delivery10Text1.FontSize = width / 50;
+                delivery10Text2.FontSize = width / 65;
+
+                //SignUpButton.HeightRequest = height / 50;
+                SignUpButton.WidthRequest = width / 4;
+                SignUpButton.HeightRequest = width / 15;
+                SignUpButton.CornerRadius = (int)(width / 30);
+                SignUpButton.FontSize = width / 50;
             }
             else //android
             {
@@ -415,7 +351,6 @@ namespace MTYD.ViewModel
                 orangeBox.CornerRadius = height / 40;
                 heading.FontSize = width / 45;
                 heading.Margin = new Thickness(0, 0, 0, 40);
-                //heading.VerticalOptions = LayoutOptions.Center;
                 pfp.HeightRequest = width / 25;
                 pfp.WidthRequest = width / 25;
                 pfp.CornerRadius = (int)(width / 50);
@@ -423,6 +358,10 @@ namespace MTYD.ViewModel
                 menu.HeightRequest = width / 30;
                 menu.WidthRequest = width / 30;
                 menu.Margin = new Thickness(25, 0, 0, 40);
+
+                backButton.HeightRequest = width / 30;
+                backButton.WidthRequest = width / 30;
+                backButton.Margin = new Thickness(25, 0, 0, 40);
 
                 takeoutGrid.Margin = new Thickness(20, 10, 20, 10);
                 takeout.HeightRequest = width / 22;
@@ -432,367 +371,323 @@ namespace MTYD.ViewModel
                 numMeals.FontSize = width / 48;
                 numMeals.Margin = new Thickness(25, 10, 0, 10);
 
-                meals1.HeightRequest = height / 33;
-                meals1.WidthRequest = width / 4;
-                meals1.CornerRadius = (int)(height / 60);
-                meals1.FontSize = width / 49;
-                meals1.Margin = new Thickness(30, 0, 15, 0);
-                meals2.HeightRequest = height / 33;
-                meals2.WidthRequest = width / 4;
-                meals2.CornerRadius = (int)(height / 60);
-                meals2.FontSize = width / 49;
-                meals2.Margin = new Thickness(30, 0, 15, 0);
-
-                meals3.HeightRequest = height / 33;
-                meals3.WidthRequest = width / 4;
-                meals3.CornerRadius = (int)(height / 60);
-                meals3.FontSize = width / 49;
-                meals3.Margin = new Thickness(15, 0, 30, 0);
-                meals4.HeightRequest = height / 33;
-                meals4.WidthRequest = width / 4;
-                meals4.CornerRadius = (int)(height / 60);
-                meals4.FontSize = width / 49;
-                meals4.Margin = new Thickness(15, 0, 30, 0);
-
                 prepay.Margin = new Thickness(30, 0, 0, 0);
                 prepay.FontSize = width / 48;
 
-                payFrame.HeightRequest = height / 12;
-                payFrame.CornerRadius = 105;
-                payOp1.FontSize = width / 55;
-                payOp2.FontSize = width / 55;
-                payOp3.FontSize = width / 55;
-                payButton1.HeightRequest = width / 13;
-                payButton1.WidthRequest = width / 13;
-                payButton1.CornerRadius = (int)(width / 26);
-                payButton2.HeightRequest = width / 13;
-                payButton2.WidthRequest = width / 13;
-                payButton2.CornerRadius = (int)(width / 26);
-                payButton3.HeightRequest = width / 13;
-                payButton3.WidthRequest = width / 13;
-                payButton3.CornerRadius = (int)(width / 26);
+                meals1.WidthRequest = width / 7;
+                meals1.HeightRequest = height / 60;
+                meals1.CornerRadius = (int)(height / 120);
+                meals2.WidthRequest = width / 7;
+                meals2.HeightRequest = height / 60;
+                meals2.CornerRadius = (int)(height / 120);
+                meals3.WidthRequest = width / 7;
+                meals3.HeightRequest = height / 60;
+                meals3.CornerRadius = (int)(height / 120);
+                meals4.WidthRequest = width / 7;
+                meals4.HeightRequest = height / 60;
+                meals4.CornerRadius = (int)(height / 120);
+                meals5.WidthRequest = width / 7;
+                meals5.HeightRequest = height / 60;
+                meals5.CornerRadius = (int)(height / 120);
+
+                delivery1.WidthRequest = width / 13;
+                delivery1.HeightRequest = width / 11;
+                delivery1Text1.FontSize = width / 50;
+
+                delivery2.WidthRequest = width / 13;
+                delivery2.HeightRequest = width / 11;
+                delivery2Text1.FontSize = width / 50;
+                delivery2Text2.FontSize = width / 70;
+
+                delivery3.WidthRequest = width / 13;
+                delivery3.HeightRequest = width / 11;
+                delivery3Text1.FontSize = width / 50;
+                delivery3Text2.FontSize = width / 70;
+
+                delivery4.WidthRequest = width / 13;
+                delivery4.HeightRequest = width / 11;
+                delivery4Text1.FontSize = width / 50;
+                delivery4Text2.FontSize = width / 70;
+
+                delivery5.WidthRequest = width / 13;
+                delivery5.HeightRequest = width / 11;
+                delivery5Text1.FontSize = width / 50;
+                delivery5Text2.FontSize = width / 70;
+
+                delivery6.WidthRequest = width / 13;
+                delivery6.HeightRequest = width / 11;
+                delivery6Text1.FontSize = width / 50;
+                delivery6Text2.FontSize = width / 70;
+
+                delivery7.WidthRequest = width / 13;
+                delivery7.HeightRequest = width / 11;
+                delivery7Text1.FontSize = width / 50;
+                delivery7Text2.FontSize = width / 70;
+
+                delivery8.WidthRequest = width / 13;
+                delivery8.HeightRequest = width / 11;
+                delivery8Text1.FontSize = width / 50;
+                delivery8Text2.FontSize = width / 70;
+
+                delivery9.WidthRequest = width / 13;
+                delivery9.HeightRequest = width / 11;
+                delivery9Text1.FontSize = width / 50;
+                delivery9Text2.FontSize = width / 70;
+
+                delivery10.WidthRequest = width / 13;
+                delivery10.HeightRequest = width / 11;
+                delivery10Text1.FontSize = width / 50;
+                delivery10Text2.FontSize = width / 70;
 
                 spacer4.HeightRequest = 10;
-                PriceFrame.HeightRequest = height / 33;
-                PriceFrame.WidthRequest = width / 8;
-                PriceFrame.CornerRadius = 33;
-                TotalPrice.FontSize = width / 50;
-                SignUpButton.HeightRequest = height / 33;
-                SignUpButton.WidthRequest = width / 8;
-                SignUpButton.CornerRadius = (int)(height / 66);
-                SignUpButton.FontSize = width / 50;
+                SignUpButton.HeightRequest = height / 50;
+                SignUpButton.WidthRequest = width / 4;
+                SignUpButton.CornerRadius = (int)(height / 100);
+                SignUpButton.FontSize = width / 60;
             }
 
             //common adjustments regardless of platform
         }
 
-        public SubscriptionModal(string firstName, string lastName, string email, string social, string token, string num, string expDate, string cvv, string zip, string purchaseID, string businessID, string itemID, string customerID)
+        protected async Task GetDeliveryDates()
         {
-            cust_firstName = firstName;
-            cust_lastName = lastName;
-            cust_email = email;
-            Console.WriteLine("SubscriptionModal entered");
-            var width = DeviceDisplay.MainDisplayInfo.Width;
-            var height = DeviceDisplay.MainDisplayInfo.Height;
+            var request = new HttpRequestMessage();
+            request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/delivery_weekdays");
+            request.Method = HttpMethod.Get;
+            var client = new HttpClient();
+            HttpResponseMessage response = await client.SendAsync(request);
 
-            Console.WriteLine("next entered");
-            socialLogin = social; refresh_token = token; cc_num = num; cc_exp_date = expDate; cc_cvv = cvv; purchase_id = purchaseID;
-            new_item_id = itemID; customer_id = customerID; cc_zip = zip; itm_business_uid = businessID;
-            Console.WriteLine("next2 entered");
-
-            InitializeComponent();
-            NavigationPage.SetHasBackButton(this, false);
-            NavigationPage.SetHasNavigationBar(this, false);
-            checkPlatform(height, width);
-            GetPlans();
-            Preferences.Set("freqSelected", "");
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                HttpContent content = response.Content;
+                var userString = await content.ReadAsStringAsync();
+                JObject dates_obj = JObject.Parse(userString);
+                HashSet<String> dates = new HashSet<String>();
+                foreach (var m in dates_obj["result"])
+                {
+                    Console.WriteLine(m["weekday(menu_date)"].ToString());
+                    dates.Add(m["weekday(menu_date)"].ToString());
+                }
+                String deliveryDatesText = "";
+                if (dates.Contains("0")) deliveryDatesText += "Monday, ";
+                if (dates.Contains("1")) deliveryDatesText += "Tuesday, ";
+                if (dates.Contains("2")) deliveryDatesText += "Wednesday, ";
+                if (dates.Contains("3")) deliveryDatesText += "Thursday, ";
+                if (dates.Contains("4")) deliveryDatesText += "Friday, ";
+                if (dates.Contains("5")) deliveryDatesText += "Saturday, ";
+                if (dates.Contains("6")) deliveryDatesText += "Sunday, ";
+                if (deliveryDatesText.Length != 0)
+                {
+                    deliveryDays2.Text = deliveryDatesText.Substring(0, deliveryDatesText.Length - 2);
+                }
+            }
         }
-
 
         private void clickedMeals1(object sender, EventArgs e)
         {
-            SignUpButton.Text = "CHECK PRICE";
             meals1.BackgroundColor = Color.FromHex("#FFBA00");
-            meals2.BackgroundColor = Color.FromHex("#FFF0C6");
-            meals3.BackgroundColor = Color.FromHex("#FFF0C6");
-            meals4.BackgroundColor = Color.FromHex("#FFF0C6");
-            Preferences.Set("mealSelected", "1");
-
-            string freq_select = Preferences.Get("freqSelected", "");
-            if (freq_select == "1")
+            meals2.BackgroundColor = Color.FromHex("#f5f5f5");
+            meals3.BackgroundColor = Color.FromHex("#f5f5f5");
+            meals4.BackgroundColor = Color.FromHex("#f5f5f5");
+            meals5.BackgroundColor = Color.FromHex("#f5f5f5");
+            Button b = (Button)sender;
+            Preferences.Set("mealSelected", b.Text.Substring(0, b.Text.IndexOf(" ")));
+            mealSelected = int.Parse(meals1.Text.Substring(0, 1));
+            if (deliverySelected != 0)
             {
-                TotalPrice.Text = "$" + m1price_f1.ToString();
-                Preferences.Set("item_name", m1f1name);
-                Preferences.Set("item_uid", m1f1uid);
-                new_item_id = m1f1uid;
+                Preferences.Set("item_name", itemNames[deliverySelected - 1, 6 - mealSelected]);
+                Preferences.Set("item_uid", itemUids[deliverySelected - 1, 4]);
+                mealNum.Text = mealSelected.ToString();
+                deliveryNum.Text = deliverySelected.ToString();
+                discountPercentage.Text = ((int)discounts[deliverySelected - 1, 6 - mealSelected]).ToString() + "%";
+                total = deliverySelected * itemPrices[deliverySelected - 1, 6 - mealSelected] * (1 - discounts[deliverySelected - 1, 6 - mealSelected] / 100.0);
+                TotalPrice.Text = "$" + total.ToString();
+                pricePerMeal.Text = "That's Less Than $" + Math.Ceiling(total / mealSelected / deliverySelected) + " per Meal!";
             }
-            else if (freq_select == "2")
-            {
-                TotalPrice.Text = "$" + m1price_f2.ToString();
-                Preferences.Set("item_name", m1f2name);
-                Preferences.Set("item_uid", m1f2uid);
-                new_item_id = m1f2uid;
-            }
-            else if (freq_select == "3")
-            {
-                TotalPrice.Text = "$" + m1price_f3.ToString();
-                Preferences.Set("item_name", m1f3name);
-                Preferences.Set("item_uid", m1f3uid);
-                new_item_id = m1f3uid;
-            }
-            else
-            {
-                TotalPrice.Text = "$00.00";
-            }
-
         }
+
         private void clickedMeals2(object sender, EventArgs e)
         {
-            SignUpButton.Text = "CHECK PRICE";
-            meals1.BackgroundColor = Color.FromHex("#FFF0C6");
+            meals1.BackgroundColor = Color.FromHex("#f5f5f5");
             meals2.BackgroundColor = Color.FromHex("#FFBA00");
-            meals3.BackgroundColor = Color.FromHex("#FFF0C6");
-            meals4.BackgroundColor = Color.FromHex("#FFF0C6");
-            Preferences.Set("mealSelected", "2");
-
-            string freq_select = Preferences.Get("freqSelected", "");
-            if (freq_select == "1")
+            meals3.BackgroundColor = Color.FromHex("#f5f5f5");
+            meals4.BackgroundColor = Color.FromHex("#f5f5f5");
+            meals5.BackgroundColor = Color.FromHex("#f5f5f5");
+            Button b = (Button)sender;
+            Preferences.Set("mealSelected", b.Text.Substring(0, b.Text.IndexOf(" ")));
+            mealSelected = int.Parse(meals2.Text.Substring(0, 1));
+            if (deliverySelected != 0)
             {
-                TotalPrice.Text = "$" + m2price_f1.ToString();
-                Preferences.Set("item_name", m2f1name);
-                Preferences.Set("item_uid", m2f1uid);
-                new_item_id = m2f1uid;
-            }
-            else if (freq_select == "2")
-            {
-                TotalPrice.Text = "$" + m2price_f2.ToString();
-                Preferences.Set("item_name", m2f2name);
-                Preferences.Set("item_uid", m2f2uid);
-                new_item_id = m2f2uid;
-            }
-            else if (freq_select == "3")
-            {
-                TotalPrice.Text = "$" + m2price_f3.ToString();
-                Preferences.Set("item_name", m2f3name);
-                Preferences.Set("item_uid", m2f3uid);
-                new_item_id = m2f3uid;
-            }
-            else
-            {
-                TotalPrice.Text = "$00.00";
+                Preferences.Set("item_name", itemNames[deliverySelected - 1, 6 - mealSelected]);
+                Preferences.Set("item_uid", itemUids[deliverySelected - 1, 3]);
+                mealNum.Text = mealSelected.ToString();
+                deliveryNum.Text = deliverySelected.ToString();
+                discountPercentage.Text = ((int)discounts[deliverySelected - 1, 6 - mealSelected]).ToString() + "%";
+                total = deliverySelected * itemPrices[deliverySelected - 1, 6 - mealSelected] * (1 - discounts[deliverySelected - 1, 6 - mealSelected] / 100.0);
+                TotalPrice.Text = "$" + total.ToString();
+                pricePerMeal.Text = "That's Less Than $" + Math.Ceiling(total / mealSelected / deliverySelected) + " per Meal!";
             }
         }
 
         private void clickedMeals3(object sender, EventArgs e)
         {
-            SignUpButton.Text = "CHECK PRICE";
-            meals1.BackgroundColor = Color.FromHex("#FFF0C6");
-            meals2.BackgroundColor = Color.FromHex("#FFF0C6");
+            meals1.BackgroundColor = Color.FromHex("#f5f5f5");
+            meals2.BackgroundColor = Color.FromHex("#f5f5f5");
             meals3.BackgroundColor = Color.FromHex("#FFBA00");
-            meals4.BackgroundColor = Color.FromHex("#FFF0C6");
-            Preferences.Set("mealSelected", "3");
-
-            string freq_select = Preferences.Get("freqSelected", "");
-            if (freq_select == "1")
+            meals4.BackgroundColor = Color.FromHex("#f5f5f5");
+            meals5.BackgroundColor = Color.FromHex("#f5f5f5");
+            Button b = (Button)sender;
+            Preferences.Set("mealSelected", b.Text.Substring(0, b.Text.IndexOf(" ")));
+            mealSelected = int.Parse(meals3.Text.Substring(0, 1));
+            if (deliverySelected != 0)
             {
-                TotalPrice.Text = "$" + m3price_f1.ToString();
-                Preferences.Set("item_name", m3f1name);
-                Preferences.Set("item_uid", m3f1uid);
-                new_item_id = m3f1uid;
-            }
-            else if (freq_select == "2")
-            {
-                TotalPrice.Text = "$" + m3price_f2.ToString();
-                Preferences.Set("item_name", m3f2name);
-                Preferences.Set("item_uid", m3f2uid);
-                new_item_id = m3f2uid;
-            }
-            else if (freq_select == "3")
-            {
-                TotalPrice.Text = "$" + m3price_f3.ToString();
-                Preferences.Set("item_name", m3f3name);
-                Preferences.Set("item_uid", m3f3uid);
-                new_item_id = m3f3uid;
-            }
-            else
-            {
-                TotalPrice.Text = "$00.00";
+                Preferences.Set("item_name", itemNames[deliverySelected - 1, 6 - mealSelected]);
+                Preferences.Set("item_uid", itemUids[deliverySelected - 1, 2]);
+                mealNum.Text = mealSelected.ToString();
+                deliveryNum.Text = deliverySelected.ToString();
+                discountPercentage.Text = ((int)discounts[deliverySelected - 1, 6 - mealSelected]).ToString() + "%";
+                total = deliverySelected * itemPrices[deliverySelected - 1, 6 - mealSelected] * (1 - discounts[deliverySelected - 1, 6 - mealSelected] / 100.0);
+                TotalPrice.Text = "$" + total.ToString();
+                pricePerMeal.Text = "That's Less Than $" + Math.Ceiling(total / mealSelected / deliverySelected) + " per Meal!";
             }
         }
 
         private void clickedMeals4(object sender, EventArgs e)
         {
-            SignUpButton.Text = "CHECK PRICE";
-            meals1.BackgroundColor = Color.FromHex("#FFF0C6");
-            meals2.BackgroundColor = Color.FromHex("#FFF0C6");
-            meals3.BackgroundColor = Color.FromHex("#FFF0C6");
+            meals1.BackgroundColor = Color.FromHex("#f5f5f5");
+            meals2.BackgroundColor = Color.FromHex("#f5f5f5");
+            meals3.BackgroundColor = Color.FromHex("#f5f5f5");
             meals4.BackgroundColor = Color.FromHex("#FFBA00");
-            Preferences.Set("mealSelected", "4");
-
-            string freq_select = Preferences.Get("freqSelected", "");
-            if (freq_select == "1")
+            meals5.BackgroundColor = Color.FromHex("#f5f5f5");
+            Button b = (Button)sender;
+            Preferences.Set("mealSelected", b.Text.Substring(0, b.Text.IndexOf(" ")));
+            mealSelected = int.Parse(meals4.Text.Substring(0, 1));
+            if (deliverySelected != 0)
             {
-                TotalPrice.Text = "$" + m4price_f1.ToString();
-                Preferences.Set("item_name", m4f1name);
-                Preferences.Set("item_uid", m4f1uid);
-                new_item_id = m4f1uid;
-            }
-            else if (freq_select == "2")
-            {
-                TotalPrice.Text = "$" + m4price_f2.ToString();
-                Preferences.Set("item_name", m4f2name);
-                Preferences.Set("item_uid", m4f2uid);
-                new_item_id = m4f2uid;
-            }
-            else if (freq_select == "3")
-            {
-                TotalPrice.Text = "$" + m4price_f3.ToString();
-                Preferences.Set("item_name", m4f3name);
-                Preferences.Set("item_uid", m4f3uid);
-                new_item_id = m4f3uid;
-            }
-            else
-            {
-                TotalPrice.Text = "$00.00";
+                Preferences.Set("item_name", itemNames[deliverySelected - 1, 6 - mealSelected]);
+                Preferences.Set("item_uid", itemUids[deliverySelected - 1, 1]);
+                mealNum.Text = mealSelected.ToString();
+                deliveryNum.Text = deliverySelected.ToString();
+                discountPercentage.Text = ((int)discounts[deliverySelected - 1, 6 - mealSelected]).ToString() + "%";
+                total = deliverySelected * itemPrices[deliverySelected - 1, 6 - mealSelected] * (1 - discounts[deliverySelected - 1, 6 - mealSelected] / 100.0);
+                TotalPrice.Text = "$" + total.ToString();
+                pricePerMeal.Text = "That's Less Than $" + Math.Ceiling(total / mealSelected / deliverySelected) + " per Meal!";
             }
         }
 
-        private void clickedPayOp1(object sender, EventArgs e)
+        private void clickedMeals5(object sender, EventArgs e)
         {
-            SignUpButton.Text = "CHECK PRICE";
-            //payButton1.BackgroundColor = Color.FromHex("#FFF0C6");
-            //payButton2.BackgroundColor = Color.Transparent;
-            //payButton3.BackgroundColor = Color.Transparent;
-
-            payButton1.Opacity = 1;
-            payButton2.Opacity = 0.3;
-            payButton3.Opacity = 0.3;
-
-            //TryParse(TotalPrice.Text.Substring(1, 5), double val);
-            Preferences.Set("freqSelected", "1");
-            string meal_select = Preferences.Get("mealSelected", "");
-            if (meal_select == "1")
+            meals1.BackgroundColor = Color.FromHex("#f5f5f5");
+            meals2.BackgroundColor = Color.FromHex("#f5f5f5");
+            meals3.BackgroundColor = Color.FromHex("#f5f5f5");
+            meals4.BackgroundColor = Color.FromHex("#f5f5f5");
+            meals5.BackgroundColor = Color.FromHex("#FFBA00");
+            Button b = (Button)sender;
+            Preferences.Set("mealSelected", b.Text.Substring(0, b.Text.IndexOf(" ")));
+            mealSelected = int.Parse(meals5.Text.Substring(0, 1));
+            if (deliverySelected != 0)
             {
-                TotalPrice.Text = "$" + m1price_f1.ToString();
-                Preferences.Set("item_name", m1f1name);
-                Preferences.Set("item_uid", m1f1uid);
-                new_item_id = Preferences.Get("item_uid", "");
-            }
-            else if (meal_select == "2")
-            {
-                TotalPrice.Text = "$" + m2price_f1.ToString();
-                Preferences.Set("item_name", m2f1name);
-                Preferences.Set("item_uid", m2f1uid);
-                new_item_id = Preferences.Get("item_uid", "");
-            }
-            else if (meal_select == "3")
-            {
-                TotalPrice.Text = "$" + m3price_f1.ToString();
-                Preferences.Set("item_name", m3f1name);
-                Preferences.Set("item_uid", m3f1uid);
-                new_item_id = Preferences.Get("item_uid", "");
-            }
-            else if (meal_select == "4")
-            {
-                TotalPrice.Text = "$" + m4price_f1.ToString();
-                Preferences.Set("item_name", m4f1name);
-                Preferences.Set("item_uid", m4f1uid);
-                new_item_id = Preferences.Get("item_uid", "");
-            }
-            else
-            {
-                TotalPrice.Text = "$00.00";
+                Preferences.Set("item_name", itemNames[deliverySelected - 1, 6 - mealSelected]);
+                Preferences.Set("item_uid", itemUids[deliverySelected - 1, 0]);
+                mealNum.Text = mealSelected.ToString();
+                deliveryNum.Text = deliverySelected.ToString();
+                discountPercentage.Text = ((int)discounts[deliverySelected - 1, 6 - mealSelected]).ToString() + "%";
+                total = deliverySelected * itemPrices[deliverySelected - 1, 6 - mealSelected] * (1 - discounts[deliverySelected - 1, 6 - mealSelected] / 100.0);
+                TotalPrice.Text = "$" + total.ToString();
+                pricePerMeal.Text = "That's Less Than $" + Math.Ceiling(total / mealSelected / deliverySelected) + " per Meal!";
             }
         }
 
-        private void clickedPayOp2(object sender, EventArgs e)
+        private void clickedDeliveryNum(object sender, EventArgs e)
         {
-            SignUpButton.Text = "CHECK PRICE";
-            //payButton1.BackgroundColor = Color.Transparent;
-            //payButton2.BackgroundColor = Color.FromHex("#FFF0C6");
-            //payButton3.BackgroundColor = Color.Transparent;
+            Button btn = (Button)sender;
 
-            payButton1.Opacity = 0.3;
-            payButton2.Opacity = 1;
-            payButton3.Opacity = 0.3;
+            delivery1Frame.BackgroundColor = Color.FromHex("#f5f5f5");
+            delivery2Frame.BackgroundColor = Color.FromHex("#f5f5f5");
+            delivery3Frame.BackgroundColor = Color.FromHex("#f5f5f5");
+            delivery4Frame.BackgroundColor = Color.FromHex("#f5f5f5");
+            delivery5Frame.BackgroundColor = Color.FromHex("#f5f5f5");
+            delivery6Frame.BackgroundColor = Color.FromHex("#f5f5f5");
+            delivery7Frame.BackgroundColor = Color.FromHex("#f5f5f5");
+            delivery8Frame.BackgroundColor = Color.FromHex("#f5f5f5");
+            delivery9Frame.BackgroundColor = Color.FromHex("#f5f5f5");
+            delivery10Frame.BackgroundColor = Color.FromHex("#f5f5f5");
 
-            Preferences.Set("freqSelected", "2");
-            string meal_select = Preferences.Get("mealSelected", "");
-            if (meal_select == "1")
+            if (btn.Equals(delivery1))
             {
-                TotalPrice.Text = "$" + m1price_f2.ToString();
-                Preferences.Set("item_name", m1f2name);
-                Preferences.Set("item_uid", m1f2uid);
-                new_item_id = Preferences.Get("item_uid", "");
+                delivery1Frame.BackgroundColor = Color.FromHex("#FFBA00");
+                Preferences.Set("freqSelected", "1");
+                deliverySelected = 1;
             }
-            else if (meal_select == "2")
+            else if (btn.Equals(delivery2))
             {
-                TotalPrice.Text = "$" + m2price_f2.ToString();
-                Preferences.Set("item_name", m2f2name);
-                Preferences.Set("item_uid", m2f2uid);
-                new_item_id = Preferences.Get("item_uid", "");
+                delivery2Frame.BackgroundColor = Color.FromHex("#FFBA00");
+                Preferences.Set("freqSelected", "2");
+                deliverySelected = 2;
             }
-            else if (meal_select == "3")
+            else if (btn.Equals(delivery3))
             {
-                TotalPrice.Text = "$" + m3price_f2.ToString();
-                Preferences.Set("item_name", m3f2name);
-                Preferences.Set("item_uid", m3f2uid);
-                new_item_id = Preferences.Get("item_uid", "");
+                delivery3Frame.BackgroundColor = Color.FromHex("#FFBA00");
+                Preferences.Set("freqSelected", "3");
+                deliverySelected = 3;
             }
-            else if (meal_select == "4")
+            else if (btn.Equals(delivery4))
             {
-                TotalPrice.Text = "$" + m4price_f2.ToString();
-                Preferences.Set("item_name", m4f2name);
-                Preferences.Set("item_uid", m4f2uid);
-                new_item_id = Preferences.Get("item_uid", "");
+                delivery4Frame.BackgroundColor = Color.FromHex("#FFBA00");
+                Preferences.Set("freqSelected", "4");
+                deliverySelected = 4;
+            }
+            else if (btn.Equals(delivery5))
+            {
+                delivery5Frame.BackgroundColor = Color.FromHex("#FFBA00");
+                Preferences.Set("freqSelected", "5");
+                deliverySelected = 5;
+            }
+            else if (btn.Equals(delivery6))
+            {
+                delivery6Frame.BackgroundColor = Color.FromHex("#FFBA00");
+                Preferences.Set("freqSelected", "6");
+                deliverySelected = 6;
+            }
+            else if (btn.Equals(delivery7))
+            {
+                delivery7Frame.BackgroundColor = Color.FromHex("#FFBA00");
+                Preferences.Set("freqSelected", "7");
+                deliverySelected = 7;
+            }
+            else if (btn.Equals(delivery8))
+            {
+                delivery8Frame.BackgroundColor = Color.FromHex("#FFBA00");
+                Preferences.Set("freqSelected", "8");
+                deliverySelected = 8;
+            }
+            else if (btn.Equals(delivery9))
+            {
+                delivery9Frame.BackgroundColor = Color.FromHex("#FFBA00");
+                Preferences.Set("freqSelected", "9");
+                deliverySelected = 9;
+            }
+            else if (btn.Equals(delivery10))
+            {
+                delivery10Frame.BackgroundColor = Color.FromHex("#FFBA00");
+                Preferences.Set("freqSelected", "10");
+                deliverySelected = 10;
             }
             else
             {
-                TotalPrice.Text = "$00.00";
+                Preferences.Set("freqSelected", "0");
+                deliverySelected = 0;
             }
-        }
-
-        private void clickedPayOp3(object sender, EventArgs e)
-        {
-            SignUpButton.Text = "CHECK PRICE";
-            //payButton1.BackgroundColor = Color.Transparent;
-            //payButton2.BackgroundColor = Color.Transparent;
-            //payButton3.BackgroundColor = Color.FromHex("#FFF0C6");
-
-            payButton1.Opacity = 0.3;
-            payButton2.Opacity = 0.3;
-            payButton3.Opacity = 1;
-
-            Preferences.Set("freqSelected", "3");
-
-            string meal_select = Preferences.Get("mealSelected", "");
-            if (meal_select == "1")
+            if (mealSelected != 0)
             {
-                TotalPrice.Text = "$" + m1price_f3.ToString();
-                Preferences.Set("item_name", m1f3name);
-                Preferences.Set("item_uid", m1f3uid);
-                new_item_id = Preferences.Get("item_uid", "");
-            }
-            else if (meal_select == "2")
-            {
-                TotalPrice.Text = "$" + m2price_f3.ToString();
-                Preferences.Set("item_name", m2f3name);
-                Preferences.Set("item_uid", m2f3uid);
-                new_item_id = Preferences.Get("item_uid", "");
-            }
-            else if (meal_select == "3")
-            {
-                TotalPrice.Text = "$" + m3price_f3.ToString();
-                Preferences.Set("item_name", m3f3name);
-                Preferences.Set("item_uid", m3f3uid);
-                new_item_id = Preferences.Get("item_uid", "");
-            }
-            else if (meal_select == "4")
-            {
-                TotalPrice.Text = "$" + m4price_f3.ToString();
-                Preferences.Set("item_name", m4f3name);
-                Preferences.Set("item_uid", m4f3uid);
-                new_item_id = Preferences.Get("item_uid", "");
+                Preferences.Set("item_name", itemNames[deliverySelected - 1, 6 - mealSelected]);
+                //Preferences.Set("item_uid", itemUids[deliverySelected - 1, 6 - mealSelected]);
+                mealNum.Text = mealSelected.ToString();
+                deliveryNum.Text = deliverySelected.ToString();
+                discountPercentage.Text = ((int)discounts[deliverySelected - 1, 6 - mealSelected]).ToString() + "%";
+                total = deliverySelected * itemPrices[deliverySelected - 1, 6 - mealSelected] * (1 - discounts[deliverySelected - 1, 6 - mealSelected] / 100.0);
+                TotalPrice.Text = "$" + total.ToString();
+                pricePerMeal.Text = "That's Less Than $" + Math.Ceiling(total / mealSelected / deliverySelected) + " per Meal!";
             }
         }
 
@@ -808,7 +703,8 @@ namespace MTYD.ViewModel
             {
                 var request2 = new HttpRequestMessage();
                 Debug.WriteLine("subscriptionModal trying to delete this purchase uid: " + purchase_id.ToString());
-                request2.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/refund_calculator?purchase_uid=" + purchase_id);
+                //request2.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/refund_calculator?purchase_uid=" + purchase_id);
+                request2.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_purchase/" + purchase_id);
                 request2.Method = HttpMethod.Get;
                 var client2 = new HttpClient();
                 HttpResponseMessage response2 = await client2.SendAsync(request2);
@@ -819,9 +715,10 @@ namespace MTYD.ViewModel
                     var userString2 = await content2.ReadAsStringAsync();
                     JObject refund_obj = JObject.Parse(userString2);
 
-                    Debug.WriteLine("first start" + refund_obj["result"][0].ToString());
-                    Debug.WriteLine("this is what I'm getting: " + refund_obj["result"][0]["refund_amount"].ToString());
-                    double amt = Double.Parse(refund_obj["result"][0]["refund_amount"].ToString());
+
+                    Debug.WriteLine("first start" + refund_obj.ToString());
+                    Debug.WriteLine("this is what I'm getting: " + refund_obj["refund_amount"].ToString());
+                    double amt = Double.Parse(refund_obj["refund_amount"].ToString());
                     double currentPrice = Double.Parse(TotalPrice.Text.ToString().Substring(1));
                     double correct = amt - currentPrice;
 
@@ -885,7 +782,7 @@ namespace MTYD.ViewModel
                 updated.cc_cvv = cc_cvv;
                 updated.purchase_id = purchase_id;
                 //updated.purchase_id = "400-000019";
-                updated.new_item_id = new_item_id;
+                updated.new_item_id = Preferences.Get("item_uid", "");
                 updated.customer_email = cust_email;
                 updated.cc_zip = cc_zip;
                 updated.start_delivery_date = "";
@@ -893,22 +790,7 @@ namespace MTYD.ViewModel
                 List<Item2> list1 = new List<Item2>();
                 Item2 item1 = new Item2();
                 item1.qty = Preferences.Get("freqSelected", "");
-                if (Preferences.Get("mealSelected", "") == "1")
-                {
-                    item1.name = "5 Meal Plan";
-                }
-                else if (Preferences.Get("mealSelected", "") == "2")
-                {
-                    item1.name = "10 Meal Plan";
-                }
-                else if (Preferences.Get("mealSelected", "") == "3")
-                {
-                    item1.name = "15 Meal Plan";
-                }
-                else
-                {
-                    item1.name = "20 Meal Plan";
-                }
+                item1.name = Preferences.Get("mealSelected", "") + " Meal Plan";
                 item1.price = Preferences.Get("price", "");
                 item1.item_uid = updated.new_item_id;
                 item1.itm_business_uid = itm_business_uid;
@@ -948,7 +830,16 @@ namespace MTYD.ViewModel
 
         async void clickedBack(System.Object sender, System.EventArgs e)
         {
-            await Navigation.PopAsync(false);
+            Console.WriteLine("navigation stack count: " + Navigation.NavigationStack.Count);
+            if (Navigation.NavigationStack.Count == 1)
+            {
+                Application.Current.MainPage = new MainPage();
+            }
+            else
+            {
+                await Navigation.PopAsync(false);
+            }
+            //await Navigation.PushAsync(new MainPage());
         }
 
         async void clickedMenu(System.Object sender, System.EventArgs e)

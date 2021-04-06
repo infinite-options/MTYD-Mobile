@@ -69,9 +69,9 @@ namespace MTYD.ViewModel
             //newPayment.amount_paid = Preferences.Get("price", "00.00");
             newPayment.cc_num = CCEntry.Text;
             //newPayment.cc_exp_year = YearPicker.Items[YearPicker.SelectedIndex];
-            newPayment.cc_exp_year = "2022";
+            newPayment.cc_exp_year = "20" + cardExpYear.Text;
             //newPayment.cc_exp_month = MonthPicker.Items[MonthPicker.SelectedIndex];
-            newPayment.cc_exp_month = "11";
+            newPayment.cc_exp_month = cardExpMonth.Text;
             newPayment.cc_cvv = CVVEntry.Text;
             newPayment.cc_zip = ZipCCEntry.Text;
 
@@ -198,79 +198,82 @@ namespace MTYD.ViewModel
                 if (ZipCCEntry.Text == "")
                     ZipCCEntry.Placeholder = "Zip*";
 
-                int chosenMonth = int.Parse(((info_obj["result"])[0]["cc_exp_date"].ToString()).Substring(5, 2));
-                if (chosenMonth == 1)
-                    MonthPicker.SelectedIndex = 0;
-                else if (chosenMonth == 2)
-                    MonthPicker.SelectedIndex = 1;
-                else if (chosenMonth == 3)
-                    MonthPicker.SelectedIndex = 2;
-                else if (chosenMonth == 4)
-                    MonthPicker.SelectedIndex = 3;
-                else if (chosenMonth == 5)
-                    MonthPicker.SelectedIndex = 4;
-                else if (chosenMonth == 6)
-                    MonthPicker.SelectedIndex = 5;
-                else if (chosenMonth == 7)
-                    MonthPicker.SelectedIndex = 6;
-                else if (chosenMonth == 8)
-                    MonthPicker.SelectedIndex = 7;
-                else if (chosenMonth == 9)
-                    MonthPicker.SelectedIndex = 8;
-                else if (chosenMonth == 10)
-                    MonthPicker.SelectedIndex = 9;
-                else if (chosenMonth == 11)
-                    MonthPicker.SelectedIndex = 10;
-                else MonthPicker.SelectedIndex = 11;
+                cardExpMonth.Text = ((info_obj["result"])[0]["cc_exp_date"].ToString()).Substring(5, 2);
+                //int chosenMonth = int.Parse(((info_obj["result"])[0]["cc_exp_date"].ToString()).Substring(5, 2));
+                //if (chosenMonth == 1)
+                //    MonthPicker.SelectedIndex = 0;
+                //else if (chosenMonth == 2)
+                //    MonthPicker.SelectedIndex = 1;
+                //else if (chosenMonth == 3)
+                //    MonthPicker.SelectedIndex = 2;
+                //else if (chosenMonth == 4)
+                //    MonthPicker.SelectedIndex = 3;
+                //else if (chosenMonth == 5)
+                //    MonthPicker.SelectedIndex = 4;
+                //else if (chosenMonth == 6)
+                //    MonthPicker.SelectedIndex = 5;
+                //else if (chosenMonth == 7)
+                //    MonthPicker.SelectedIndex = 6;
+                //else if (chosenMonth == 8)
+                //    MonthPicker.SelectedIndex = 7;
+                //else if (chosenMonth == 9)
+                //    MonthPicker.SelectedIndex = 8;
+                //else if (chosenMonth == 10)
+                //    MonthPicker.SelectedIndex = 9;
+                //else if (chosenMonth == 11)
+                //    MonthPicker.SelectedIndex = 10;
+                //else MonthPicker.SelectedIndex = 11;
 
-                int chosenYear = int.Parse(((info_obj["result"])[0]["cc_exp_date"].ToString()).Substring(0, 4));
-                if (chosenYear == 2020)
-                    YearPicker.SelectedIndex = 0;
-                else if (chosenYear == 2021)
-                    YearPicker.SelectedIndex = 1;
-                else if (chosenYear == 2022)
-                    YearPicker.SelectedIndex = 2;
-                else if (chosenYear == 2023)
-                    YearPicker.SelectedIndex = 3;
-                else if (chosenYear == 2024)
-                    YearPicker.SelectedIndex = 4;
-                else if (chosenYear == 2025)
-                    YearPicker.SelectedIndex = 5;
-                else if (chosenYear == 2026)
-                    YearPicker.SelectedIndex = 6;
-                else if (chosenYear == 2027)
-                    YearPicker.SelectedIndex = 7;
-                else if (chosenYear == 2028)
-                    YearPicker.SelectedIndex = 8;
-                else if (chosenYear == 2029)
-                    YearPicker.SelectedIndex = 9;
-                else if (chosenYear == 2030)
-                    YearPicker.SelectedIndex = 10;
-                else if (chosenYear == 2031)
-                    YearPicker.SelectedIndex = 11;
-                else if (chosenYear == 2032)
-                    YearPicker.SelectedIndex = 12;
-                else if (chosenYear == 2033)
-                    YearPicker.SelectedIndex = 13;
-                else if (chosenYear == 2034)
-                    YearPicker.SelectedIndex = 14;
-                else if (chosenYear == 2035)
-                    YearPicker.SelectedIndex = 15;
-                else if (chosenYear == 2036)
-                    YearPicker.SelectedIndex = 16;
-                else if (chosenYear == 2037)
-                    YearPicker.SelectedIndex = 17;
-                else if (chosenYear == 2038)
-                    YearPicker.SelectedIndex = 18;
-                else if (chosenYear == 2039)
-                    YearPicker.SelectedIndex = 19;
-                else if (chosenYear == 2040)
-                    YearPicker.SelectedIndex = 20;
-                else if (chosenYear == 2041)
-                    YearPicker.SelectedIndex = 21;
-                else if (chosenYear == 2042)
-                    YearPicker.SelectedIndex = 22;
-                else YearPicker.SelectedIndex = 23;
+                cardExpYear.Text = ((info_obj["result"])[0]["cc_exp_date"].ToString()).Substring(2, 2);
+
+                //int chosenYear = int.Parse(((info_obj["result"])[0]["cc_exp_date"].ToString()).Substring(0, 4));
+                //if (chosenYear == 2020)
+                //    YearPicker.SelectedIndex = 0;
+                //else if (chosenYear == 2021)
+                //    YearPicker.SelectedIndex = 1;
+                //else if (chosenYear == 2022)
+                //    YearPicker.SelectedIndex = 2;
+                //else if (chosenYear == 2023)
+                //    YearPicker.SelectedIndex = 3;
+                //else if (chosenYear == 2024)
+                //    YearPicker.SelectedIndex = 4;
+                //else if (chosenYear == 2025)
+                //    YearPicker.SelectedIndex = 5;
+                //else if (chosenYear == 2026)
+                //    YearPicker.SelectedIndex = 6;
+                //else if (chosenYear == 2027)
+                //    YearPicker.SelectedIndex = 7;
+                //else if (chosenYear == 2028)
+                //    YearPicker.SelectedIndex = 8;
+                //else if (chosenYear == 2029)
+                //    YearPicker.SelectedIndex = 9;
+                //else if (chosenYear == 2030)
+                //    YearPicker.SelectedIndex = 10;
+                //else if (chosenYear == 2031)
+                //    YearPicker.SelectedIndex = 11;
+                //else if (chosenYear == 2032)
+                //    YearPicker.SelectedIndex = 12;
+                //else if (chosenYear == 2033)
+                //    YearPicker.SelectedIndex = 13;
+                //else if (chosenYear == 2034)
+                //    YearPicker.SelectedIndex = 14;
+                //else if (chosenYear == 2035)
+                //    YearPicker.SelectedIndex = 15;
+                //else if (chosenYear == 2036)
+                //    YearPicker.SelectedIndex = 16;
+                //else if (chosenYear == 2037)
+                //    YearPicker.SelectedIndex = 17;
+                //else if (chosenYear == 2038)
+                //    YearPicker.SelectedIndex = 18;
+                //else if (chosenYear == 2039)
+                //    YearPicker.SelectedIndex = 19;
+                //else if (chosenYear == 2040)
+                //    YearPicker.SelectedIndex = 20;
+                //else if (chosenYear == 2041)
+                //    YearPicker.SelectedIndex = 21;
+                //else if (chosenYear == 2042)
+                //    YearPicker.SelectedIndex = 22;
+                //else YearPicker.SelectedIndex = 23;
             }
         }
 
@@ -285,8 +288,10 @@ namespace MTYD.ViewModel
             var width = DeviceDisplay.MainDisplayInfo.Width;
             var height = DeviceDisplay.MainDisplayInfo.Height;
 
-            MonthPicker.SelectedIndex = Int32.Parse(month) - 1;
-            YearPicker.SelectedIndex = Int32.Parse(year) - 2020;
+            //MonthPicker.SelectedIndex = Int32.Parse(month) - 1;
+            cardExpMonth.Text = month;
+            //YearPicker.SelectedIndex = Int32.Parse(year) - 2020;
+            cardExpYear.Text = year.Substring(2);
             password = pass; refresh_token = token; CCEntry.Text = num; CVVEntry.Text = cvv; ZipCCEntry.Text = zip; purchase_id = purchaseID;
             new_item_id = itemID; customer_id = customerID; mealSelected = mealPlan; mealPrice = price; itm_business_id = businessID;
 
@@ -357,8 +362,8 @@ namespace MTYD.ViewModel
                 zipCode2.CornerRadius = 22;
                 zipCode2.HeightRequest = 35;
 
-                monthFrame.CornerRadius = 22;
-                yearFrame.CornerRadius = 22;
+                //monthFrame.CornerRadius = 22;
+                //yearFrame.CornerRadius = 22;
                 SignUpButton.CornerRadius = 25;
             }
             else //android
@@ -387,8 +392,8 @@ namespace MTYD.ViewModel
                 cvvFrame.CornerRadius = 24;
                 zipCode2.CornerRadius = 24;
 
-                monthFrame.CornerRadius = 24;
-                yearFrame.CornerRadius = 24;
+                //monthFrame.CornerRadius = 24;
+                //yearFrame.CornerRadius = 24;
                 SignUpButton.CornerRadius = 25;
             }
 
@@ -443,9 +448,11 @@ namespace MTYD.ViewModel
             updated.password = password;
             updated.refresh_token = refresh_token;
             updated.cc_num = CCEntry.Text;
-            updated.cc_exp_year = YearPicker.SelectedItem.ToString();
+            //updated.cc_exp_year = YearPicker.SelectedItem.ToString();
+            updated.cc_exp_year = "20" + cardExpYear.Text;
             //"cc_exp_year":"2022","cc_exp_month":"11-November"
-            updated.cc_exp_month = MonthPicker.SelectedItem.ToString().Substring(0,2);
+            //updated.cc_exp_month = MonthPicker.SelectedItem.ToString().Substring(0,2);
+            updated.cc_exp_month = cardExpMonth.Text;
             updated.cc_cvv = CVVEntry.Text;
             updated.purchase_id = purchase_id;
             updated.new_item_id = new_item_id;
@@ -530,17 +537,28 @@ namespace MTYD.ViewModel
                 return;
             }
 
-            if (MonthPicker.SelectedIndex == -1)
+            //if (MonthPicker.SelectedIndex == -1)
+            //{
+            //    DisplayAlert("Error", "select a month", "OK");
+            //    return;
+            //}
+            if (cardExpMonth.Text == null || cardExpMonth.Text == "")
             {
-                DisplayAlert("Error", "select a month", "OK");
+                DisplayAlert("Error", "invalid expiration date", "OK");
                 return;
             }
 
-            if (YearPicker.SelectedIndex == -1)
+            if (cardExpYear.Text == null || cardExpYear.Text == "")
             {
-                DisplayAlert("Error", "select a year", "OK");
+                DisplayAlert("Error", "invalid expiration date", "OK");
                 return;
             }
+
+            //if (YearPicker.SelectedIndex == -1)
+            //{
+            //    DisplayAlert("Error", "select a year", "OK");
+            //    return;
+            //}
 
             clickedDone(sender, e);
         }

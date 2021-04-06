@@ -80,9 +80,11 @@ namespace MTYD.ViewModel
         WebClient client4 = new WebClient();
         Zones[] passingZones;
         WebClient client = new WebClient();
+        string zip;
 
         // address auto-complete
-        public const string GooglePlacesApiAutoCompletePath = "https://maps.googleapis.com/maps/api/place/autocomplete/json?key={0}&input={1}&components=country:us"; //Adding country:us limits results to us
+        public const string GooglePlacesApiAutoCompletePath = "https://maps.googleapis.com/maps/api/place/autocomplete/json?key={0}&input={1}&components=country:us";
+        public const string GooglePlacesApiDetailsPath = "https://maps.googleapis.com/maps/api/place/details/json?key={0}&place_id={1}&fields=address_components";
         private static HttpClient _httpClientInstance;
         public static HttpClient HttpClientInstance => _httpClientInstance ?? (_httpClientInstance = new HttpClient());
         private ObservableCollection<AddressAutocomplete> _addresses;
@@ -178,6 +180,8 @@ namespace MTYD.ViewModel
                 checkAddressButton.WidthRequest = width / 5;
                 checkAddressButton.HeightRequest = width / 20;
                 checkAddressButton.CornerRadius = (int)(width / 40);
+
+                addressList.HeightRequest = width / 8;
             }
             else //android
             {
@@ -288,12 +292,13 @@ namespace MTYD.ViewModel
 
 
             string latitude = "0";
-            string longitude = "0";
+            string longitude = "0"; 
             foreach (XElement element in xdoc.Descendants("Address"))
             {
                 if (GetXMLElement(element, "Error").Equals(""))
                 {
-                    if (GetXMLElement(element, "DPVConfirmation").Equals("Y") && GetXMLElement(element, "Zip5").Equals(ZipEntry.Text.Trim()) && GetXMLElement(element, "City").Equals(CityEntry.Text.ToUpper().Trim())) // Best case
+                    //if ((GetXMLElement(element, "DPVConfirmation").Equals("Y") && GetXMLElement(element, "Zip5").Equals(ZipEntry.Text.Trim()) && GetXMLElement(element, "City").Equals(CityEntry.Text.ToUpper().Trim()))
+                    if (GetXMLElement(element, "DPVConfirmation").Equals("Y") || GetXMLElement(element, "DPVConfirmation").Equals("D") || GetXMLElement(element, "DPVConfirmation").Equals("S"))
                     {
                         // Get longitude and latitide because we can make a deliver here. Move on to next page.
                         // Console.WriteLine("The address you entered is valid and deliverable by USPS. We are going to get its latitude & longitude");
@@ -360,11 +365,11 @@ namespace MTYD.ViewModel
 
                         break;
                     }
-                    else if (GetXMLElement(element, "DPVConfirmation").Equals("D"))
-                    {
-                        //await DisplayAlert("Alert!", "Address is missing information like 'Apartment number'.", "Ok");
-                        //return;
-                    }
+                    //else if (GetXMLElement(element, "DPVConfirmation").Equals("D"))
+                    //{
+                    //    await DisplayAlert("Alert!", "Please enter a unit number.", "Ok");
+                    //    return;
+                    //}
                     else
                     {
                         //await DisplayAlert("Alert!", "Seems like your address is invalid.", "Ok");
@@ -1360,10 +1365,11 @@ namespace MTYD.ViewModel
 
             // TODO: Add throttle logic, Google begins denying requests if too many are made in a short amount of time
 
+
             CancellationToken cancellationToken = new CancellationTokenSource(TimeSpan.FromMinutes(2)).Token;
 
             using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, string.Format(GooglePlacesApiAutoCompletePath, Constant.GooglePlacesApiKey, WebUtility.UrlEncode(_addressText))))
-            { //Be sure to UrlEncode the search term they enter
+            {
 
                 using (HttpResponseMessage message = await HttpClientInstance.SendAsync(request, HttpCompletionOption.ResponseContentRead, cancellationToken).ConfigureAwait(false))
                 {
@@ -1380,38 +1386,70 @@ namespace MTYD.ViewModel
 
                             if (predictionList.Predictions.Count > 0)
                             {
-                                int rows = 0;
                                 foreach (Prediction prediction in predictionList.Predictions)
                                 {
-                                    if (rows > 2) break; // show maximum 3 addresses
-                                    Console.WriteLine(prediction.Description);
                                     string[] predictionSplit = prediction.Description.Split(',');
+
+                                    Console.WriteLine("Place ID: " + prediction.PlaceId);
+                                    await setZipcode(prediction.PlaceId);
+                                    Console.WriteLine("After setZipcode:\n" + prediction.Description.Trim() + "\n" + predictionSplit[0].Trim() + "\n" + predictionSplit[1].Trim() + "\n" + predictionSplit[2].Trim() + "\n" + zip);
                                     Addresses.Add(new AddressAutocomplete
                                     {
-                                        Address = prediction.Description,
-                                        Street = predictionSplit[0],
-                                        City = predictionSplit[1],
-                                        State = predictionSplit[2],
+                                        Address = prediction.Description.Trim(),
+                                        Street = predictionSplit[0].Trim(),
+                                        City = predictionSplit[1].Trim(),
+                                        State = predictionSplit[2].Trim(),
+                                        ZipCode = zip,
                                     });
-                                    rows++;
+                                    addressList.ItemsSource = Addresses;
                                 }
                             }
                         }
                         else
                         {
-                            throw new Exception(predictionList.Status);
+                            Addresses.Clear();
                         }
                     }
                 }
             }
         }
 
-        private async void OnAddressChanged(object sender, EventArgs eventArgs)
+        private async Task setZipcode(string placeId)
         {
-            if (!string.IsNullOrWhiteSpace(AddressText))
+            CancellationToken cancellationToken = new CancellationTokenSource(TimeSpan.FromMinutes(2)).Token;
+            string s = string.Format(GooglePlacesApiDetailsPath, Constant.GooglePlacesApiKey, WebUtility.UrlEncode(placeId));
+            Console.WriteLine(s);
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, s);
+            HttpResponseMessage message = await HttpClientInstance.SendAsync(request, HttpCompletionOption.ResponseContentRead, cancellationToken).ConfigureAwait(false);
+            if (message.IsSuccessStatusCode)
             {
-                await GetPlacesPredictionsAsync();
+                string json = await message.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+                Console.WriteLine(json);
+
+                PlacesDetailsResult placesDetailsResult = await Task.Run(() => JsonConvert.DeserializeObject<PlacesDetailsResult>(json)).ConfigureAwait(false);
+
+                foreach (var components in placesDetailsResult.Result.AddressComponents)
+                {
+                    if (components.Types[0] == "postal_code")
+                    {
+                        zip = components.LongName;
+                    }
+                }
+
+                Console.WriteLine("Zip code: " + zip);
             }
+        }
+        private CancellationTokenSource throttleCts = new CancellationTokenSource();
+        private void OnAddressChanged(object sender, EventArgs eventArgs)
+        {
+            Interlocked.Exchange(ref this.throttleCts, new CancellationTokenSource()).Cancel();
+            Task.Delay(TimeSpan.FromMilliseconds(500), this.throttleCts.Token)
+                .ContinueWith(
+                delegate { GetPlacesPredictionsAsync(); },
+                CancellationToken.None,
+                TaskContinuationOptions.OnlyOnRanToCompletion,
+                TaskScheduler.FromCurrentSynchronizationContext());
         }
 
         private void addressEntryFocused(object sender, EventArgs eventArgs)
@@ -1428,8 +1466,26 @@ namespace MTYD.ViewModel
             StateZip.IsVisible = true;
         }
 
-        void addressSelected(System.Object sender, System.EventArgs e)
+        async void addressSelected(System.Object sender, System.EventArgs e)
         {
+            // get zip code
+            //var locations = await Geocoding.GetLocationsAsync(((AddressAutocomplete)addressList.SelectedItem).Address);
+            //var location = locations?.FirstOrDefault();
+            //double lat, lon;
+            //if (location != null)
+            //{
+            //    lat = location.Latitude;
+            //    lon = location.Longitude;
+
+            //    var placemarks = await Geocoding.GetPlacemarksAsync(lat, lon);
+
+            //    var placemark = placemarks?.FirstOrDefault();
+            //    if (placemark != null)
+            //    {
+            //        ((AddressAutocomplete)addressList.SelectedItem).ZipCode = placemark.PostalCode;
+            //    }
+            //}
+
             addressList.IsVisible = false;
             UnitCity.IsVisible = true;
             StateZip.IsVisible = true;
@@ -1438,6 +1494,7 @@ namespace MTYD.ViewModel
             CityEntry.Text = ((AddressAutocomplete)addressList.SelectedItem).City;
             StateEntry.Text = ((AddressAutocomplete)addressList.SelectedItem).State;
             ZipEntry.Text = ((AddressAutocomplete)addressList.SelectedItem).ZipCode;
+            
         }
 
         //private void resetBttn_Clicked(object sender, EventArgs e)

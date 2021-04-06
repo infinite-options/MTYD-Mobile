@@ -74,4 +74,36 @@ namespace MTYD.Model
         [Newtonsoft.Json.JsonProperty("status")]
         public string Status { get; set; }
     }
+
+    public class PlacesDetailsResult
+    {
+
+        [Newtonsoft.Json.JsonProperty("html_attributions")]
+        public List<string> HtmlAttributions { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("result")]
+        public PlacesDetailsAddressComponents Result { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("status")]
+        public string Status { get; set; }
+    }
+
+    public class PlacesDetailsAddressComponents
+    {
+        [Newtonsoft.Json.JsonProperty("address_components")]
+        public List<PlacesDetails> AddressComponents { get; set; }
+    }
+
+    public class PlacesDetails
+    {
+
+        [Newtonsoft.Json.JsonProperty("long_name")]
+        public string LongName { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("short_name")]
+        public string ShortName { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("types")]
+        public List<string> Types { get; set; }
+    }
 }

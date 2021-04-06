@@ -393,8 +393,15 @@ namespace MTYD.ViewModel
                             HeartSource = source
                         });
 
-                        weekOneMenu.ItemsSource = Meals1;
                         mealCount++;
+
+                        //testing in new location
+                        //if (mealCount % 2 != 0)
+                        //    mealCount++;
+                        //weekOneMenu.HeightRequest = 320 * ((mealCount / 2));
+
+                        //weekOneMenu.ItemsSource = Meals1;
+                        
                         Debug.WriteLine("mealCount incremented:" + mealCount.ToString());
                     }
                     else if (obj.Result[i].MealCat == "Add-On" && obj.Result[i].MenuDate.Equals(convertDay1))
@@ -457,18 +464,30 @@ namespace MTYD.ViewModel
                             HeartSource = source
                         });
 
-                        weekOneAddOns.ItemsSource = Meals2;
                         addOnCount++;
+                        //testing in new location
+                        //weekOneAddOns.HeightRequest = 280 * ((addOnCount / 2));
+
+                        //weekOneAddOns.ItemsSource = Meals2;
+                        
                     }
                 }
-                //weekOneMenu.ItemsSource = Meals1;
+
                 if (mealCount % 2 != 0)
                     mealCount++;
                 weekOneMenu.HeightRequest = 320 * ((mealCount / 2));
+                weekOneAddOns.HeightRequest = 280 * ((addOnCount / 2));
+                //weekOneMenu.ItemsSource = Meals1;
+                //commented out to test
+                //if (mealCount % 2 != 0)
+                //    mealCount++;
+                //weekOneMenu.HeightRequest = 320 * ((mealCount / 2));
+                weekOneMenu.ItemsSource = Meals1;
+                weekOneAddOns.ItemsSource = Meals2;
 
                 if (addOnCount % 2 != 0)
                     addOnCount++;
-                weekOneAddOns.HeightRequest = 280 * ((addOnCount / 2));
+                //weekOneAddOns.HeightRequest = 280 * ((addOnCount / 2));
                 Debug.WriteLine("mealCount:" + mealCount.ToString());
                 Debug.WriteLine("mealCount half:" + ((int)(mealCount / 2)).ToString());
                 Debug.WriteLine("height:" + weekOneMenu.HeightRequest.ToString());
@@ -1004,6 +1023,7 @@ namespace MTYD.ViewModel
                 Console.WriteLine("Purch Id: " + Preferences.Get("purchId", ""));
                 //testing
                 getUserMeals();
+                await checkDateStatuses();
 
                 // Button b = (Button)sender;
                 // MealInfo ms = b.BindingContext as MealInfo;

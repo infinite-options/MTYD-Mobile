@@ -214,7 +214,8 @@
                                                 <ImageButton x:Name="heart1" Source="heartoutline.png" Clicked="clickedFavorite" />
                                             </Frame>-->
 
-                                        <ImageButton x:Name="heart1" HorizontalOptions="Start" VerticalOptions="Start" Aspect="AspectFit" HeightRequest="25" WidthRequest="25" Source="heartoutline.png" Clicked="clickedFavorite" BackgroundColor="White" CornerRadius="0"/>
+                                        <ImageButton x:Name="heart1" HorizontalOptions="Start" VerticalOptions="Start" Aspect="AspectFit" HeightRequest="30" WidthRequest="30" Source="heartoutline.png" Clicked="clickedFavorite"
+                                                     BackgroundColor="White" CornerRadius="10" Margin="5" Padding="5"/>
                                         <!--<Grid Margin="-29,-27,-29,-27" Grid.Row="0" Grid.ColumnSpan="2" >
                                             <Frame Grid.Row="0" Grid.Column="0" ScaleY="0.4" ScaleX="0.4" CornerRadius="40">
                                                 <ImageButton x:Name="heart1" Source="heartoutline.png" Clicked="clickedFavorite" />
@@ -295,31 +296,29 @@
                                 <Frame Grid.Column="0" Padding="10" Grid.RowSpan="2" Grid.ColumnSpan="1">
                                     <Grid>
                                         <Grid.RowDefinitions>
-                                            <RowDefinition Height="*"/>
+                                            <!--<RowDefinition Height="*"/>-->
+                                            <RowDefinition Height="140"/>
+                                            <RowDefinition Height="25"/>
+                                            <RowDefinition Height="15"/>
+                                            <RowDefinition Height="35"/>
                                         </Grid.RowDefinitions>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="1.25*"/>
                                         </Grid.ColumnDefinitions>
 
-                                        <Image Grid.RowSpan="2"
+                                        <!--<Image Grid.RowSpan="2"
                                                        Grid.ColumnSpan="2"
                                                        Source="{Binding MealImage}"
                                                        Aspect="AspectFill"
-                                                       />
-                                        <Grid Margin="-30,-30,-30,-30" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="2">
+                                                       />-->
+                                        <Image Grid.ColumnSpan="2" Source="{Binding MealImage}" Aspect="AspectFill"/>
+                                        <ImageButton x:Name="heart1_AddOns" HorizontalOptions="Start" VerticalOptions="Start" Aspect="AspectFit" HeightRequest="30" WidthRequest="30" Source="heartoutline.png" Clicked="clickedFavorite"
+                                                     BackgroundColor="White" CornerRadius="10" Margin="5" Padding="5"/>
+                                        <!--<Grid Margin="-30,-30,-30,-30" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="2">
                                             <Frame Grid.Row="0" Grid.Column="0" ScaleY="0.25" ScaleX="0.25" CornerRadius="40">
                                                 <ImageButton x:Name="heart1_AddOns" Source="heartoutline.png" Clicked="clickedFavorite" />
                                             </Frame>
-                                            <!--<Frame Grid.Row="0" Grid.Column="1" ScaleY="0.25" ScaleX="0.25" CornerRadius="40">
-                                                <Label Text="{Binding MealQuantity}" FontSize="50" HorizontalOptions="Center" VerticalOptions="Center" />
-                                            </Frame>
-                                            <Frame x:Name="week1Dec_AddOns" Grid.Row="1" Grid.Column="0" ScaleY="0.25" ScaleX="0.25" CornerRadius="40">
-                                                <Button FontSize="100" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center" Text="-" Clicked="clickDecreaseAddOn" />
-                                            </Frame>
-                                            <Frame x:Name="week1Inc_AddOns" Grid.Row="1" Grid.Column="1" ScaleY="0.25" ScaleX="0.25" CornerRadius="40">
-                                                <Button x:Name="increase" FontSize="70" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center" Text="+" Clicked="clickIncreaseAddOn"/>
-                                            </Frame>-->
-                                        </Grid>
+                                        </Grid>-->
                                         <Label  Grid.Column="0"
                                                         Grid.Row="2"
                                                         Grid.ColumnSpan="2"
