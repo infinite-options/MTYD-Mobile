@@ -76,6 +76,7 @@ namespace MTYD.ViewModel
         public SignUpPost directSignUp = new SignUpPost();
         bool paymentSucceed = false;
         string new_purchase_id = "";
+        string guestSalt = "";
 
 
         // CREDENTIALS CLASS
@@ -557,6 +558,110 @@ namespace MTYD.ViewModel
                 Button receiving = (Button)sender;
                 if (receiving.Text != "Save")
                 {
+                    clickedSaveContact(receiving, e);
+                    if ((string)Xamarin.Forms.Application.Current.Properties["platform"] == "GUEST")
+                    {
+                        Debug.WriteLine("entered guest in clickedproceed");
+                        directSignUp.email = emailEntry.Text;
+                        directSignUp.first_name = FNameEntry.Text;
+                        directSignUp.last_name = LNameEntry.Text;
+                        directSignUp.phone_number = PhoneEntry.Text;
+                        directSignUp.address = AddressEntry.Text;
+                        directSignUp.unit = AptEntry.Text;
+                        directSignUp.city = CityEntry.Text;
+                        directSignUp.state = StateEntry.Text;
+                        directSignUp.zip_code = ZipEntry.Text;
+                        directSignUp.latitude = Preferences.Get("user_latitude", "");
+                        directSignUp.longitude = Preferences.Get("user_longitude", "");
+                        directSignUp.referral_source = "MOBILE";
+                        directSignUp.role = "CUSTOMER";
+                        directSignUp.mobile_access_token = "FALSE";
+                        directSignUp.mobile_refresh_token = "FALSE";
+                        directSignUp.user_access_token = "FALSE";
+                        directSignUp.user_refresh_token = "FALSE";
+                        directSignUp.social = "FALSE";
+                        directSignUp.password = FNameEntry.Text + AddressEntry.Text.Substring(0, AddressEntry.Text.IndexOf(" "));
+                        Debug.WriteLine("generated password for guest: " + directSignUp.password);
+                        directSignUp.social_id = "NULL";
+
+                        var directSignUpSerializedObject = JsonConvert.SerializeObject(directSignUp);
+                        var content2 = new StringContent(directSignUpSerializedObject, Encoding.UTF8, "application/json");
+
+                        System.Diagnostics.Debug.WriteLine(directSignUpSerializedObject);
+
+                        var signUpclient = new System.Net.Http.HttpClient();
+                        var RDSResponse = await signUpclient.PostAsync(Constant.SignUpUrl, content2);
+                        Debug.WriteLine("RDSResponse: " + RDSResponse.ToString());
+                        var RDSMessage = await RDSResponse.Content.ReadAsStringAsync();
+                        Debug.WriteLine("RDSMessage: " + RDSMessage.ToString());
+
+                        // if Sign up is has successfully ie 200 response code
+                        if (RDSResponse.IsSuccessStatusCode)
+                        {
+                            var RDSData = JsonConvert.DeserializeObject<SignUpResponse>(RDSMessage);
+                            Debug.WriteLine("RDSData: " + RDSData.ToString());
+
+                            if (RDSData.message.Contains("taken"))
+                            {
+                                await DisplayAlert("Email Address Already In Use", "Please log in with the account that uses this email. If you previously used this email for guest checkout, your password is {first name}{house #}.", "OK");
+
+                                Xamarin.Forms.Application.Current.MainPage = new MainPage();
+                                return;
+                            }
+                            else
+                            {
+                                // Local Variables in Xamarin that can be used throughout the App
+                                Xamarin.Forms.Application.Current.Properties["user_id"] = RDSData.result.customer_uid;
+
+                                Debug.WriteLine("starting saving new preference strings");
+                                savedFirstName = "firstName" + RDSData.result.customer_uid;
+                                savedLastName = "lastName" + RDSData.result.customer_uid;
+                                savedEmail = "email" + RDSData.result.customer_uid;
+                                savedAdd = "address" + RDSData.result.customer_uid;
+                                savedApt = "apt" + RDSData.result.customer_uid;
+                                savedCity = "city" + RDSData.result.customer_uid;
+                                savedState = "state" + RDSData.result.customer_uid;
+                                savedZip = "zip" + RDSData.result.customer_uid;
+                                savedPhone = "phone" + RDSData.result.customer_uid;
+                                savedInstr = "instructions" + RDSData.result.customer_uid;
+                                billingEmail = "billing_email" + RDSData.result.customer_uid;
+                                billingName = "billing_name" + RDSData.result.customer_uid;
+                                billingNum = "billing_num" + RDSData.result.customer_uid;
+                                billingMonth = "billing_month" + RDSData.result.customer_uid;
+                                billingYear = "billing_year" + RDSData.result.customer_uid;
+                                billingCVV = "billing_cvv" + RDSData.result.customer_uid;
+                                billingAddress = "billing_address" + RDSData.result.customer_uid;
+                                billingUnit = "billing_unit" + RDSData.result.customer_uid;
+                                billingCity = "billing_city" + RDSData.result.customer_uid;
+                                billingState = "billing_state" + RDSData.result.customer_uid;
+                                billingZip = "billing_zip" + RDSData.result.customer_uid;
+                                purchaseDescription = "purchase_descr" + RDSData.result.customer_uid;
+                                Debug.WriteLine("end saving new preference strings");
+
+
+                                EventArgs e2 = new EventArgs();
+                                saveInfoDeliv();
+                                clickedSaveContact(proceedButton, e2);
+                            }
+                        }
+
+                        var client3 = new System.Net.Http.HttpClient();
+                        //newPayment.customer_uid = (string)Xamarin.Forms.Application.Current.Properties["user_id"];
+                        string url2 = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Xamarin.Forms.Application.Current.Properties["user_id"];
+                        var request3 = new HttpRequestMessage();
+                        request3.RequestUri = new Uri(url2);
+                        request3.Method = HttpMethod.Get;
+                        var response3 = await client3.SendAsync(request3);
+                        var content3 = response3.Content;
+                        Console.WriteLine("content: " + content3);
+                        var userString2 = await content3.ReadAsStringAsync();
+                        JObject info_obj3 = JObject.Parse(userString2);
+                        //Preferences.Set("password_salt", (info_obj3["result"])[0]["password_salt"].ToString());
+
+                        //the salt in the json object for /checkout actually stores the hashed password
+                        guestSalt = (info_obj3["result"])[0]["password_hashed"].ToString();
+                    }
+
                     Preferences.Set("price", Preferences.Get("subtotal", "00.00"));
                     subtotalTitle.Text = "Meal Subscription \n(" + Preferences.Get("item_name", "").Substring(0, 1) + " Meals for " + Preferences.Get("freqSelected", "") + " Deliveries): ";
                     deliveryTitle.Text = "Total Delivery Fee For All " + Preferences.Get("freqSelected", "") + " Deliveries: ";
@@ -655,6 +760,9 @@ namespace MTYD.ViewModel
                     //else if (ambassDisc.Text.Substring(ambassDisc.Text.IndexOf(".") + 1).Length == 0)
                     //    ambassDisc.Text = ambassDisc.Text + "00";
 
+                    if (Double.Parse(total.ToString()) <= 0)
+                        total = "0.00";
+
                     grandTotalPrice.Text = "$" + total.ToString();
 
                     if (grandTotalPrice.Text.Contains(".") == false)
@@ -731,12 +839,117 @@ namespace MTYD.ViewModel
             saveContact.IsVisible = true;
         }
 
-        void clickedProceed(object sender, EventArgs e)
+        async Task clickedProceed(object sender, EventArgs e)
         {
             Preferences.Set("price", Preferences.Get("subtotal", ""));
 
             clickedSaveContact(sender, e);
             clickedDeliv(sender, e);
+
+            Debug.WriteLine("platform: " + (string)Xamarin.Forms.Application.Current.Properties["platform"]);
+
+            if ((string)Xamarin.Forms.Application.Current.Properties["platform"] == "GUEST")
+            {
+                Debug.WriteLine("entered guest in clickedproceed");
+                directSignUp.email = emailEntry.Text;
+                directSignUp.first_name = FNameEntry.Text;
+                directSignUp.last_name = LNameEntry.Text;
+                directSignUp.phone_number = PhoneEntry.Text;
+                directSignUp.address = AddressEntry.Text;
+                directSignUp.unit = AptEntry.Text;
+                directSignUp.city = CityEntry.Text;
+                directSignUp.state = StateEntry.Text;
+                directSignUp.zip_code = ZipEntry.Text;
+                directSignUp.latitude = Preferences.Get("user_latitude", "");
+                directSignUp.longitude = Preferences.Get("user_longitude", "");
+                directSignUp.referral_source = "MOBILE";
+                directSignUp.role = "CUSTOMER";
+                directSignUp.mobile_access_token = "FALSE";
+                directSignUp.mobile_refresh_token = "FALSE";
+                directSignUp.user_access_token = "FALSE";
+                directSignUp.user_refresh_token = "FALSE";
+                directSignUp.social = "FALSE";
+                directSignUp.password = FNameEntry.Text + AddressEntry.Text.Substring(0, AddressEntry.Text.IndexOf(" "));
+                Debug.WriteLine("generated password for guest: " + directSignUp.password);
+                directSignUp.social_id = "NULL";
+
+                var directSignUpSerializedObject = JsonConvert.SerializeObject(directSignUp);
+                var content2 = new StringContent(directSignUpSerializedObject, Encoding.UTF8, "application/json");
+
+                System.Diagnostics.Debug.WriteLine(directSignUpSerializedObject);
+
+                var signUpclient = new System.Net.Http.HttpClient();
+                var RDSResponse = await signUpclient.PostAsync(Constant.SignUpUrl, content2);
+                Debug.WriteLine("RDSResponse: " + RDSResponse.ToString());
+                var RDSMessage = await RDSResponse.Content.ReadAsStringAsync();
+                Debug.WriteLine("RDSMessage: " + RDSMessage.ToString());
+
+                // if Sign up is has successfully ie 200 response code
+                if (RDSResponse.IsSuccessStatusCode)
+                {
+                    var RDSData = JsonConvert.DeserializeObject<SignUpResponse>(RDSMessage);
+                    Debug.WriteLine("RDSData: " + RDSData.ToString());
+
+                    if (RDSData.message.Contains("taken"))
+                    {
+                        await DisplayAlert("Email Address Already In Use", "Please log in with the account that uses this email. If you previously used this email for guest checkout, your password is {first name}{house #}.", "OK");
+
+                        Xamarin.Forms.Application.Current.MainPage = new MainPage();
+                        return;
+                    }
+                    else
+                    {
+                        // Local Variables in Xamarin that can be used throughout the App
+                        Xamarin.Forms.Application.Current.Properties["user_id"] = RDSData.result.customer_uid;
+
+                        Debug.WriteLine("starting saving new preference strings");
+                        savedFirstName = "firstName" + RDSData.result.customer_uid;
+                        savedLastName = "lastName" + RDSData.result.customer_uid;
+                        savedEmail = "email" + RDSData.result.customer_uid;
+                        savedAdd = "address" + RDSData.result.customer_uid;
+                        savedApt = "apt" + RDSData.result.customer_uid;
+                        savedCity = "city" + RDSData.result.customer_uid;
+                        savedState = "state" + RDSData.result.customer_uid;
+                        savedZip = "zip" + RDSData.result.customer_uid;
+                        savedPhone = "phone" + RDSData.result.customer_uid;
+                        savedInstr = "instructions" + RDSData.result.customer_uid;
+                        billingEmail = "billing_email" + RDSData.result.customer_uid;
+                        billingName = "billing_name" + RDSData.result.customer_uid;
+                        billingNum = "billing_num" + RDSData.result.customer_uid;
+                        billingMonth = "billing_month" + RDSData.result.customer_uid;
+                        billingYear = "billing_year" + RDSData.result.customer_uid;
+                        billingCVV = "billing_cvv" + RDSData.result.customer_uid;
+                        billingAddress = "billing_address" + RDSData.result.customer_uid;
+                        billingUnit = "billing_unit" + RDSData.result.customer_uid;
+                        billingCity = "billing_city" + RDSData.result.customer_uid;
+                        billingState = "billing_state" + RDSData.result.customer_uid;
+                        billingZip = "billing_zip" + RDSData.result.customer_uid;
+                        purchaseDescription = "purchase_descr" + RDSData.result.customer_uid;
+                        Debug.WriteLine("end saving new preference strings");
+
+
+                        EventArgs e2 = new EventArgs();
+                        saveInfoDeliv();
+                        clickedSaveContact(proceedButton, e2);
+                    }
+                }
+
+                var client3 = new System.Net.Http.HttpClient();
+                //newPayment.customer_uid = (string)Xamarin.Forms.Application.Current.Properties["user_id"];
+                string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Xamarin.Forms.Application.Current.Properties["user_id"];
+                var request3 = new HttpRequestMessage();
+                request3.RequestUri = new Uri(url);
+                request3.Method = HttpMethod.Get;
+                var response3 = await client3.SendAsync(request3);
+                var content3 = response3.Content;
+                Console.WriteLine("content: " + content3);
+                var userString2 = await content3.ReadAsStringAsync();
+                JObject info_obj3 = JObject.Parse(userString2);
+                //Preferences.Set("password_salt", (info_obj3["result"])[0]["password_salt"].ToString());
+
+                //the salt in the json object for /checkout actually stores the hashed password
+                guestSalt = (info_obj3["result"])[0]["password_hashed"].ToString();
+            }
         }
 
         void clickedSaveContact(object sender, EventArgs e)
@@ -908,6 +1121,9 @@ namespace MTYD.ViewModel
                     ambassDisc.Text = "- $" + totalDiscount.ToString();
                     grandTotalValue -= totalDiscount;
 
+                    if (grandTotalValue <= 0)
+                        grandTotalValue = 0.00;
+
                     string grandTotalString = grandTotalValue.ToString();
 
                     if (ambassDisc.Text.Contains(".") == false)
@@ -916,6 +1132,7 @@ namespace MTYD.ViewModel
                         ambassDisc.Text = ambassDisc.Text + "0";
                     else if (ambassDisc.Text.Substring(ambassDisc.Text.IndexOf(".") + 1).Length == 0)
                         ambassDisc.Text = ambassDisc.Text + "00";
+
 
 
                     if (grandTotalString.Contains(".") == false)
@@ -1096,6 +1313,7 @@ namespace MTYD.ViewModel
             newPayment.amount_paid = grandTotalPrice.Text.Substring(1);//Preferences.Get("price", "00.00");
             newPayment.tax = taxPrice.Text.Substring(taxPrice.Text.IndexOf("$") + 1);
             newPayment.tip = tipPrice.Text.Substring(tipPrice.Text.IndexOf("$") + 1);
+            newPayment.amb = ambassDisc.Text.Substring(ambassDisc.Text.IndexOf("$") + 1);
             newPayment.service_fee = serviceFeePrice.Text.Substring(serviceFeePrice.Text.IndexOf("$") + 1);
             newPayment.delivery_fee = deliveryFeePrice.Text.Substring(deliveryFeePrice.Text.IndexOf("$") + 1);
             newPayment.subtotal = subtotalPrice.Text.Substring(subtotalPrice.Text.IndexOf("$") + 1);
@@ -1135,108 +1353,12 @@ namespace MTYD.ViewModel
             //newPayment.cc_zip = ZipCCEntry;
             //==================================
 
-            if ((string)Xamarin.Forms.Application.Current.Properties["platform"] == "GUEST")
-            {
-                directSignUp.email = emailEntry.Text;
-                directSignUp.first_name = FNameEntry.Text;
-                directSignUp.last_name = LNameEntry.Text;
-                directSignUp.phone_number = PhoneEntry.Text;
-                directSignUp.address = AddressEntry.Text;
-                directSignUp.unit = AptEntry.Text;
-                directSignUp.city = CityEntry.Text;
-                directSignUp.state = StateEntry.Text;
-                directSignUp.zip_code = ZipEntry.Text;
-                directSignUp.latitude = Preferences.Get("user_latitude", "");
-                directSignUp.longitude = Preferences.Get("user_longitude", "");
-                directSignUp.referral_source = "MOBILE";
-                directSignUp.role = "CUSTOMER";
-                directSignUp.mobile_access_token = "FALSE";
-                directSignUp.mobile_refresh_token = "FALSE";
-                directSignUp.user_access_token = "FALSE";
-                directSignUp.user_refresh_token = "FALSE";
-                directSignUp.social = "FALSE";
-                directSignUp.password = FNameEntry.Text + AddressEntry.Text.Substring(0, AddressEntry.Text.IndexOf(" "));
-                Debug.WriteLine("generated password for guest: " + directSignUp.password);
-                directSignUp.social_id = "NULL";
-
-                var directSignUpSerializedObject = JsonConvert.SerializeObject(directSignUp);
-                var content2 = new StringContent(directSignUpSerializedObject, Encoding.UTF8, "application/json");
-
-                System.Diagnostics.Debug.WriteLine(directSignUpSerializedObject);
- 
-                var signUpclient = new System.Net.Http.HttpClient();
-                var RDSResponse = await signUpclient.PostAsync(Constant.SignUpUrl, content2);
-                Debug.WriteLine("RDSResponse: " + RDSResponse.ToString());
-                var RDSMessage = await RDSResponse.Content.ReadAsStringAsync();
-                Debug.WriteLine("RDSMessage: " + RDSMessage.ToString());
-
-                // if Sign up is has successfully ie 200 response code
-                if (RDSResponse.IsSuccessStatusCode)
-                {
-                    var RDSData = JsonConvert.DeserializeObject<SignUpResponse>(RDSMessage);
-                    Debug.WriteLine("RDSData: " + RDSData.ToString());
-
-                    if (RDSData.message.Contains("taken"))
-                    {
-                        await DisplayAlert("Email Address Already In Use", "Please log in with the account that uses this email. If you previously used this email for guest checkout, your password is {first name}{house #}.", "OK");
-
-                        Xamarin.Forms.Application.Current.MainPage = new MainPage();
-                        return;
-                    }
-                    else
-                    {
-                        // Local Variables in Xamarin that can be used throughout the App
-                        Xamarin.Forms.Application.Current.Properties["user_id"] = RDSData.result.customer_uid;
-
-                        Debug.WriteLine("starting saving new preference strings");
-                        savedFirstName = "firstName" + RDSData.result.customer_uid;
-                        savedLastName = "lastName" + RDSData.result.customer_uid;
-                        savedEmail = "email" + RDSData.result.customer_uid;
-                        savedAdd = "address" + RDSData.result.customer_uid;
-                        savedApt = "apt" + RDSData.result.customer_uid;
-                        savedCity = "city" + RDSData.result.customer_uid;
-                        savedState = "state" + RDSData.result.customer_uid;
-                        savedZip = "zip" + RDSData.result.customer_uid;
-                        savedPhone = "phone" + RDSData.result.customer_uid;
-                        savedInstr = "instructions" + RDSData.result.customer_uid;
-                        billingEmail = "billing_email" + RDSData.result.customer_uid;
-                        billingName = "billing_name" + RDSData.result.customer_uid;
-                        billingNum = "billing_num" + RDSData.result.customer_uid;
-                        billingMonth = "billing_month" + RDSData.result.customer_uid;
-                        billingYear = "billing_year" + RDSData.result.customer_uid;
-                        billingCVV = "billing_cvv" + RDSData.result.customer_uid;
-                        billingAddress = "billing_address" + RDSData.result.customer_uid;
-                        billingUnit = "billing_unit" + RDSData.result.customer_uid;
-                        billingCity = "billing_city" + RDSData.result.customer_uid;
-                        billingState = "billing_state" + RDSData.result.customer_uid;
-                        billingZip = "billing_zip" + RDSData.result.customer_uid;
-                        purchaseDescription = "purchase_descr" + RDSData.result.customer_uid;
-                        Debug.WriteLine("end saving new preference strings");
-
-
-                        EventArgs e = new EventArgs();
-                        saveInfoDeliv();
-                        clickedSaveContact(proceedButton, e);
-                    }
-                }
-
-                var client3 = new System.Net.Http.HttpClient();
-                newPayment.customer_uid = (string)Xamarin.Forms.Application.Current.Properties["user_id"];
-                string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Xamarin.Forms.Application.Current.Properties["user_id"];
-                var request3 = new HttpRequestMessage();
-                request3.RequestUri = new Uri(url);
-                request3.Method = HttpMethod.Get;
-                var response3 = await client3.SendAsync(request3);
-                var content3 = response3.Content;
-                Console.WriteLine("content: " + content3);
-                var userString2 = await content3.ReadAsStringAsync();
-                JObject info_obj3 = JObject.Parse(userString2);
-                //Preferences.Set("password_salt", (info_obj3["result"])[0]["password_salt"].ToString());
-
-                //the salt in the json object for /checkout actually stores the hashed password
-                newPayment.salt = (info_obj3["result"])[0]["password_hashed"].ToString();
-            }
-
+            newPayment.customer_uid = (string)Xamarin.Forms.Application.Current.Properties["user_id"];
+            
+            
+            if (guestSalt != "")
+                newPayment.salt = guestSalt;
+            //newPayment.salt = (info_obj3["result"])[0]["password_hashed"].ToString();
 
             //var StripeIntentJSONString = JsonConvert.SerializeObject(newPayment);
             //Console.WriteLine("StripeIntentJSONString" + StripeIntentJSONString);

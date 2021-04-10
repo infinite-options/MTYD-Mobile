@@ -59,6 +59,7 @@ namespace MTYD.Model
         public string service_fee { get; set; }
         public string delivery_fee { get; set; }
         public string subtotal { get; set; }
+        public string amb { get; set; }
         /*
         public string customer_uid { get; set; }
         public string business_id { get; set; }
@@ -177,9 +178,9 @@ namespace MTYD.Model
         public string cc_num { get; set; }
         public string cc_zip { get; set; }
         public string customer_email { get; set; }
-        public List<Item2> items { get; set; }
+        public List<Item> items { get; set; }
         public string new_item_id { get; set; }
-        public string password { get; set; }
+        //public string password { get; set; }
         public string purchase_id { get; set; }
         public string start_delivery_date { get; set; }
     }
