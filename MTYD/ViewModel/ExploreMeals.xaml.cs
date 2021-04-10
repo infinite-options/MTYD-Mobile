@@ -22,9 +22,6 @@ using System.Xml.Linq;
 using System.Threading;
 using MTYD.Constants;
 
-//auto-complete
-//using DurianCode.PlacesSearchBar;
-
 namespace MTYD.ViewModel
 {
     public partial class ExploreMeals : ContentPage
@@ -80,19 +77,13 @@ namespace MTYD.ViewModel
         WebClient client4 = new WebClient();
         Zones[] passingZones;
         WebClient client = new WebClient();
-        string zip;
-
-        // address auto-complete
-        public const string GooglePlacesApiAutoCompletePath = "https://maps.googleapis.com/maps/api/place/autocomplete/json?key={0}&input={1}&components=country:us";
-        public const string GooglePlacesApiDetailsPath = "https://maps.googleapis.com/maps/api/place/details/json?key={0}&place_id={1}&fields=address_components";
-        private static HttpClient _httpClientInstance;
-        public static HttpClient HttpClientInstance => _httpClientInstance ?? (_httpClientInstance = new HttpClient());
-        private ObservableCollection<AddressAutocomplete> _addresses;
-
+        Address addr;
+        
         public ExploreMeals()
         {
             availableDates = new List<Date>();
             dateDict = new Dictionary<string, Date>();
+            addr = new Address();
             InitializeComponent();
 
             //===========================================
@@ -166,10 +157,10 @@ namespace MTYD.ViewModel
 
                 xButton.FontSize = width / 37;
                 //addressGrid.Margin = new Thickness(width / 30, height / 8, width / 30, 0);
-                addressGrid.HeightRequest = height / 4.5;
+                //addressGrid.HeightRequest = height / 4.5;
                 addressGrid.WidthRequest = width / 2.3;
 
-                outerFrame.HeightRequest = height/ 4.5;
+                //outerFrame.HeightRequest = height/ 4.5;
 
                 addressHeader.FontSize = width / 35;
 
@@ -181,7 +172,7 @@ namespace MTYD.ViewModel
                 checkAddressButton.HeightRequest = width / 20;
                 checkAddressButton.CornerRadius = (int)(width / 40);
 
-                addressList.HeightRequest = width / 8;
+                addressList.HeightRequest = width / 4;
             }
             else //android
             {
@@ -1374,6 +1365,7 @@ namespace MTYD.ViewModel
         }
 
         // Auto-complete
+        private ObservableCollection<AddressAutocomplete> _addresses;
         public ObservableCollection<AddressAutocomplete> Addresses
         {
             get => _addresses ?? (_addresses = new ObservableCollection<AddressAutocomplete>());
@@ -1401,6 +1393,28 @@ namespace MTYD.ViewModel
             }
         }
 
+        private void OnAddressChanged(object sender, EventArgs eventArgs)
+        {
+            addr.OnAddressChanged(addressList, Addresses, _addressText);
+        }
+
+        private void addressEntryFocused(object sender, EventArgs eventArgs)
+        {
+            addr.addressEntryFocused(addressList, new Grid[] { UnitCity, StateZip });
+        }
+
+        private void addressEntryUnfocused(object sender, EventArgs eventArgs)
+        {
+            addr.addressEntryUnfocused(addressList, new Grid[] { UnitCity, StateZip });
+        }
+
+        async void addressSelected(System.Object sender, System.EventArgs e)
+        {
+            addr.addressSelected(addressList, new Grid[] { UnitCity, StateZip }, AddressEntry, CityEntry, StateEntry, ZipEntry);
+
+        }
+
+        /*
         public async Task GetPlacesPredictionsAsync()
         {
 
@@ -1509,24 +1523,6 @@ namespace MTYD.ViewModel
 
         async void addressSelected(System.Object sender, System.EventArgs e)
         {
-            // get zip code
-            //var locations = await Geocoding.GetLocationsAsync(((AddressAutocomplete)addressList.SelectedItem).Address);
-            //var location = locations?.FirstOrDefault();
-            //double lat, lon;
-            //if (location != null)
-            //{
-            //    lat = location.Latitude;
-            //    lon = location.Longitude;
-
-            //    var placemarks = await Geocoding.GetPlacemarksAsync(lat, lon);
-
-            //    var placemark = placemarks?.FirstOrDefault();
-            //    if (placemark != null)
-            //    {
-            //        ((AddressAutocomplete)addressList.SelectedItem).ZipCode = placemark.PostalCode;
-            //    }
-            //}
-
             addressList.IsVisible = false;
             UnitCity.IsVisible = true;
             StateZip.IsVisible = true;
@@ -1535,8 +1531,9 @@ namespace MTYD.ViewModel
             CityEntry.Text = ((AddressAutocomplete)addressList.SelectedItem).City;
             StateEntry.Text = ((AddressAutocomplete)addressList.SelectedItem).State;
             ZipEntry.Text = ((AddressAutocomplete)addressList.SelectedItem).ZipCode;
-            
+
         }
+        */
 
         //private void resetBttn_Clicked(object sender, EventArgs e)
         //{

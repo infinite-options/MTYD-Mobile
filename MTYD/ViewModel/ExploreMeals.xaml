@@ -25,9 +25,7 @@
 
                 </Grid>-->
 
-                <!--<Button x:Name="backButton" BackgroundColor="Transparent" Text="&lt;  Back" TextColor="Black" FontSize="25" HorizontalOptions="Start" Margin="15,0" Clicked="clickedBack"/>-->
                 <Image Source="logo.png" HeightRequest="80" Aspect="AspectFit" HorizontalOptions="Center" VerticalOptions="Start"/>
-                
 
                 <BoxView x:Name="spacer2" HeightRequest="10"/>
 
@@ -474,29 +472,12 @@
                    <BoxView HeightRequest="2" HorizontalOptions="FillAndExpand" Margin="15,0" Color="#FFBA00"/>
                    <BoxView HeightRequest="5"/>
 
-                   <!--
-                   <places:PlacesBar x:Name="search_bar" />
-                   <Image Source="powered_by_google_on_white.png" HeightRequest="30" HorizontalOptions="Center" />
-		            <AbsoluteLayout>
-			            <ActivityIndicator x:Name="spinner" IsRunning="false"
-				            AbsoluteLayout.LayoutBounds="0.5, 0.1, 50, 50" AbsoluteLayout.LayoutFlags="PositionProportional" />
-			            <ListView x:Name="results_list" IsVisible="false"
-				            AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="SizeProportional" >
-				            <ListView.ItemTemplate>
-					            <DataTemplate>
-						            <TextCell d:DataContext="{d:DesignInstance custom:AutoCompletePrediction}" Text="{Binding MainText}" Detail="{Binding SecondaryText}" />
-					            </DataTemplate>
-				            </ListView.ItemTemplate>
-			            </ListView>
-		            </AbsoluteLayout>
-                   -->
-
                    <Frame x:Name="street" Grid.Row="0" Padding="10,5" HasShadow="False" CornerRadius="10" HorizontalOptions="Fill" BorderColor="Black" Margin="15, 15, 15, 5">
                        <Entry x:Name="AddressEntry" Text="{Binding AddressText}" TextChanged="OnAddressChanged" TextColor="Black" PlaceholderColor="#B4B4B4" Placeholder="Address*"
                               Focused="addressEntryFocused" Unfocused="addressEntryUnfocused"/>
                    </Frame>
 
-                   <ListView x:Name="addressList" ItemsSource="{Binding Addresses}" IsVisible="false" Margin="15, 0, 15, 0" ItemSelected="addressSelected">
+                   <ListView x:Name="addressList" ItemsSource="{Binding Addresses}" IsVisible="false" Margin="15, 0, 15, 30" ItemSelected="addressSelected">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <TextCell Text="{Binding Address}"/>
@@ -534,68 +515,7 @@
                         </Frame>
                    </Grid>
 
-
-
-                   <!--<Grid x:Name="entryGrid" RowSpacing="15" Margin="15, 15, 15, 15">
-                       <Grid.RowDefinitions>
-                           <RowDefinition Height="1*"/>
-                           <RowDefinition Height="1*"/>
-                           <RowDefinition Height="1*"/>
-                       </Grid.RowDefinitions>
-
-                       <Frame x:Name="street" Grid.Row="0" Padding="10,5" HasShadow="False" CornerRadius="10" HorizontalOptions="Fill" BorderColor="Black">
-                            <Entry x:Name="AddressEntry" Keyboard="Text" FontAttributes="Bold" TextColor="Black" PlaceholderColor="#B4B4B4" Placeholder="Address*"/>
-                           <Entry x:Name="AddressEntry" Text="{Binding AddressText}" TextChanged="OnAddressChanged" TextColor="Black" PlaceholderColor="#B4B4B4" Placeholder="Address*"/>
-                       </Frame>
-
-                       
-
-                       <Grid Grid.Row="1" HorizontalOptions="Fill">
-                           <Grid.RowDefinitions>
-                               <RowDefinition Height="1*"/>
-                           </Grid.RowDefinitions>
-                           <Grid.ColumnDefinitions>
-                               <ColumnDefinition Width="1*"/>
-                               <ColumnDefinition Width="2*"/>
-                           </Grid.ColumnDefinitions>
-
-                           <Frame x:Name="unit" Grid.Column="0" Padding="10,5" HasShadow="False" CornerRadius="10" HorizontalOptions="Fill" BorderColor="Black">
-                               <Entry x:Name="AptEntry" Keyboard="Text" FontAttributes="Bold" TextColor="Black" PlaceholderColor="#B4B4B4" Placeholder="Unit"/>
-                           </Frame>
-
-                           <Frame x:Name="city" Grid.Column="1" Padding="10,5" HasShadow="False" CornerRadius="10" HorizontalOptions="Fill" BorderColor="Black">
-                                <Entry x:Name="CityEntry" Keyboard="Text" FontAttributes="Bold" TextColor="Black" PlaceholderColor="#B4B4B4" Placeholder="City*"/>
-                           </Frame>
-                       </Grid>
-
-                       <ListView x:Name="adressList" Grid.Row="1" Grid.RowSpan="2" ItemsSource="{Binding Addresses}">
-                           <ListView.ItemTemplate>
-                               <DataTemplate>
-                                   <TextCell Text="{Binding Address}"/>
-                               </DataTemplate>
-                           </ListView.ItemTemplate>
-                       </ListView>
-
-                        <Grid Grid.Row="2" HorizontalOptions="Fill">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="1*"/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="1*"/>
-                            </Grid.ColumnDefinitions>
-
-                            <Frame x:Name="state" Grid.Column="0" Padding="10,5" HasShadow="False" CornerRadius="10" HorizontalOptions="Fill" BorderColor="Black">
-                                <Entry x:Name="StateEntry" Keyboard="Text" FontAttributes="Bold" TextColor="Black" PlaceholderColor="#B4B4B4" Placeholder="State*"/>
-                            </Frame>
-
-                            <Frame x:Name="zipCode" Grid.Column="1" Padding="10,5" HasShadow="False" CornerRadius="10" HorizontalOptions="Fill" BorderColor="Black">
-                                <Entry x:Name="ZipEntry" Keyboard="Numeric" FontAttributes="Bold" TextColor="Black" PlaceholderColor="#B4B4B4" Placeholder="Zip*"/>
-                            </Frame>
-                        </Grid>
-                   </Grid>-->
-
-                   <Button x:Name="checkAddressButton" BackgroundColor="#F59A28" Text="CHECK" TextColor="White" FontAttributes="Bold" FontSize="20" Margin="0, 0, 0, 25"
+                   <Button x:Name="checkAddressButton" BackgroundColor="#F59A28" Text="CHECK" TextColor="White" FontAttributes="Bold" FontSize="20" Margin="0, 0, 0, 40"
                            HorizontalOptions="Center" Clicked="clickedCheck"/>
                </StackLayout>
             </Grid>

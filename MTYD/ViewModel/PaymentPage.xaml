@@ -87,15 +87,21 @@
                    <Frame x:Name="street" Padding="10,5" Margin="20,0.5" BackgroundColor="#FFE5B4"
                           Grid.Row="0" Grid.Column="0" HasShadow="False" >
 
-                        <Entry x:Name="AddressEntry" Keyboard="Text" FontAttributes="Bold"
-                   FontSize="17" Placeholder="Street Address*"
-                   WidthRequest="24"
-                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4" TextChanged="DeliveryAdd_TextChanged"/>
+                        <Entry x:Name="AddressEntry" Keyboard="Text" FontAttributes="Bold" FontSize="17" Placeholder="Street Address*"
+                               WidthRequest="24" BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4" Text="{Binding AddressText}"
+                               TextChanged="OnAddressChanged" Focused="addressEntryFocused" Unfocused="addressEntryUnfocused"/>
 
                    </Frame>
 
                 </Grid>
 
+                <ListView x:Name="addressList" ItemsSource="{Binding Addresses}" IsVisible="false" Margin="15, 0, 15, 30" ItemSelected="addressSelected">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <TextCell Text="{Binding Address}"/>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                </ListView>
 
                 <Grid x:Name="UnitCity" HorizontalOptions="Center" VerticalOptions="Center">
                     <Grid.ColumnDefinitions>
@@ -568,14 +574,23 @@
 
                         </Grid>
                         <Frame x:Name="cardAddFrame" Padding="10,5" Margin="0,0.5,1,0.5" BackgroundColor="#FFE5B4" HasShadow="False" CornerRadius="24">
-                            <Entry Placeholder="Address*" x:Name="cardHolderAddress" FontAttributes="Bold" FontSize="17"  BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4" HeightRequest="35"></Entry>
+                            <Entry Placeholder="Address*" x:Name="cardHolderAddress" FontAttributes="Bold" FontSize="17"  BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4" HeightRequest="35"
+                                   Text="{Binding AddressText}" TextChanged="OnAddressChanged" Focused="addressEntryFocused" Unfocused="addressEntryUnfocused"></Entry>
                         </Frame>
 
-                        <Frame  Padding="10,5" Margin="0,0.5,1,0.5" BackgroundColor="#FFE5B4" HasShadow="False" CornerRadius="24">
+                        <ListView x:Name="addressList2" ItemsSource="{Binding Addresses}" IsVisible="false" Margin="15, 0, 15, 30" ItemSelected="addressSelected">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <TextCell Text="{Binding Address}"/>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                   </ListView>
+
+                        <Frame x:Name="Unit" Padding="10,5" Margin="0,0.5,1,0.5" BackgroundColor="#FFE5B4" HasShadow="False" CornerRadius="24">
                             <Entry Placeholder="Unit" x:Name="cardHolderUnit" FontAttributes="Bold" FontSize="17"  BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4" HeightRequest="35"></Entry>
                         </Frame>
                                      
-                        <Grid>
+                        <Grid x:Name="CityStateZip">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"></ColumnDefinition>
                                 <ColumnDefinition Width="*"></ColumnDefinition>

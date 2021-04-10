@@ -25,10 +25,13 @@ namespace MTYD
         public ObservableCollection<Plans> NewMainPage = new ObservableCollection<Plans>();
         public SignUpPost directSignUp = new SignUpPost();
         public bool isAddessValidated = false;
+        Address addr;
 
         public CarlosSignUp()
         {
+            addr = new Address();
             InitializeComponent();
+            BindingContext = this;
             InitializeSignUpPost();
             var width = DeviceDisplay.MainDisplayInfo.Width;
             var height = DeviceDisplay.MainDisplayInfo.Height;
@@ -58,7 +61,7 @@ namespace MTYD
                 orDivider.WidthRequest = width / 2.5;
                 emailOption.FontSize = width / 35;
 
-                firstName.HeightRequest = width / 15;
+                firstName.HeightRequest = width / 30;
                 FNameEntry.FontSize = width / 55;
                 LNameEntry.FontSize = width / 55;
                 emailEntry.FontSize = width / 55;
@@ -71,6 +74,8 @@ namespace MTYD
                 StateEntry.FontSize = width / 55;
                 ZipEntry.FontSize = width / 55;
                 PhoneEntry.FontSize = width / 55;
+
+                addressList.HeightRequest = width / 5;
 
                 backButton.WidthRequest = width / 8;
                 backButton.HeightRequest = width / 17;
@@ -515,5 +520,58 @@ namespace MTYD
             mainPage.facebookLoginButtonClicked(sender, e);
         }
 
+        // Auto-complete
+        private ObservableCollection<AddressAutocomplete> _addresses;
+        public ObservableCollection<AddressAutocomplete> Addresses
+        {
+            get => _addresses ?? (_addresses = new ObservableCollection<AddressAutocomplete>());
+            set
+            {
+                if (_addresses != value)
+                {
+                    _addresses = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private string _addressText;
+        public string AddressText
+        {
+            get => _addressText;
+            set
+            {
+                if (_addressText != value)
+                {
+                    _addressText = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public async Task GetPlacesPredictionsAsync()
+        {
+            await addr.GetPlacesPredictionsAsync(addressList, Addresses, _addressText);
+        }
+
+        private void OnAddressChanged(object sender, EventArgs eventArgs)
+        {
+            addr.OnAddressChanged(addressList, Addresses, _addressText);
+        }
+
+        private void addressEntryFocused(object sender, EventArgs eventArgs)
+        {
+            addr.addressEntryFocused(addressList, new Grid[] { UnitCity, StateZip });
+        }
+
+        private void addressEntryUnfocused(object sender, EventArgs eventArgs)
+        {
+            addr.addressEntryUnfocused(addressList, new Grid[] { UnitCity, StateZip });
+        }
+
+        async void addressSelected(System.Object sender, System.EventArgs e)
+        {
+            addr.addressSelected(addressList, new Grid[] { UnitCity, StateZip }, AddressEntry, CityEntry, StateEntry, ZipEntry);
+        }
     }
 }

@@ -45,6 +45,7 @@ namespace MTYD.ViewModel
         string cityToPass;
         string stateToPass;
         string zipToPass;
+        Address addr;
 
         public MealPlans(string firstName, string lastName, string email)
         {
@@ -58,7 +59,9 @@ namespace MTYD.ViewModel
             cust_email = email;
             var width = DeviceDisplay.MainDisplayInfo.Width;
             var height = DeviceDisplay.MainDisplayInfo.Height;
+            addr = new Address();
             InitializeComponent();
+            BindingContext = this;
             NavigationPage.SetHasBackButton(this, false);
             NavigationPage.SetHasNavigationBar(this, false);
             checkPlatform(height, width);
@@ -182,6 +185,8 @@ namespace MTYD.ViewModel
                 ZipEntry.FontSize = width / 45;
                 PhoneEntry.FontSize = width / 45;
                 //instructionsEntry.FontSize = width / 45;
+
+                addressList.HeightRequest = width / 5;
 
                 pay.FontSize = width / 38;
 
@@ -976,6 +981,61 @@ namespace MTYD.ViewModel
             }
 
             
+        }
+
+        // Auto-complete
+        private ObservableCollection<AddressAutocomplete> _addresses;
+        public ObservableCollection<AddressAutocomplete> Addresses
+        {
+            get => _addresses ?? (_addresses = new ObservableCollection<AddressAutocomplete>());
+            set
+            {
+                if (_addresses != value)
+                {
+                    _addresses = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private string _addressText;
+        public string AddressText
+        {
+            get => _addressText;
+            set
+            {
+                if (_addressText != value)
+                {
+                    _addressText = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public async Task GetPlacesPredictionsAsync()
+        {
+            await addr.GetPlacesPredictionsAsync(addressList, Addresses, _addressText);
+        }
+
+        private void OnAddressChanged(object sender, EventArgs eventArgs)
+        {
+            addr.OnAddressChanged(addressList, Addresses, _addressText);
+        }
+
+        private void addressEntryFocused(object sender, EventArgs eventArgs)
+        {
+            addr.addressEntryFocused(addressList, new Grid[] { UnitCityState, ZipPhone });
+        }
+
+        private void addressEntryUnfocused(object sender, EventArgs eventArgs)
+        {
+            addr.addressEntryUnfocused(addressList, new Grid[] { UnitCityState, ZipPhone });
+        }
+
+        async void addressSelected(System.Object sender, System.EventArgs e)
+        {
+            addr.addressSelected(addressList, new Grid[] { UnitCityState, ZipPhone }, AddressEntry, CityEntry, StateEntry, ZipEntry);
+
         }
     }
 }

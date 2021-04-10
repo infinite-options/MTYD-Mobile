@@ -121,21 +121,29 @@
                         </Grid>
 
 
-                        <Grid x:Name="St" HorizontalOptions="Center" VerticalOptions="Center">
-                            <Grid.ColumnDefinitions>
-                             <ColumnDefinition Width="1*"/>
-                        </Grid.ColumnDefinitions>
-                         <Grid.RowDefinitions>
-                          <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
+                    <Grid x:Name="St" HorizontalOptions="Center" VerticalOptions="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
 
-                   <Frame x:Name="street" Padding="15,10" Margin="0,0.5,0,0.5" BackgroundColor="#FFE5B4" HasShadow="False">
+                        <Frame x:Name="street" Padding="15,10" Margin="0,0.5,0,0.5" BackgroundColor="#FFE5B4" HasShadow="False">
 
-                        <Entry x:Name="AddressEntry" Keyboard="Text" FontAttributes="Bold" TextColor="Black"
-                   BackgroundColor="#FFE5B4" />
+                            <Entry x:Name="AddressEntry" Keyboard="Text" FontAttributes="Bold" TextColor="Black" BackgroundColor="#FFE5B4"
+                                    Text="{Binding AddressText}" TextChanged="OnAddressChanged" Focused="addressEntryFocused" Unfocused="addressEntryUnfocused"/>
 
-                   </Frame>
-                        </Grid>
+                        </Frame>
+                    </Grid>
+
+                    <ListView x:Name="addressList" ItemsSource="{Binding Addresses}" IsVisible="false" Margin="15, 0, 15, 30" ItemSelected="addressSelected">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <TextCell Text="{Binding Address}"/>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                   </ListView>
 
                         <Grid x:Name="UnitCityState" HorizontalOptions="Center" VerticalOptions="Center">
                     <Grid.ColumnDefinitions>

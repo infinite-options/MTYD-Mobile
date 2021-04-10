@@ -78,6 +78,7 @@ namespace MTYD.ViewModel
         string new_purchase_id = "";
         string guestSalt = "";
 
+        Model.Address addr;
 
         // CREDENTIALS CLASS
         public class Credentials
@@ -189,7 +190,9 @@ namespace MTYD.ViewModel
             cust_firstName = Fname;
             cust_lastName = Lname;
             cust_email = email;
+            addr = new Model.Address();
             InitializeComponent();
+            BindingContext = this;
 
             if ((string)Xamarin.Forms.Application.Current.Properties["platform"] == "GUEST")
             {
@@ -286,6 +289,10 @@ namespace MTYD.ViewModel
 
                 zipCode.CornerRadius = 22;
                 zipCode.HeightRequest = 35;
+
+                addressList.HeightRequest = width / 5;
+                
+
                 phoneNum.CornerRadius = 22;
                 phoneNum.HeightRequest = 35;
 
@@ -1543,7 +1550,7 @@ namespace MTYD.ViewModel
                 backButton.IsVisible = false;
                 PaymentScreen.HeightRequest = deviceHeight;
                 PayPalScreen.Height = deviceHeight - (deviceHeight / 8);
-
+                addressList2.HeightRequest = deviceWidth / 5;
 
                 //PayPalScreen.Height = ;
                 StripeScreen.Height = 0;
@@ -2425,5 +2432,82 @@ namespace MTYD.ViewModel
         {
         }
 
+        // Auto-complete
+        private ObservableCollection<AddressAutocomplete> _addresses;
+        public ObservableCollection<AddressAutocomplete> Addresses
+        {
+            get => _addresses ?? (_addresses = new ObservableCollection<AddressAutocomplete>());
+            set
+            {
+                if (_addresses != value)
+                {
+                    _addresses = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private string _addressText;
+        public string AddressText
+        {
+            get => _addressText;
+            set
+            {
+                if (_addressText != value)
+                {
+                    _addressText = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private void OnAddressChanged(object sender, EventArgs eventArgs)
+        {
+            if (((Entry)sender).Equals(AddressEntry))
+            {
+                paymentStack.IsVisible = false;
+                saveDeliv.IsVisible = true;
+                addr.OnAddressChanged(addressList, Addresses, _addressText);
+            }
+            else
+            {
+                addr.OnAddressChanged(addressList2, Addresses, _addressText);
+            }
+        }
+
+        private void addressEntryFocused(object sender, EventArgs eventArgs)
+        {
+            if (((Entry)sender).Equals(AddressEntry)) {
+                addr.addressEntryFocused(addressList, new Grid[] { UnitCity, StateZip });
+            }
+            else
+            {
+                addr.addressEntryFocused(addressList2, new Grid[] { CityStateZip });
+            }
+        }
+
+        private void addressEntryUnfocused(object sender, EventArgs eventArgs)
+        {
+            if (((Entry)sender).Equals(AddressEntry))
+            {
+                addr.addressEntryUnfocused(addressList, new Grid[] { UnitCity, StateZip });
+            }
+            else
+            {
+                addr.addressEntryFocused(addressList2, new Grid[] { CityStateZip });
+            }
+        }
+
+        private void addressSelected(System.Object sender, System.EventArgs e)
+        {
+            if (((ListView)sender).Equals(addressList))
+            {
+                addr.addressSelected(addressList, new Grid[] { UnitCity, StateZip }, AddressEntry, CityEntry, StateEntry, ZipEntry);
+            }
+            else
+            {
+                addr.addressSelected(addressList2, new Grid[] { CityStateZip }, cardHolderAddress, cardCity, cardState, cardZip);
+            }
+        }
     }
 }
