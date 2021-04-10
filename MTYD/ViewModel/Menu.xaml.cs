@@ -252,8 +252,9 @@ namespace MTYD.ViewModel
         void LogOutClick(System.Object sender, System.EventArgs e)
         {
             Application.Current.Properties.Remove("user_id");
+            Application.Current.Properties["platform"] = "GUEST";
             Application.Current.Properties.Remove("time_stamp");
-            Application.Current.Properties.Remove("platform");
+            //Application.Current.Properties.Remove("platform");
             Application.Current.MainPage = new MainPage();
         }
     }

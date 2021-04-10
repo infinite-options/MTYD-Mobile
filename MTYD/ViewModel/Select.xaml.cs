@@ -475,8 +475,10 @@ namespace MTYD.ViewModel
 
                 if (mealCount % 2 != 0)
                     mealCount++;
+                if (addOnCount % 2 != 0)
+                    addOnCount++;
                 weekOneMenu.HeightRequest = 320 * ((mealCount / 2));
-                weekOneAddOns.HeightRequest = 280 * ((addOnCount / 2));
+                weekOneAddOns.HeightRequest = 290 * ((addOnCount / 2));
                 //weekOneMenu.ItemsSource = Meals1;
                 //commented out to test
                 //if (mealCount % 2 != 0)
@@ -1453,8 +1455,8 @@ namespace MTYD.ViewModel
                 if (count == 0)
                 {
                     Debug.WriteLine("final margin: " + BarParameters[0].update.ToString());
-                    BarParameters[0].mealsLeft = "All Meals Selected";
-                    BarParameters[0].barLabel = "All Meals Selected";
+                    BarParameters[0].mealsLeft = "All Meals Selected (Click Save)";
+                    BarParameters[0].barLabel = "All Meals Selected (Click Save)";
                     //progress.Text = "All Meals Selected";
                 }
                 else
@@ -1903,6 +1905,8 @@ namespace MTYD.ViewModel
                     Console.WriteLine("line 302 " + jsonMeals);
                     postData();
                     addOnSelected = false;
+                    BarParameters[0].mealsLeft = "All Meals Selected";
+                    BarParameters[0].barLabel = "All Meals Selected";
                     DisplayAlert("Selection Saved", "You will be charged for your add-ons on 1/1/2021.", "OK");
                 }
                 else
@@ -1914,6 +1918,8 @@ namespace MTYD.ViewModel
                     jsonMeals = JsonConvert.SerializeObject(mealsSaved);
                     Console.WriteLine("line 302 " + jsonMeals);
                     postData();
+                    BarParameters[0].mealsLeft = "All Meals Selected";
+                    BarParameters[0].barLabel = "All Meals Selected";
                     DisplayAlert("Selection Saved", "You've successfully saved your meal selection.", "OK");
                 }
                 addOnSelected = false;

@@ -25,9 +25,7 @@
 
                 </Grid>-->
 
-                <!--<Button x:Name="backButton" BackgroundColor="Transparent" Text="&lt;  Back" TextColor="Black" FontSize="25" HorizontalOptions="Start" Margin="15,0" Clicked="clickedBack"/>-->
                 <Image Source="logo.png" HeightRequest="80" Aspect="AspectFit" HorizontalOptions="Center" VerticalOptions="Start"/>
-                
 
                 <BoxView x:Name="spacer2" HeightRequest="10"/>
 
@@ -195,7 +193,8 @@
                                 <Frame Grid.Column="0" Padding="10" Grid.RowSpan="2" Grid.ColumnSpan="1">
                                     <Grid>
                                         <Grid.RowDefinitions>
-                                            <RowDefinition Height="140"/>
+                                            <RowDefinition Height="42"/>
+                                            <RowDefinition Height="98"/>
                                             <RowDefinition Height="25"/>
                                             <RowDefinition Height="15"/>
                                             <RowDefinition Height="35"/>
@@ -204,18 +203,21 @@
                                             <ColumnDefinition Width="1.25*"/>
                                         </Grid.ColumnDefinitions>
 
-                                        <Image 
+                                        <Image x:Name="mealImage"
                                                        Grid.ColumnSpan="2"
                                                        Source="{Binding MealImage}"
                                                        Aspect="AspectFill"
+                                                       Grid.RowSpan="2"
+                                                       IsVisible="{Binding SeeImage}"
                                                        />
 
                                         <!--<Frame Grid.Row="0" Grid.Column="0" ScaleY="0.5" ScaleX="0.5" VerticalOptions="Start" HorizontalOptions="Start">
                                                 <ImageButton x:Name="heart1" Source="heartoutline.png" Clicked="clickedFavorite" />
                                             </Frame>-->
 
-                                        <ImageButton x:Name="heart1" HorizontalOptions="Start" VerticalOptions="Start" Aspect="AspectFit" HeightRequest="30" WidthRequest="30" Source="heartoutline.png" Clicked="clickedFavorite"
-                                                     BackgroundColor="White" CornerRadius="10" Margin="5" Padding="5"/>
+                                        <ImageButton x:Name="heart1" HorizontalOptions="Start" VerticalOptions="Start" Margin="5,5,0,0" Aspect="AspectFit" Padding="8" HeightRequest="35" WidthRequest="35" Source="{Binding HeartSource}" Clicked="clickedFavorite" BackgroundColor="White" CornerRadius="17"/>
+                                        <ImageButton Grid.Column="1" x:Name="info1" HorizontalOptions="End" VerticalOptions="Start" Margin="0,5,5,0"  Aspect="AspectFit" HeightRequest="35" Padding="-2" WidthRequest="35" Source="info.png" BackgroundColor="White" CornerRadius="17" Clicked="clickedInfo"/>
+
                                         <!--<Grid Margin="-29,-27,-29,-27" Grid.Row="0" Grid.ColumnSpan="2" >
                                             <Frame Grid.Row="0" Grid.Column="0" ScaleY="0.4" ScaleX="0.4" CornerRadius="40">
                                                 <ImageButton x:Name="heart1" Source="heartoutline.png" Clicked="clickedFavorite" />
@@ -237,33 +239,39 @@
                                                         VerticalTextAlignment="Center"
                                                        Text="{Binding MealName}"
                                                        FontAttributes="Bold" LineBreakMode="WordWrap" />-->
-                                        <Forms9Patch:Label  Grid.Column="0"
-                                                        Grid.Row="1"
+                                        <Forms9Patch:Label x:Name="mealName" Grid.Column="0"
+                                                        Grid.Row="2"
                                                         Grid.ColumnSpan="2"
                                                         FontSize="Small"
                                                         VerticalTextAlignment="Center"
                                                        Text="{Binding MealName}"
-                                                       FontAttributes="Bold" />
+                                                       FontAttributes="Bold"
+                                                       />
 
-                                        <Label Grid.Row="2"
+                                        <Label x:Name="mealCal" Grid.Row="3"
                                                        FontSize="Micro"
                                                        Grid.Column="0"
                                                        Grid.ColumnSpan="2"
                                                        Text="{Binding MealCalories}"
+                                                       
                                                        VerticalOptions="Start" />
 
-                                        <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,0,-5">
+                                        <!--<Grid Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,0,-5">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="1*"/>
                                                 <ColumnDefinition Width="30"/>
                                                 <ColumnDefinition Width="1*"/>
                                             </Grid.ColumnDefinitions>
 
-                                            <!--<Button FontSize="40" TextColor="Black" HorizontalOptions="Fill" VerticalOptions="Fill" Text="-" Clicked="clickDecrease" BackgroundColor="#FFF0C6"/>-->
-                                            <!--<Label Grid.Column="1" Text="{Binding MealQuantity}" HorizontalOptions="Center" VerticalOptions="Center" FontSize="15"/>-->
-                                            <!--<Button x:Name="increase" Grid.Column="2" FontSize="30" TextColor="Black" HorizontalOptions="Fill" VerticalOptions="Fill" FontAttributes="Bold" Text="+" Clicked="clickIncrease" BackgroundColor="#FFBA00"/>-->
+                                            <Button FontSize="40" TextColor="Black" HorizontalOptions="Fill" VerticalOptions="Fill" Text="-" Clicked="clickDecrease" BackgroundColor="#FFF0C6"/>
+                                            <Label Grid.Column="1" Text="{Binding MealQuantity}" HorizontalOptions="Center" VerticalOptions="Center" FontSize="15"/>
+                                            <Button x:Name="increase" Grid.Column="2" FontSize="30" TextColor="Black" HorizontalOptions="Fill" VerticalOptions="Fill" FontAttributes="Bold" Text="+" Clicked="clickIncrease" BackgroundColor="#FFBA00"/>
 
-                                        </Grid>
+                                        </Grid>-->
+
+
+                                        <Forms9Patch:Label x:Name="mealDesc" Text="{Binding MealDesc}" HorizontalTextAlignment="Center" IsVisible="{Binding SeeDesc}" Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="White" TextColor="Black"/>
+
 
                                     </Grid>
                                 </Frame>
@@ -284,7 +292,8 @@
                         <DataTemplate>
                             <Grid Padding="10">
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="175" />
+                                    <!--<RowDefinition Height="175" />-->
+                                    <RowDefinition Height="205"/>
                                     <RowDefinition Height="50" />
                                     <RowDefinition Height="20" />
                                 </Grid.RowDefinitions>
@@ -296,8 +305,8 @@
                                 <Frame Grid.Column="0" Padding="10" Grid.RowSpan="2" Grid.ColumnSpan="1">
                                     <Grid>
                                         <Grid.RowDefinitions>
-                                            <!--<RowDefinition Height="*"/>-->
-                                            <RowDefinition Height="140"/>
+                                            <RowDefinition Height="42"/>
+                                            <RowDefinition Height="98"/>
                                             <RowDefinition Height="25"/>
                                             <RowDefinition Height="15"/>
                                             <RowDefinition Height="35"/>
@@ -306,32 +315,76 @@
                                             <ColumnDefinition Width="1.25*"/>
                                         </Grid.ColumnDefinitions>
 
-                                        <!--<Image Grid.RowSpan="2"
+                                        <Image x:Name="mealImage"
                                                        Grid.ColumnSpan="2"
                                                        Source="{Binding MealImage}"
                                                        Aspect="AspectFill"
-                                                       />-->
-                                        <Image Grid.ColumnSpan="2" Source="{Binding MealImage}" Aspect="AspectFill"/>
-                                        <ImageButton x:Name="heart1_AddOns" HorizontalOptions="Start" VerticalOptions="Start" Aspect="AspectFit" HeightRequest="30" WidthRequest="30" Source="heartoutline.png" Clicked="clickedFavorite"
-                                                     BackgroundColor="White" CornerRadius="10" Margin="5" Padding="5"/>
-                                        <!--<Grid Margin="-30,-30,-30,-30" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="2">
-                                            <Frame Grid.Row="0" Grid.Column="0" ScaleY="0.25" ScaleX="0.25" CornerRadius="40">
-                                                <ImageButton x:Name="heart1_AddOns" Source="heartoutline.png" Clicked="clickedFavorite" />
+                                                       Grid.RowSpan="2"
+                                                       IsVisible="{Binding SeeImage}"
+                                                       />
+
+                                        <!--<Frame Grid.Row="0" Grid.Column="0" ScaleY="0.5" ScaleX="0.5" VerticalOptions="Start" HorizontalOptions="Start">
+                                                <ImageButton x:Name="heart1" Source="heartoutline.png" Clicked="clickedFavorite" />
+                                            </Frame>-->
+
+                                        <ImageButton x:Name="heart1_AddOns" HorizontalOptions="Start" VerticalOptions="Start" Margin="5,5,0,0" Aspect="AspectFit" Padding="8" HeightRequest="35" WidthRequest="35" Source="{Binding HeartSource}" Clicked="clickedFavorite" BackgroundColor="White" CornerRadius="17"/>
+                                        <ImageButton Grid.Column="1" x:Name="info1" HorizontalOptions="End" VerticalOptions="Start" Margin="0,5,5,0"  Aspect="AspectFit" HeightRequest="35" Padding="-2" WidthRequest="35" Source="info.png" BackgroundColor="White" CornerRadius="17" Clicked="clickedInfo"/>
+
+                                        <!--<Grid Margin="-29,-27,-29,-27" Grid.Row="0" Grid.ColumnSpan="2" >
+                                            <Frame Grid.Row="0" Grid.Column="0" ScaleY="0.4" ScaleX="0.4" CornerRadius="40">
+                                                <ImageButton x:Name="heart1" Source="heartoutline.png" Clicked="clickedFavorite" />
+                                            </Frame>
+                                            <Frame Grid.Row="0" Grid.Column="1" ScaleY="0.36" ScaleX="0.36" CornerRadius="40">
+                                                <Label Text="{Binding MealQuantity}" FontSize="50" HorizontalOptions="Center" VerticalOptions="Center" />
+                                            </Frame>
+                                            <Frame x:Name="week1Dec" Grid.Row="1" Grid.Column="0" ScaleY="0.35" ScaleX="0.35" CornerRadius="40">
+                                                <Button FontSize="100" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center" Text="-" Clicked="clickDecrease" />
+                                            </Frame>
+                                            <Frame x:Name="week1Inc" Grid.Row="1" Grid.Column="1" ScaleY="0.35" ScaleX="0.35" CornerRadius="40">
+                                                <Button x:Name="increase" FontSize="70" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center" FontAttributes="Bold" Text="+" Clicked="clickIncrease"/>
                                             </Frame>
                                         </Grid>-->
-                                        <Label  Grid.Column="0"
+                                        <!--<Label  Grid.Column="0"
+                                                        Grid.Row="1"
+                                                        Grid.ColumnSpan="2"
+                                                        FontSize="14"
+                                                        VerticalTextAlignment="Center"
+                                                       Text="{Binding MealName}"
+                                                       FontAttributes="Bold" LineBreakMode="WordWrap" />-->
+                                        <Forms9Patch:Label x:Name="mealName" Grid.Column="0"
                                                         Grid.Row="2"
                                                         Grid.ColumnSpan="2"
                                                         FontSize="Small"
+                                                        VerticalTextAlignment="Center"
                                                        Text="{Binding MealName}"
-                                                       FontAttributes="Bold" />
+                                                       FontAttributes="Bold"
+                                                       />
 
-                                        <Label Grid.Row="2"
+                                        <Label x:Name="mealCal" Grid.Row="3"
                                                        FontSize="Micro"
                                                        Grid.Column="0"
                                                        Grid.ColumnSpan="2"
                                                        Text="{Binding MealCalories}"
-                                                       VerticalOptions="End" />
+                                                       
+                                                       VerticalOptions="Start" />
+
+                                        <!--<Grid Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,0,-5">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="1*"/>
+                                                <ColumnDefinition Width="30"/>
+                                                <ColumnDefinition Width="1*"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <Button FontSize="40" TextColor="Black" HorizontalOptions="Fill" VerticalOptions="Fill" Text="-" Clicked="clickDecrease" BackgroundColor="#FFF0C6"/>
+                                            <Label Grid.Column="1" Text="{Binding MealQuantity}" HorizontalOptions="Center" VerticalOptions="Center" FontSize="15"/>
+                                            <Button x:Name="increase_AddOns" Grid.Column="2" FontSize="30" TextColor="Black" HorizontalOptions="Fill" VerticalOptions="Fill" FontAttributes="Bold" Text="+" Clicked="clickIncrease" BackgroundColor="#FFBA00"/>
+
+                                        </Grid>-->
+
+
+                                        <Forms9Patch:Label x:Name="mealDesc" Text="{Binding MealDesc}" HorizontalTextAlignment="Center" IsVisible="{Binding SeeDesc}" Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="White" TextColor="Black"/>
+
+
                                     </Grid>
                                 </Frame>
                             </Grid>
@@ -419,29 +472,12 @@
                    <BoxView HeightRequest="2" HorizontalOptions="FillAndExpand" Margin="15,0" Color="#FFBA00"/>
                    <BoxView HeightRequest="5"/>
 
-                   <!--
-                   <places:PlacesBar x:Name="search_bar" />
-                   <Image Source="powered_by_google_on_white.png" HeightRequest="30" HorizontalOptions="Center" />
-		            <AbsoluteLayout>
-			            <ActivityIndicator x:Name="spinner" IsRunning="false"
-				            AbsoluteLayout.LayoutBounds="0.5, 0.1, 50, 50" AbsoluteLayout.LayoutFlags="PositionProportional" />
-			            <ListView x:Name="results_list" IsVisible="false"
-				            AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="SizeProportional" >
-				            <ListView.ItemTemplate>
-					            <DataTemplate>
-						            <TextCell d:DataContext="{d:DesignInstance custom:AutoCompletePrediction}" Text="{Binding MainText}" Detail="{Binding SecondaryText}" />
-					            </DataTemplate>
-				            </ListView.ItemTemplate>
-			            </ListView>
-		            </AbsoluteLayout>
-                   -->
-
                    <Frame x:Name="street" Grid.Row="0" Padding="10,5" HasShadow="False" CornerRadius="10" HorizontalOptions="Fill" BorderColor="Black" Margin="15, 15, 15, 5">
                        <Entry x:Name="AddressEntry" Text="{Binding AddressText}" TextChanged="OnAddressChanged" TextColor="Black" PlaceholderColor="#B4B4B4" Placeholder="Address*"
                               Focused="addressEntryFocused" Unfocused="addressEntryUnfocused"/>
                    </Frame>
 
-                   <ListView x:Name="addressList" ItemsSource="{Binding Addresses}" IsVisible="false" Margin="15, 0, 15, 0" ItemSelected="addressSelected">
+                   <ListView x:Name="addressList" ItemsSource="{Binding Addresses}" IsVisible="false" Margin="15, 0, 15, 30" ItemSelected="addressSelected">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <TextCell Text="{Binding Address}"/>
@@ -479,68 +515,7 @@
                         </Frame>
                    </Grid>
 
-
-
-                   <!--<Grid x:Name="entryGrid" RowSpacing="15" Margin="15, 15, 15, 15">
-                       <Grid.RowDefinitions>
-                           <RowDefinition Height="1*"/>
-                           <RowDefinition Height="1*"/>
-                           <RowDefinition Height="1*"/>
-                       </Grid.RowDefinitions>
-
-                       <Frame x:Name="street" Grid.Row="0" Padding="10,5" HasShadow="False" CornerRadius="10" HorizontalOptions="Fill" BorderColor="Black">
-                            <Entry x:Name="AddressEntry" Keyboard="Text" FontAttributes="Bold" TextColor="Black" PlaceholderColor="#B4B4B4" Placeholder="Address*"/>
-                           <Entry x:Name="AddressEntry" Text="{Binding AddressText}" TextChanged="OnAddressChanged" TextColor="Black" PlaceholderColor="#B4B4B4" Placeholder="Address*"/>
-                       </Frame>
-
-                       
-
-                       <Grid Grid.Row="1" HorizontalOptions="Fill">
-                           <Grid.RowDefinitions>
-                               <RowDefinition Height="1*"/>
-                           </Grid.RowDefinitions>
-                           <Grid.ColumnDefinitions>
-                               <ColumnDefinition Width="1*"/>
-                               <ColumnDefinition Width="2*"/>
-                           </Grid.ColumnDefinitions>
-
-                           <Frame x:Name="unit" Grid.Column="0" Padding="10,5" HasShadow="False" CornerRadius="10" HorizontalOptions="Fill" BorderColor="Black">
-                               <Entry x:Name="AptEntry" Keyboard="Text" FontAttributes="Bold" TextColor="Black" PlaceholderColor="#B4B4B4" Placeholder="Unit"/>
-                           </Frame>
-
-                           <Frame x:Name="city" Grid.Column="1" Padding="10,5" HasShadow="False" CornerRadius="10" HorizontalOptions="Fill" BorderColor="Black">
-                                <Entry x:Name="CityEntry" Keyboard="Text" FontAttributes="Bold" TextColor="Black" PlaceholderColor="#B4B4B4" Placeholder="City*"/>
-                           </Frame>
-                       </Grid>
-
-                       <ListView x:Name="adressList" Grid.Row="1" Grid.RowSpan="2" ItemsSource="{Binding Addresses}">
-                           <ListView.ItemTemplate>
-                               <DataTemplate>
-                                   <TextCell Text="{Binding Address}"/>
-                               </DataTemplate>
-                           </ListView.ItemTemplate>
-                       </ListView>
-
-                        <Grid Grid.Row="2" HorizontalOptions="Fill">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="1*"/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="1*"/>
-                            </Grid.ColumnDefinitions>
-
-                            <Frame x:Name="state" Grid.Column="0" Padding="10,5" HasShadow="False" CornerRadius="10" HorizontalOptions="Fill" BorderColor="Black">
-                                <Entry x:Name="StateEntry" Keyboard="Text" FontAttributes="Bold" TextColor="Black" PlaceholderColor="#B4B4B4" Placeholder="State*"/>
-                            </Frame>
-
-                            <Frame x:Name="zipCode" Grid.Column="1" Padding="10,5" HasShadow="False" CornerRadius="10" HorizontalOptions="Fill" BorderColor="Black">
-                                <Entry x:Name="ZipEntry" Keyboard="Numeric" FontAttributes="Bold" TextColor="Black" PlaceholderColor="#B4B4B4" Placeholder="Zip*"/>
-                            </Frame>
-                        </Grid>
-                   </Grid>-->
-
-                   <Button x:Name="checkAddressButton" BackgroundColor="#F59A28" Text="CHECK" TextColor="White" FontAttributes="Bold" FontSize="20" Margin="0, 0, 0, 25"
+                   <Button x:Name="checkAddressButton" BackgroundColor="#F59A28" Text="CHECK" TextColor="White" FontAttributes="Bold" FontSize="20" Margin="0, 0, 0, 40"
                            HorizontalOptions="Center" Clicked="clickedCheck"/>
                </StackLayout>
             </Grid>

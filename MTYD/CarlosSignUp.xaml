@@ -48,16 +48,16 @@
 
             <Grid x:Name="userInfo" Margin="30, 0, 30, 15" RowSpacing="10">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="1*"/>
-                    <RowDefinition Height="1*"/>
-                    <RowDefinition Height="1*"/>
-                    <RowDefinition Height="1*"/>
-                    <RowDefinition Height="1*"/>
-                    <RowDefinition Height="1*"/>
-                    <RowDefinition Height="1*"/>
-                    <RowDefinition Height="1*"/>
-                    <RowDefinition Height="1*"/>
-                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*"/>
@@ -94,11 +94,19 @@
                 </Frame>
 
                 <Frame x:Name="street" Grid.Row="6" Padding="10,5" HasShadow="False" CornerRadius="5" HorizontalOptions="Fill">
-                    <Entry x:Name="AddressEntry" Keyboard="Text" FontAttributes="Bold" TextColor="Black"
-                           PlaceholderColor="#B4B4B4" Placeholder="Address*"/>
+                    <Entry x:Name="AddressEntry" TextColor="Black" FontAttributes="Bold" Text="{Binding AddressText}" TextChanged="OnAddressChanged" 
+                           PlaceholderColor="#B4B4B4" Placeholder="Address*" Focused="addressEntryFocused" Unfocused="addressEntryUnfocused"/>
                 </Frame>
 
-                <Grid Grid.Row="7" HorizontalOptions="Fill">
+                <ListView x:Name="addressList" Grid.Row="7" ItemsSource="{Binding Addresses}" IsVisible="false" ItemSelected="addressSelected">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <TextCell Text="{Binding Address}"/>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <Grid Grid.Row="7" x:Name="UnitCity" HorizontalOptions="Fill">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*"/>
                     </Grid.RowDefinitions>
@@ -118,7 +126,7 @@
                     </Frame>
                 </Grid>
 
-                <Grid Grid.Row="8" HorizontalOptions="Fill">
+                <Grid Grid.Row="8" x:Name="StateZip" HorizontalOptions="Fill">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*"/>
                     </Grid.RowDefinitions>

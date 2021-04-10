@@ -76,7 +76,7 @@ namespace MTYD.ViewModel
         public SignUpPost directSignUp = new SignUpPost();
         bool paymentSucceed = false;
         string new_purchase_id = "";
-
+        Model.Address addr;
 
         // CREDENTIALS CLASS
         public class Credentials
@@ -188,7 +188,9 @@ namespace MTYD.ViewModel
             cust_firstName = Fname;
             cust_lastName = Lname;
             cust_email = email;
+            addr = new Model.Address();
             InitializeComponent();
+            BindingContext = this;
 
             if ((string)Xamarin.Forms.Application.Current.Properties["platform"] == "GUEST")
             {
@@ -285,6 +287,10 @@ namespace MTYD.ViewModel
 
                 zipCode.CornerRadius = 22;
                 zipCode.HeightRequest = 35;
+
+                addressList.HeightRequest = width / 5;
+                
+
                 phoneNum.CornerRadius = 22;
                 phoneNum.HeightRequest = 35;
 
@@ -1060,7 +1066,12 @@ namespace MTYD.ViewModel
             Console.WriteLine("YOUR userID is " + userID);
             newPayment.customer_uid = userID;
             //newPayment.customer_uid = "100-000082";
-            //newPayment.business_uid = "200-000002";
+            if (Device.RuntimePlatform == Device.Android)
+                newPayment.business_uid = "MOBILE ANDROID";
+            else if (Device.RuntimePlatform == Device.iOS)
+                newPayment.business_uid = "MOBILE IOS";
+            else newPayment.business_uid = "MOBILE";
+
             newPayment.items = itemsList;
             //newPayment.salt = "64a7f1fb0df93d8f5b9df14077948afa1b75b4c5028d58326fb801d825c9cd24412f88c8b121c50ad5c62073c75d69f14557255da1a21e24b9183bc584efef71";
             //newPayment.salt = "cec35d4fc0c5e83527f462aeff579b0c6f098e45b01c8b82e311f87dc6361d752c30293e27027653adbb251dff5d03242c8bec68a3af1abd4e91c5adb799a01b";
@@ -1088,7 +1099,7 @@ namespace MTYD.ViewModel
 
             newPayment.amount_due = Preferences.Get("price", "00.00");
             newPayment.amount_discount = Preferences.Get("discountAmt", "0.00");
-            newPayment.amount_paid = "00.00";//Preferences.Get("price", "00.00");
+            newPayment.amount_paid = grandTotalPrice.Text.Substring(1);//Preferences.Get("price", "00.00");
             newPayment.tax = taxPrice.Text.Substring(taxPrice.Text.IndexOf("$") + 1);
             newPayment.tip = tipPrice.Text.Substring(tipPrice.Text.IndexOf("$") + 1);
             newPayment.service_fee = serviceFeePrice.Text.Substring(serviceFeePrice.Text.IndexOf("$") + 1);
@@ -1416,7 +1427,7 @@ namespace MTYD.ViewModel
                 backButton.IsVisible = false;
                 PaymentScreen.HeightRequest = deviceHeight;
                 PayPalScreen.Height = deviceHeight - (deviceHeight / 8);
-
+                addressList2.HeightRequest = deviceWidth / 5;
 
                 //PayPalScreen.Height = ;
                 StripeScreen.Height = 0;
@@ -2298,5 +2309,82 @@ namespace MTYD.ViewModel
         {
         }
 
+        // Auto-complete
+        private ObservableCollection<AddressAutocomplete> _addresses;
+        public ObservableCollection<AddressAutocomplete> Addresses
+        {
+            get => _addresses ?? (_addresses = new ObservableCollection<AddressAutocomplete>());
+            set
+            {
+                if (_addresses != value)
+                {
+                    _addresses = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private string _addressText;
+        public string AddressText
+        {
+            get => _addressText;
+            set
+            {
+                if (_addressText != value)
+                {
+                    _addressText = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private void OnAddressChanged(object sender, EventArgs eventArgs)
+        {
+            if (((Entry)sender).Equals(AddressEntry))
+            {
+                paymentStack.IsVisible = false;
+                saveDeliv.IsVisible = true;
+                addr.OnAddressChanged(addressList, Addresses, _addressText);
+            }
+            else
+            {
+                addr.OnAddressChanged(addressList2, Addresses, _addressText);
+            }
+        }
+
+        private void addressEntryFocused(object sender, EventArgs eventArgs)
+        {
+            if (((Entry)sender).Equals(AddressEntry)) {
+                addr.addressEntryFocused(addressList, new Grid[] { UnitCity, StateZip });
+            }
+            else
+            {
+                addr.addressEntryFocused(addressList2, new Grid[] { CityStateZip });
+            }
+        }
+
+        private void addressEntryUnfocused(object sender, EventArgs eventArgs)
+        {
+            if (((Entry)sender).Equals(AddressEntry))
+            {
+                addr.addressEntryUnfocused(addressList, new Grid[] { UnitCity, StateZip });
+            }
+            else
+            {
+                addr.addressEntryFocused(addressList2, new Grid[] { CityStateZip });
+            }
+        }
+
+        private void addressSelected(System.Object sender, System.EventArgs e)
+        {
+            if (((ListView)sender).Equals(addressList))
+            {
+                addr.addressSelected(addressList, new Grid[] { UnitCity, StateZip }, AddressEntry, CityEntry, StateEntry, ZipEntry);
+            }
+            else
+            {
+                addr.addressSelected(addressList2, new Grid[] { CityStateZip }, cardHolderAddress, cardCity, cardState, cardZip);
+            }
+        }
     }
 }
