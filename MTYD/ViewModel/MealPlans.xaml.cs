@@ -40,10 +40,20 @@ namespace MTYD.ViewModel
         int currentIndex = -1;
         string currentPlan;
         List<JToken> activePlans = new List<JToken>();
+        string addressToPass;
+        string unitToPass;
+        string cityToPass;
+        string stateToPass;
+        string zipToPass;
         Address addr;
 
         public MealPlans(string firstName, string lastName, string email)
         {
+            activePlans.Clear();
+            itemsArray.Clear();
+            purchIdArray.Clear();
+            namesArray.Clear();
+            itemUidArray.Clear();
             cust_firstName = firstName;
             cust_lastName = lastName;
             cust_email = email;
@@ -218,6 +228,7 @@ namespace MTYD.ViewModel
                 if (userString.ToString()[0] != '{')
                 {
                     Console.WriteLine("no meal plans");
+                    Preferences.Set("canChooseSelect", false);
                     return;
                 }
 
@@ -405,6 +416,7 @@ namespace MTYD.ViewModel
                 if (userString.ToString()[0] != '{')
                 {
                     Console.WriteLine("no meal plans");
+                    Preferences.Set("canChooseSelect", false);
                     return;
                 }
 
@@ -426,7 +438,7 @@ namespace MTYD.ViewModel
                     else Debug.WriteLine(m["purchase_uid"].ToString() + " was skipped");
                 }
 
-                if (purchIdArray.Count == 0)
+                if (purchIdArray.Count == 0 || activePlans.Count == 0)
                 {
                     Preferences.Set("canChooseSelect", false);
                 }
@@ -499,7 +511,7 @@ namespace MTYD.ViewModel
             await Navigation.PushAsync(new SubscriptionModal(cust_firstName, cust_lastName, cust_email, activePlans[planPicker.SelectedIndex]["user_social_media"].ToString(), activePlans[planPicker.SelectedIndex]["mobile_refresh_token"].ToString(), activePlans[planPicker.SelectedIndex]["cc_num"].ToString(),
                 expDate.Substring(0, 10), 
                 activePlans[planPicker.SelectedIndex]["cc_cvv"].ToString(), activePlans[planPicker.SelectedIndex]["cc_zip"].ToString(), activePlans[planPicker.SelectedIndex]["purchase_uid"].ToString(), itemsStr.Substring(itemsStr.IndexOf("itm_business_uid") + 20, 10),
-                itemsStr.Substring(itemsStr.IndexOf("item_uid") + 12, 10), activePlans[planPicker.SelectedIndex]["pur_customer_uid"].ToString(), qty, numMeal), false);
+                itemsStr.Substring(itemsStr.IndexOf("item_uid") + 12, 10), activePlans[planPicker.SelectedIndex]["pur_customer_uid"].ToString(), qty, numMeal, AddressEntry.Text, AptEntry.Text, CityEntry.Text, StateEntry.Text, ZipEntry.Text), false);
         }
 
         async void clickedInfo(System.Object sender, System.EventArgs e)

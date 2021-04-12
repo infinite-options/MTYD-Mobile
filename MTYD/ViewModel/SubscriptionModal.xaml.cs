@@ -7,11 +7,14 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using Xamarin.Forms.Maps;
 using Xamarin.Forms.Xaml;
 
 namespace MTYD.ViewModel
@@ -28,6 +31,7 @@ namespace MTYD.ViewModel
 
         string socialLogin; string refresh_token; string cc_num; string cc_exp_year; string cc_exp_month; string cc_cvv; string purchase_id;
         string new_item_id; string customer_id; string itm_business_uid; string cc_zip; string cc_exp_date; string qty; string numMeal;
+        string passedAdd, passedUnit, passedCity, passedState, passedZip;
 
         int mealSelected;
         int deliverySelected;
@@ -35,11 +39,13 @@ namespace MTYD.ViewModel
         double[,] itemPrices;
         String[,] itemNames, itemUids;
         double total;
+        WebClient client4 = new WebClient();
+        double taxRate = 0;
 
         public object NavigationStack { get; private set; }
 
 
-        public SubscriptionModal(string firstName, string lastName, string email, string social, string token, string num, string expDate, string cvv, string zip, string purchaseID, string businessID, string itemID, string customerID, string quantity, string numOfMeals)
+        public SubscriptionModal(string firstName, string lastName, string email, string social, string token, string num, string expDate, string cvv, string zip, string purchaseID, string businessID, string itemID, string customerID, string quantity, string numOfMeals, string add, string unit, string city, string state, string zipDeliv)
         {
             cust_firstName = firstName;
             cust_lastName = lastName;
@@ -51,6 +57,7 @@ namespace MTYD.ViewModel
             Console.WriteLine("next entered");
             socialLogin = social; refresh_token = token; cc_num = num; cc_exp_date = expDate; cc_cvv = cvv; purchase_id = purchaseID;
             new_item_id = itemID; customer_id = customerID; cc_zip = zip; itm_business_uid = businessID; qty = quantity; numMeal = numOfMeals;
+            passedAdd = add.Trim(); passedUnit = unit.Trim(); passedCity = city.Trim(); passedState = state.Trim(); passedZip = zipDeliv.Trim();
             Debug.WriteLine("new_item_id: " + new_item_id);
 
             Console.WriteLine("next2 entered");
@@ -500,10 +507,13 @@ namespace MTYD.ViewModel
                 mealNum.Text = mealSelected.ToString();
                 deliveryNum.Text = deliverySelected.ToString();
                 discountPercentage.Text = ((int)discounts[deliverySelected - 1, 6 - mealSelected]).ToString() + "%";
+                double itemPrice = itemPrices[0, 6 - mealSelected];
+                Preferences.Set("itemPrice", itemPrice);
                 total = deliverySelected * itemPrices[deliverySelected - 1, 6 - mealSelected] * (1 - discounts[deliverySelected - 1, 6 - mealSelected] / 100.0);
                 TotalPrice.Text = "$" + total.ToString();
                 pricePerMeal.Text = "That's Less Than $" + Math.Ceiling(total / mealSelected / deliverySelected) + " per Meal!";
             }
+            SignUpButton.Text = "CHECK PRICE";
         }
 
         private void clickedMeals2(object sender, EventArgs e)
@@ -523,10 +533,13 @@ namespace MTYD.ViewModel
                 mealNum.Text = mealSelected.ToString();
                 deliveryNum.Text = deliverySelected.ToString();
                 discountPercentage.Text = ((int)discounts[deliverySelected - 1, 6 - mealSelected]).ToString() + "%";
+                double itemPrice = itemPrices[0, 6 - mealSelected];
+                Preferences.Set("itemPrice", itemPrice);
                 total = deliverySelected * itemPrices[deliverySelected - 1, 6 - mealSelected] * (1 - discounts[deliverySelected - 1, 6 - mealSelected] / 100.0);
                 TotalPrice.Text = "$" + total.ToString();
                 pricePerMeal.Text = "That's Less Than $" + Math.Ceiling(total / mealSelected / deliverySelected) + " per Meal!";
             }
+            SignUpButton.Text = "CHECK PRICE";
         }
 
         private void clickedMeals3(object sender, EventArgs e)
@@ -546,10 +559,13 @@ namespace MTYD.ViewModel
                 mealNum.Text = mealSelected.ToString();
                 deliveryNum.Text = deliverySelected.ToString();
                 discountPercentage.Text = ((int)discounts[deliverySelected - 1, 6 - mealSelected]).ToString() + "%";
+                double itemPrice = itemPrices[0, 6 - mealSelected];
+                Preferences.Set("itemPrice", itemPrice);
                 total = deliverySelected * itemPrices[deliverySelected - 1, 6 - mealSelected] * (1 - discounts[deliverySelected - 1, 6 - mealSelected] / 100.0);
                 TotalPrice.Text = "$" + total.ToString();
                 pricePerMeal.Text = "That's Less Than $" + Math.Ceiling(total / mealSelected / deliverySelected) + " per Meal!";
             }
+            SignUpButton.Text = "CHECK PRICE";
         }
 
         private void clickedMeals4(object sender, EventArgs e)
@@ -569,10 +585,13 @@ namespace MTYD.ViewModel
                 mealNum.Text = mealSelected.ToString();
                 deliveryNum.Text = deliverySelected.ToString();
                 discountPercentage.Text = ((int)discounts[deliverySelected - 1, 6 - mealSelected]).ToString() + "%";
+                double itemPrice = itemPrices[0, 6 - mealSelected];
+                Preferences.Set("itemPrice", itemPrice);
                 total = deliverySelected * itemPrices[deliverySelected - 1, 6 - mealSelected] * (1 - discounts[deliverySelected - 1, 6 - mealSelected] / 100.0);
                 TotalPrice.Text = "$" + total.ToString();
                 pricePerMeal.Text = "That's Less Than $" + Math.Ceiling(total / mealSelected / deliverySelected) + " per Meal!";
             }
+            SignUpButton.Text = "CHECK PRICE";
         }
 
         private void clickedMeals5(object sender, EventArgs e)
@@ -592,15 +611,19 @@ namespace MTYD.ViewModel
                 mealNum.Text = mealSelected.ToString();
                 deliveryNum.Text = deliverySelected.ToString();
                 discountPercentage.Text = ((int)discounts[deliverySelected - 1, 6 - mealSelected]).ToString() + "%";
+                double itemPrice = itemPrices[0, 6 - mealSelected];
+                Preferences.Set("itemPrice", itemPrice);
                 total = deliverySelected * itemPrices[deliverySelected - 1, 6 - mealSelected] * (1 - discounts[deliverySelected - 1, 6 - mealSelected] / 100.0);
                 TotalPrice.Text = "$" + total.ToString();
                 pricePerMeal.Text = "That's Less Than $" + Math.Ceiling(total / mealSelected / deliverySelected) + " per Meal!";
             }
+            SignUpButton.Text = "CHECK PRICE";
         }
 
         private void clickedDeliveryNum(object sender, EventArgs e)
         {
             Button btn = (Button)sender;
+            SignUpButton.Text = "CHECK PRICE";
 
             delivery1Frame.BackgroundColor = Color.FromHex("#f5f5f5");
             delivery2Frame.BackgroundColor = Color.FromHex("#f5f5f5");
@@ -685,6 +708,8 @@ namespace MTYD.ViewModel
                 mealNum.Text = mealSelected.ToString();
                 deliveryNum.Text = deliverySelected.ToString();
                 discountPercentage.Text = ((int)discounts[deliverySelected - 1, 6 - mealSelected]).ToString() + "%";
+                double itemPrice = itemPrices[0, 6 - mealSelected];
+                Preferences.Set("itemPrice", itemPrice);
                 total = deliverySelected * itemPrices[deliverySelected - 1, 6 - mealSelected] * (1 - discounts[deliverySelected - 1, 6 - mealSelected] / 100.0);
                 TotalPrice.Text = "$" + total.ToString();
                 pricePerMeal.Text = "That's Less Than $" + Math.Ceiling(total / mealSelected / deliverySelected) + " per Meal!";
@@ -701,26 +726,142 @@ namespace MTYD.ViewModel
 
             if (SignUpButton.Text == "CHECK PRICE")
             {
-                var request2 = new HttpRequestMessage();
+                // Setting request for USPS API
+                XDocument requestDoc = new XDocument(
+                    new XElement("AddressValidateRequest",
+                    new XAttribute("USERID", "400INFIN1745"),
+                    new XElement("Revision", "1"),
+                    new XElement("Address",
+                    new XAttribute("ID", "0"),
+                    new XElement("Address1", passedAdd),
+                    new XElement("Address2", passedUnit),
+                    new XElement("City", passedCity),
+                    new XElement("State", passedState),
+                    new XElement("Zip5", passedZip),
+                    new XElement("Zip4", "")
+                         )
+                     )
+                 );
+                var url = "http://production.shippingapis.com/ShippingAPI.dll?API=Verify&XML=" + requestDoc;
+                Console.WriteLine(url);
+                var client2 = new WebClient();
+                var response2 = client2.DownloadString(url);
+
+                var xdoc = XDocument.Parse(response2.ToString());
+                Console.WriteLine("xdoc begin");
+                Console.WriteLine(xdoc);
+
+
+                string latitude = "0";
+                string longitude = "0";
+                foreach (XElement element in xdoc.Descendants("Address"))
+                {
+                    if (GetXMLElement(element, "Error").Equals(""))
+                    {
+                        if (GetXMLElement(element, "DPVConfirmation").Equals("Y") && GetXMLElement(element, "Zip5").Equals(passedZip) && GetXMLElement(element, "City").Equals(passedCity.ToUpper())) // Best case
+                        {
+                            // Get longitude and latitide because we can make a deliver here. Move on to next page.
+                            // Console.WriteLine("The address you entered is valid and deliverable by USPS. We are going to get its latitude & longitude");
+                            //GetAddressLatitudeLongitude();
+                            Geocoder geoCoder = new Geocoder();
+
+                            //Debug.WriteLine("$" + AddressEntry.Text.Trim() + "$");
+                            //Debug.WriteLine("$" + CityEntry.Text.Trim() + "$");
+                            //Debug.WriteLine("$" + StateEntry.Text.Trim() + "$");
+                            IEnumerable<Position> approximateLocations = await geoCoder.GetPositionsForAddressAsync(passedAdd + "," + passedCity + "," + passedState);
+                            Position position = approximateLocations.FirstOrDefault();
+
+                            latitude = $"{position.Latitude}";
+                            longitude = $"{position.Longitude}";
+
+
+
+                            //used for createaccount endpoint
+                            Preferences.Set("user_latitude", latitude);
+                            Preferences.Set("user_longitude", longitude);
+                            Debug.WriteLine("user latitude: " + latitude);
+                            Debug.WriteLine("user longitude: " + longitude);
+
+                            //directSignUp.latitude = latitude;
+                            //directSignUp.longitude = longitude;
+                            //map.MapType = MapType.Street;
+                            //var mapSpan = new MapSpan(position, 0.001, 0.001);
+
+                            //Pin address = new Pin();
+                            //address.Label = "Delivery Address";
+                            //address.Type = PinType.SearchResult;
+                            //address.Position = position;
+
+                            //map.MoveToRegion(mapSpan);
+                            //map.Pins.Add(address);
+
+                            //https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/categoricalOptions/-121.8866517,37.2270928 long,lat
+                            //var request3 = new HttpRequestMessage();
+                            //Console.WriteLine("user_id: " + (string)Application.Current.Properties["user_id"]);
+                            //Debug.WriteLine("latitude: " + latitude + ", longitude: " + longitude);
+                            string url3 = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/categoricalOptions/" + longitude + "," + latitude;
+                            //request3.RequestUri = new Uri(url3);
+                            //request3.Method = HttpMethod.Get;
+                            //var client3 = new HttpClient();
+                            //HttpResponseMessage response3 = await client3.SendAsync(request3);
+                            Debug.WriteLine("categorical options url: " + url3);
+
+                            var content = client4.DownloadString(url3);
+                            var obj = JsonConvert.DeserializeObject<ZonesDto>(content);
+
+                                Debug.WriteLine("first business: " + obj.Result[0].business_name);
+                                taxRate = obj.Result[0].tax_rate / 100;
+                                //deliveryFee = obj.Result[0].delivery_fee;
+                                //serviceFee = obj.Result[0].service_fee;
+                                //passingZones = obj.Result;
+                                //withinZones = true;
+                            }
+
+                            break;
+                        }
+                }
+
+
+
+
+                var request3 = new HttpRequestMessage();
                 Debug.WriteLine("subscriptionModal trying to delete this purchase uid: " + purchase_id.ToString());
                 //request2.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/refund_calculator?purchase_uid=" + purchase_id);
-                request2.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_purchase/" + purchase_id);
-                request2.Method = HttpMethod.Get;
-                var client2 = new HttpClient();
-                HttpResponseMessage response2 = await client2.SendAsync(request2);
+                request3.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_purchase/" + purchase_id);
+                request3.Method = HttpMethod.Get;
+                var client3 = new HttpClient();
+                HttpResponseMessage response3 = await client3.SendAsync(request3);
 
-                if (response2.StatusCode == System.Net.HttpStatusCode.OK)
+                if (response3.StatusCode == System.Net.HttpStatusCode.OK)
                 {
-                    HttpContent content2 = response2.Content;
-                    var userString2 = await content2.ReadAsStringAsync();
-                    JObject refund_obj = JObject.Parse(userString2);
+                    HttpContent content3 = response3.Content;
+                    var userString3 = await content3.ReadAsStringAsync();
+                    JObject refund_obj = JObject.Parse(userString3);
 
 
                     Debug.WriteLine("first start" + refund_obj.ToString());
                     Debug.WriteLine("this is what I'm getting: " + refund_obj["refund_amount"].ToString());
                     double amt = Double.Parse(refund_obj["refund_amount"].ToString());
+                    double newTotal = Math.Round(Double.Parse(TotalPrice.Text.Substring(1)) * (1 + taxRate),2);
+                    Debug.WriteLine("tax rate from categorical options: " + taxRate.ToString());
+                    newTotal += Double.Parse(refund_obj["delivery_fee"].ToString());
+                    newTotal += Double.Parse(refund_obj["service_fee"].ToString());
+                    newTotal += Double.Parse(refund_obj["driver_tip"].ToString());
+                    newTotal = Math.Round(newTotal, 2);
+                    Debug.WriteLine("amt before subtracting: " + amt.ToString());
+                    Debug.WriteLine("newTotal before subtracting: " + newTotal.ToString());
                     double currentPrice = Double.Parse(TotalPrice.Text.ToString().Substring(1));
-                    double correct = amt - currentPrice;
+
+                    double correct;
+                    //check if the ambassador code discount completely covers the meal plan price
+                    if (Double.Parse(refund_obj["ambassador_code"].ToString()) - newTotal > 0)
+                        correct = amt;
+                    else correct = amt + Double.Parse(refund_obj["ambassador_code"].ToString()) - newTotal;
+
+                    //double correct = amt - newTotal;
+                    correct = Math.Round(correct, 2);
+                    Debug.WriteLine("correct after subtracting: " + correct.ToString());
+
 
                     if (correct < 0)
                     {
@@ -766,16 +907,16 @@ namespace MTYD.ViewModel
                         var userString2 = await content2.ReadAsStringAsync();
                         var info_obj2 = JObject.Parse(userString2);
 
-                        updated.password = (info_obj2["result"])[0]["password_hashed"].ToString();
+                        //updated.password = (info_obj2["result"])[0]["password_hashed"].ToString();
                     }
                 }
-                else updated.password = "NULL";
+                //else updated.password = "NULL";
 
                 //updated.password = password;
                 //updated.refresh_token = refresh_token;
                 //updated.cc_num = cc_num;
                 //testing
-                updated.cc_num = "4242424242424242";
+                updated.cc_num = cc_num;
                 updated.cc_exp_date = cc_exp_date;
                 //updated.cc_exp_year = cc_exp_year;
                 //updated.cc_exp_month = cc_exp_month;
@@ -787,27 +928,29 @@ namespace MTYD.ViewModel
                 updated.cc_zip = cc_zip;
                 updated.start_delivery_date = "";
 
-                List<Item2> list1 = new List<Item2>();
-                Item2 item1 = new Item2();
+                List<Item> list1 = new List<Item>();
+                Item item1 = new Item();
                 item1.qty = Preferences.Get("freqSelected", "");
                 item1.name = Preferences.Get("mealSelected", "") + " Meal Plan";
-                item1.price = Preferences.Get("price", "");
+                //item1.price = Preferences.Get("price", "");
+                item1.price = Preferences.Get("itemPrice", "00.00");
                 item1.item_uid = updated.new_item_id;
                 item1.itm_business_uid = itm_business_uid;
                 list1.Add(item1);
                 updated.items = list1;
 
                 var newPaymentJSONString = JsonConvert.SerializeObject(updated);
-                // Console.WriteLine("newPaymentJSONString" + newPaymentJSONString);
+                Console.WriteLine("updatedJSONString" + newPaymentJSONString);
                 var content = new StringContent(newPaymentJSONString, Encoding.UTF8, "application/json");
-                Console.WriteLine("Content: " + content);
+                Console.WriteLine("updatedContent: " + content);
                 /*var request = new HttpRequestMessage();
                 request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/checkout");
                 request.Method = HttpMethod.Post;
                 request.Content = content;*/
                 var client = new HttpClient();
+                Debug.WriteLine("url we are posting to: " + "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_purchase/" + purchase_id);
                 //var response = client.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_purchase_id", content);
-                var response = client.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_purchase", content);
+                var response = client.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_purchase/" + purchase_id, content);
                 // HttpResponseMessage response = await client.SendAsync(request);
                 Console.WriteLine("RESPONSE TO CHECKOUT   " + response.Result);
                 Console.WriteLine("CHECKOUT JSON OBJECT BEING SENT: " + newPaymentJSONString);
@@ -820,6 +963,16 @@ namespace MTYD.ViewModel
                 //Application.Current.MainPage = new DeliveryBilling();
                 //await NavigationPage.PushAsync(DeliveryBilling());
             }
+        }
+
+        public static string GetXMLElement(XElement element, string name)
+        {
+            var el = element.Element(name);
+            if (el != null)
+            {
+                return el.Value;
+            }
+            return "";
         }
 
         async void clickedPfp(System.Object sender, System.EventArgs e)

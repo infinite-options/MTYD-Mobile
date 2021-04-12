@@ -578,18 +578,22 @@
                                    Text="{Binding AddressText}" TextChanged="OnAddressChanged" Focused="addressEntryFocused" Unfocused="addressEntryUnfocused"></Entry>
                         </Frame>
 
-                        <ListView x:Name="addressList2" ItemsSource="{Binding Addresses}" IsVisible="false" Margin="15, 0, 15, 30" ItemSelected="addressSelected">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <TextCell Text="{Binding Address}"/>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                   </ListView>
-
-                        <Frame x:Name="Unit" Padding="10,5" Margin="0,0.5,1,0.5" BackgroundColor="#FFE5B4" HasShadow="False" CornerRadius="24">
-                            <Entry Placeholder="Unit" x:Name="cardHolderUnit" FontAttributes="Bold" FontSize="17"  BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4" HeightRequest="35"></Entry>
+                        <Frame x:Name="addressListFrame" HeightRequest="180" HasShadow="False" BackgroundColor="White" IsVisible="false" Padding="0">
+                            <ListView x:Name="addressList2" ItemsSource="{Binding Addresses}" IsVisible="false" ItemSelected="addressSelected">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextCell Text="{Binding Address}"/>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
                         </Frame>
-                                     
+
+                        <Grid x:Name="UnitGrid">
+                            <Frame x:Name="Unit" Padding="10,5" Margin="0,0.5,1,0.5" BackgroundColor="#FFE5B4" HasShadow="False" CornerRadius="24">
+                                <Entry Placeholder="Unit" x:Name="cardHolderUnit" FontAttributes="Bold" FontSize="17"  BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4" HeightRequest="35"></Entry>
+                            </Frame>
+                        </Grid>
+                        
                         <Grid x:Name="CityStateZip">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"></ColumnDefinition>
