@@ -426,7 +426,8 @@ namespace MTYD.ViewModel
             {
                 if (GetXMLElement(element, "Error").Equals(""))
                 {
-                    if (GetXMLElement(element, "DPVConfirmation").Equals("Y") && GetXMLElement(element, "Zip5").Equals(ZipEntry.Text.Trim()) && GetXMLElement(element, "City").Equals(CityEntry.Text.ToUpper().Trim())) // Best case
+                    //  && GetXMLElement(element, "Zip5").Equals(ZipEntry.Text.Trim()) && GetXMLElement(element, "City").Equals(CityEntry.Text.ToUpper().Trim())
+                    if (GetXMLElement(element, "DPVConfirmation").Equals("Y")) // Best case
                     {
                         // Get longitude and latitide because we can make a deliver here. Move on to next page.
                         // Console.WriteLine("The address you entered is valid and deliverable by USPS. We are going to get its latitude & longitude");
@@ -509,8 +510,13 @@ namespace MTYD.ViewModel
                     }
                     else if (GetXMLElement(element, "DPVConfirmation").Equals("D"))
                     {
-                        //await DisplayAlert("Alert!", "Address is missing information like 'Apartment number'.", "Ok");
-                        //return;
+                        await DisplayAlert("Alert!", "Please enter your unit number", "Ok");
+                        return;
+                    }
+                    else if (GetXMLElement(element, "DPVConfirmation").Equals("S"))
+                    {
+                        await DisplayAlert("Alert!", "Invalid unit number", "Ok");
+                        return;
                     }
                     else
                     {
@@ -1572,7 +1578,6 @@ namespace MTYD.ViewModel
                 backButton.IsVisible = false;
                 PaymentScreen.HeightRequest = deviceHeight;
                 PayPalScreen.Height = deviceHeight - (deviceHeight / 8);
-                addressList2.HeightRequest = deviceWidth / 5;
 
                 //PayPalScreen.Height = ;
                 StripeScreen.Height = 0;
@@ -1727,7 +1732,8 @@ namespace MTYD.ViewModel
                 {
                     if (GetXMLElement(element, "Error").Equals(""))
                     {
-                        if (GetXMLElement(element, "DPVConfirmation").Equals("Y") && GetXMLElement(element, "Zip5").Equals(cardZip.Text.Trim()) && GetXMLElement(element, "City").Equals(cardCity.Text.ToUpper().Trim())) // Best case
+                         // && GetXMLElement(element, "Zip5").Equals(cardZip.Text.Trim()) && GetXMLElement(element, "City").Equals(cardCity.Text.ToUpper().Trim())
+                        if (GetXMLElement(element, "DPVConfirmation").Equals("Y")) // Best case
                         {
                             // Get longitude and latitide because we can make a deliver here. Move on to next page.
                             // Console.WriteLine("The address you entered is valid and deliverable by USPS. We are going to get its latitude & longitude");
@@ -1757,13 +1763,21 @@ namespace MTYD.ViewModel
                         }
                         else if (GetXMLElement(element, "DPVConfirmation").Equals("D"))
                         {
-                            //await DisplayAlert("Alert!", "Address is missing information like 'Apartment number'.", "Ok");
-                            //return;
+                            await Navigation.PopAsync(false);
+                            await DisplayAlert("Alert!", "Please enter your unit number", "Ok");
+                            return;
+                        }
+                        else if (GetXMLElement(element, "DPVConfirmation").Equals("S"))
+                        {
+                            await Navigation.PopAsync(false);
+                            await DisplayAlert("Alert!", "Invalid unit number", "Ok");
+                            return;
                         }
                         else
                         {
-                            //await DisplayAlert("Alert!", "Seems like your address is invalid.", "Ok");
-                            //return;
+                            await Navigation.PopAsync(false);
+                            await DisplayAlert("Alert!", "Seems like your address is invalid.", "Ok");
+                            return;
                         }
                     }
                     else
@@ -2506,6 +2520,7 @@ namespace MTYD.ViewModel
             }
             else
             {
+                addressListFrame.IsVisible = true;
                 addr.addressEntryFocused(addressList2, new Grid[] { CityStateZip });
             }
         }
@@ -2518,7 +2533,8 @@ namespace MTYD.ViewModel
             }
             else
             {
-                addr.addressEntryFocused(addressList2, new Grid[] { CityStateZip });
+                addressListFrame.IsVisible = false;
+                addr.addressEntryUnfocused(addressList2, new Grid[] { UnitGrid, CityStateZip });
             }
         }
 
@@ -2530,7 +2546,8 @@ namespace MTYD.ViewModel
             }
             else
             {
-                addr.addressSelected(addressList2, new Grid[] { CityStateZip }, cardHolderAddress, cardCity, cardState, cardZip);
+                addressListFrame.IsVisible = false;
+                addr.addressSelected(addressList2, new Grid[] { UnitGrid, CityStateZip }, cardHolderAddress, cardCity, cardState, cardZip);
             }
         }
     }
