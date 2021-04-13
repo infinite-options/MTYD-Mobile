@@ -77,6 +77,8 @@ namespace MTYD.ViewModel
         bool paymentSucceed = false;
         string new_purchase_id = "";
         string guestSalt = "";
+        string checkoutAdd, checkoutUnit, checkoutCity, checkoutState, checkoutZip;
+        bool onStripeScreen = false;
 
         Model.Address addr;
 
@@ -344,6 +346,12 @@ namespace MTYD.ViewModel
 
         private async void clickedDeliv(object sender, EventArgs e)
         {
+            checkoutAdd = AddressEntry.Text;
+            checkoutUnit = AptEntry.Text;
+            checkoutCity = CityEntry.Text;
+            checkoutState = StateEntry.Text;
+            checkoutZip = ZipEntry.Text;
+
             //Preferences.Set("price", Preferences.Get("subtotal", "00.00"));
             string platform = Xamarin.Forms.Application.Current.Properties["platform"].ToString();
             //string passwordSalt = Preferences.Get("password_salt", "");
@@ -850,6 +858,12 @@ namespace MTYD.ViewModel
         {
             Preferences.Set("price", Preferences.Get("subtotal", ""));
 
+            checkoutAdd = AddressEntry.Text;
+            checkoutUnit = AptEntry.Text;
+            checkoutCity = CityEntry.Text;
+            checkoutState = StateEntry.Text;
+            checkoutZip = ZipEntry.Text;
+
             clickedSaveContact(sender, e);
             clickedDeliv(sender, e);
 
@@ -1304,11 +1318,16 @@ namespace MTYD.ViewModel
             newPayment.delivery_last_name = LNameEntry.Text;
             newPayment.delivery_email = emailEntry.Text;
             newPayment.delivery_phone = PhoneEntry.Text;
-            newPayment.delivery_address = AddressEntry.Text;
-            newPayment.delivery_unit = Preferences.Get("unitNum", "");
-            newPayment.delivery_city = CityEntry.Text;
-            newPayment.delivery_state = StateEntry.Text;
-            newPayment.delivery_zip = ZipEntry.Text;
+            //newPayment.delivery_address = AddressEntry.Text;
+            //newPayment.delivery_unit = Preferences.Get("unitNum", "");
+            //newPayment.delivery_city = CityEntry.Text;
+            //newPayment.delivery_state = StateEntry.Text;
+            //newPayment.delivery_zip = ZipEntry.Text;
+            newPayment.delivery_address = checkoutAdd;
+            newPayment.delivery_unit = checkoutUnit;
+            newPayment.delivery_city = checkoutCity;
+            newPayment.delivery_state = checkoutState;
+            newPayment.delivery_zip = checkoutZip;
             //newPayment.delivery_instructions = DeliveryEntry;
             newPayment.delivery_instructions = DeliveryEntry.Text;
             newPayment.delivery_longitude = "";
@@ -1508,6 +1527,9 @@ namespace MTYD.ViewModel
         // FUNCTION  1:
         public async void CheckouWithStripe(System.Object sender, System.EventArgs e)
         {
+            onStripeScreen = true;
+
+
             paymentMethod = "STRIPE";
             fillEntries();
 
@@ -2035,6 +2057,8 @@ namespace MTYD.ViewModel
         // FUNCTION  4:
         public void CancelViaStripe(System.Object sender, System.EventArgs e)
         {
+            onStripeScreen = false;
+
             headingGrid.IsVisible = true;
             checkoutButton.IsVisible = true;
             backButton.IsVisible = true;

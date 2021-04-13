@@ -60,6 +60,8 @@ namespace MTYD.ViewModel
             passedAdd = add.Trim(); passedUnit = unit.Trim(); passedCity = city.Trim(); passedState = state.Trim(); passedZip = zipDeliv.Trim();
             Debug.WriteLine("new_item_id: " + new_item_id);
 
+            Debug.WriteLine("Address passed in: " + passedAdd + ", unit: " + passedUnit + ", " + passedCity + ", " + passedState + " " + passedZip);
+
             Console.WriteLine("next2 entered");
 
             InitializeComponent();
@@ -843,7 +845,9 @@ namespace MTYD.ViewModel
                     Debug.WriteLine("this is what I'm getting: " + refund_obj["refund_amount"].ToString());
                     double amt = Double.Parse(refund_obj["refund_amount"].ToString());
                     double newTotal = Math.Round(Double.Parse(TotalPrice.Text.Substring(1)) * (1 + taxRate),2);
+                    Debug.WriteLine("this is the amount for tax: " + Math.Round(Double.Parse(TotalPrice.Text.Substring(1)) * (taxRate), 2).ToString());
                     Debug.WriteLine("tax rate from categorical options: " + taxRate.ToString());
+                    Debug.WriteLine("newTotal: " + newTotal.ToString());
                     newTotal += Double.Parse(refund_obj["delivery_fee"].ToString());
                     newTotal += Double.Parse(refund_obj["service_fee"].ToString());
                     newTotal += Double.Parse(refund_obj["driver_tip"].ToString());
