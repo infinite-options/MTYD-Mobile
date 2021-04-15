@@ -230,6 +230,8 @@
     <BundleResource Include="Resources\info.png" />
     <BundleResource Include="Resources\heartoutline.png" />
     <BundleResource Include="Resources\heart.png" />
+    <BundleResource Include="Resources\leftHeart.png" />
+    <BundleResource Include="Resources\rightInfo.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AppleSignIn\" />

@@ -50,6 +50,6 @@
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>The user&apos;s location is used to determine where the meals will be delivered as well as the billing calculations.</string>
 	<key>CFBundleVersion</key>
-	<string>31</string>
+	<string>32</string>
 </dict>
 </plist>

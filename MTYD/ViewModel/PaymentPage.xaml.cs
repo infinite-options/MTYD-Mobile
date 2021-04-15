@@ -2499,8 +2499,15 @@ namespace MTYD.ViewModel
             }
         }
 
-        private void OnAddressChanged(object sender, EventArgs eventArgs)
+        private void OnAddressChanged(object sender, TextChangedEventArgs eventArgs)
         {
+            if (((Entry)sender).Equals(AddressEntry) && onStripeScreen == true)
+            {
+                var ent = (Entry)sender;
+                ent.Text = eventArgs.OldTextValue;
+                return;
+            }
+
             if (((Entry)sender).Equals(AddressEntry))
             {
                 paymentStack.IsVisible = false;

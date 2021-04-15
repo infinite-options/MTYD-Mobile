@@ -376,7 +376,7 @@ namespace MTYD.ViewModel
                         string source;
                         if (favDict.ContainsKey(obj.Result[i].MealUid) == true)
                             source = "filledHeart.png";
-                        else source = "emptyHeart.png";
+                        else source = "leftHeart.png";
 
 
                         Meals1.Add(new MealInfo
@@ -448,7 +448,7 @@ namespace MTYD.ViewModel
                         string source;
                         if (favDict.ContainsKey(obj.Result[i].MealUid) == true)
                             source = "filledHeart.png";
-                        else source = "emptyHeart.png";
+                        else source = "leftHeart.png";
 
                         Meals2.Add(new MealInfo
                         {
@@ -557,7 +557,7 @@ namespace MTYD.ViewModel
                     //for just date use Substring(0, 10)
                     d.fullDateTime = i.Key;
                     d.fillColor = Color.White;
-                    d.outlineColor = Color.Black;
+                    d.outlineColor = Color.White;
                     d.index = index1;
                     index1++;
                     Debug.WriteLine("fullDate: $" + d.fullDateTime + "$");
@@ -789,7 +789,7 @@ namespace MTYD.ViewModel
             Debug.WriteLine(sender.GetType().ToString());
             Button button1 = (Button)sender;
             Date dateChosen = button1.BindingContext as Date;
-            selectedDate.outlineColor = Color.Black;
+            selectedDate.outlineColor = Color.White;
             selectedDate = dateChosen;
             selectedDate.outlineColor = Color.Red;
             //dateChosen.fillColor = Color.LightGray;
@@ -1369,7 +1369,7 @@ namespace MTYD.ViewModel
                 }
 
                 //b.Source = "heartoutline.png";
-                ms.HeartSource = "emptyHeart.png";
+                ms.HeartSource = "leftHeart.png";
 
             }
         }
