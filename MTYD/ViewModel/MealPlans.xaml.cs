@@ -40,20 +40,37 @@ namespace MTYD.ViewModel
         int currentIndex = -1;
         string currentPlan;
         List<JToken> activePlans = new List<JToken>();
+        string addressToPass;
+        string unitToPass;
+        string cityToPass;
+        string stateToPass;
+        string zipToPass;
+        Address addr;
 
         public MealPlans(string firstName, string lastName, string email)
         {
+            info_obj = null;
+            activePlans.Clear();
+            itemsArray.Clear();
+            purchIdArray.Clear();
+            namesArray.Clear();
+            itemUidArray.Clear();
             cust_firstName = firstName;
             cust_lastName = lastName;
             cust_email = email;
             var width = DeviceDisplay.MainDisplayInfo.Width;
             var height = DeviceDisplay.MainDisplayInfo.Height;
+            addr = new Address();
             InitializeComponent();
+            BindingContext = this;
             NavigationPage.SetHasBackButton(this, false);
             NavigationPage.SetHasNavigationBar(this, false);
             checkPlatform(height, width);
             getMealsSelected();
-            GetMealPlans();
+            _ = GetMealPlans();
+
+            //if (namesArray.Count != 0)
+            //    planPicker.SelectedIndex = 0;
         }
 
         public async void getFrequency()
@@ -173,6 +190,8 @@ namespace MTYD.ViewModel
                 PhoneEntry.FontSize = width / 45;
                 //instructionsEntry.FontSize = width / 45;
 
+                addressList.HeightRequest = width / 5;
+
                 pay.FontSize = width / 38;
 
                 card.FontSize = width / 55;
@@ -213,6 +232,7 @@ namespace MTYD.ViewModel
                 if (userString.ToString()[0] != '{')
                 {
                     Console.WriteLine("no meal plans");
+                    Preferences.Set("canChooseSelect", false);
                     return;
                 }
 
@@ -220,65 +240,8 @@ namespace MTYD.ViewModel
                 this.userProfileInfo.Clear();
                 //Console.WriteLine("info_obj: " + info_obj);
 
-                ////ArrayList item_price = new ArrayList();
-                ////ArrayList num_items = new ArrayList();
-                ////ArrayList payment_frequency = new ArrayList();
-                ////ArrayList groupArray = new ArrayList();
-
-                //if ((info_obj["result"]).ToString() == "[]")
-                //{
-                //    Console.WriteLine("no info");
-
-                //    FNameEntry.Placeholder = "First Name*";
-                //    LNameEntry.Placeholder = "Last Name*";
-                //    emailEntry.Placeholder = "Email*";
-                //    AddressEntry.Placeholder = "Street*";
-                //    AptEntry.Placeholder = "Unit";
-                //    CityEntry.Placeholder = "City*";
-                //    StateEntry.Placeholder = "State*";
-                //    ZipEntry.Placeholder = "Zip*";
-                //    PhoneEntry.Placeholder = "Phone Number*";
-
-
-                //return;
-                //}
-
-                //Console.WriteLine("delivery first name: " + (info_obj["result"])[0]["selection_uid"]);
-                //FNameEntry.Text = (info_obj["result"])[0]["delivery_first_name"].ToString();
-                //if (FNameEntry.Text == "")
-                //    FNameEntry.Text = "First Name*";
-
-                //LNameEntry.Text = (info_obj["result"])[0]["delivery_last_name"].ToString();
-                //if (LNameEntry.Text == "")
-                //    LNameEntry.Text = "Last Name*";
-
-                //emailEntry.Text = (info_obj["result"])[0]["delivery_email"].ToString();
-                //if (emailEntry.Text == "")
-                //    emailEntry.Text = "Email*";
-
-                //AddressEntry.Text = (info_obj["result"])[0]["delivery_address"].ToString();
-                //if (AddressEntry.Text == "")
-                //    AddressEntry.Text = "Street*";
-
-                //AptEntry.Text = (info_obj["result"])[0]["delivery_unit"].ToString();
-                //if (AptEntry.Text == "")
-                //    AptEntry.Text = "Unit";
-
-                //CityEntry.Text = (info_obj["result"])[0]["delivery_city"].ToString();
-                //if (CityEntry.Text == "")
-                //    CityEntry.Text = "City*";
-
-                //StateEntry.Text = (info_obj["result"])[0]["delivery_state"].ToString();
-                //if (StateEntry.Text == "")
-                //    StateEntry.Text = "State*";
-
-                //ZipEntry.Text = (info_obj["result"])[0]["delivery_zip"].ToString();
-                //if (ZipEntry.Text == "")
-                //    ZipEntry.Text = "Zip*";
-
-                //PhoneEntry.Text = (info_obj["result"])[0]["delivery_phone_num"].ToString();
-                //if (PhoneEntry.Text == "")
-                //    PhoneEntry.Text = "Phone Number*";
+                while (info_obj == null)
+                    await Task.Delay(100);
             }
         }
 
@@ -296,10 +259,27 @@ namespace MTYD.ViewModel
 
             Console.WriteLine("after frequency " + frequency);
 
-            if ((info_obj["result"]).ToString() == "[]")
+            if (info_obj == null)
             {
-                return;
+                while (info_obj == null)
+                    await Task.Delay(100);
+
+                if (info_obj != null && (info_obj["result"]).ToString() == "[]")
+                {
+                    return;
+                }
             }
+            else
+            {
+                if ((info_obj["result"]).ToString() == "[]")
+                {
+                    return;
+                }
+            }
+            //if ((info_obj["result"]).ToString() == "[]")
+            //{
+            //    return;
+            //}
 
             //old
             //chosenPurchUid = (info_obj["result"])[planPicker.SelectedIndex]["purchase_uid"].ToString();
@@ -400,6 +380,7 @@ namespace MTYD.ViewModel
                 if (userString.ToString()[0] != '{')
                 {
                     Console.WriteLine("no meal plans");
+                    Preferences.Set("canChooseSelect", false);
                     return;
                 }
 
@@ -421,7 +402,7 @@ namespace MTYD.ViewModel
                     else Debug.WriteLine(m["purchase_uid"].ToString() + " was skipped");
                 }
 
-                if (purchIdArray.Count == 0)
+                if (purchIdArray.Count == 0 || activePlans.Count == 0)
                 {
                     Preferences.Set("canChooseSelect", false);
                 }
@@ -469,6 +450,9 @@ namespace MTYD.ViewModel
                 Console.WriteLine("namesArray contents:" + namesArray[0].ToString());
                 //SubscriptionPicker.Title = namesArray[0];
 
+                if (namesArray.Count != 0)
+                    planPicker.SelectedIndex = 0;
+
                 Console.WriteLine("END OF GET MEAL PLANS FUNCTION");
             }
         }
@@ -482,6 +466,11 @@ namespace MTYD.ViewModel
             }
 
             string itemsStr = activePlans[planPicker.SelectedIndex]["items"].ToString();
+            string qty = itemsStr.Substring(itemsStr.IndexOf("qty") + 7);
+            qty = qty.Substring(0, qty.IndexOf("\""));
+            string numMeal = itemsStr.Substring(itemsStr.IndexOf("name") + 8);
+            numMeal = numMeal.Substring(0, numMeal.IndexOf(" "));
+            Debug.WriteLine("qty: " + qty);
             string expDate = activePlans[planPicker.SelectedIndex]["cc_exp_date"].ToString();
             //var testing = (info_obj["result"])[1];
             //string zip = testing["cc_zip"].ToString();
@@ -489,7 +478,7 @@ namespace MTYD.ViewModel
             await Navigation.PushAsync(new SubscriptionModal(cust_firstName, cust_lastName, cust_email, activePlans[planPicker.SelectedIndex]["user_social_media"].ToString(), activePlans[planPicker.SelectedIndex]["mobile_refresh_token"].ToString(), activePlans[planPicker.SelectedIndex]["cc_num"].ToString(),
                 expDate.Substring(0, 10), 
                 activePlans[planPicker.SelectedIndex]["cc_cvv"].ToString(), activePlans[planPicker.SelectedIndex]["cc_zip"].ToString(), activePlans[planPicker.SelectedIndex]["purchase_uid"].ToString(), itemsStr.Substring(itemsStr.IndexOf("itm_business_uid") + 20, 10),
-                itemsStr.Substring(itemsStr.IndexOf("item_uid") + 12, 10), activePlans[planPicker.SelectedIndex]["pur_customer_uid"].ToString()), false);
+                itemsStr.Substring(itemsStr.IndexOf("item_uid") + 12, 10), activePlans[planPicker.SelectedIndex]["pur_customer_uid"].ToString(), qty, numMeal, AddressEntry.Text, AptEntry.Text, CityEntry.Text, StateEntry.Text, ZipEntry.Text), false);
         }
 
         async void clickedInfo(System.Object sender, System.EventArgs e)
@@ -907,20 +896,31 @@ namespace MTYD.ViewModel
                 //get the amount that will be refunded
                 var request2 = new HttpRequestMessage();
                 Debug.WriteLine("trying to delete: " + chosenPurchUid.ToString());
-                request2.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/refund_calculator?purchase_uid=" + chosenPurchUid);
+
+                //sample (get) endpoint: https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_purchase/400-000209
+                /*
+                sample output: {
+                                    "week_remaining": 2,
+                                    "refund_amount": 19.68
+                                }
+                */
+
+
+                //request2.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/refund_calculator?purchase_uid=" + chosenPurchUid);
+                request2.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_purchase/" + chosenPurchUid);
                 request2.Method = HttpMethod.Get;
                 var client2 = new HttpClient();
                 HttpResponseMessage response2 = await client2.SendAsync(request2);
-
+                Debug.WriteLine("response from refund calc: " + response2.ToString());
                 if (response2.StatusCode == System.Net.HttpStatusCode.OK)
                 {
                     HttpContent content2 = response2.Content;
                     var userString2 = await content2.ReadAsStringAsync();
                     JObject refund_obj = JObject.Parse(userString2);
 
-                    Debug.WriteLine("first start" + refund_obj["result"][0].ToString());
-                    Debug.WriteLine("this is what I'm getting: " + refund_obj["result"][0]["refund_amount"].ToString());
-                    refundAmount = refund_obj["result"][0]["refund_amount"].ToString();
+                    Debug.WriteLine("first start" + refund_obj.ToString());
+                    Debug.WriteLine("this is what I'm getting: " + refund_obj["refund_amount"].ToString());
+                    refundAmount = refund_obj["refund_amount"].ToString();
 
                 }
 
@@ -939,7 +939,7 @@ namespace MTYD.ViewModel
 
                     var clientResponse = await client.PutAsync(Constant.DeletePlanUrl, deleteContent);
 
-                    Debug.WriteLine("Status code: " + clientResponse);
+                    Debug.WriteLine("Status code from deleting plan: " + clientResponse);
                     //await DisplayAlert("Deleted Plan", currentPlan + " was cancelled and refunded.", "OK");
 
                     await Navigation.PushAsync(new MealPlans(cust_firstName, cust_lastName, cust_email), false);
@@ -948,6 +948,61 @@ namespace MTYD.ViewModel
             }
 
             
+        }
+
+        // Auto-complete
+        private ObservableCollection<AddressAutocomplete> _addresses;
+        public ObservableCollection<AddressAutocomplete> Addresses
+        {
+            get => _addresses ?? (_addresses = new ObservableCollection<AddressAutocomplete>());
+            set
+            {
+                if (_addresses != value)
+                {
+                    _addresses = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private string _addressText;
+        public string AddressText
+        {
+            get => _addressText;
+            set
+            {
+                if (_addressText != value)
+                {
+                    _addressText = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public async Task GetPlacesPredictionsAsync()
+        {
+            await addr.GetPlacesPredictionsAsync(addressList, Addresses, _addressText);
+        }
+
+        private void OnAddressChanged(object sender, EventArgs eventArgs)
+        {
+            addr.OnAddressChanged(addressList, Addresses, _addressText);
+        }
+
+        private void addressEntryFocused(object sender, EventArgs eventArgs)
+        {
+            addr.addressEntryFocused(addressList, new Grid[] { UnitCityState, ZipPhone });
+        }
+
+        private void addressEntryUnfocused(object sender, EventArgs eventArgs)
+        {
+            addr.addressEntryUnfocused(addressList, new Grid[] { UnitCityState, ZipPhone });
+        }
+
+        async void addressSelected(System.Object sender, System.EventArgs e)
+        {
+            addr.addressSelected(addressList, new Grid[] { UnitCityState, ZipPhone }, AddressEntry, CityEntry, StateEntry, ZipEntry);
+
         }
     }
 }

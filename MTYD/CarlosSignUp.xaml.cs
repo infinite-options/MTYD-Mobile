@@ -25,10 +25,13 @@ namespace MTYD
         public ObservableCollection<Plans> NewMainPage = new ObservableCollection<Plans>();
         public SignUpPost directSignUp = new SignUpPost();
         public bool isAddessValidated = false;
+        Address addr;
 
         public CarlosSignUp()
         {
+            addr = new Address();
             InitializeComponent();
+            BindingContext = this;
             InitializeSignUpPost();
             var width = DeviceDisplay.MainDisplayInfo.Width;
             var height = DeviceDisplay.MainDisplayInfo.Height;
@@ -39,40 +42,91 @@ namespace MTYD
         {
             if (Device.RuntimePlatform == Device.iOS)
             {
-                heading.FontSize = width / 25;
-                heading.Margin = new Thickness(20, 100, 0, 0);
+                appleSignupFrame.WidthRequest = width / 3.5;
+                appleSignupFrame.HeightRequest = width / 25;
+                appleSignupButton.WidthRequest = width / 3.5;
+                appleSignupButton.HeightRequest = width / 25;
+                appleSignupText.FontSize = width / 50;
+                fbSignupFrame.WidthRequest = width / 3.5;
+                fbSignupFrame.HeightRequest = width / 25;
+                fbSignupButton.WidthRequest = width / 3.5;
+                fbSignupButton.HeightRequest = width / 25;
+                fbSignupText.FontSize = width / 50;
+                googleSignupFrame.WidthRequest = width / 3.5;
+                googleSignupFrame.HeightRequest = width / 25;
+                googleSignupButton.WidthRequest = width / 3.5;
+                googleSignupButton.HeightRequest = width / 25;
+                googleSignupText.FontSize = width / 50;
 
-                firstName.CornerRadius = 22;
-                firstName.HeightRequest = 35;
-                lastName.CornerRadius = 22;
-                lastName.HeightRequest = 35;
+                orDivider.WidthRequest = width / 2.5;
+                emailOption.FontSize = width / 35;
 
-                emailAdd.CornerRadius = 22;
-                emailAdd.HeightRequest = 35;
-                reenterEmailAdd.CornerRadius = 22;
-                reenterEmailAdd.HeightRequest = 35;
+                firstName.HeightRequest = width / 30;
+                FNameEntry.FontSize = width / 55;
+                LNameEntry.FontSize = width / 55;
+                emailEntry.FontSize = width / 55;
+                reenterEmailEntry.FontSize = width / 55;
+                passwordEntry.FontSize = width / 55;
+                reenterPasswordEntry.FontSize = width / 55;
+                AddressEntry.FontSize = width / 55;
+                AptEntry.FontSize = width / 55;
+                CityEntry.FontSize = width / 55;
+                StateEntry.FontSize = width / 55;
+                ZipEntry.FontSize = width / 55;
+                PhoneEntry.FontSize = width / 55;
 
-                street.CornerRadius = 22;
-                street.HeightRequest = 35;
+                addressList.HeightRequest = width / 5;
 
-                unit.CornerRadius = 22;
-                unit.HeightRequest = 35;
-                city.CornerRadius = 22;
-                city.HeightRequest = 35;
-                state.CornerRadius = 22;
-                state.HeightRequest = 35;
+                backButton.WidthRequest = width / 8;
+                backButton.HeightRequest = width / 17;
+                backButton.CornerRadius = (int)(width / 34);
 
-                zipCode.CornerRadius = 22;
-                zipCode.HeightRequest = 35;
-                phoneNum.CornerRadius = 22;
-                phoneNum.HeightRequest = 35;
+                SignUpButton.WidthRequest = width / 8;
+                SignUpButton.HeightRequest = width / 17;
+                SignUpButton.CornerRadius = (int)(width / 34);
+            }
+            else //Android
+            {
+                appleSignupFrame.WidthRequest = width / 5;
+                appleSignupFrame.HeightRequest = width / 35;
+                appleSignupButton.WidthRequest = width / 5;
+                appleSignupButton.HeightRequest = width / 35;
+                appleSignupText.FontSize = width / 65;
+                fbSignupFrame.WidthRequest = width / 5;
+                fbSignupFrame.HeightRequest = width / 35;
+                fbSignupButton.WidthRequest = width / 5;
+                fbSignupButton.HeightRequest = width / 35;
+                fbSignupText.FontSize = width / 65;
+                googleSignupFrame.WidthRequest = width / 5;
+                googleSignupFrame.HeightRequest = width / 35;
+                googleSignupButton.WidthRequest = width / 5;
+                googleSignupButton.HeightRequest = width / 35;
+                googleSignupText.FontSize = width / 65;
 
-                password.CornerRadius = 22;
-                password.HeightRequest = 35;
-                reenterPassword.CornerRadius = 22;
-                reenterPassword.HeightRequest = 35;
+                orDivider.WidthRequest = width / 4;
+                emailOption.FontSize = width / 55;
 
-                SignUpButton.CornerRadius = 25;
+                firstName.HeightRequest = width / 45;
+                FNameEntry.FontSize = width / 70;
+                LNameEntry.FontSize = width / 70;
+                emailEntry.FontSize = width / 70;
+                reenterEmailEntry.FontSize = width / 70;
+                passwordEntry.FontSize = width / 70;
+                reenterPasswordEntry.FontSize = width / 70;
+                AddressEntry.FontSize = width / 70;
+                AptEntry.FontSize = width / 70;
+                CityEntry.FontSize = width / 70;
+                StateEntry.FontSize = width / 70;
+                ZipEntry.FontSize = width / 70;
+                PhoneEntry.FontSize = width / 70;
+
+                backButton.WidthRequest = width / 10;
+                backButton.HeightRequest = width / 25;
+                backButton.CornerRadius = (int)(width / 50);
+
+                SignUpButton.WidthRequest = width / 10;
+                SignUpButton.HeightRequest = width / 25;
+                SignUpButton.CornerRadius = (int)(width / 50);
             }
         }
 
@@ -145,7 +199,7 @@ namespace MTYD
                 string password = reenterPasswordEntry.Text.Trim();
                 if (!directSignUp.password.Equals(password))
                 {
-                    await DisplayAlert("Error", "Your email doesn't match", "OK");
+                    await DisplayAlert("Error", "Your password doesn't match", "OK");
                 }
             }
 
@@ -449,6 +503,75 @@ namespace MTYD
             }
         }
 
+        public async void googleSignupButtonClicked(object sender, EventArgs e)
+        {
+            MainPage mainPage = new MainPage();
+            mainPage.googleLoginButtonClicked(sender, e);
+        }
 
+        public async void appleSignupButtonClicked(object sender, EventArgs e)
+        {
+            MainPage mainPage = new MainPage();
+            mainPage.appleLoginButtonClicked(sender, e);
+        }
+        public async void fbSignupButtonClicked(object sender, EventArgs e)
+        {
+            MainPage mainPage = new MainPage();
+            mainPage.facebookLoginButtonClicked(sender, e);
+        }
+
+        // Auto-complete
+        private ObservableCollection<AddressAutocomplete> _addresses;
+        public ObservableCollection<AddressAutocomplete> Addresses
+        {
+            get => _addresses ?? (_addresses = new ObservableCollection<AddressAutocomplete>());
+            set
+            {
+                if (_addresses != value)
+                {
+                    _addresses = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private string _addressText;
+        public string AddressText
+        {
+            get => _addressText;
+            set
+            {
+                if (_addressText != value)
+                {
+                    _addressText = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public async Task GetPlacesPredictionsAsync()
+        {
+            await addr.GetPlacesPredictionsAsync(addressList, Addresses, _addressText);
+        }
+
+        private void OnAddressChanged(object sender, EventArgs eventArgs)
+        {
+            addr.OnAddressChanged(addressList, Addresses, _addressText);
+        }
+
+        private void addressEntryFocused(object sender, EventArgs eventArgs)
+        {
+            addr.addressEntryFocused(addressList, new Grid[] { UnitCity, StateZip });
+        }
+
+        private void addressEntryUnfocused(object sender, EventArgs eventArgs)
+        {
+            addr.addressEntryUnfocused(addressList, new Grid[] { UnitCity, StateZip });
+        }
+
+        async void addressSelected(System.Object sender, System.EventArgs e)
+        {
+            addr.addressSelected(addressList, new Grid[] { UnitCity, StateZip }, AddressEntry, CityEntry, StateEntry, ZipEntry);
+        }
     }
 }

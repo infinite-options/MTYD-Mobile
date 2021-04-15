@@ -48,6 +48,10 @@ namespace MTYD.ViewModel
         }
     }
     //==========================================
+
+    
+
+
     public partial class Select : ContentPage
     {
         //==========================================
@@ -89,15 +93,25 @@ namespace MTYD.ViewModel
         int mealCount;
         int addOnCount;
         bool addOnSelected = false;
-        string selectedDate;
+        string selectedDotw;
         Zones[] passedZones;
+        //for the carousel of dates
+        List<Date> availableDates;
+        int availDateIndex;
+        Date selectedDate;
+        Dictionary<string, Date> dateDict;
+        Dictionary<string, bool> favDict;
 
         WebClient client = new WebClient();
 
         public Select(Zones[] zones, string firstName, string lastName, string userEmail)
         {
+            availableDates = new List<Date>();
+            dateDict = new Dictionary<string, Date>();
+            favDict = new Dictionary<string, bool>();
             passedZones = zones;
             InitializeComponent();
+
 
             //move bar initialization testing
             //==========================================
@@ -112,6 +126,7 @@ namespace MTYD.ViewModel
             Debug.WriteLine("bar initialization done");
 
             Preferences.Set("origMax", 0);
+            getFavorites();
             GetMealPlans();
             //Task.Delay(1000).Wait();
             setDates();
@@ -122,7 +137,11 @@ namespace MTYD.ViewModel
             var height = DeviceDisplay.MainDisplayInfo.Height;
             NavigationPage.SetHasBackButton(this, false);
             NavigationPage.SetHasNavigationBar(this, false);
+
+            //dateCarousel.PeekAreaInsets = new Thickness((width / 2) - 250, 0);
             
+
+
             first = firstName;
             last = lastName;
             email = userEmail;
@@ -235,6 +254,40 @@ namespace MTYD.ViewModel
         //    var obj = JsonConvert.DeserializeObject<ZonesDto>(content);
         //}
 
+        async void getFavorites()
+        {
+            GetFavPost getFav = new GetFavPost();
+            getFav.customer_uid = (string)Application.Current.Properties["user_id"];
+            var getFavSerializedObj = JsonConvert.SerializeObject(getFav);
+            var content4 = new StringContent(getFavSerializedObj, Encoding.UTF8, "application/json");
+            var client3 = new System.Net.Http.HttpClient();
+            var response3 = await client3.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/favourite_food/get", content4);
+            var message = await response3.Content.ReadAsStringAsync();
+            Debug.WriteLine("RESPONSE TO getfavs   " + response3.ToString());
+            Debug.WriteLine("json object sent:  " + getFavSerializedObj.ToString());
+            Debug.WriteLine("message received:  " + message.ToString());
+
+            //if there are any favorites stored
+            if (message.Contains("840") == true)
+            {
+                var data = JsonConvert.DeserializeObject<FavsDto>(message);
+                Debug.WriteLine("RESPONSE TO getfavs   " + response3.ToString());
+                Debug.WriteLine("favorites: " + data.result[0].favorites);
+
+                string favoritesList = data.result[0].favorites;
+
+                while (favoritesList.Contains(",") != false)
+                {
+                    Debug.WriteLine("favorite: " + favoritesList.Substring(0, favoritesList.IndexOf(",")));
+                    favDict.Add(favoritesList.Substring(0, favoritesList.IndexOf(",")), true);
+                    favoritesList = favoritesList.Substring(favoritesList.IndexOf(",") + 1);
+                }
+
+                Debug.WriteLine("favorite: " + favoritesList);
+                favDict.Add(favoritesList, true);
+
+            }
+        }
 
         async void clickedPfp(System.Object sender, System.EventArgs e)
         {
@@ -286,7 +339,7 @@ namespace MTYD.ViewModel
                 var obj = JsonConvert.DeserializeObject<UpcomingMenu>(content);
 
                 // Convert dates to json date format 2020-09-13
-                var convertDay1 = String.Format("{0:yyyy-MM-dd}", text1);
+                var convertDay1 = String.Format("{0:yyyy-MM-dd}", selectedDate.fullDateTime);
 
                 System.Diagnostics.Debug.WriteLine("Here " + convertDay1.ToString());
 
@@ -315,6 +368,17 @@ namespace MTYD.ViewModel
                             mealQty = 0;
                         }
 
+                        Debug.WriteLine("itemuid: " + obj.Result[i].MealUid + " and meal name: " + obj.Result[i].MealName);
+
+                        //b.Source = "filledHeart.png";
+                        //b.Source = "emptyHeart.png";
+
+                        string source;
+                        if (favDict.ContainsKey(obj.Result[i].MealUid) == true)
+                            source = "filledHeart.png";
+                        else source = "leftHeart.png";
+
+
                         Meals1.Add(new MealInfo
                         {
                             MealName = obj.Result[i].MealName,
@@ -323,10 +387,21 @@ namespace MTYD.ViewModel
                             MealQuantity = mealQty,
                             MealPrice = obj.Result[i].MealPrice,
                             ItemUid = obj.Result[i].MealUid,
+                            MealDesc = obj.Result[i].MealDesc,
+                            SeeDesc = false,
+                            SeeImage = true,
+                            HeartSource = source
                         });
 
-                        weekOneMenu.ItemsSource = Meals1;
                         mealCount++;
+
+                        //testing in new location
+                        //if (mealCount % 2 != 0)
+                        //    mealCount++;
+                        //weekOneMenu.HeightRequest = 320 * ((mealCount / 2));
+
+                        //weekOneMenu.ItemsSource = Meals1;
+                        
                         Debug.WriteLine("mealCount incremented:" + mealCount.ToString());
                     }
                     else if (obj.Result[i].MealCat == "Add-On" && obj.Result[i].MenuDate.Equals(convertDay1))
@@ -370,6 +445,11 @@ namespace MTYD.ViewModel
                             mealQty = 0;
                         }
 
+                        string source;
+                        if (favDict.ContainsKey(obj.Result[i].MealUid) == true)
+                            source = "filledHeart.png";
+                        else source = "leftHeart.png";
+
                         Meals2.Add(new MealInfo
                         {
                             MealName = obj.Result[i].MealName,
@@ -378,20 +458,38 @@ namespace MTYD.ViewModel
                             MealQuantity = mealQty,
                             MealPrice = obj.Result[i].MealPrice,
                             ItemUid = obj.Result[i].MealUid,
+                            MealDesc = obj.Result[i].MealDesc,
+                            SeeDesc = false,
+                            SeeImage = true,
+                            HeartSource = source
                         });
 
-                        weekOneAddOns.ItemsSource = Meals2;
                         addOnCount++;
+                        //testing in new location
+                        //weekOneAddOns.HeightRequest = 280 * ((addOnCount / 2));
+
+                        //weekOneAddOns.ItemsSource = Meals2;
+                        
                     }
                 }
-                //weekOneMenu.ItemsSource = Meals1;
+
                 if (mealCount % 2 != 0)
                     mealCount++;
+                if (addOnCount % 2 != 0)
+                    addOnCount++;
                 weekOneMenu.HeightRequest = 320 * ((mealCount / 2));
+                weekOneAddOns.HeightRequest = 320 * ((addOnCount / 2));
+                //weekOneMenu.ItemsSource = Meals1;
+                //commented out to test
+                //if (mealCount % 2 != 0)
+                //    mealCount++;
+                //weekOneMenu.HeightRequest = 320 * ((mealCount / 2));
+                weekOneMenu.ItemsSource = Meals1;
+                weekOneAddOns.ItemsSource = Meals2;
 
                 if (addOnCount % 2 != 0)
                     addOnCount++;
-                weekOneAddOns.HeightRequest = 280 * ((addOnCount / 2));
+                //weekOneAddOns.HeightRequest = 280 * ((addOnCount / 2));
                 Debug.WriteLine("mealCount:" + mealCount.ToString());
                 Debug.WriteLine("mealCount half:" + ((int)(mealCount / 2)).ToString());
                 Debug.WriteLine("height:" + weekOneMenu.HeightRequest.ToString());
@@ -417,6 +515,8 @@ namespace MTYD.ViewModel
             Debug.WriteLine("setDates entered");
             try
             {
+                availableDates.Clear();
+                dateDict.Clear();
                 var content = client.DownloadString(menuUrl);
                 Debug.WriteLine("after content reached");
                 Debug.WriteLine("content: " + content);
@@ -436,18 +536,226 @@ namespace MTYD.ViewModel
                 }
                 Debug.WriteLine("after adding to Dictionary reached");
 
+                int index1 = 0;
                 foreach (var i in hm)
                 {
                     datePicker.Items.Add(i.Key);
+                    Debug.WriteLine("date key: " + i.Key.ToString());
                     //String.Format("MMMM dd, yyyy", i.Key);
-                }
-                Debug.WriteLine("after adding to picker reached");
 
+                    //testing with carouselView
+                    //format of i.Key = yyyy-mm-dd hh-mm-ss
+                    //format for DateTime constructor: (year, month, day, hour, minute, second)
+                    var dateObj = new DateTime(int.Parse(i.Key.Substring(0, 4)), int.Parse(i.Key.Substring(5, 2)), int.Parse(i.Key.Substring(8, 2)), 0, 0, 0);
+
+                    Date d = new Date();
+                    d.dotw = dateObj.ToString("ddd").ToUpper();
+                    d.month = dateObj.ToString("MMM");
+                    d.day = dateObj.Day.ToString();
+                    //if (d.day.Substring(0, 1) == "0")
+                    //    d.day = d.day.Substring(1, 2);
+                    //for just date use Substring(0, 10)
+                    d.fullDateTime = i.Key;
+                    d.fillColor = Color.White;
+                    d.outlineColor = Color.White;
+                    d.index = index1;
+                    index1++;
+                    Debug.WriteLine("fullDate: $" + d.fullDateTime + "$");
+                    availableDates.Add(d);
+                    Debug.WriteLine("availableDates size: " + availableDates.Count.ToString());
+                    //dateDict.Add(d.fullDateTime, d);
+                }
+
+                Debug.WriteLine("after adding to picker reached");
+                //dateCarousel.ItemsSource = availableDates; 
                 datePicker.SelectedIndex = 0;
-                text1 = datePicker.SelectedItem.ToString();
-                Debug.WriteLine("date picked: " + text1);
-                Preferences.Set("dateSelected", text1.Substring(0, 11));
+                availDateIndex = 0;
+                selectedDate = availableDates[0];
+                selectedDate.outlineColor = Color.Red;
+                text1 = selectedDate.fullDateTime;
+                //Debug.WriteLine("date picked: " + text1);
+                Preferences.Set("dateSelected", availableDates[0].fullDateTime.Substring(0,10));
                 Console.WriteLine("dateSet: " + Preferences.Get("dateSelected", ""));
+
+
+
+
+                int orig = Preferences.Get("origMax", 0);
+                if (orig != 0)
+                {
+                    totalCount.Text = orig.ToString();
+
+                }
+                else
+                {
+                    totalCount.Text = "Count";
+                }
+                Preferences.Set("total", orig);
+                Console.WriteLine("here before");
+                //BarParameters[0].mealsLeft = "Please Select " + Preferences.Get("total", "").ToString() + " Meals";
+                //BarParameters[0].barLabel = "Please Select " + Preferences.Get("total", "").ToString() + " Meals";
+                Preferences.Set("dateSelected", selectedDate.fullDateTime.Substring(0, 10));
+                Console.WriteLine("dateSelected: " + Preferences.Get("dateSelected", ""));
+
+                //testing here
+                getUserMeals();
+
+                mealsSaved.Clear();   //New Addition SV
+                resetAll(); //New Addition SV
+
+                isSkip = false;
+                isSurprise = false;
+
+                if ((string)Application.Current.Properties["platform"] != "GUEST")
+                {
+                    checkDateStatuses();
+                    GetRecentSelection();
+                    GetRecentSelection2();
+                }
+                else
+                {
+                    isSurprise = true;
+                    isSkip = false;
+                    isAlreadySelected = false;
+                }
+                
+                dateCarousel.ItemsSource = availableDates;
+                //testing setMenu here
+                setMenu();
+
+
+                Console.WriteLine("isAlreadySeleced in planchange" + isAlreadySelected);
+                //bool isAlreadySelected = Preferences.Get("isAlreadySelected", true);
+                if (isAlreadySelected == true)
+                {
+                    Debug.WriteLine("isalreadyselected=true");
+                    //selectedDate.fillColor = Color.FromHex("#FFBA00");
+                    saveBttn.BackgroundColor = Color.Orange;
+                    saveFrame.BackgroundColor = Color.Orange;
+                    saveBttn.TextColor = Color.White;
+                    skipBttn.BackgroundColor = Color.Transparent;
+                    skipFrame.BackgroundColor = Color.Transparent;
+                    skipBttn.TextColor = Color.Black;
+                    surpriseBttn.BackgroundColor = Color.Transparent;
+                    surpriseFrame.BackgroundColor = Color.Transparent;
+                    surpriseBttn.TextColor = Color.Black;
+
+
+                    string s = SubscriptionPicker.SelectedItem.ToString();
+                    s = s.Substring(0, 2);
+
+                    totalCount.Text = "0";
+                    Preferences.Set("total", 0);
+                    Console.WriteLine("before true");
+                    BarParameters[0].mealsLeft = "All Meals Selected";
+                    BarParameters[0].barLabel = "All Meals Selected";
+                    BarParameters[0].margin = new Thickness(this.Width, 0, 0, 0);
+                    BarParameters[0].update = new Thickness(this.Width, 0, 0, 0);
+                    Console.WriteLine("after true");
+                    Preferences.Set("origMax", int.Parse(s));
+                    totalCount.Text = Preferences.Get("total", 0).ToString();
+                    //DisplayAlert("Alert", "Select reset button to change your meal selections", "OK");
+                    //weekOneProgress.Progress = 1;
+                }
+                else if (isAlreadySelected == false)
+                {
+                    Debug.WriteLine("isalreadyselected=false");
+                    string s = SubscriptionPicker.SelectedItem.ToString();
+                    s = s.Substring(0, 2);
+                    Preferences.Set("total", int.Parse(s));
+                    Console.WriteLine("before false");
+                    var holder = BarParameters[0].mealsLeft;
+                    holder = "Please Select " + Preferences.Get("total", "").ToString() + " Meals";
+                    BarParameters[0].mealsLeft = holder;
+                    BarParameters[0].barLabel = holder;
+                    BarParameters[0].margin = 0;
+                    BarParameters[0].update = 0;
+                    Console.WriteLine("after false");
+                    totalCount.Text = Preferences.Get("total", 0).ToString();
+                    Preferences.Set("origMax", int.Parse(s));
+                    //weekOneProgress.Progress = 0;
+                }
+
+                if (isSkip)
+                {
+                    Debug.WriteLine("isSkip");
+                    //selectedDate.fillColor = Color.FromHex("#FF9E19");
+                    //testing to try and send correct json object
+                    //qtyDict.Clear();
+
+                    skipBttn.BackgroundColor = Color.Orange;
+                    skipFrame.BackgroundColor = Color.Orange;
+                    skipBttn.TextColor = Color.White;
+                    surpriseBttn.BackgroundColor = Color.Transparent;
+                    surpriseFrame.BackgroundColor = Color.Transparent;
+                    surpriseBttn.TextColor = Color.Black;
+                    saveBttn.BackgroundColor = Color.Transparent;
+                    saveFrame.BackgroundColor = Color.Transparent;
+                    saveBttn.TextColor = Color.Black;
+
+
+
+                    string s = SubscriptionPicker.SelectedItem.ToString();
+                    s = s.Substring(0, 2);
+                    Preferences.Set("total", int.Parse(s));
+                    Console.WriteLine("before skip");
+                    BarParameters[0].margin = 0;
+                    BarParameters[0].update = 0;
+                    BarParameters[0].mealsLeft = "Please Select " + Preferences.Get("total", "").ToString() + " Meals";
+                    BarParameters[0].barLabel = "Please Select " + Preferences.Get("total", "").ToString() + " Meals";
+                    Console.WriteLine("after skip");
+                    totalCount.Text = Preferences.Get("total", 0).ToString();
+                    Preferences.Set("origMax", int.Parse(s));
+                    //weekOneProgress.Progress = 0;
+                }
+                else if (isSurprise)
+                {
+                    Debug.WriteLine("isSurprise");
+                    //testing to try and send correct json object
+                    //qtyDict.Clear();
+
+                    surpriseBttn.BackgroundColor = Color.Orange;
+                    surpriseFrame.BackgroundColor = Color.Orange;
+                    surpriseBttn.TextColor = Color.White;
+                    skipBttn.BackgroundColor = Color.Transparent;
+                    skipFrame.BackgroundColor = Color.Transparent;
+                    skipBttn.TextColor = Color.Black;
+                    saveBttn.BackgroundColor = Color.Transparent;
+                    saveFrame.BackgroundColor = Color.Transparent;
+                    saveBttn.TextColor = Color.Black;
+
+
+
+                    string s = SubscriptionPicker.SelectedItem.ToString();
+                    s = s.Substring(0, 2);
+                    Preferences.Set("total", int.Parse(s));
+                    Console.WriteLine("before surprise");
+                    BarParameters[0].margin = 0;
+                    BarParameters[0].update = 0;
+                    BarParameters[0].mealsLeft = "Please Select " + Preferences.Get("total", "").ToString() + " Meals";
+                    BarParameters[0].barLabel = "Please Select " + Preferences.Get("total", "").ToString() + " Meals";
+                    Console.WriteLine("after surprise");
+                    totalCount.Text = Preferences.Get("total", 0).ToString();
+                    Preferences.Set("origMax", int.Parse(s));
+                    //weekOneProgress.Progress = 0;
+                }
+                else
+                {
+                    Debug.WriteLine("new plan");
+                    //If neither skip or surprise (new plan), then initialize to surprise
+                    skipBttn.BackgroundColor = Color.Transparent;
+                    skipFrame.BackgroundColor = Color.Transparent;
+                    skipBttn.TextColor = Color.Black;
+                    surpriseBttn.BackgroundColor = Color.Transparent;
+                    surpriseFrame.BackgroundColor = Color.Transparent;
+                    surpriseBttn.TextColor = Color.Black;
+
+
+
+                    if (isAlreadySelected == false)
+                        surprise();
+
+                }
             }
             catch
             {
@@ -457,9 +765,10 @@ namespace MTYD.ViewModel
         }
 
        
-        // Date Picker Selection Changes
-        async private void dateChange(object sender, EventArgs e)
+        /////////date change for carousel view
+        async private void dateChangeCar(object sender, EventArgs e)
         {
+            dateCarousel.ItemsSource = availableDates;
             qtyDict.Clear();
             qtyDict_addon.Clear();
 
@@ -468,7 +777,7 @@ namespace MTYD.ViewModel
 
             //getUserMeals();
             Console.WriteLine("Setting now");
-            text1 = datePicker.SelectedItem.ToString();
+            text1 = selectedDate.fullDateTime;
             string tempHolder = text1;
             Debug.WriteLine("year:" + tempHolder.Substring(0, 4));
             //tempHolder = tempHolder.Substring(tempHolder.IndexOf("-") + 1);
@@ -477,9 +786,18 @@ namespace MTYD.ViewModel
             Debug.WriteLine("day:" + text1.Substring(8, 2));
             //getDayOfTheWeek();
             DateTime selected = new DateTime(Int32.Parse(text1.Substring(0, 4)), Int32.Parse(text1.Substring(5, 2)), Int32.Parse(text1.Substring(8, 2)));
-            selectedDate = selected.ToString("dddd");
-            Debug.WriteLine("dayOfWeek: " + selectedDate);
+            Debug.WriteLine(sender.GetType().ToString());
+            Button button1 = (Button)sender;
+            Date dateChosen = button1.BindingContext as Date;
+            selectedDate.outlineColor = Color.White;
+            selectedDate = dateChosen;
+            selectedDate.outlineColor = Color.Red;
+            //dateChosen.fillColor = Color.LightGray;
+            selectedDotw = dateChosen.dotw;
+            Debug.WriteLine("dayOfWeek: " + selectedDotw);
 
+            
+            
 
             //testing no setMenu();
             //setMenu();
@@ -501,7 +819,7 @@ namespace MTYD.ViewModel
             Console.WriteLine("here before");
             //BarParameters[0].mealsLeft = "Please Select " + Preferences.Get("total", "").ToString() + " Meals";
             //BarParameters[0].barLabel = "Please Select " + Preferences.Get("total", "").ToString() + " Meals";
-            Preferences.Set("dateSelected", text1.Substring(0, 11));
+            Preferences.Set("dateSelected", dateChosen.fullDateTime.Substring(0,10));
             Console.WriteLine("dateSelected: " + Preferences.Get("dateSelected", ""));
 
             //testing here
@@ -513,15 +831,23 @@ namespace MTYD.ViewModel
             isSkip = false;
             isSurprise = false;
 
-            await GetRecentSelection();
-            GetRecentSelection2();
+            if ((string)Application.Current.Properties["platform"] != "GUEST")
+            {
+                await GetRecentSelection();
+                GetRecentSelection2();
+            }
+            else
+            {
+                isSurprise = true;
+                isSkip = false;
+                isAlreadySelected = false;
+            }
 
             //testing setMenu here
             setMenu();
-            
+
 
             Console.WriteLine("isAlreadySeleced in planchange" + isAlreadySelected);
-
             //bool isAlreadySelected = Preferences.Get("isAlreadySelected", true);
             if (isAlreadySelected == true)
             {
@@ -534,7 +860,7 @@ namespace MTYD.ViewModel
                 surpriseBttn.BackgroundColor = Color.Transparent;
                 surpriseFrame.BackgroundColor = Color.Transparent;
                 surpriseBttn.TextColor = Color.Black;
-                
+
 
                 string s = SubscriptionPicker.SelectedItem.ToString();
                 s = s.Substring(0, 2);
@@ -585,7 +911,7 @@ namespace MTYD.ViewModel
                 saveFrame.BackgroundColor = Color.Transparent;
                 saveBttn.TextColor = Color.Black;
 
-                
+
 
                 string s = SubscriptionPicker.SelectedItem.ToString();
                 s = s.Substring(0, 2);
@@ -615,7 +941,7 @@ namespace MTYD.ViewModel
                 saveFrame.BackgroundColor = Color.Transparent;
                 saveBttn.TextColor = Color.Black;
 
-                
+
 
                 string s = SubscriptionPicker.SelectedItem.ToString();
                 s = s.Substring(0, 2);
@@ -641,7 +967,7 @@ namespace MTYD.ViewModel
                 surpriseFrame.BackgroundColor = Color.Transparent;
                 surpriseBttn.TextColor = Color.Black;
 
-                
+
 
                 if (isAlreadySelected == false)
                     surprise();
@@ -650,6 +976,7 @@ namespace MTYD.ViewModel
             //reset the buttons
             //default to surprise if null
         }
+        //////////
 
         private async void planChange(object sender, EventArgs e)
         {
@@ -691,110 +1018,182 @@ namespace MTYD.ViewModel
             //totalCount.Text = Preferences.Get("total", 0).ToString();
           //  Preferences.Set("origMax", int.Parse(s));
             */
-            int indexOfMealPlanSelected = (int)SubscriptionPicker.SelectedIndex;
-            Preferences.Set("purchId", purchIdArray[indexOfMealPlanSelected].ToString());
-            Console.WriteLine("Purch Id: " + Preferences.Get("purchId", ""));
-            //testing
-            getUserMeals();
-
-            // Button b = (Button)sender;
-            // MealInfo ms = b.BindingContext as MealInfo;
-            // ms.MealQuantity = 0;
-            mealsSaved.Clear(); //New Addition SV
-            resetAll(); //New Addition SV
-            //Task.Delay(500).Wait();
-            //getUserMeals();
-            await GetRecentSelection();
-            GetRecentSelection2();
-
-            Console.WriteLine("isAlreadySeleced in planchange" + isAlreadySelected);
-
-            //bool isAlreadySelected = Preferences.Get("isAlreadySelected", true);
-            if (isAlreadySelected == true)
+            if ((string)Application.Current.Properties["platform"] != "GUEST")
             {
-                saveBttn.BackgroundColor = Color.Orange;
-                saveFrame.BackgroundColor = Color.Orange;
-                saveBttn.TextColor = Color.White;
-                skipBttn.BackgroundColor = Color.Transparent;
-                skipFrame.BackgroundColor = Color.Transparent;
-                skipBttn.TextColor = Color.Black;
-                surpriseBttn.BackgroundColor = Color.Transparent;
-                surpriseFrame.BackgroundColor = Color.Transparent;
-                surpriseBttn.TextColor = Color.Black;
-
-                string s = SubscriptionPicker.SelectedItem.ToString();
-                s = s.Substring(0, 2);
-
-                totalCount.Text = "0";
-                Preferences.Set("total", 0);
-                Console.WriteLine("before true alreadyselected");
-                BarParameters[0].mealsLeft = "All Meals Selected";
-                BarParameters[0].barLabel = "All Meals Selected";
-                BarParameters[0].margin = new Thickness(this.Width, 0, 0, 0);
-                BarParameters[0].update = new Thickness(this.Width, 0, 0, 0);
-                Console.WriteLine("after true");
-                Preferences.Set("origMax", int.Parse(s));
-                totalCount.Text = Preferences.Get("total", 0).ToString();
-                //DisplayAlert("Alert", "Select reset button to change your meal selections", "OK");
-                //weekOneProgress.Progress = 1;
-            }
-            else if (isAlreadySelected == false)
-            {
-                string s = SubscriptionPicker.SelectedItem.ToString();
-                s = s.Substring(0, 2);
-                Preferences.Set("total", int.Parse(s));
-                Console.WriteLine("before false");
-                var holder = BarParameters[0].mealsLeft;
-                holder = "Please Select " + Preferences.Get("total", "").ToString() + " Meals";
-                BarParameters[0].mealsLeft = holder;
-                BarParameters[0].barLabel = holder;
-                BarParameters[0].margin = 0;
-                BarParameters[0].update = 0;
-                Console.WriteLine("after false");
-                totalCount.Text = Preferences.Get("total", 0).ToString();
-                Preferences.Set("origMax", int.Parse(s));
-                //weekOneProgress.Progress = 0;
-            }
-
-            if (isSkip)
-            {
-                //testing to try and send correct json object
-                //qtyDict.Clear();
-
-                skipBttn.BackgroundColor = Color.Orange;
-                skipFrame.BackgroundColor = Color.Orange;
-                skipBttn.TextColor = Color.White;
-                surpriseBttn.BackgroundColor = Color.Transparent;
-                surpriseFrame.BackgroundColor = Color.Transparent;
-                surpriseBttn.TextColor = Color.Black;
-                saveBttn.BackgroundColor = Color.Transparent;
-                saveFrame.BackgroundColor = Color.Transparent;
-                saveBttn.TextColor = Color.Black;
-
-                indexOfMealPlanSelected = (int)SubscriptionPicker.SelectedIndex;
+                int indexOfMealPlanSelected = (int)SubscriptionPicker.SelectedIndex;
                 Preferences.Set("purchId", purchIdArray[indexOfMealPlanSelected].ToString());
                 Console.WriteLine("Purch Id: " + Preferences.Get("purchId", ""));
+                //testing
+                getUserMeals();
+                await checkDateStatuses();
 
-                string s = SubscriptionPicker.SelectedItem.ToString();
-                s = s.Substring(0, 2);
-                Preferences.Set("total", int.Parse(s));
-                Console.WriteLine("before skip");
-                BarParameters[0].margin = 1;
-                BarParameters[0].update = 1;
-                BarParameters[0].mealsLeft = "Please Select " + Preferences.Get("total", "").ToString() + " Meals";
-                BarParameters[0].barLabel = "Please Select " + Preferences.Get("total", "").ToString() + " Meals";
-                Console.WriteLine("after skip");
-                totalCount.Text = Preferences.Get("total", 0).ToString();
-                Preferences.Set("origMax", int.Parse(s));
-                //weekOneProgress.Progress = 0;
+                // Button b = (Button)sender;
+                // MealInfo ms = b.BindingContext as MealInfo;
+                // ms.MealQuantity = 0;
+                mealsSaved.Clear(); //New Addition SV
+                resetAll(); //New Addition SV
+                            //Task.Delay(500).Wait();
+                            //getUserMeals();
+                await GetRecentSelection();
+                GetRecentSelection2();
+
+                Console.WriteLine("isAlreadySeleced in planchange" + isAlreadySelected);
+
+                //bool isAlreadySelected = Preferences.Get("isAlreadySelected", true);
+                if (isAlreadySelected == true)
+                {
+                    saveBttn.BackgroundColor = Color.Orange;
+                    saveFrame.BackgroundColor = Color.Orange;
+                    saveBttn.TextColor = Color.White;
+                    skipBttn.BackgroundColor = Color.Transparent;
+                    skipFrame.BackgroundColor = Color.Transparent;
+                    skipBttn.TextColor = Color.Black;
+                    surpriseBttn.BackgroundColor = Color.Transparent;
+                    surpriseFrame.BackgroundColor = Color.Transparent;
+                    surpriseBttn.TextColor = Color.Black;
+
+                    string s = SubscriptionPicker.SelectedItem.ToString();
+                    s = s.Substring(0, 2);
+
+                    totalCount.Text = "0";
+                    Preferences.Set("total", 0);
+                    Console.WriteLine("before true alreadyselected");
+                    BarParameters[0].mealsLeft = "All Meals Selected";
+                    BarParameters[0].barLabel = "All Meals Selected";
+                    BarParameters[0].margin = new Thickness(this.Width, 0, 0, 0);
+                    BarParameters[0].update = new Thickness(this.Width, 0, 0, 0);
+                    Console.WriteLine("after true");
+                    Preferences.Set("origMax", int.Parse(s));
+                    totalCount.Text = Preferences.Get("total", 0).ToString();
+                    //DisplayAlert("Alert", "Select reset button to change your meal selections", "OK");
+                    //weekOneProgress.Progress = 1;
+                }
+                else if (isAlreadySelected == false)
+                {
+                    string s = SubscriptionPicker.SelectedItem.ToString();
+                    s = s.Substring(0, 2);
+                    Preferences.Set("total", int.Parse(s));
+                    Console.WriteLine("before false");
+                    var holder = BarParameters[0].mealsLeft;
+                    holder = "Please Select " + Preferences.Get("total", "").ToString() + " Meals";
+                    BarParameters[0].mealsLeft = holder;
+                    BarParameters[0].barLabel = holder;
+                    BarParameters[0].margin = 0;
+                    BarParameters[0].update = 0;
+                    Console.WriteLine("after false");
+                    totalCount.Text = Preferences.Get("total", 0).ToString();
+                    Preferences.Set("origMax", int.Parse(s));
+                    //weekOneProgress.Progress = 0;
+                }
+
+                if (isSkip)
+                {
+                    //testing to try and send correct json object
+                    //qtyDict.Clear();
+
+                    skipBttn.BackgroundColor = Color.Orange;
+                    skipFrame.BackgroundColor = Color.Orange;
+                    skipBttn.TextColor = Color.White;
+                    surpriseBttn.BackgroundColor = Color.Transparent;
+                    surpriseFrame.BackgroundColor = Color.Transparent;
+                    surpriseBttn.TextColor = Color.Black;
+                    saveBttn.BackgroundColor = Color.Transparent;
+                    saveFrame.BackgroundColor = Color.Transparent;
+                    saveBttn.TextColor = Color.Black;
+
+                    indexOfMealPlanSelected = (int)SubscriptionPicker.SelectedIndex;
+                    Preferences.Set("purchId", purchIdArray[indexOfMealPlanSelected].ToString());
+                    Console.WriteLine("Purch Id: " + Preferences.Get("purchId", ""));
+
+                    string s = SubscriptionPicker.SelectedItem.ToString();
+                    s = s.Substring(0, 2);
+                    Preferences.Set("total", int.Parse(s));
+                    Console.WriteLine("before skip");
+                    BarParameters[0].margin = 1;
+                    BarParameters[0].update = 1;
+                    BarParameters[0].mealsLeft = "Please Select " + Preferences.Get("total", "").ToString() + " Meals";
+                    BarParameters[0].barLabel = "Please Select " + Preferences.Get("total", "").ToString() + " Meals";
+                    Console.WriteLine("after skip");
+                    totalCount.Text = Preferences.Get("total", 0).ToString();
+                    Preferences.Set("origMax", int.Parse(s));
+                    //weekOneProgress.Progress = 0;
+                }
+                else if (isSurprise)
+                {
+                    //testing to try and send correct json object
+                    //qtyDict.Clear();
+
+                    surpriseBttn.BackgroundColor = Color.Orange;
+                    surpriseFrame.BackgroundColor = Color.Orange;
+                    surpriseBttn.TextColor = Color.White;
+                    skipBttn.BackgroundColor = Color.Transparent;
+                    skipFrame.BackgroundColor = Color.Transparent;
+                    skipBttn.TextColor = Color.Black;
+                    saveBttn.BackgroundColor = Color.Transparent;
+                    saveFrame.BackgroundColor = Color.Transparent;
+                    saveBttn.TextColor = Color.Black;
+
+                    indexOfMealPlanSelected = (int)SubscriptionPicker.SelectedIndex;
+                    Preferences.Set("purchId", purchIdArray[indexOfMealPlanSelected].ToString());
+                    Console.WriteLine("Purch Id: " + Preferences.Get("purchId", ""));
+
+                    string s = SubscriptionPicker.SelectedItem.ToString();
+                    s = s.Substring(0, 2);
+                    Preferences.Set("total", int.Parse(s));
+                    Console.WriteLine("before surprise");
+                    BarParameters[0].margin = 1;
+                    BarParameters[0].update = 1;
+                    BarParameters[0].mealsLeft = "Please Select " + Preferences.Get("total", "").ToString() + " Meals";
+                    BarParameters[0].barLabel = "Please Select " + Preferences.Get("total", "").ToString() + " Meals";
+                    Console.WriteLine("after surprise");
+                    totalCount.Text = Preferences.Get("total", 0).ToString();
+                    Preferences.Set("origMax", int.Parse(s));
+                    //weekOneProgress.Progress = 0;
+                }
+                else
+                {
+
+                    //If neither skip or surprise (new plan), then initialize to surprise
+                    skipBttn.BackgroundColor = Color.Transparent;
+                    skipFrame.BackgroundColor = Color.Transparent;
+                    skipBttn.TextColor = Color.Black;
+                    surpriseBttn.BackgroundColor = Color.Transparent;
+                    surpriseFrame.BackgroundColor = Color.Transparent;
+                    surpriseBttn.TextColor = Color.Black;
+                    if (isAlreadySelected == false)
+                        surprise();
+
+                }
+                //GetRecentSelection(); //11/17 10pm comment SV
+
+                //calcTotal();
+                /* //Testing 11/12 Total meals count
+                int totalMealsCount = 110;
+                for (int i = 0; i < Meals1.Count; i++)
+                {
+                    if (Meals1[i].MealQuantity > 0)
+                    {
+                        totalMealsCount += Int32.Parse(Meals1[i].MealQuantity.ToString());
+                    }
+                } */
+                Console.WriteLine("Meals1 Count: " + totalMealsCount);
+                //11/12
+                //Preferences.Set("total", Meals1.Count);
+                //totalCount.Text = Preferences.Get("total", 0).ToString();
+                //Preferences.Set("origMax", int.Parse(s));
+
+                //
+                //GetMealPlans();
+                //setDates();
+
+                //commented out 11/11 for second merge
+
+                //setMenu();
             }
-            else if (isSurprise)
+            else
             {
-                //testing to try and send correct json object
-                //qtyDict.Clear();
-
                 surpriseBttn.BackgroundColor = Color.Orange;
-                surpriseFrame.BackgroundColor = Color.Orange ;
+                surpriseFrame.BackgroundColor = Color.Orange;
                 surpriseBttn.TextColor = Color.White;
                 skipBttn.BackgroundColor = Color.Transparent;
                 skipFrame.BackgroundColor = Color.Transparent;
@@ -803,9 +1202,9 @@ namespace MTYD.ViewModel
                 saveFrame.BackgroundColor = Color.Transparent;
                 saveBttn.TextColor = Color.Black;
 
-                indexOfMealPlanSelected = (int)SubscriptionPicker.SelectedIndex;
-                Preferences.Set("purchId", purchIdArray[indexOfMealPlanSelected].ToString());
-                Console.WriteLine("Purch Id: " + Preferences.Get("purchId", ""));
+                //indexOfMealPlanSelected = (int)SubscriptionPicker.SelectedIndex;
+                //Preferences.Set("purchId", purchIdArray[indexOfMealPlanSelected].ToString());
+                //Console.WriteLine("Purch Id: " + Preferences.Get("purchId", ""));
 
                 string s = SubscriptionPicker.SelectedItem.ToString();
                 s = s.Substring(0, 2);
@@ -818,47 +1217,7 @@ namespace MTYD.ViewModel
                 Console.WriteLine("after surprise");
                 totalCount.Text = Preferences.Get("total", 0).ToString();
                 Preferences.Set("origMax", int.Parse(s));
-                //weekOneProgress.Progress = 0;
             }
-            else
-            {
-
-                //If neither skip or surprise (new plan), then initialize to surprise
-                skipBttn.BackgroundColor = Color.Transparent;
-                skipFrame.BackgroundColor = Color.Transparent;
-                skipBttn.TextColor = Color.Black;
-                surpriseBttn.BackgroundColor = Color.Transparent;
-                surpriseFrame.BackgroundColor = Color.Transparent;
-                surpriseBttn.TextColor = Color.Black;
-                if (isAlreadySelected == false)
-                    surprise();
-
-            }
-            //GetRecentSelection(); //11/17 10pm comment SV
-
-            //calcTotal();
-            /* //Testing 11/12 Total meals count
-            int totalMealsCount = 110;
-            for (int i = 0; i < Meals1.Count; i++)
-            {
-                if (Meals1[i].MealQuantity > 0)
-                {
-                    totalMealsCount += Int32.Parse(Meals1[i].MealQuantity.ToString());
-                }
-            } */
-            Console.WriteLine("Meals1 Count: " + totalMealsCount);
-            //11/12
-            //Preferences.Set("total", Meals1.Count);
-            //totalCount.Text = Preferences.Get("total", 0).ToString();
-            //Preferences.Set("origMax", int.Parse(s));
-
-            //
-            //GetMealPlans();
-            //setDates();
-
-            //commented out 11/11 for second merge
-            
-            //setMenu();
         }
 
         /*
@@ -904,16 +1263,152 @@ namespace MTYD.ViewModel
         private async void clickedFavorite(object sender, EventArgs e)
         {
             ImageButton b = (ImageButton)sender;
-            if (b.Source.ToString().Equals("File: heartoutline.png"))
+            MealInfo ms = b.BindingContext as MealInfo;
+            //ms.MealQuantity++;
+
+            //favoriting
+            if (b.Source.ToString().Equals("File: emptyHeart.png"))
             {
-                b.Source = "heart.png";
+                favDict.Add(ms.ItemUid, true);
+                UpdateFavPost updateFav = new UpdateFavPost();
+                updateFav.customer_uid = (string)Application.Current.Properties["user_id"];
+                updateFav.favorite = ms.ItemUid;
+                var updateFavSerializedObj = JsonConvert.SerializeObject(updateFav);
+                var content4 = new StringContent(updateFavSerializedObj, Encoding.UTF8, "application/json");
+                var client3 = new System.Net.Http.HttpClient();
+                //post endpoint passes in 1 favorite and appends it to the end of the list of favorites for the user
+                var response3 = await client3.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/favourite_food/post", content4);
+                var message = await response3.Content.ReadAsStringAsync();
+                Debug.WriteLine("RESPONSE TO updatefavs   " + response3.ToString());
+                Debug.WriteLine("json object sent:  " + updateFavSerializedObj.ToString());
+                Debug.WriteLine("message received:  " + message.ToString());
+                //b.Source = "heart.png";
+                ms.HeartSource = "filledHeart.png";
+
             }
+            //unfavoriting
             else
             {
-                b.Source = "heartoutline.png";
+                favDict.Remove(ms.ItemUid);
+
+                //if there are no favorites to be saved, send in a blank list of favorites
+                if (favDict.Count == 0)
+                {
+                    UpdateFavPost updateFav = new UpdateFavPost();
+                    updateFav.customer_uid = (string)Application.Current.Properties["user_id"];
+                    updateFav.favorite = "";
+                    var updateFavSerializedObj = JsonConvert.SerializeObject(updateFav);
+                    var content4 = new StringContent(updateFavSerializedObj, Encoding.UTF8, "application/json");
+                    var client3 = new System.Net.Http.HttpClient();
+                    //overwrites the entire favorites list and only keep the favorite that is passed in
+                    var response3 = await client3.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/favourite_food/update", content4);
+                    var message = await response3.Content.ReadAsStringAsync();
+                    Debug.WriteLine("RESPONSE TO updatefavs   " + response3.ToString());
+                    Debug.WriteLine("json object sent:  " + updateFavSerializedObj.ToString());
+                    Debug.WriteLine("message received:  " + message.ToString());
+                }
+                else if (favDict.Count == 1)
+                {
+                    UpdateFavPost updateFav = new UpdateFavPost();
+                    updateFav.customer_uid = (string)Application.Current.Properties["user_id"];
+                    updateFav.favorite = favDict.Keys.First();
+                    var updateFavSerializedObj = JsonConvert.SerializeObject(updateFav);
+                    var content4 = new StringContent(updateFavSerializedObj, Encoding.UTF8, "application/json");
+                    var client3 = new System.Net.Http.HttpClient();
+                    //update overwrites the entire favorites list and only keep the favorite that is passed in
+                    var response3 = await client3.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/favourite_food/update", content4);
+                    var message = await response3.Content.ReadAsStringAsync();
+                    Debug.WriteLine("RESPONSE TO updatefavs   " + response3.ToString());
+                    Debug.WriteLine("json object sent:  " + updateFavSerializedObj.ToString());
+                    Debug.WriteLine("message received:  " + message.ToString());
+                }
+                else if (favDict.Count > 1)
+                {
+                    UpdateFavPost updateFav = new UpdateFavPost();
+                    updateFav.customer_uid = (string)Application.Current.Properties["user_id"];
+                    updateFav.favorite = favDict.Keys.First();
+                    //var updateFavSerializedObj = JsonConvert.SerializeObject(updateFav);
+                    //var content4 = new StringContent(updateFavSerializedObj, Encoding.UTF8, "application/json");
+                    //var client3 = new System.Net.Http.HttpClient();
+                    ////update overwrites the entire favorites list and only keep the favorite that is passed in
+                    //var response3 = await client3.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/favourite_food/update", content4);
+                    //var message = await response3.Content.ReadAsStringAsync();
+                    //Debug.WriteLine("RESPONSE TO updatefavs   " + response3.ToString());
+                    //Debug.WriteLine("json object sent:  " + updateFavSerializedObj.ToString());
+                    //Debug.WriteLine("message received:  " + message.ToString());
+
+                    foreach (string uid in favDict.Keys)
+                    {
+                        if (uid == favDict.Keys.First())
+                            continue;
+                        else updateFav.favorite += "," + uid;
+
+
+                        //UpdateFavPost updateFav2 = new UpdateFavPost();
+                        //updateFav2.customer_uid = (string)Application.Current.Properties["user_id"];
+                        //updateFav2.favorite = uid;
+                        //var updateFavSerializedObj2 = JsonConvert.SerializeObject(updateFav);
+                        //var content2 = new StringContent(updateFavSerializedObj2, Encoding.UTF8, "application/json");
+                        //var client2 = new System.Net.Http.HttpClient();
+                        ////post endpoint passes in 1 favorite and appends it to the end of the list of favorites for the user
+                        //var response2 = await client2.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/favourite_food/post", content2);
+                        //var message2 = await response2.Content.ReadAsStringAsync();
+                        //Debug.WriteLine("RESPONSE TO updatefavs   " + response2.ToString());
+                        //Debug.WriteLine("json object sent:  " + updateFavSerializedObj2.ToString());
+                        //Debug.WriteLine("message received:  " + message2.ToString());
+                    }
+                    var updateFavSerializedObj = JsonConvert.SerializeObject(updateFav);
+                    var content4 = new StringContent(updateFavSerializedObj, Encoding.UTF8, "application/json");
+                    var client3 = new System.Net.Http.HttpClient();
+                    //update overwrites the entire favorites list and only keep the favorite that is passed in
+                    var response3 = await client3.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/favourite_food/update", content4);
+                    var message = await response3.Content.ReadAsStringAsync();
+                    Debug.WriteLine("RESPONSE TO updatefavs   " + response3.ToString());
+                    Debug.WriteLine("json object sent:  " + updateFavSerializedObj.ToString());
+                    Debug.WriteLine("message received:  " + message.ToString());
+                }
+
+                //b.Source = "heartoutline.png";
+                ms.HeartSource = "leftHeart.png";
 
             }
         }
+
+        //info button
+        private void clickedInfo(object sender, EventArgs e)
+        {
+            ImageButton b = (ImageButton)sender;
+            MealInfo ms = b.BindingContext as MealInfo;
+
+            if (ms.SeeDesc == false)
+            {
+                ms.SeeImage = false;
+                ms.SeeDesc = true;
+            }
+            else
+            {
+                ms.SeeImage = true;
+                ms.SeeDesc = false;
+            }
+        }
+
+        ////info button
+        //private void clickedInfo(object sender, EventArgs e)
+        //{
+        //    ImageButton b = (ImageButton)sender;
+        //    MealInfo ms = b.BindingContext as MealInfo;
+
+        //    if (ms.SeeDesc == false)
+        //    {
+        //        ms.SeeImage = false;
+        //        ms.SeeDesc = true;
+        //    }
+        //    else
+        //    {
+        //        ms.SeeImage = true;
+        //        ms.SeeDesc = false;
+        //    }
+        //}
 
         private async void clickIncrease(object sender, EventArgs e)
         {
@@ -960,8 +1455,8 @@ namespace MTYD.ViewModel
                 if (count == 0)
                 {
                     Debug.WriteLine("final margin: " + BarParameters[0].update.ToString());
-                    BarParameters[0].mealsLeft = "All Meals Selected";
-                    BarParameters[0].barLabel = "All Meals Selected";
+                    BarParameters[0].mealsLeft = "All Meals Selected (Click Save)";
+                    BarParameters[0].barLabel = "All Meals Selected (Click Save)";
                     //progress.Text = "All Meals Selected";
                 }
                 else
@@ -1164,155 +1659,170 @@ namespace MTYD.ViewModel
         protected async Task GetMealPlans()
         {
             Console.WriteLine("ENTER GET MEAL PLANS FUNCTION");
-            var request = new HttpRequestMessage();
-            string userID = (string)Application.Current.Properties["user_id"];
-            Console.WriteLine("Inside GET MEAL PLANS: User ID:  " + userID);
 
-            request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/customer_lplp?customer_uid=" + userID);
-            Console.WriteLine("GET MEALS PLAN ENDPOINT TRYING TO BE REACHED: " + "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/customer_lplp?customer_uid=" + userID);
-            request.Method = HttpMethod.Get;
-            var client = new HttpClient();
-            HttpResponseMessage response = await client.SendAsync(request);
-            Debug.WriteLine("get meal plans response: " + response.ToString());
-            //Debug.WriteLine("get meal plans content: " + response.Content.ToString());
-
-            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            if ((string)Application.Current.Properties["platform"] == "GUEST")
             {
-                HttpContent content = response.Content;
-                var userString = await content.ReadAsStringAsync();
-                JObject mealPlan_obj = JObject.Parse(userString);
-                this.NewPlan.Clear();
-
-                ArrayList itemsArray = new ArrayList();
-                // List<Item> itemsArray = new List<Item>;
                 ArrayList namesArray = new ArrayList();
-
-                Console.WriteLine("itemsArray contents:");
-
-                foreach (var m in mealPlan_obj["result"])
-                {
-                    Console.WriteLine("In first foreach loop of getmeal plans func:");
-                    if (m["purchase_status"].ToString() != "CANCELLED and REFUNDED")
-                    {
-                        itemsArray.Add((m["items"].ToString()));
-                        purchIdArray.Add((m["purchase_id"].ToString()));
-                    }
-                }
-
-                // Console.WriteLine("itemsArray contents:" + itemsArray[0]);
-
-                for (int i = 0; i < itemsArray.Count; i++)
-                {
-                    JArray newobj = Newtonsoft.Json.JsonConvert.DeserializeObject<JArray>(itemsArray[i].ToString());
-
-                    Console.WriteLine("Inside forloop before foreach in GetmealsPlan func");
-
-                    foreach (JObject config in newobj)
-                    {
-                        Console.WriteLine("Inside foreach loop in GetmealsPlan func");
-                        //string qty = (string)config["qty"];
-                        string name = (string)config["name"];
-                        //string price = (string)config["price"];
-                        //string mealid = (string)config["item_uid"];
-
-                        //only includes meal plan name
-                        //namesArray.Add(name);
-
-                        //adds purchase uid to front of meal plan name
-                        //namesArray.Add(purchIdArray[i].ToString().Substring(4) + " : " + name);
-                        namesArray.Add(name + " : " + purchIdArray[i].ToString().Substring(4));
-                    }
-                }
-                Console.WriteLine("Outside foreach in GetmealsPlan func");
-                //Find unique number of meals
-                //firstIndex = namesArray[0].ToString();
-                //Console.WriteLine("namesArray contents:" + namesArray[0].ToString() + " " + namesArray[1].ToString() + " " + namesArray[2].ToString() + " ");
+                namesArray.Add(Preferences.Get("item_name", "").Substring(0, 1) + " Meal Plan");
                 SubscriptionPicker.ItemsSource = namesArray;
                 SubscriptionPicker.SelectedItem = namesArray[0].ToString();
-                Console.WriteLine("namesArray contents:" + namesArray[0].ToString());
-                //SubscriptionPicker.Title = namesArray[0];
+                //Preferences.Get("item_name", "").Substring(0, 1) + " Meals for " + Preferences.Get("freqSelected", "") + " Deliveries): 
+            }
+            else
+            {
+                var request = new HttpRequestMessage();
+                string userID = (string)Application.Current.Properties["user_id"];
+                Console.WriteLine("Inside GET MEAL PLANS: User ID:  " + userID);
 
-                Console.WriteLine("END OF GET MEAL PLANS FUNCTION");
+                request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/customer_lplp?customer_uid=" + userID);
+                Console.WriteLine("GET MEALS PLAN ENDPOINT TRYING TO BE REACHED: " + "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/customer_lplp?customer_uid=" + userID);
+                request.Method = HttpMethod.Get;
+                var client = new HttpClient();
+                HttpResponseMessage response = await client.SendAsync(request);
+                Debug.WriteLine("get meal plans response: " + response.ToString());
+                //Debug.WriteLine("get meal plans content: " + response.Content.ToString());
+
+                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    HttpContent content = response.Content;
+                    var userString = await content.ReadAsStringAsync();
+                    JObject mealPlan_obj = JObject.Parse(userString);
+                    this.NewPlan.Clear();
+
+                    ArrayList itemsArray = new ArrayList();
+                    // List<Item> itemsArray = new List<Item>;
+                    ArrayList namesArray = new ArrayList();
+
+                    Console.WriteLine("itemsArray contents:");
+
+                    foreach (var m in mealPlan_obj["result"])
+                    {
+                        Console.WriteLine("In first foreach loop of getmeal plans func:");
+                        if (m["purchase_status"].ToString() != "CANCELLED and REFUNDED")
+                        {
+                            itemsArray.Add((m["items"].ToString()));
+                            purchIdArray.Add((m["purchase_uid"].ToString()));
+                        }
+                    }
+
+                    // Console.WriteLine("itemsArray contents:" + itemsArray[0]);
+
+                    for (int i = 0; i < itemsArray.Count; i++)
+                    {
+                        JArray newobj = Newtonsoft.Json.JsonConvert.DeserializeObject<JArray>(itemsArray[i].ToString());
+
+                        Console.WriteLine("Inside forloop before foreach in GetmealsPlan func");
+
+                        foreach (JObject config in newobj)
+                        {
+                            Console.WriteLine("Inside foreach loop in GetmealsPlan func");
+                            //string qty = (string)config["qty"];
+                            string name = (string)config["name"];
+                            //string price = (string)config["price"];
+                            //string mealid = (string)config["item_uid"];
+
+                            //only includes meal plan name
+                            //namesArray.Add(name);
+
+                            //adds purchase uid to front of meal plan name
+                            //namesArray.Add(purchIdArray[i].ToString().Substring(4) + " : " + name);
+                            namesArray.Add(name + " : " + purchIdArray[i].ToString().Substring(4));
+                        }
+                    }
+                    Console.WriteLine("Outside foreach in GetmealsPlan func");
+                    //Find unique number of meals
+                    //firstIndex = namesArray[0].ToString();
+                    //Console.WriteLine("namesArray contents:" + namesArray[0].ToString() + " " + namesArray[1].ToString() + " " + namesArray[2].ToString() + " ");
+                    SubscriptionPicker.ItemsSource = namesArray;
+                    SubscriptionPicker.SelectedItem = namesArray[0].ToString();
+                    Console.WriteLine("namesArray contents:" + namesArray[0].ToString());
+                    //SubscriptionPicker.Title = namesArray[0];
+
+                    Console.WriteLine("END OF GET MEAL PLANS FUNCTION");
+                }
             }
         }
 
         private void getUserMeals()
         {
-            try
+            if ((string)Application.Current.Properties["platform"] != "GUEST")
             {
-                MealInformation jsonobj;
-                // UID = 100-000001 PID = 400-000001
-                var content = client.DownloadString(userMeals);
-                var obj = JsonConvert.DeserializeObject<MealsSelected>(content);
-
-                for (int i = 0; i < obj.Result.Length; i++)
+                try
                 {
-                    // If meals selected matches menu date, get meals selected
-                    Debug.WriteLine("purchId: " + Preferences.Get("purchId", ""));
-                    Debug.WriteLine("Selection purchase id: " + obj.Result[i].SelPurchaseId.ToString());
-                    Debug.WriteLine("purchase uid: " + obj.Result[i].PurchaseUid.ToString());
-                    Debug.WriteLine("purchase id: " + obj.Result[i].PurchaseId.ToString());
-                    Debug.WriteLine("purchase id: " + obj.Result[i].PurchaseId.ToString());
-                    if (obj.Result[i].SelMenuDate.Equals(datePicker.SelectedItem) && Preferences.Get("purchId","") == obj.Result[i].SelPurchaseId)
+                    MealInformation jsonobj;
+                    // UID = 100-000001 PID = 400-000001
+                    var content = client.DownloadString(userMeals);
+                    var obj = JsonConvert.DeserializeObject<MealsSelected>(content);
+
+                    for (int i = 0; i < obj.Result.Length; i++)
                     {
-                        string json = obj.Result[i].MealSelection;
-                        JArray newobj = Newtonsoft.Json.JsonConvert.DeserializeObject<JArray>(json);
-
-                        foreach (JObject config in newobj)
+                        // If meals selected matches menu date, get meals selected
+                        Debug.WriteLine("purchId: " + Preferences.Get("purchId", ""));
+                        Debug.WriteLine("Selection purchase id: " + obj.Result[i].SelPurchaseId.ToString());
+                        Debug.WriteLine("purchase uid: " + obj.Result[i].PurchaseUid.ToString());
+                        Debug.WriteLine("purchase id: " + obj.Result[i].PurchaseId.ToString());
+                        Debug.WriteLine("purchase id: " + obj.Result[i].PurchaseId.ToString());
+                        if (obj.Result[i].SelMenuDate.Equals(selectedDate.fullDateTime) && Preferences.Get("purchId", "") == obj.Result[i].SelPurchaseId)
                         {
-                            string qty = (string)config["qty"];
-                            string name = (string)config["name"];
-                            string mealid = (string)config["item_uid"];
+                            string json = obj.Result[i].MealSelection;
+                            JArray newobj = Newtonsoft.Json.JsonConvert.DeserializeObject<JArray>(json);
 
-
-                            if (qty != null)
+                            foreach (JObject config in newobj)
                             {
-                                if (qtyDict.ContainsKey(name)) //mealid
+                                string qty = (string)config["qty"];
+                                string name = (string)config["name"];
+                                string mealid = (string)config["item_uid"];
+
+
+                                if (qty != null)
                                 {
-                                    qtyDict.Remove(name);
+                                    if (qtyDict.ContainsKey(name)) //mealid
+                                    {
+                                        qtyDict.Remove(name);
+                                    }
+                                    Debug.WriteLine("meal tracked: " + name + " amount: " + qty);
+                                    qtyDict.Add(name, qty);
                                 }
-                                Debug.WriteLine("meal tracked: " + name + " amount: " + qty);
-                                qtyDict.Add(name, qty);
-                            }
-
-                        }
-
-                        string json2 = obj.Result[i].AddonSelection;
-                        JArray newobj2 = Newtonsoft.Json.JsonConvert.DeserializeObject<JArray>(json2);
-
-                        foreach (JObject config in newobj2)
-                        {
-                            string qty = (string)config["qty"];
-                            string name = (string)config["name"];
-                            string mealid = (string)config["item_uid"];
-
-
-                            if (qty != null)
-                            {
-                                //original code working with one quantity dictionary to save previous selection
-                                //if (qtyDict.ContainsKey(name)) //mealid
-                                //{
-                                //    qtyDict.Remove(name);
-                                //}
-                                //Debug.WriteLine("add-on tracked: " + name + " amount: " + qty);
-                                //qtyDict.Add(name, qty);
-                                if (qtyDict_addon.ContainsKey(name))
-                                {
-                                    qtyDict_addon.Remove(name);
-                                }
-                                Debug.WriteLine("add-on tracked: " + name + " amount: " + qty);
-                                qtyDict_addon.Add(name, qty);
 
                             }
 
-                        }
+                            string json2 = obj.Result[i].AddonSelection;
+                            JArray newobj2 = Newtonsoft.Json.JsonConvert.DeserializeObject<JArray>(json2);
 
+                            foreach (JObject config in newobj2)
+                            {
+                                string qty = (string)config["qty"];
+                                string name = (string)config["name"];
+                                string mealid = (string)config["item_uid"];
+
+
+                                if (qty != null)
+                                {
+                                    //original code working with one quantity dictionary to save previous selection
+                                    //if (qtyDict.ContainsKey(name)) //mealid
+                                    //{
+                                    //    qtyDict.Remove(name);
+                                    //}
+                                    //Debug.WriteLine("add-on tracked: " + name + " amount: " + qty);
+                                    //qtyDict.Add(name, qty);
+                                    if (qtyDict_addon.ContainsKey(name))
+                                    {
+                                        qtyDict_addon.Remove(name);
+                                    }
+                                    Debug.WriteLine("add-on tracked: " + name + " amount: " + qty);
+                                    qtyDict_addon.Add(name, qty);
+
+                                }
+
+                            }
+
+                        }
                     }
                 }
-            }
-            catch
-            {
-                Console.WriteLine("GET USER MEALS ERROR CATCHED");
+                catch
+                {
+                    Console.WriteLine("GET USER MEALS ERROR CATCHED");
+                }
             }
         }
 
@@ -1320,7 +1830,7 @@ namespace MTYD.ViewModel
         private async void saveUserMeals(object sender, EventArgs e)
         {
             //set delivery day of the week
-            string tempHolder = datePicker.SelectedItem.ToString();
+            string tempHolder = selectedDate.fullDateTime;
             Debug.WriteLine("year:" + tempHolder.Substring(0, 4));
             //tempHolder = tempHolder.Substring(tempHolder.IndexOf("-") + 1);
             Debug.WriteLine("month:" + text1.Substring(5, 2));
@@ -1328,8 +1838,8 @@ namespace MTYD.ViewModel
             Debug.WriteLine("day:" + text1.Substring(8, 2));
             //getDayOfTheWeek();
             DateTime selected = new DateTime(Int32.Parse(text1.Substring(0, 4)), Int32.Parse(text1.Substring(5, 2)), Int32.Parse(text1.Substring(8, 2)));
-            selectedDate = selected.ToString("dddd");
-            Debug.WriteLine("dayOfWeek: " + selectedDate);
+            selectedDotw = selected.ToString("dddd");
+            Debug.WriteLine("dayOfWeek: " + selectedDotw);
 
             surpriseBttn.BackgroundColor = Color.Transparent;
             surpriseFrame.BackgroundColor = Color.Transparent;
@@ -1347,6 +1857,7 @@ namespace MTYD.ViewModel
                 saveFrame.BackgroundColor = Color.Orange;
                 saveBttn.BackgroundColor = Color.Orange;
                 saveBttn.TextColor = Color.White;
+                selectedDate.fillColor = Color.FromHex("#FFBA00");
 
                 for (int i = 0; i < Meals1.Count; i++)
                 {
@@ -1394,6 +1905,8 @@ namespace MTYD.ViewModel
                     Console.WriteLine("line 302 " + jsonMeals);
                     postData();
                     addOnSelected = false;
+                    BarParameters[0].mealsLeft = "All Meals Selected";
+                    BarParameters[0].barLabel = "All Meals Selected";
                     DisplayAlert("Selection Saved", "You will be charged for your add-ons on 1/1/2021.", "OK");
                 }
                 else
@@ -1405,6 +1918,8 @@ namespace MTYD.ViewModel
                     jsonMeals = JsonConvert.SerializeObject(mealsSaved);
                     Console.WriteLine("line 302 " + jsonMeals);
                     postData();
+                    BarParameters[0].mealsLeft = "All Meals Selected";
+                    BarParameters[0].barLabel = "All Meals Selected";
                     DisplayAlert("Selection Saved", "You've successfully saved your meal selection.", "OK");
                 }
                 addOnSelected = false;
@@ -1421,7 +1936,7 @@ namespace MTYD.ViewModel
 
         private async void skipMealSelection(object sender, EventArgs e)
         {
-            selectedDate = "SKIP";
+            selectedDotw = "SKIP";
             //addOnSelected = false;
             //qtyDict.Clear();
             skipBttn.BackgroundColor = Color.Orange;
@@ -1465,7 +1980,7 @@ namespace MTYD.ViewModel
             postData();
             addOnSelected = false;
             //mealsSaved = new List<MealInformation>();
-
+            selectedDate.fillColor = Color.FromHex("#BBBBBB");
             DisplayAlert("Delivery Skipped", "You won't receive any meals for this delivery cycle. We'll extend your subscription accordingly.", "OK");
             mealsSaved.Clear();
             int indexOfMealPlanSelected = (int)SubscriptionPicker.SelectedIndex;
@@ -1487,7 +2002,7 @@ namespace MTYD.ViewModel
         private void surprise()
         {
             //set delivery day of the week
-            string tempHolder = datePicker.SelectedItem.ToString();
+            string tempHolder = selectedDate.fullDateTime;
             Debug.WriteLine("year:" + tempHolder.Substring(0, 4));
             //tempHolder = tempHolder.Substring(tempHolder.IndexOf("-") + 1);
             Debug.WriteLine("month:" + text1.Substring(5, 2));
@@ -1495,9 +2010,10 @@ namespace MTYD.ViewModel
             Debug.WriteLine("day:" + text1.Substring(8, 2));
             //getDayOfTheWeek();
             DateTime selected = new DateTime(Int32.Parse(text1.Substring(0, 4)), Int32.Parse(text1.Substring(5, 2)), Int32.Parse(text1.Substring(8, 2)));
-            selectedDate = selected.ToString("dddd");
-            Debug.WriteLine("dayOfWeek: " + selectedDate);
+            selectedDotw = selected.ToString("dddd");
+            Debug.WriteLine("dayOfWeek: " + selectedDotw);
 
+            selectedDate.fillColor = Color.White;
             //weekOneProgress.Progress = 0;
             surpriseBttn.BackgroundColor = Color.Orange;
             surpriseFrame.BackgroundColor = Color.Orange;
@@ -1550,7 +2066,7 @@ namespace MTYD.ViewModel
         private async void surpriseMealSelection(object sender, EventArgs e)
         {
             //set delivery day of the week
-            string tempHolder = datePicker.SelectedItem.ToString();
+            string tempHolder = selectedDate.fullDateTime;
             Debug.WriteLine("year:" + tempHolder.Substring(0, 4));
             //tempHolder = tempHolder.Substring(tempHolder.IndexOf("-") + 1);
             Debug.WriteLine("month:" + text1.Substring(5, 2));
@@ -1558,8 +2074,8 @@ namespace MTYD.ViewModel
             Debug.WriteLine("day:" + text1.Substring(8, 2));
             //getDayOfTheWeek();
             DateTime selected = new DateTime(Int32.Parse(text1.Substring(0, 4)), Int32.Parse(text1.Substring(5, 2)), Int32.Parse(text1.Substring(8, 2)));
-            selectedDate = selected.ToString("dddd");
-            Debug.WriteLine("dayOfWeek: " + selectedDate);
+            selectedDotw = selected.ToString("dddd");
+            Debug.WriteLine("dayOfWeek: " + selectedDotw);
 
             //addOnSelected = false;
             //qtyDict.Clear();
@@ -1576,6 +2092,7 @@ namespace MTYD.ViewModel
             mealsSaved.Clear();
             int count = Preferences.Get("total", 0);
             totalCount.Text = "SURPRISE";
+            selectedDate.fillColor = Color.White;
             //for (int i = 0; i < Meals1.Count; i++)
             //{
             //if (Meals1[i].MealQuantity > 0)
@@ -1632,8 +2149,8 @@ namespace MTYD.ViewModel
                 // Need to create json formatting for this
                 Items = mealsSaved,
                 PurchaseId = Preferences.Get("purchId", ""),
-                MenuDate = datePicker.SelectedItem.ToString(),
-                DeliveryDay = selectedDate,
+                MenuDate = selectedDate.fullDateTime,
+                DeliveryDay = selectedDotw,
             };
 
             string mealSelectInfoJson = JsonConvert.SerializeObject(mealSelectInfoTosend);
@@ -1709,6 +2226,127 @@ namespace MTYD.ViewModel
                     totalMealsCount += Meals1[i].MealQuantity;
                 }
 
+            }
+        }
+
+        //highlight each date either light gray, orange, or white
+        protected async Task checkDateStatuses()
+        {
+            foreach (Date d in availableDates)
+            {
+                Debug.WriteLine("INSIDE checkDateStatuses #1");
+                Debug.WriteLine("availableDate passed in: " + d.fullDateTime);
+                var request = new HttpRequestMessage();
+                string purchaseID = Preferences.Get("purchId", "");
+                string date = d.fullDateTime.Substring(0,10);
+                if (date == Preferences.Get("dateSelected", ""))
+                    continue;
+                string userID = (string)Application.Current.Properties["user_id"];
+                string halfUrl = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected_specific?customer_uid=" + userID;
+                string urlSent = halfUrl + "&purchase_id=" + purchaseID + "&menu_date=" + date;
+                Console.WriteLine("URL ENDPOINT TRYING TO BE REACHED:" + urlSent);
+                request.RequestUri = new Uri(halfUrl + "&purchase_id=" + purchaseID + "&menu_date=" + date);
+                request.Method = HttpMethod.Get;
+                var client = new HttpClient();
+                HttpResponseMessage response = await client.SendAsync(request);
+
+                Console.WriteLine("Trying to enter if statement in Get Recent Selection");
+                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    bool isAlreadySelected2 = false;
+                    bool isSkip2 = false;
+                    bool isSurprise2 = false;
+
+                    HttpContent content = response.Content;
+                    var userString = await content.ReadAsStringAsync();
+                    JObject recentMeals = JObject.Parse(userString);
+                    this.NewPlan.Clear();
+
+                    ArrayList qtyList = new ArrayList();
+                    //ArrayList nameList = new ArrayList();
+                    //ArrayList itemUidList = new ArrayList();
+                    ArrayList namesArray = new ArrayList();
+                    ArrayList combinedArray = new ArrayList();
+                    ArrayList addOnArray = new ArrayList();
+                    ArrayList addOnQtyList = new ArrayList();
+                    ArrayList addOnNamesArray = new ArrayList();
+
+                    Console.WriteLine("Trying to enter foreach loop in Get Recent Meals");
+
+                    foreach (var m in recentMeals["result"])
+                    {
+                        //Console.WriteLine("PARSING DATA FROM DB: ITEM_UID: " + m["item_uid"].ToString());
+                        //qtyList.Add(double.Parse(m["qty"].ToString()));
+                        //nameList.Add(int.Parse(m["name"].ToString()));
+                        combinedArray.Add((m["meal_selection"].ToString()));
+                    }
+
+                    foreach (var m in recentMeals["result"])
+                    {
+                        addOnArray.Add((m["addon_selection"].ToString()));
+                    }
+
+                    if (combinedArray.Count == 0)
+                    {
+                        //Preferences.Set("isAlreadySelected", false);
+                        isAlreadySelected2 = false;
+                    }
+                    else
+                    {
+                        //Preferences.Set("isAlreadySelected", true);
+                        isAlreadySelected2 = true;
+                    }
+                    //isAlreadySelected = Preferences.Get("isAlreadySelected", true);
+                    Console.WriteLine("isAlreadySelected" + isAlreadySelected2);
+
+                    Console.WriteLine("Trying to enter for loop in Get Recent Selection");
+                    for (int i = 0; i < combinedArray.Count; i++)
+                    {
+
+                        JArray newobj = Newtonsoft.Json.JsonConvert.DeserializeObject<JArray>(combinedArray[i].ToString());
+
+                        foreach (JObject config in newobj)
+                        {
+                            string qty = (string)config["qty"];
+                            string name = (string)config["name"];
+                            //string price = (string)config["price"];
+                            //string mealid = (string)config["item_uid"];
+                            namesArray.Add(name);
+                            qtyList.Add(qty);
+                            Debug.WriteLine("meal updating list name: " + name + " amount: " + qty);
+                        }
+                    }
+
+
+                    for (int i = 0; i < namesArray.Count; i++)
+                    {
+                        if (namesArray[i].ToString() == "SURPRISE")
+                        {
+                            isSurprise2 = true;
+                            break;
+                        }
+                        else if (namesArray[i].ToString() == "SKIP")
+                        {
+                            isSkip2 = true;
+                            break;
+                        }
+                        else
+                        {
+                            isSkip2 = false;
+                            isSurprise2 = false;
+                        }
+                    }
+
+
+                    if (isSkip2 == true)
+                        d.fillColor = Color.FromHex("#BBBBBB");
+                    else if (isAlreadySelected2 == true && isSurprise2 == false)
+                        d.fillColor = Color.FromHex("#FFBA00");
+                    else d.fillColor = Color.White;
+                    Console.WriteLine("isSurprise value: " + isSurprise2 + " isSkip value: " + isSkip2);
+
+
+                }
             }
         }
 
@@ -1827,6 +2465,12 @@ namespace MTYD.ViewModel
                         isSurprise = false;
                     }
                 }
+                if (isSkip == true)
+                    //selectedDate.fillColor = Color.FromHex("#C9C9C9");
+                    selectedDate.fillColor = Color.FromHex("#BBBBBB");
+                else if (isAlreadySelected == true && isSurprise == false)
+                    selectedDate.fillColor = Color.FromHex("#FFBA00");
+                else selectedDate.fillColor = Color.White;
                 Console.WriteLine("isSurprise value: " + isSurprise + " isSkip value: " + isSkip);
                 return;
                 Console.WriteLine("Trying to enter second for loop in Get Recent Selection");

@@ -77,6 +77,7 @@ namespace MTYD
                     DateTime expTime = (DateTime)Application.Current.Properties["time_stamp"];
                     Console.WriteLine("today" + today.ToString());
                     Console.WriteLine("expTime" + expTime.ToString());
+                    
 
                     if (today <= expTime)
                     {
@@ -103,6 +104,11 @@ namespace MTYD
                     }
                     else
                     {
+                        Application.Current.Properties["platform"] = "GUEST";
+                        Application.Current.Properties["user_id"] = "000-00000";
+                        Preferences.Set("user_latitude", "0.0");
+                        Preferences.Set("user_longitude", "0.0");
+
                         MainPage client = new MainPage();
                         MainPage = client;
 
@@ -133,11 +139,21 @@ namespace MTYD
                 }
                 else
                 {
+                    Application.Current.Properties["platform"] = "GUEST";
+                    Application.Current.Properties["user_id"] = "000-00000";
+                    Preferences.Set("user_latitude", "0.0");
+                    Preferences.Set("user_longitude", "0.0");
+
                     MainPage = new MainPage();
                 }
             }
             else
             {
+                Application.Current.Properties["platform"] = "GUEST";
+                Application.Current.Properties["user_id"] = "000-00000";
+                Preferences.Set("user_latitude", "0.0");
+                Preferences.Set("user_longitude", "0.0");
+
                 MainPage = new MainPage();
             }
         

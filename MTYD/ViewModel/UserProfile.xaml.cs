@@ -34,6 +34,7 @@ namespace MTYD.ViewModel
         public bool isAddessValidated = false;
         bool withinZones = false;
         bool socialMediaLogin = false;
+        Address addr;
 
         public UserProfile(string firstName, string lastName, string email)
         {
@@ -42,7 +43,9 @@ namespace MTYD.ViewModel
             cust_email = email;
             var width = DeviceDisplay.MainDisplayInfo.Width;
             var height = DeviceDisplay.MainDisplayInfo.Height;
+            addr = new Address();
             InitializeComponent();
+            BindingContext = this;
             NavigationPage.SetHasBackButton(this, false);
             NavigationPage.SetHasNavigationBar(this, false);
             checkPlatform(height, width);
@@ -144,6 +147,8 @@ namespace MTYD.ViewModel
                 StateEntry.FontSize = width / 45;
                 ZipEntry.FontSize = width / 45;
                 PhoneEntry.FontSize = width / 45;
+
+                addressList.HeightRequest = width / 5;
 
                 mapFrame.Margin = new Thickness(width / 50, 0);
 
@@ -559,6 +564,25 @@ namespace MTYD.ViewModel
                         //    }
                         //    else withinZones = true;
                         //}
+                        string url3 = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/categoricalOptions/" + longitude + "," + latitude;
+                        Debug.WriteLine("categorical options url: " + url3);
+                        var client4 = new WebClient();
+                        var content = client4.DownloadString(url3);
+                        var obj = JsonConvert.DeserializeObject<ZonesDto>(content);
+
+                        if (obj.Result.Length == 0)
+                        {
+                            withinZones = false;
+                            //await DisplayAlert("Invalid address", "The address you entered is not in any of our delivery zones", "OK");
+                            break;
+                        }
+                        else
+                        {
+
+                            Debug.WriteLine("first business: " + obj.Result[0].business_name);
+                            
+                            withinZones = true;
+                        }
 
                         break;
                     }
@@ -583,6 +607,10 @@ namespace MTYD.ViewModel
             if (latitude == "0" || longitude == "0")
             {
                 await DisplayAlert("We couldn't find your address", "Please check for errors.", "Ok");
+            }
+            else if (withinZones == false)
+            {
+                await DisplayAlert("Invalid address", "The address you entered is not in any of our delivery zones", "OK");
             }
             //else if (withinZones == false)
             //{
@@ -663,5 +691,59 @@ namespace MTYD.ViewModel
             HttpResponseMessage updateRegistrationResponse = await updateRegistrationClient.SendAsync(updateRegistrationRequest);
         }
 
+        // Auto-complete
+        private ObservableCollection<AddressAutocomplete> _addresses;
+        public ObservableCollection<AddressAutocomplete> Addresses
+        {
+            get => _addresses ?? (_addresses = new ObservableCollection<AddressAutocomplete>());
+            set
+            {
+                if (_addresses != value)
+                {
+                    _addresses = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private string _addressText;
+        public string AddressText
+        {
+            get => _addressText;
+            set
+            {
+                if (_addressText != value)
+                {
+                    _addressText = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public async Task GetPlacesPredictionsAsync()
+        {
+            await addr.GetPlacesPredictionsAsync(addressList, Addresses, _addressText);
+        }
+
+        private void OnAddressChanged(object sender, EventArgs eventArgs)
+        {
+            addr.OnAddressChanged(addressList, Addresses, _addressText);
+        }
+
+        private void addressEntryFocused(object sender, EventArgs eventArgs)
+        {
+            addr.addressEntryFocused(addressList, new Grid[] { UnitCityState, ZipPhone });
+        }
+
+        private void addressEntryUnfocused(object sender, EventArgs eventArgs)
+        {
+            addr.addressEntryUnfocused(addressList, new Grid[] { UnitCityState, ZipPhone });
+        }
+
+        async void addressSelected(System.Object sender, System.EventArgs e)
+        {
+            addr.addressSelected(addressList, new Grid[] { UnitCityState, ZipPhone }, AddressEntry, CityEntry, StateEntry, ZipEntry);
+
+        }
     }
 }

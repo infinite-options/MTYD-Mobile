@@ -152,6 +152,13 @@ namespace MTYD.ViewModel
 
                 divider6.Margin = new Thickness(24, 10);
 
+                //exploreButton.Margin = new Thickness(0, -5);
+                //explorePic.HeightRequest = width / 15;
+                //explorePic.WidthRequest = width / 15;
+                //explorePic.Margin = new Thickness(25, 0, 0, 0);
+
+                //divider7.Margin = new Thickness(24, 10);
+
                 logoutButton.Margin = new Thickness(0, -5);
                 logoutPic.HeightRequest = width / 15;
                 logoutPic.WidthRequest = width / 15;
@@ -182,7 +189,8 @@ namespace MTYD.ViewModel
 
         async void clickedLanding(System.Object sender, System.EventArgs e)
         {
-            await Navigation.PushAsync(new Landing(firstName, lastName, email), false);
+            //await Navigation.PushAsync(new Landing(firstName, lastName, email), false);
+            await Navigation.PushAsync(new MainPage(firstName, lastName, email), false);
             Navigation.RemovePage(this.Navigation.NavigationStack[this.Navigation.NavigationStack.Count - 2]);
         }
 
@@ -201,6 +209,12 @@ namespace MTYD.ViewModel
         async void clickedAboutUs(System.Object sender, System.EventArgs e)
         {
             await Navigation.PushAsync(new AboutUs(firstName, lastName, email), false);
+            Navigation.RemovePage(this.Navigation.NavigationStack[this.Navigation.NavigationStack.Count - 2]);
+        }
+
+        async void clickedExplore(System.Object sender, System.EventArgs e)
+        {
+            await Navigation.PushAsync(new PaymentPage(firstName, lastName, email), false);
             Navigation.RemovePage(this.Navigation.NavigationStack[this.Navigation.NavigationStack.Count - 2]);
         }
 
@@ -238,8 +252,9 @@ namespace MTYD.ViewModel
         void LogOutClick(System.Object sender, System.EventArgs e)
         {
             Application.Current.Properties.Remove("user_id");
+            Application.Current.Properties["platform"] = "GUEST";
             Application.Current.Properties.Remove("time_stamp");
-            Application.Current.Properties.Remove("platform");
+            //Application.Current.Properties.Remove("platform");
             Application.Current.MainPage = new MainPage();
         }
     }

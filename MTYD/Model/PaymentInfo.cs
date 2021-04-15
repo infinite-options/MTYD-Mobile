@@ -52,6 +52,14 @@ namespace MTYD.Model
         public string cc_exp_month { get; set; }
         public string cc_cvv { get; set; }
         public string cc_zip { get; set; }
+        public string charge_id { get; set; }
+        public string payment_type { get; set; }
+        public string tax { get; set; }
+        public string tip { get; set; }
+        public string service_fee { get; set; }
+        public string delivery_fee { get; set; }
+        public string subtotal { get; set; }
+        public string amb { get; set; }
         /*
         public string customer_uid { get; set; }
         public string business_id { get; set; }
@@ -170,9 +178,9 @@ namespace MTYD.Model
         public string cc_num { get; set; }
         public string cc_zip { get; set; }
         public string customer_email { get; set; }
-        public List<Item2> items { get; set; }
+        public List<Item> items { get; set; }
         public string new_item_id { get; set; }
-        public string password { get; set; }
+        //public string password { get; set; }
         public string purchase_id { get; set; }
         public string start_delivery_date { get; set; }
     }
@@ -198,4 +206,20 @@ namespace MTYD.Model
         public string old_password { get; set; }
         public string new_password { get; set; }
     }
+
+
+    public class StripeIntentPost
+    {
+        public string note { get; set; }
+    }
+
+    public class checkoutDto
+    {
+        public string message { get; set; }
+        public string payment_id { get; set; }
+        public string purchase_id { get; set; }
+    }
+
+    public class filler
+    { }
 }
