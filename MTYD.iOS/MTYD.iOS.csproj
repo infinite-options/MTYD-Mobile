@@ -158,6 +158,9 @@
     <PackageReference Include="Forms9Patch">
       <Version>2.4.9</Version>
     </PackageReference>
+    <PackageReference Include="Xamarin.CommunityToolkit">
+      <Version>1.1.0</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
@@ -232,6 +235,7 @@
     <BundleResource Include="Resources\heart.png" />
     <BundleResource Include="Resources\leftHeart.png" />
     <BundleResource Include="Resources\rightInfo.png" />
+    <BundleResource Include="Resources\plate.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AppleSignIn\" />

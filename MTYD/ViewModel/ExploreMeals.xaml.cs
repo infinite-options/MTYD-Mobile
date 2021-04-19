@@ -11,7 +11,7 @@ using MTYD.Model.Database;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
+//using System.Collections.Generic;
 using Xamarin.Forms.Maps;
 using Xamarin.Forms;
 using System.Threading.Tasks;
@@ -635,8 +635,9 @@ namespace MTYD.ViewModel
 
                     Date d = new Date();
                     d.dotw = dateObj.ToString("ddd").ToUpper();
-                    d.month = dateObj.ToString("MMM");
-                    d.day = dateObj.Day.ToString();
+                    //d.month = dateObj.ToString("MMM");
+                    //d.day = dateObj.Day.ToString();
+                    d.date = dateObj.ToString("MMM") + " " + dateObj.Day.ToString();
                     //if (d.day.Substring(0, 1) == "0")
                     //    d.day = d.day.Substring(1, 2);
                     //for just date use Substring(0, 10)

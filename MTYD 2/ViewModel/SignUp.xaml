@@ -1,0 +1,223 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="MTYD.ViewModel.SignUp">
+
+    <StackLayout>
+
+    <AbsoluteLayout>
+
+        <Image  AbsoluteLayout.LayoutBounds="1, -15, 2, 1"
+                AbsoluteLayout.LayoutFlags="All"
+                Source="landing.jpg" Aspect="AspectFill" Rotation="180"/>
+
+        <Image AbsoluteLayout.LayoutBounds="1,1,1,1"
+               AbsoluteLayout.LayoutFlags="All"
+               BackgroundColor="Black" Aspect="AspectFill" Opacity="0.5"/>
+
+        <Label Text="NUTRITION&#10;MADE EASY" FontAttributes="Bold" LineHeight="1"
+               AbsoluteLayout.LayoutBounds="0.5, 0.14"
+               AbsoluteLayout.LayoutFlags="PositionProportional"
+               FontSize="44" VerticalOptions="Center"
+               HorizontalTextAlignment="Center"
+               TextColor="#FFFFFF" CharacterSpacing="3"/>
+
+        <Label x:Name="subHeading" Text="LOCAL. ORGANIC. RESPONSIBLE."
+               VerticalOptions="Center" TextColor="#FFB054" FontAttributes="Bold"
+               HorizontalTextAlignment="Center" FontSize="20"
+               AbsoluteLayout.LayoutBounds="0.5, 0.26" CharacterSpacing="1"
+               AbsoluteLayout.LayoutFlags="PositionProportional"/>
+
+        <Frame x:Name="BackgroundOrange" BackgroundColor="#F59A28"
+               AbsoluteLayout.LayoutBounds="0.5, 0.53"
+               AbsoluteLayout.LayoutFlags="PositionProportional"
+               HeightRequest="310" WidthRequest="330"
+               CornerRadius="21"/>
+
+        <Frame x:Name="BackgroundWhite" BackgroundColor="White"
+               AbsoluteLayout.LayoutBounds="0.5, 0.527"
+               AbsoluteLayout.LayoutFlags="PositionProportional"
+               HeightRequest="300" WidthRequest="320"
+               CornerRadius="20" HasShadow="False"/>
+
+        <Grid AbsoluteLayout.LayoutBounds="0.5, 0.39"
+              AbsoluteLayout.LayoutFlags="PositionProportional">
+
+              <Frame CornerRadius="20" Padding="20,10" Margin="0"
+                     HasShadow="False" BackgroundColor="#FFE5B4">
+                    
+                   <Entry x:Name="newUsername" Keyboard="Text" FontAttributes="Bold"
+                   FontSize="16" Placeholder="USERNAME"
+                   HeightRequest="20" WidthRequest="245"
+                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"/>
+
+               </Frame>
+
+         </Grid>
+
+        <Grid AbsoluteLayout.LayoutBounds="0.5, 0.46"
+              AbsoluteLayout.LayoutFlags="PositionProportional">
+
+              <Frame CornerRadius="20" Padding="20,10,35,10" Margin="0"
+                     HasShadow="False" BackgroundColor="#FFE5B4">
+                    
+                   <Entry x:Name="newPassword" Keyboard="Text" FontAttributes="Bold"
+                   FontSize="16" Placeholder="PASSWORD" IsPassword="True"
+                   HeightRequest="20" WidthRequest="230"
+                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"/>
+
+               </Frame>
+
+         </Grid>
+
+        <Grid AbsoluteLayout.LayoutBounds="0.5, 0.53"
+              AbsoluteLayout.LayoutFlags="PositionProportional">
+
+              <Frame CornerRadius="20" Padding="20,10,35,10" Margin="0"
+                     HasShadow="False" BackgroundColor="#FFE5B4">
+                    
+                   <Entry x:Name="retypePassword" Keyboard="Text" FontAttributes="Bold"
+                   FontSize="16" Placeholder="RE-ENTER PASSWORD"
+                   HeightRequest="20" WidthRequest="230" IsPassword="True"
+                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"/>
+
+               </Frame>
+
+         </Grid>
+
+        <ImageButton x:Name="seePassword1" AbsoluteLayout.LayoutBounds="0.815, 0.46"
+                         AbsoluteLayout.LayoutFlags="PositionProportional" 
+                         HeightRequest="28" WidthRequest="28" Source="eye.png"
+                         Aspect="AspectFill" Opacity="0.5" Clicked="clickedSeePassword1"/>
+
+        <ImageButton x:Name="seePassword2" AbsoluteLayout.LayoutBounds="0.815, 0.53"
+                         AbsoluteLayout.LayoutFlags="PositionProportional"
+                         HeightRequest="28" WidthRequest="28" Source="eye.png"
+                         Aspect="AspectFill" Opacity="0.5" Clicked="clickedSeePassword2"/>
+
+        <!--<Entry x:Name="newUsername" Keyboard="Text" 
+               FontSize="16" Placeholder="  USERNAME"
+               HeightRequest="37" WidthRequest="285"
+               AbsoluteLayout.LayoutBounds="0.5, 0.39"
+               AbsoluteLayout.LayoutFlags="PositionProportional"
+               BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"/>
+
+        <Entry x:Name="newPassword" IsPassword="True" Keyboard="Text"
+               FontSize="16" Placeholder="  PASSWORD"
+               HeightRequest="37" WidthRequest="285" 
+               AbsoluteLayout.LayoutBounds="0.5, 0.46"
+               AbsoluteLayout.LayoutFlags="PositionProportional"
+               BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"/>
+
+        <Entry x:Name="retypePassword" IsPassword="True" Keyboard="Text"
+               FontSize="16" Placeholder="  RE-ENTER PASSWORD"
+               HeightRequest="37" WidthRequest="285"
+               AbsoluteLayout.LayoutBounds="0.5, 0.53"
+               AbsoluteLayout.LayoutFlags="PositionProportional"
+               BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"/>-->
+
+        <Button x:Name="backButton" Text="◀  BACK" FontSize="17" FontAttributes="Bold"
+                BackgroundColor="#F59A28" TextColor= "White"
+                HeightRequest="49" WidthRequest="120" CornerRadius="25"
+                AbsoluteLayout.LayoutBounds="0.27, 0.61"
+                AbsoluteLayout.LayoutFlags="PositionProportional"
+                Clicked="clickedBack" />
+
+        <Button x:Name= "finalSignUp" Text="SIGN UP" FontSize="17" FontAttributes="Bold"
+                BackgroundColor="#F59A28" TextColor= "White"
+                HeightRequest="49" WidthRequest="120" CornerRadius="25"
+                AbsoluteLayout.LayoutBounds="0.73, 0.61"
+                AbsoluteLayout.LayoutFlags="PositionProportional"
+                Clicked="clickedFinalSignUp" ></Button>
+
+    </AbsoluteLayout>
+
+    </StackLayout>
+    <!--<Grid Padding="15,15,15,15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.9*"/>
+            <RowDefinition Height="1.3*"/>
+            <RowDefinition Height="1.3*"/>
+            <RowDefinition Height="1.3*"/>
+            <RowDefinition Height="1.3*"/>
+            <RowDefinition Height="1.3*"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <BoxView Grid.Row="0"/>
+        <Label Grid.Row="0" Grid.ColumnSpan="2" Text="Sign Up" TextColor="Black" FontAttributes="Bold" FontSize="Large" HorizontalOptions="Center"/>
+
+        <BoxView Grid.Row="1"/>
+        <Label Grid.Row="1" Margin="0,-7,0,0" FontSize="Small" Text="First Name" HorizontalOptions="Start" VerticalOptions="Start" TextColor="Black" FontAttributes="Bold"/>
+        <Entry x:Name="firstNameEntry" Grid.Row="1" Placeholder="First Name" VerticalOptions="Center" Unfocused="firstNameEntryUnfocused"/>
+        <Label x:Name="firstNameWarning" FontSize="Micro" Grid.Row="1" Text="First Name is required" TextColor="Red" VerticalOptions="End"/>
+
+        <BoxView Grid.Column="1" Grid.Row="1"/>
+        <Label Grid.Column="1" Grid.Row="1" Margin="0,-7,0,0" FontSize="Small" Text="Last Name" VerticalOptions="Start" TextColor="Black" FontAttributes="Bold"/>
+        <Entry x:Name="lastNameEntry" Grid.Column="1" Grid.Row="1" Placeholder="Last Name" VerticalOptions="Center" Unfocused="lastNameEntryUnfocused"/>
+        <Label x:Name="lastNameWarning" FontSize="Micro" Grid.Column="1" Grid.Row="1" Text="Last Name is required" TextColor="Red" VerticalOptions="End"/>
+
+        <BoxView Grid.Row="2" Grid.ColumnSpan="2"/>
+        <Label Grid.Row="2" Grid.ColumnSpan="2" Margin="0,-7,0,0" FontSize="Small" Text="Email" VerticalOptions="Start" TextColor="Black" FontAttributes="Bold"/>
+        <Entry x:Name="emailEntry" Grid.Row="2" Grid.ColumnSpan="2" Placeholder="Email" VerticalOptions="Center" Unfocused="emailEntryUnfocused"/>
+        <Label x:Name="emailWarning" FontSize="Micro" Grid.Row="2" Grid.ColumnSpan="2" Text="Email is required" TextColor="Red" VerticalOptions="End"/>
+
+        <BoxView Grid.Row="3" Grid.ColumnSpan="2"/>
+        <Label Grid.Row="3" Grid.ColumnSpan="2" Margin="0,-7,0,0" FontSize="Small" Text="Confirm Email" VerticalOptions="Start" TextColor="Black" FontAttributes="Bold"/>
+        <Entry x:Name="confirmEmailEntry" Grid.Row="3" Grid.ColumnSpan="2" Placeholder="Confirm Email" VerticalOptions="Center" Unfocused="confirmEmailEntryUnfocused"/>
+        <Label x:Name="confirmEmailWarning" FontSize="Micro" Grid.Row="3" Grid.ColumnSpan="2" Text="Emails do not match" TextColor="Red" VerticalOptions="End"/>
+
+        <BoxView Grid.Row="4"/>
+        <Label Grid.Row="4" Text="Password" Margin="0,-7,0,0" FontSize="Small" VerticalOptions="Start" TextColor="Black" FontAttributes="Bold"/>
+        <Entry x:Name="passwordEntry" Grid.Row="4" Placeholder="Password" VerticalOptions="Center" IsPassword="True" Unfocused="passwordEntryUnfocused"/>
+        <Label x:Name="passwordWarning" FontSize="Micro" Grid.Row="4" Text="Password is required" TextColor="Red" VerticalOptions="End"/>
+
+
+        <BoxView Grid.Column="1" Grid.Row="4"/>
+        <Label Grid.Column="1" Grid.Row="4" Margin="0,-7,0,0" FontSize="Small" Text="Confirm Password" VerticalOptions="Start" TextColor="Black" FontAttributes="Bold"/>
+        <Entry x:Name="confirmPasswordEntry" Grid.Column="1" Grid.Row="4" Placeholder="Confirm Password" VerticalOptions="Center" IsPassword="True" Unfocused="confirmPasswordEntryUnfocused"/>
+        <Label x:Name="confirmPasswordWarning" FontSize="Micro" Grid.Column="1" Grid.Row="4" Text="Passwords do not match" TextColor="Red" VerticalOptions="End"/>
+
+        <BoxView Grid.Row="5"/>
+        <Label Grid.Row="5" Text="Phone Number" Margin="0,-7,0,0" FontSize="Small" VerticalOptions="Start" TextColor="Black" FontAttributes="Bold"/>
+        <Entry x:Name="phoneNumberEntry" Grid.Row="5" Placeholder="Phone Number" VerticalOptions="Center" Keyboard="Numeric" MaxLength="10" Unfocused="phoneNumberEntryUnfocused"/>
+        <Label x:Name="phoneNumberWarning" FontSize="Micro" Grid.Row="5" Text="Phone # must be 10 digits" TextColor="Red" VerticalOptions="End"/>
+
+        <BoxView Grid.Column="1" Grid.Row="5"/>
+        <Label Grid.Column="1" Grid.Row="5" Margin="0,-7,0,0" FontSize="Small" Text="Referral" VerticalOptions="Start" TextColor="Black" FontAttributes="Bold"/>
+        <Picker x:Name="referralPicker" Grid.Column="1" Grid.Row="5" VerticalOptions="Center" Title="Referral">
+            <Picker.ItemsSource>
+                <x:Array Type="{x:Type x:String}">
+                    <x:String>Website</x:String>
+                    <x:String>Social Media</x:String>
+                    <x:String>Friend</x:String>
+                    <x:String>Event</x:String>
+                </x:Array>
+            </Picker.ItemsSource>
+        </Picker>
+
+        <BoxView Grid.Row="6"/>
+        <StackLayout Grid.Row="6" Grid.ColumnSpan="2" Orientation="Horizontal" VerticalOptions="Center" HorizontalOptions="Center">
+            <ImageButton x:Name="termsOfServiceButton" Source="checkboxUnselected" Grid.Row="7" Grid.ColumnSpan="1" WidthRequest="20" HeightRequest="20" Clicked="termsOfServiceButtonClicked"/>
+            <Label Text="Agree to Prep to Your Door" FontSize ="Small" TextColor="Black" VerticalOptions="Center"/>
+            <Label Text="Terms of Service" FontSize ="Small" TextColor="Black" FontAttributes="Bold" TextDecorations="Underline" VerticalOptions="Center"/>
+        </StackLayout>
+
+        <BoxView Grid.Row="7"/>
+        <StackLayout Grid.Row="7" Grid.ColumnSpan="2" Margin="0,-50,0,0" Orientation="Horizontal" VerticalOptions="Center" HorizontalOptions="Center">
+            <ImageButton x:Name="weeklyUpdatesButton" Source="checkboxUnselected" Grid.Row="7" Grid.ColumnSpan="1" WidthRequest="20" HeightRequest="20"  Clicked="weeklyUpdatesButtonClicked"/>
+            <Label Text="Sign me up for weekly updates" FontSize = "Small" TextColor="Black" VerticalOptions="Center"/>
+        </StackLayout>
+        
+        <BoxView Grid.Row="8"/>
+        <Button x:Name="signUpButton" Margin="100,0,100,10" TextColor="White" BackgroundColor="Green" Grid.Row="8" Grid.ColumnSpan="2" Text="Sign Up" FontSize="Large" Clicked="ClickedSignUp"/>
+
+    </Grid>-->
+</ContentPage>

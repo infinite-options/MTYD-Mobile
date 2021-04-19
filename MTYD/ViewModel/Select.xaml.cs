@@ -11,13 +11,13 @@ using MTYD.Model.Database;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
 
 using Xamarin.Forms;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
 using System.ComponentModel;
 using System.Diagnostics;
+using Xamarin.CommunityToolkit;
 
 namespace MTYD.ViewModel
 {
@@ -101,24 +101,36 @@ namespace MTYD.ViewModel
         Date selectedDate;
         Dictionary<string, Date> dateDict;
         Dictionary<string, bool> favDict;
+        List<ImageButton> plates;
 
         WebClient client = new WebClient();
 
         public Select(Zones[] zones, string firstName, string lastName, string userEmail)
         {
+            //public ObservableCollection<AddressAutocomplete> Add;
+            
+
             availableDates = new List<Date>();
             dateDict = new Dictionary<string, Date>();
             favDict = new Dictionary<string, bool>();
             passedZones = zones;
             InitializeComponent();
 
-
+            
             //move bar initialization testing
             //==========================================
             // CARLOS PROGRESS BAR INITIALIZATION
             var m = new Origin();
             m.margin = new Thickness(0, 0, 0, 0);
             m.mealsLeft = "";
+
+            plates = new List<ImageButton>();
+            plates.Add(plate1);
+            plates.Add(plate2);
+            plates.Add(plate3);
+            plates.Add(plate4);
+            plates.Add(plate5);
+            plates.Add(plate6);
 
             BarParameters.Add(m);
             MyCollectionView.ItemsSource = BarParameters;
@@ -378,6 +390,11 @@ namespace MTYD.ViewModel
                             source = "filledHeart.png";
                         else source = "leftHeart.png";
 
+                        Color backgroundColor;
+
+                        if (mealQty > 0)
+                            backgroundColor = Color.FromHex("#F8BB17");
+                        else backgroundColor = Color.White;
 
                         Meals1.Add(new MealInfo
                         {
@@ -385,6 +402,7 @@ namespace MTYD.ViewModel
                             MealCalories = "Cal: " + obj.Result[i].MealCalories.ToString(),
                             MealImage = obj.Result[i].MealPhotoUrl,
                             MealQuantity = mealQty,
+                            Background = backgroundColor,
                             MealPrice = obj.Result[i].MealPrice,
                             ItemUid = obj.Result[i].MealUid,
                             MealDesc = obj.Result[i].MealDesc,
@@ -550,14 +568,15 @@ namespace MTYD.ViewModel
 
                     Date d = new Date();
                     d.dotw = dateObj.ToString("ddd").ToUpper();
-                    d.month = dateObj.ToString("MMM");
-                    d.day = dateObj.Day.ToString();
+                    d.date = dateObj.ToString("MMM") + " " + dateObj.Day.ToString();
+                    //d.day = ;
                     //if (d.day.Substring(0, 1) == "0")
                     //    d.day = d.day.Substring(1, 2);
                     //for just date use Substring(0, 10)
                     d.fullDateTime = i.Key;
                     d.fillColor = Color.White;
                     d.outlineColor = Color.White;
+                    d.status = "Surprise / No Selection";
                     d.index = index1;
                     index1++;
                     Debug.WriteLine("fullDate: $" + d.fullDateTime + "$");
@@ -620,6 +639,7 @@ namespace MTYD.ViewModel
                 }
                 
                 dateCarousel.ItemsSource = availableDates;
+                //dateCarousel1.ItemSource = availableDates;
                 //testing setMenu here
                 setMenu();
 
@@ -633,11 +653,11 @@ namespace MTYD.ViewModel
                     saveBttn.BackgroundColor = Color.Orange;
                     saveFrame.BackgroundColor = Color.Orange;
                     saveBttn.TextColor = Color.White;
-                    skipBttn.BackgroundColor = Color.Transparent;
-                    skipFrame.BackgroundColor = Color.Transparent;
+                    skipBttn.BackgroundColor = Color.White;
+                    skipFrame.BackgroundColor = Color.White;
                     skipBttn.TextColor = Color.Black;
-                    surpriseBttn.BackgroundColor = Color.Transparent;
-                    surpriseFrame.BackgroundColor = Color.Transparent;
+                    surpriseBttn.BackgroundColor = Color.White;
+                    surpriseFrame.BackgroundColor = Color.White;
                     surpriseBttn.TextColor = Color.Black;
 
 
@@ -648,11 +668,22 @@ namespace MTYD.ViewModel
                     Preferences.Set("total", 0);
                     Console.WriteLine("before true");
                     BarParameters[0].mealsLeft = "All Meals Selected";
+                    mealsLeftLabel.Text = "All Meals Selected";
                     BarParameters[0].barLabel = "All Meals Selected";
                     BarParameters[0].margin = new Thickness(this.Width, 0, 0, 0);
                     BarParameters[0].update = new Thickness(this.Width, 0, 0, 0);
                     Console.WriteLine("after true");
                     Preferences.Set("origMax", int.Parse(s));
+
+                    for (int i = 0; i < (6 - int.Parse(s)); i++)
+                        plates[i].IsVisible = false;
+                    for (int i = (6 - int.Parse(s)); i < 6; i++)
+                    {
+                        plates[i].IsVisible = true;
+                        plates[i].Source = "plate.png";
+                    }
+                        
+
                     totalCount.Text = Preferences.Get("total", 0).ToString();
                     //DisplayAlert("Alert", "Select reset button to change your meal selections", "OK");
                     //weekOneProgress.Progress = 1;
@@ -667,6 +698,21 @@ namespace MTYD.ViewModel
                     var holder = BarParameters[0].mealsLeft;
                     holder = "Please Select " + Preferences.Get("total", "").ToString() + " Meals";
                     BarParameters[0].mealsLeft = holder;
+                    mealsLeftLabel.Text = "Please Select " + Preferences.Get("total", "").ToString() + " Meals"; ;
+
+                    for (int i = 0; i < (6 - int.Parse(s)); i++)
+                        plates[i].IsVisible = false;
+                    for (int i = (6 - int.Parse(s)); i < 6; i++)
+                    {
+                        plates[i].IsVisible = true;
+                        plates[i].Source = "";
+                    }
+
+                    //for (int i = (6 - int.Parse(s)); i < int.Parse(Preferences.Get("total", "").ToString()) + ((6 - int.Parse(s))); i++)
+                    //    plates[i].Source = "plate.png";
+                    //for (int i = int.Parse(Preferences.Get("total", "").ToString()) + ((6 - int.Parse(s))); i < 6; i++)
+                    //    plates[i].Source = "";
+
                     BarParameters[0].barLabel = holder;
                     BarParameters[0].margin = 0;
                     BarParameters[0].update = 0;
@@ -686,11 +732,11 @@ namespace MTYD.ViewModel
                     skipBttn.BackgroundColor = Color.Orange;
                     skipFrame.BackgroundColor = Color.Orange;
                     skipBttn.TextColor = Color.White;
-                    surpriseBttn.BackgroundColor = Color.Transparent;
-                    surpriseFrame.BackgroundColor = Color.Transparent;
+                    surpriseBttn.BackgroundColor = Color.White;
+                    surpriseFrame.BackgroundColor = Color.White;
                     surpriseBttn.TextColor = Color.Black;
-                    saveBttn.BackgroundColor = Color.Transparent;
-                    saveFrame.BackgroundColor = Color.Transparent;
+                    saveBttn.BackgroundColor = Color.White;
+                    saveFrame.BackgroundColor = Color.White;
                     saveBttn.TextColor = Color.Black;
 
 
@@ -702,7 +748,18 @@ namespace MTYD.ViewModel
                     BarParameters[0].margin = 0;
                     BarParameters[0].update = 0;
                     BarParameters[0].mealsLeft = "Please Select " + Preferences.Get("total", "").ToString() + " Meals";
+                    mealsLeftLabel.Text = "Please Select " + Preferences.Get("total", "").ToString() + " Meals";
                     BarParameters[0].barLabel = "Please Select " + Preferences.Get("total", "").ToString() + " Meals";
+
+                    for (int i = 0; i < (6 - int.Parse(s)); i++)
+                        plates[i].IsVisible = false;
+                    for (int i = (6 - int.Parse(s)); i < 6; i++)
+                    {
+                        plates[i].IsVisible = true;
+                        plates[i].Source = "";
+                    }
+                        //plates[i].IsVisible = true;
+
                     Console.WriteLine("after skip");
                     totalCount.Text = Preferences.Get("total", 0).ToString();
                     Preferences.Set("origMax", int.Parse(s));
@@ -717,11 +774,11 @@ namespace MTYD.ViewModel
                     surpriseBttn.BackgroundColor = Color.Orange;
                     surpriseFrame.BackgroundColor = Color.Orange;
                     surpriseBttn.TextColor = Color.White;
-                    skipBttn.BackgroundColor = Color.Transparent;
-                    skipFrame.BackgroundColor = Color.Transparent;
+                    skipBttn.BackgroundColor = Color.White;
+                    skipFrame.BackgroundColor = Color.White;
                     skipBttn.TextColor = Color.Black;
-                    saveBttn.BackgroundColor = Color.Transparent;
-                    saveFrame.BackgroundColor = Color.Transparent;
+                    saveBttn.BackgroundColor = Color.White;
+                    saveFrame.BackgroundColor = Color.White;
                     saveBttn.TextColor = Color.Black;
 
 
@@ -733,7 +790,18 @@ namespace MTYD.ViewModel
                     BarParameters[0].margin = 0;
                     BarParameters[0].update = 0;
                     BarParameters[0].mealsLeft = "Please Select " + Preferences.Get("total", "").ToString() + " Meals";
+                    mealsLeftLabel.Text = "Please Select " + Preferences.Get("total", "").ToString() + " Meals";
                     BarParameters[0].barLabel = "Please Select " + Preferences.Get("total", "").ToString() + " Meals";
+
+                    for (int i = 0; i < (6 - int.Parse(s)); i++)
+                        plates[i].IsVisible = false;
+                    for (int i = (6 - int.Parse(s)); i < 6; i++)
+                    {
+                        plates[i].IsVisible = true;
+                        plates[i].Source = "";
+                    }
+                        //plates[i].IsVisible = true;
+
                     Console.WriteLine("after surprise");
                     totalCount.Text = Preferences.Get("total", 0).ToString();
                     Preferences.Set("origMax", int.Parse(s));
@@ -743,11 +811,11 @@ namespace MTYD.ViewModel
                 {
                     Debug.WriteLine("new plan");
                     //If neither skip or surprise (new plan), then initialize to surprise
-                    skipBttn.BackgroundColor = Color.Transparent;
-                    skipFrame.BackgroundColor = Color.Transparent;
+                    skipBttn.BackgroundColor = Color.White;
+                    skipFrame.BackgroundColor = Color.White;
                     skipBttn.TextColor = Color.Black;
-                    surpriseBttn.BackgroundColor = Color.Transparent;
-                    surpriseFrame.BackgroundColor = Color.Transparent;
+                    surpriseBttn.BackgroundColor = Color.White;
+                    surpriseFrame.BackgroundColor = Color.White;
                     surpriseBttn.TextColor = Color.Black;
 
 
@@ -854,11 +922,11 @@ namespace MTYD.ViewModel
                 saveBttn.BackgroundColor = Color.Orange;
                 saveFrame.BackgroundColor = Color.Orange;
                 saveBttn.TextColor = Color.White;
-                skipBttn.BackgroundColor = Color.Transparent;
-                skipFrame.BackgroundColor = Color.Transparent;
+                skipBttn.BackgroundColor = Color.White;
+                skipFrame.BackgroundColor = Color.White;
                 skipBttn.TextColor = Color.Black;
-                surpriseBttn.BackgroundColor = Color.Transparent;
-                surpriseFrame.BackgroundColor = Color.Transparent;
+                surpriseBttn.BackgroundColor = Color.White;
+                surpriseFrame.BackgroundColor = Color.White;
                 surpriseBttn.TextColor = Color.Black;
 
 
@@ -869,7 +937,18 @@ namespace MTYD.ViewModel
                 Preferences.Set("total", 0);
                 Console.WriteLine("before true");
                 BarParameters[0].mealsLeft = "All Meals Selected";
+                mealsLeftLabel.Text = "All Meals Selected";
                 BarParameters[0].barLabel = "All Meals Selected";
+
+                for (int i = 0; i < (6 - int.Parse(s)); i++)
+                    plates[i].IsVisible = false;
+                for (int i = (6 - int.Parse(s)); i < 6; i++)
+                {
+                    plates[i].IsVisible = true;
+                    plates[i].Source = "plate.png";
+                }
+                    //plates[i].IsVisible = true;
+
                 BarParameters[0].margin = new Thickness(this.Width, 0, 0, 0);
                 BarParameters[0].update = new Thickness(this.Width, 0, 0, 0);
                 Console.WriteLine("after true");
@@ -887,7 +966,23 @@ namespace MTYD.ViewModel
                 var holder = BarParameters[0].mealsLeft;
                 holder = "Please Select " + Preferences.Get("total", "").ToString() + " Meals";
                 BarParameters[0].mealsLeft = holder;
+                mealsLeftLabel.Text = "Select " + Preferences.Get("total", "").ToString() + " meals";
                 BarParameters[0].barLabel = holder;
+
+                for (int i = 0; i < (6 - int.Parse(s)); i++)
+                    plates[i].IsVisible = false;
+                for (int i = (6 - int.Parse(s)); i < 6; i++)
+                {
+                    plates[i].IsVisible = true;
+                    plates[i].Source = "";
+                }
+                    //plates[i].IsVisible = true;
+
+                //for (int i = (6 - int.Parse(s)); i < int.Parse(Preferences.Get("total", "").ToString()) + ((6 - int.Parse(s))); i++)
+                //    plates[i].Source = "plate.png";
+                //for (int i = int.Parse(Preferences.Get("total", "").ToString()) + ((6 - int.Parse(s))); i < 6; i++)
+                //    plates[i].Source = "";
+
                 BarParameters[0].margin = 0;
                 BarParameters[0].update = 0;
                 Console.WriteLine("after false");
@@ -904,11 +999,11 @@ namespace MTYD.ViewModel
                 skipBttn.BackgroundColor = Color.Orange;
                 skipFrame.BackgroundColor = Color.Orange;
                 skipBttn.TextColor = Color.White;
-                surpriseBttn.BackgroundColor = Color.Transparent;
-                surpriseFrame.BackgroundColor = Color.Transparent;
+                surpriseBttn.BackgroundColor = Color.White;
+                surpriseFrame.BackgroundColor = Color.White;
                 surpriseBttn.TextColor = Color.Black;
-                saveBttn.BackgroundColor = Color.Transparent;
-                saveFrame.BackgroundColor = Color.Transparent;
+                saveBttn.BackgroundColor = Color.White;
+                saveFrame.BackgroundColor = Color.White;
                 saveBttn.TextColor = Color.Black;
 
 
@@ -920,7 +1015,18 @@ namespace MTYD.ViewModel
                 BarParameters[0].margin = 0;
                 BarParameters[0].update = 0;
                 BarParameters[0].mealsLeft = "Please Select " + Preferences.Get("total", "").ToString() + " Meals";
+                mealsLeftLabel.Text = "Select " + Preferences.Get("total", "").ToString() + " meals";
                 BarParameters[0].barLabel = "Please Select " + Preferences.Get("total", "").ToString() + " Meals";
+
+                for (int i = 0; i < (6 - int.Parse(s)); i++)
+                    plates[i].IsVisible = false;
+                for (int i = (6 - int.Parse(s)); i < 6; i++)
+                {
+                    plates[i].IsVisible = true;
+                    plates[i].Source = "";
+                }
+                    //plates[i].IsVisible = true;
+
                 Console.WriteLine("after skip");
                 totalCount.Text = Preferences.Get("total", 0).ToString();
                 Preferences.Set("origMax", int.Parse(s));
@@ -934,11 +1040,11 @@ namespace MTYD.ViewModel
                 surpriseBttn.BackgroundColor = Color.Orange;
                 surpriseFrame.BackgroundColor = Color.Orange;
                 surpriseBttn.TextColor = Color.White;
-                skipBttn.BackgroundColor = Color.Transparent;
-                skipFrame.BackgroundColor = Color.Transparent;
+                skipBttn.BackgroundColor = Color.White;
+                skipFrame.BackgroundColor = Color.White;
                 skipBttn.TextColor = Color.Black;
-                saveBttn.BackgroundColor = Color.Transparent;
-                saveFrame.BackgroundColor = Color.Transparent;
+                saveBttn.BackgroundColor = Color.White;
+                saveFrame.BackgroundColor = Color.White;
                 saveBttn.TextColor = Color.Black;
 
 
@@ -950,7 +1056,20 @@ namespace MTYD.ViewModel
                 BarParameters[0].margin = 0;
                 BarParameters[0].update = 0;
                 BarParameters[0].mealsLeft = "Please Select " + Preferences.Get("total", "").ToString() + " Meals";
+                mealsLeftLabel.Text = "Select " + Preferences.Get("total", "").ToString() + " meals";
                 BarParameters[0].barLabel = "Please Select " + Preferences.Get("total", "").ToString() + " Meals";
+
+                for (int i = 0; i < (6 - int.Parse(s)); i++)
+                    plates[i].IsVisible = false;
+                for (int i = (6 - int.Parse(s)); i < 6; i++)
+                {
+                    plates[i].IsVisible = true;
+                    plates[i].Source = "";
+                }
+                    //plates[i].IsVisible = true;
+
+
+
                 Console.WriteLine("after surprise");
                 totalCount.Text = Preferences.Get("total", 0).ToString();
                 Preferences.Set("origMax", int.Parse(s));
@@ -960,11 +1079,11 @@ namespace MTYD.ViewModel
             {
                 Debug.WriteLine("new plan");
                 //If neither skip or surprise (new plan), then initialize to surprise
-                skipBttn.BackgroundColor = Color.Transparent;
-                skipFrame.BackgroundColor = Color.Transparent;
+                skipBttn.BackgroundColor = Color.White;
+                skipFrame.BackgroundColor = Color.White;
                 skipBttn.TextColor = Color.Black;
-                surpriseBttn.BackgroundColor = Color.Transparent;
-                surpriseFrame.BackgroundColor = Color.Transparent;
+                surpriseBttn.BackgroundColor = Color.White;
+                surpriseFrame.BackgroundColor = Color.White;
                 surpriseBttn.TextColor = Color.Black;
 
 
@@ -1045,11 +1164,11 @@ namespace MTYD.ViewModel
                     saveBttn.BackgroundColor = Color.Orange;
                     saveFrame.BackgroundColor = Color.Orange;
                     saveBttn.TextColor = Color.White;
-                    skipBttn.BackgroundColor = Color.Transparent;
-                    skipFrame.BackgroundColor = Color.Transparent;
+                    skipBttn.BackgroundColor = Color.White;
+                    skipFrame.BackgroundColor = Color.White;
                     skipBttn.TextColor = Color.Black;
-                    surpriseBttn.BackgroundColor = Color.Transparent;
-                    surpriseFrame.BackgroundColor = Color.Transparent;
+                    surpriseBttn.BackgroundColor = Color.White;
+                    surpriseFrame.BackgroundColor = Color.White;
                     surpriseBttn.TextColor = Color.Black;
 
                     string s = SubscriptionPicker.SelectedItem.ToString();
@@ -1059,9 +1178,20 @@ namespace MTYD.ViewModel
                     Preferences.Set("total", 0);
                     Console.WriteLine("before true alreadyselected");
                     BarParameters[0].mealsLeft = "All Meals Selected";
+                    mealsLeftLabel.Text = "All Meals Selected";
                     BarParameters[0].barLabel = "All Meals Selected";
                     BarParameters[0].margin = new Thickness(this.Width, 0, 0, 0);
                     BarParameters[0].update = new Thickness(this.Width, 0, 0, 0);
+
+                    for (int i = 0; i < (6 - int.Parse(s)); i++)
+                        plates[i].IsVisible = false;
+                    for (int i = (6 - int.Parse(s)); i < 6; i++)
+                    {
+                        plates[i].IsVisible = true;
+                        plates[i].Source = "plate.png";
+                    }
+                        //plates[i].IsVisible = true;
+
                     Console.WriteLine("after true");
                     Preferences.Set("origMax", int.Parse(s));
                     totalCount.Text = Preferences.Get("total", 0).ToString();
@@ -1077,7 +1207,20 @@ namespace MTYD.ViewModel
                     var holder = BarParameters[0].mealsLeft;
                     holder = "Please Select " + Preferences.Get("total", "").ToString() + " Meals";
                     BarParameters[0].mealsLeft = holder;
+                    mealsLeftLabel.Text = "Select " + Preferences.Get("total", "").ToString() + " meals";
                     BarParameters[0].barLabel = holder;
+
+                    for (int i = 0; i < (6 - int.Parse(s)); i++)
+                        plates[i].IsVisible = false;
+                    for (int i = (6 - int.Parse(s)); i < 6; i++)
+                    {
+                        plates[i].IsVisible = true;
+                        plates[i].Source = "";
+                    }
+                        //plates[i].IsVisible = true;
+
+
+
                     BarParameters[0].margin = 0;
                     BarParameters[0].update = 0;
                     Console.WriteLine("after false");
@@ -1094,11 +1237,11 @@ namespace MTYD.ViewModel
                     skipBttn.BackgroundColor = Color.Orange;
                     skipFrame.BackgroundColor = Color.Orange;
                     skipBttn.TextColor = Color.White;
-                    surpriseBttn.BackgroundColor = Color.Transparent;
-                    surpriseFrame.BackgroundColor = Color.Transparent;
+                    surpriseBttn.BackgroundColor = Color.White;
+                    surpriseFrame.BackgroundColor = Color.White;
                     surpriseBttn.TextColor = Color.Black;
-                    saveBttn.BackgroundColor = Color.Transparent;
-                    saveFrame.BackgroundColor = Color.Transparent;
+                    saveBttn.BackgroundColor = Color.White;
+                    saveFrame.BackgroundColor = Color.White;
                     saveBttn.TextColor = Color.Black;
 
                     indexOfMealPlanSelected = (int)SubscriptionPicker.SelectedIndex;
@@ -1112,7 +1255,18 @@ namespace MTYD.ViewModel
                     BarParameters[0].margin = 1;
                     BarParameters[0].update = 1;
                     BarParameters[0].mealsLeft = "Please Select " + Preferences.Get("total", "").ToString() + " Meals";
+                    mealsLeftLabel.Text = "Select " + Preferences.Get("total", "").ToString() + " meals";
                     BarParameters[0].barLabel = "Please Select " + Preferences.Get("total", "").ToString() + " Meals";
+
+                    for (int i = 0; i < (6 - int.Parse(s)); i++)
+                        plates[i].IsVisible = false;
+                    for (int i = (6 - int.Parse(s)); i < 6; i++)
+                    {
+                        plates[i].IsVisible = true;
+                        plates[i].Source = "";
+                    }
+                        //plates[i].IsVisible = true;
+
                     Console.WriteLine("after skip");
                     totalCount.Text = Preferences.Get("total", 0).ToString();
                     Preferences.Set("origMax", int.Parse(s));
@@ -1126,11 +1280,11 @@ namespace MTYD.ViewModel
                     surpriseBttn.BackgroundColor = Color.Orange;
                     surpriseFrame.BackgroundColor = Color.Orange;
                     surpriseBttn.TextColor = Color.White;
-                    skipBttn.BackgroundColor = Color.Transparent;
-                    skipFrame.BackgroundColor = Color.Transparent;
+                    skipBttn.BackgroundColor = Color.White;
+                    skipFrame.BackgroundColor = Color.White;
                     skipBttn.TextColor = Color.Black;
-                    saveBttn.BackgroundColor = Color.Transparent;
-                    saveFrame.BackgroundColor = Color.Transparent;
+                    saveBttn.BackgroundColor = Color.White;
+                    saveFrame.BackgroundColor = Color.White;
                     saveBttn.TextColor = Color.Black;
 
                     indexOfMealPlanSelected = (int)SubscriptionPicker.SelectedIndex;
@@ -1144,7 +1298,18 @@ namespace MTYD.ViewModel
                     BarParameters[0].margin = 1;
                     BarParameters[0].update = 1;
                     BarParameters[0].mealsLeft = "Please Select " + Preferences.Get("total", "").ToString() + " Meals";
+                    mealsLeftLabel.Text = "Select " + Preferences.Get("total", "").ToString() + " meals";
                     BarParameters[0].barLabel = "Please Select " + Preferences.Get("total", "").ToString() + " Meals";
+
+                    for (int i = 0; i < (6 - int.Parse(s)); i++)
+                        plates[i].IsVisible = false;
+                    for (int i = (6 - int.Parse(s)); i < 6; i++)
+                    {
+                        plates[i].IsVisible = true;
+                        plates[i].Source = "";
+                    }
+                        //plates[i].IsVisible = true;
+
                     Console.WriteLine("after surprise");
                     totalCount.Text = Preferences.Get("total", 0).ToString();
                     Preferences.Set("origMax", int.Parse(s));
@@ -1154,11 +1319,11 @@ namespace MTYD.ViewModel
                 {
 
                     //If neither skip or surprise (new plan), then initialize to surprise
-                    skipBttn.BackgroundColor = Color.Transparent;
-                    skipFrame.BackgroundColor = Color.Transparent;
+                    skipBttn.BackgroundColor = Color.White;
+                    skipFrame.BackgroundColor = Color.White;
                     skipBttn.TextColor = Color.Black;
-                    surpriseBttn.BackgroundColor = Color.Transparent;
-                    surpriseFrame.BackgroundColor = Color.Transparent;
+                    surpriseBttn.BackgroundColor = Color.White;
+                    surpriseFrame.BackgroundColor = Color.White;
                     surpriseBttn.TextColor = Color.Black;
                     if (isAlreadySelected == false)
                         surprise();
@@ -1195,11 +1360,11 @@ namespace MTYD.ViewModel
                 surpriseBttn.BackgroundColor = Color.Orange;
                 surpriseFrame.BackgroundColor = Color.Orange;
                 surpriseBttn.TextColor = Color.White;
-                skipBttn.BackgroundColor = Color.Transparent;
-                skipFrame.BackgroundColor = Color.Transparent;
+                skipBttn.BackgroundColor = Color.White;
+                skipFrame.BackgroundColor = Color.White;
                 skipBttn.TextColor = Color.Black;
-                saveBttn.BackgroundColor = Color.Transparent;
-                saveFrame.BackgroundColor = Color.Transparent;
+                saveBttn.BackgroundColor = Color.White;
+                saveFrame.BackgroundColor = Color.White;
                 saveBttn.TextColor = Color.Black;
 
                 //indexOfMealPlanSelected = (int)SubscriptionPicker.SelectedIndex;
@@ -1213,7 +1378,18 @@ namespace MTYD.ViewModel
                 BarParameters[0].margin = 1;
                 BarParameters[0].update = 1;
                 BarParameters[0].mealsLeft = "Please Select " + Preferences.Get("total", "").ToString() + " Meals";
+                mealsLeftLabel.Text = "Select " + Preferences.Get("total", "").ToString() + " meals";
                 BarParameters[0].barLabel = "Please Select " + Preferences.Get("total", "").ToString() + " Meals";
+
+                for (int i = 0; i < (6 - int.Parse(s)); i++)
+                    plates[i].IsVisible = false;
+                for (int i = (6 - int.Parse(s)); i < 6; i++)
+                {
+                    plates[i].IsVisible = true;
+                    plates[i].Source = "";
+                }
+                    //plates[i].IsVisible = true;
+
                 Console.WriteLine("after surprise");
                 totalCount.Text = Preferences.Get("total", 0).ToString();
                 Preferences.Set("origMax", int.Parse(s));
@@ -1416,15 +1592,25 @@ namespace MTYD.ViewModel
             int permCount = Preferences.Get("origMax", 0);
             if (count != 0)
             {
+                for (int i = 0; i < 6; i++)
+                {
+                    Debug.WriteLine("plate source: " + plates[i].Source.ToString());
+                    if (plates[i].IsVisible == true && !(plates[i].Source.ToString().Contains("plate.png")))
+                    {
+                        plates[i].Source = "plate.png";
+                        break;
+                    }
+                }
+
                 //testing reseting the save button when they increase or decrease amount of meals/add-ons
-                surpriseBttn.BackgroundColor = Color.Transparent;
-                surpriseFrame.BackgroundColor = Color.Transparent;
+                surpriseBttn.BackgroundColor = Color.White;
+                surpriseFrame.BackgroundColor = Color.White;
                 surpriseBttn.TextColor = Color.Black;
-                saveBttn.BackgroundColor = Color.Transparent;
-                saveFrame.BackgroundColor = Color.Transparent;
+                saveBttn.BackgroundColor = Color.White;
+                saveFrame.BackgroundColor = Color.White;
                 saveBttn.TextColor = Color.Black;
-                skipBttn.BackgroundColor = Color.Transparent;
-                skipFrame.BackgroundColor = Color.Transparent;
+                skipBttn.BackgroundColor = Color.White;
+                skipFrame.BackgroundColor = Color.White;
                 skipBttn.TextColor = Color.Black;
                 // ======================================
                 // CARLOS PROGRESS BAR INTEGRATION
@@ -1456,12 +1642,14 @@ namespace MTYD.ViewModel
                 {
                     Debug.WriteLine("final margin: " + BarParameters[0].update.ToString());
                     BarParameters[0].mealsLeft = "All Meals Selected (Click Save)";
+                    mealsLeftLabel.Text = "All Meals Selected (Click Save)";
                     BarParameters[0].barLabel = "All Meals Selected (Click Save)";
                     //progress.Text = "All Meals Selected";
                 }
                 else
                 {
                     BarParameters[0].mealsLeft = "Please Select " + count.ToString() + " Meals";
+                    mealsLeftLabel.Text = "Please Select " + count.ToString() + " Meals";
                     BarParameters[0].barLabel = "Please Select " + count.ToString() + " Meals";
                 }
                 //else progressLabel.Text = "Please Select " + count.ToString() + " Meals";
@@ -1471,6 +1659,7 @@ namespace MTYD.ViewModel
                 Button b = (Button)sender;
                 MealInfo ms = b.BindingContext as MealInfo;
                 ms.MealQuantity++;
+                ms.Background = Color.FromHex("#F8BB17");
 
                 //float adder = 0.0f;
                 if (permCount == 5)
@@ -1523,14 +1712,14 @@ namespace MTYD.ViewModel
         private async void clickIncreaseAddOn(object sender, EventArgs e)
         {
             //testing reseting the save button when they increase or decrease amount of meals/add-ons
-            surpriseBttn.BackgroundColor = Color.Transparent;
-            surpriseFrame.BackgroundColor = Color.Transparent;
+            surpriseBttn.BackgroundColor = Color.White;
+            surpriseFrame.BackgroundColor = Color.White;
             surpriseBttn.TextColor = Color.Black;
-            saveBttn.BackgroundColor = Color.Transparent;
-            saveFrame.BackgroundColor = Color.Transparent;
+            saveBttn.BackgroundColor = Color.White;
+            saveFrame.BackgroundColor = Color.White;
             saveBttn.TextColor = Color.Black;
-            skipBttn.BackgroundColor = Color.Transparent;
-            skipFrame.BackgroundColor = Color.Transparent;
+            skipBttn.BackgroundColor = Color.White;
+            skipFrame.BackgroundColor = Color.White;
             skipBttn.TextColor = Color.Black;
 
             Button b = (Button)sender;
@@ -1546,15 +1735,25 @@ namespace MTYD.ViewModel
             //if meal quantity is 0, don't do anything
             if (count != Preferences.Get("origMax", 0) && ms.MealQuantity != 0)
             {
+
+                for (int i = 5; i >= 0; i--)
+                {
+                    if (plates[i].IsVisible == true && plates[i].Source.ToString().Contains("plate.png"))
+                    {
+                        plates[i].Source = "";
+                        break;
+                    }
+                }
+
                 //testing reseting the save button when they increase or decrease amount of meals/add-ons
-                surpriseBttn.BackgroundColor = Color.Transparent;
-                surpriseFrame.BackgroundColor = Color.Transparent;
+                surpriseBttn.BackgroundColor = Color.White;
+                surpriseFrame.BackgroundColor = Color.White;
                 surpriseBttn.TextColor = Color.Black;
-                saveBttn.BackgroundColor = Color.Transparent;
-                saveFrame.BackgroundColor = Color.Transparent;
+                saveBttn.BackgroundColor = Color.White;
+                saveFrame.BackgroundColor = Color.White;
                 saveBttn.TextColor = Color.Black;
-                skipBttn.BackgroundColor = Color.Transparent;
-                skipFrame.BackgroundColor = Color.Transparent;
+                skipBttn.BackgroundColor = Color.White;
+                skipFrame.BackgroundColor = Color.White;
                 skipBttn.TextColor = Color.Black;
                 // ======================================
                 // CARLOS PROGRESS BAR INTEGRATION
@@ -1582,10 +1781,14 @@ namespace MTYD.ViewModel
                 {
                     totalCount.Text = (++count).ToString();
                     BarParameters[0].mealsLeft = "Please Select " + count.ToString() + " Meals";
+                    mealsLeftLabel.Text = "Please Select " + count.ToString() + " Meals";
                     BarParameters[0].barLabel = "Please Select " + count.ToString() + " Meals";
                     Preferences.Set("total", count);
                     //BarParameters[0].mealsLeft = count.ToString();
                     ms.MealQuantity--;
+
+                    if (ms.MealQuantity == 0)
+                        ms.Background = Color.White;
 
                     int permCount = Preferences.Get("origMax", 0);
                     //float adder = 0.0f;
@@ -1642,14 +1845,14 @@ namespace MTYD.ViewModel
                 if (ms.MealQuantity != 0)
                 {
                     //testing reseting the save button when they increase or decrease amount of meals/add-ons
-                    surpriseBttn.BackgroundColor = Color.Transparent;
-                    surpriseFrame.BackgroundColor = Color.Transparent;
+                    surpriseBttn.BackgroundColor = Color.White;
+                    surpriseFrame.BackgroundColor = Color.White;
                     surpriseBttn.TextColor = Color.Black;
-                    saveBttn.BackgroundColor = Color.Transparent;
-                    saveFrame.BackgroundColor = Color.Transparent;
+                    saveBttn.BackgroundColor = Color.White;
+                    saveFrame.BackgroundColor = Color.White;
                     saveBttn.TextColor = Color.Black;
-                    skipBttn.BackgroundColor = Color.Transparent;
-                    skipFrame.BackgroundColor = Color.Transparent;
+                    skipBttn.BackgroundColor = Color.White;
+                    skipFrame.BackgroundColor = Color.White;
                     skipBttn.TextColor = Color.Black;
 
                     ms.MealQuantity--;
@@ -1665,6 +1868,7 @@ namespace MTYD.ViewModel
                 ArrayList namesArray = new ArrayList();
                 namesArray.Add(Preferences.Get("item_name", "").Substring(0, 1) + " Meal Plan");
                 SubscriptionPicker.ItemsSource = namesArray;
+                //mealPlansList.ItemsSource = namesArray;
                 SubscriptionPicker.SelectedItem = namesArray[0].ToString();
                 //Preferences.Get("item_name", "").Substring(0, 1) + " Meals for " + Preferences.Get("freqSelected", "") + " Deliveries): 
             }
@@ -1734,6 +1938,7 @@ namespace MTYD.ViewModel
                     //firstIndex = namesArray[0].ToString();
                     //Console.WriteLine("namesArray contents:" + namesArray[0].ToString() + " " + namesArray[1].ToString() + " " + namesArray[2].ToString() + " ");
                     SubscriptionPicker.ItemsSource = namesArray;
+                    //mealPlansList.ItemsSource = namesArray;
                     SubscriptionPicker.SelectedItem = namesArray[0].ToString();
                     Console.WriteLine("namesArray contents:" + namesArray[0].ToString());
                     //SubscriptionPicker.Title = namesArray[0];
@@ -1819,8 +2024,9 @@ namespace MTYD.ViewModel
                         }
                     }
                 }
-                catch
+                catch (Exception ex)
                 {
+                    Debug.WriteLine("exception from getting user meals: " + ex.ToString());
                     Console.WriteLine("GET USER MEALS ERROR CATCHED");
                 }
             }
@@ -1841,11 +2047,11 @@ namespace MTYD.ViewModel
             selectedDotw = selected.ToString("dddd");
             Debug.WriteLine("dayOfWeek: " + selectedDotw);
 
-            surpriseBttn.BackgroundColor = Color.Transparent;
-            surpriseFrame.BackgroundColor = Color.Transparent;
+            surpriseBttn.BackgroundColor = Color.White;
+            surpriseFrame.BackgroundColor = Color.White;
             surpriseBttn.TextColor = Color.Black;
-            skipBttn.BackgroundColor = Color.Transparent;
-            skipFrame.BackgroundColor = Color.Transparent;
+            skipBttn.BackgroundColor = Color.White;
+            skipFrame.BackgroundColor = Color.White;
             skipBttn.TextColor = Color.Black;
             //saveFrame.BackgroundColor = Color.Orange;
             //saveBttn.BackgroundColor = Color.Orange;
@@ -1858,6 +2064,7 @@ namespace MTYD.ViewModel
                 saveBttn.BackgroundColor = Color.Orange;
                 saveBttn.TextColor = Color.White;
                 selectedDate.fillColor = Color.FromHex("#FFBA00");
+                selectedDate.status = "Selected";
 
                 for (int i = 0; i < Meals1.Count; i++)
                 {
@@ -1906,6 +2113,7 @@ namespace MTYD.ViewModel
                     postData();
                     addOnSelected = false;
                     BarParameters[0].mealsLeft = "All Meals Selected";
+                    mealsLeftLabel.Text = "All Meals Selected";
                     BarParameters[0].barLabel = "All Meals Selected";
                     DisplayAlert("Selection Saved", "You will be charged for your add-ons on 1/1/2021.", "OK");
                 }
@@ -1919,13 +2127,14 @@ namespace MTYD.ViewModel
                     Console.WriteLine("line 302 " + jsonMeals);
                     postData();
                     BarParameters[0].mealsLeft = "All Meals Selected";
+                    mealsLeftLabel.Text = "All Meals Selected";
                     BarParameters[0].barLabel = "All Meals Selected";
                     DisplayAlert("Selection Saved", "You've successfully saved your meal selection.", "OK");
                 }
                 addOnSelected = false;
                 //DisplayAlert("Selection Saved", "You've successfully saved your meal selection.", "OK");
-                saveBttn.BackgroundColor = Color.Transparent;
-                saveBttn.TextColor = Color.Black;
+                //saveBttn.BackgroundColor = Color.White;
+                //saveBttn.TextColor = Color.Black;
             }
             else
             {
@@ -1936,18 +2145,25 @@ namespace MTYD.ViewModel
 
         private async void skipMealSelection(object sender, EventArgs e)
         {
+            foreach (var ms in Meals1)
+                ms.Background = Color.White;
+
             selectedDotw = "SKIP";
             //addOnSelected = false;
             //qtyDict.Clear();
             skipBttn.BackgroundColor = Color.Orange;
             skipFrame.BackgroundColor = Color.Orange;
             skipBttn.TextColor = Color.White;
-            surpriseBttn.BackgroundColor = Color.Transparent;
-            surpriseFrame.BackgroundColor = Color.Transparent;
+            surpriseBttn.BackgroundColor = Color.White;
+            surpriseFrame.BackgroundColor = Color.White;
             surpriseBttn.TextColor = Color.Black;
-            saveBttn.BackgroundColor = Color.Transparent;
-            saveFrame.BackgroundColor = Color.Transparent;
+            saveBttn.BackgroundColor = Color.White;
+            saveFrame.BackgroundColor = Color.White;
             saveBttn.TextColor = Color.Black;
+
+            for (int i = 0; i < 6; i++)
+                plates[i].Source = "";
+
             resetAll();
             mealsSaved.Clear();
             int count = Preferences.Get("total", 0);
@@ -1981,6 +2197,7 @@ namespace MTYD.ViewModel
             addOnSelected = false;
             //mealsSaved = new List<MealInformation>();
             selectedDate.fillColor = Color.FromHex("#BBBBBB");
+            selectedDate.status = "Skipped";
             DisplayAlert("Delivery Skipped", "You won't receive any meals for this delivery cycle. We'll extend your subscription accordingly.", "OK");
             mealsSaved.Clear();
             int indexOfMealPlanSelected = (int)SubscriptionPicker.SelectedIndex;
@@ -1996,6 +2213,7 @@ namespace MTYD.ViewModel
             BarParameters[0].margin = 0;
             BarParameters[0].update = 0;
             BarParameters[0].mealsLeft = "Please Select " + Preferences.Get("total", "").ToString() + " Meals";
+            mealsLeftLabel.Text = "Select " + Preferences.Get("total", "").ToString() + " meals";
             BarParameters[0].barLabel = "Please Select " + Preferences.Get("total", "").ToString() + " Meals";
         }
 
@@ -2014,15 +2232,16 @@ namespace MTYD.ViewModel
             Debug.WriteLine("dayOfWeek: " + selectedDotw);
 
             selectedDate.fillColor = Color.White;
+            selectedDate.status = "Surprise / No Selection";
             //weekOneProgress.Progress = 0;
             surpriseBttn.BackgroundColor = Color.Orange;
             surpriseFrame.BackgroundColor = Color.Orange;
             surpriseBttn.TextColor = Color.White;
-            skipBttn.BackgroundColor = Color.Transparent;
-            skipFrame.BackgroundColor = Color.Transparent;
+            skipBttn.BackgroundColor = Color.White;
+            skipFrame.BackgroundColor = Color.White;
             skipBttn.TextColor = Color.Black;
-            saveBttn.BackgroundColor = Color.Transparent;
-            saveFrame.BackgroundColor = Color.Transparent;
+            saveBttn.BackgroundColor = Color.White;
+            saveFrame.BackgroundColor = Color.White;
             saveBttn.TextColor = Color.Black;
             resetAll();
             mealsSaved.Clear();
@@ -2061,10 +2280,15 @@ namespace MTYD.ViewModel
             BarParameters[0].margin = 0;
             BarParameters[0].update = 0;
             BarParameters[0].mealsLeft = "Please Select " + Preferences.Get("total", "").ToString() + " Meals";
+            mealsLeftLabel.Text = "Select " + Preferences.Get("total", "").ToString() + " meals";
             BarParameters[0].barLabel = "Please Select " + Preferences.Get("total", "").ToString() + " Meals";
         }
         private async void surpriseMealSelection(object sender, EventArgs e)
         {
+            foreach (var ms in Meals1)
+                ms.Background = Color.White;
+            
+
             //set delivery day of the week
             string tempHolder = selectedDate.fullDateTime;
             Debug.WriteLine("year:" + tempHolder.Substring(0, 4));
@@ -2082,17 +2306,22 @@ namespace MTYD.ViewModel
             surpriseBttn.BackgroundColor = Color.Orange;
             surpriseFrame.BackgroundColor = Color.Orange;
             surpriseBttn.TextColor = Color.White;
-            skipBttn.BackgroundColor = Color.Transparent;
-            skipFrame.BackgroundColor = Color.Transparent;
+            skipBttn.BackgroundColor = Color.White;
+            skipFrame.BackgroundColor = Color.White;
             skipBttn.TextColor = Color.Black;
-            saveBttn.BackgroundColor = Color.Transparent;
-            saveFrame.BackgroundColor = Color.Transparent;
+            saveBttn.BackgroundColor = Color.White;
+            saveFrame.BackgroundColor = Color.White;
             saveBttn.TextColor = Color.Black;
+
+            for (int i = 0; i < 6; i++)
+                plates[i].Source = "";
+
             resetAll();
             mealsSaved.Clear();
             int count = Preferences.Get("total", 0);
             totalCount.Text = "SURPRISE";
             selectedDate.fillColor = Color.White;
+            selectedDate.status = "Surprise / No Selection";
             //for (int i = 0; i < Meals1.Count; i++)
             //{
             //if (Meals1[i].MealQuantity > 0)
@@ -2136,6 +2365,7 @@ namespace MTYD.ViewModel
             BarParameters[0].margin = 0;
             BarParameters[0].update = 0;
             BarParameters[0].mealsLeft = "Please Select " + Preferences.Get("total", "").ToString() + " Meals";
+            mealsLeftLabel.Text = "Select " + Preferences.Get("total", "").ToString() + " meals";
             BarParameters[0].barLabel = "Please Select " + Preferences.Get("total", "").ToString() + " Meals";
         }
 
@@ -2339,10 +2569,20 @@ namespace MTYD.ViewModel
 
 
                     if (isSkip2 == true)
+                    {
                         d.fillColor = Color.FromHex("#BBBBBB");
+                        d.status = "Skipped";
+                    }
                     else if (isAlreadySelected2 == true && isSurprise2 == false)
+                    {
                         d.fillColor = Color.FromHex("#FFBA00");
-                    else d.fillColor = Color.White;
+                        d.status = "Selected";
+                    }
+                    else
+                    {
+                        d.fillColor = Color.White;
+                        d.status = "Surprise / No Selection";
+                    }
                     Console.WriteLine("isSurprise value: " + isSurprise2 + " isSkip value: " + isSkip2);
 
 
@@ -2466,11 +2706,20 @@ namespace MTYD.ViewModel
                     }
                 }
                 if (isSkip == true)
-                    //selectedDate.fillColor = Color.FromHex("#C9C9C9");
+                {
                     selectedDate.fillColor = Color.FromHex("#BBBBBB");
+                    selectedDate.status = "Skipped";
+                }
                 else if (isAlreadySelected == true && isSurprise == false)
+                {
                     selectedDate.fillColor = Color.FromHex("#FFBA00");
-                else selectedDate.fillColor = Color.White;
+                    selectedDate.status = "Selected";
+                }
+                else
+                {
+                    selectedDate.fillColor = Color.White;
+                    selectedDate.status = "Surprise / No Selection";
+                }
                 Console.WriteLine("isSurprise value: " + isSurprise + " isSkip value: " + isSkip);
                 return;
                 Console.WriteLine("Trying to enter second for loop in Get Recent Selection");

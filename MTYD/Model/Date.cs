@@ -11,8 +11,9 @@ namespace MTYD.Model
 
         public event PropertyChangedEventHandler PropertyChanged;
         public string dotw { get; set; }
-        public string month { get; set; }
-        public string day { get; set; }
+        //public string month { get; set; }
+        public string date { get; set; }
+        public string Status { get; set; }
         public string fullDateTime { get; set; }
         //public Color fillColor { get; set; }
         public int index { get; set; }
@@ -46,6 +47,23 @@ namespace MTYD.Model
             get
             {
                 return Outline;
+            }
+
+        }
+
+        public string status
+        {
+            set
+            {
+                if (Status != value)
+                {
+                    Status = value;
+                    OnPropertyChanged("status");
+                }
+            }
+            get
+            {
+                return Status;
             }
 
         }
