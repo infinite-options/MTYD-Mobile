@@ -478,7 +478,7 @@ namespace MTYD.ViewModel
                 if (addOnCount % 2 != 0)
                     addOnCount++;
                 weekOneMenu.HeightRequest = 320 * ((mealCount / 2));
-                weekOneAddOns.HeightRequest = 290 * ((addOnCount / 2));
+                weekOneAddOns.HeightRequest = 320 * ((addOnCount / 2));
                 //weekOneMenu.ItemsSource = Meals1;
                 //commented out to test
                 //if (mealCount % 2 != 0)
@@ -1701,7 +1701,7 @@ namespace MTYD.ViewModel
                         if (m["purchase_status"].ToString() != "CANCELLED and REFUNDED")
                         {
                             itemsArray.Add((m["items"].ToString()));
-                            purchIdArray.Add((m["purchase_id"].ToString()));
+                            purchIdArray.Add((m["purchase_uid"].ToString()));
                         }
                     }
 

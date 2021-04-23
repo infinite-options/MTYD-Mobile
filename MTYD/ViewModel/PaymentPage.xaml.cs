@@ -77,6 +77,8 @@ namespace MTYD.ViewModel
         bool paymentSucceed = false;
         string new_purchase_id = "";
         string guestSalt = "";
+        string checkoutAdd, checkoutUnit, checkoutCity, checkoutState, checkoutZip;
+        bool onStripeScreen = false;
 
         Model.Address addr;
 
@@ -198,7 +200,7 @@ namespace MTYD.ViewModel
             {
                 menu.IsVisible = false;
                 innerGrid.IsVisible = false;
-                topBackButton.IsVisible = true;
+                //topBackButton.IsVisible = true;
             }
 
             Console.WriteLine("hashed password: " + Preferences.Get("hashed_password", ""));
@@ -236,8 +238,7 @@ namespace MTYD.ViewModel
                 orangeBox.HeightRequest = height / 2;
                 orangeBox.Margin = new Thickness(0, -height / 2.2, 0, 0);
                 orangeBox.CornerRadius = height / 40;
-                heading.FontSize = width / 32;
-                heading.Margin = new Thickness(0, 0, 0, 30);
+                heading.WidthRequest = width / 3;
                 pfp.HeightRequest = width / 20;
                 pfp.WidthRequest = width / 20;
                 pfp.CornerRadius = (int)(width / 40);
@@ -265,46 +266,10 @@ namespace MTYD.ViewModel
                 menu.WidthRequest = width / 25;
                 menu.Margin = new Thickness(25, 0, 0, 30);
 
-                topBackButton.HeightRequest = width / 25;
-                topBackButton.WidthRequest = width / 25;
-                topBackButton.Margin = new Thickness(25, 0, 0, 30);
+                //topBackButton.HeightRequest = width / 25;
+                //topBackButton.WidthRequest = width / 25;
+                //topBackButton.Margin = new Thickness(25, 0, 0, 30);
 
-                firstName.CornerRadius = 22;
-                firstName.HeightRequest = 35;
-                lastName.CornerRadius = 22;
-                lastName.HeightRequest = 35;
-
-                emailAdd.CornerRadius = 22;
-                emailAdd.HeightRequest = 35;
-
-                street.CornerRadius = 22;
-                street.HeightRequest = 35;
-
-                unit.CornerRadius = 22;
-                unit.HeightRequest = 35;
-                city.CornerRadius = 22;
-                city.HeightRequest = 35;
-                state.CornerRadius = 22;
-                state.HeightRequest = 35;
-
-                zipCode.CornerRadius = 22;
-                zipCode.HeightRequest = 35;
-
-                addressList.HeightRequest = width / 5;
-                
-
-                phoneNum.CornerRadius = 22;
-                phoneNum.HeightRequest = 35;
-
-                password.CornerRadius = 22;
-                password2.CornerRadius = 22;
-                checkoutButton.CornerRadius = 24;
-
-                //mapFrame.Margin = new Thickness(width / 50, 0);
-                mapFrame.Margin = new Thickness(20, 0);
-
-                deliveryInstr.CornerRadius = 22;
-                //SignUpButton.CornerRadius = 25;
             }
             else //android
             {
@@ -337,13 +302,19 @@ namespace MTYD.ViewModel
             }
 
             fillEntriesDeliv();
-            saveContact.IsVisible = false;
+            //saveContact.IsVisible = false;
         }
 
 
 
         private async void clickedDeliv(object sender, EventArgs e)
         {
+            checkoutAdd = AddressEntry.Text;
+            checkoutUnit = AptEntry.Text;
+            checkoutCity = CityEntry.Text;
+            checkoutState = StateEntry.Text;
+            checkoutZip = ZipEntry.Text;
+
             //Preferences.Set("price", Preferences.Get("subtotal", "00.00"));
             string platform = Xamarin.Forms.Application.Current.Properties["platform"].ToString();
             //string passwordSalt = Preferences.Get("password_salt", "");
@@ -559,7 +530,7 @@ namespace MTYD.ViewModel
                 isAddessValidated = true;
                 Button b = (Button)sender;
                 if (b.Text == "Save")
-                    await DisplayAlert("We validated your address", "Please click on the proceed button to select a form of payment!", "OK");
+                await DisplayAlert("We validated your address", "Please click on the proceed button to select a form of payment!", "OK");
                 await Xamarin.Forms.Application.Current.SavePropertiesAsync();
                 //await tagUser(emailEntry.Text.Trim(), ZipEntry.Text.Trim());
 
@@ -676,7 +647,8 @@ namespace MTYD.ViewModel
                     }
 
                     Preferences.Set("price", Preferences.Get("subtotal", "00.00"));
-                    subtotalTitle.Text = "Meal Subscription \n(" + Preferences.Get("item_name", "").Substring(0, 1) + " Meals for " + Preferences.Get("freqSelected", "") + " Deliveries): ";
+                    subtotalTitle.Text = "Meal Subscription \n" + Preferences.Get("item_name", "").Substring(0, 1) + " meals for " + Preferences.Get("freqSelected", "") + " deliveries";
+                    meal_delivery_num.Text = Preferences.Get("item_name", "").Substring(0, 1) + " meals for " + Preferences.Get("freqSelected", "") + " deliveries";
                     deliveryTitle.Text = "Total Delivery Fee For All " + Preferences.Get("freqSelected", "") + " Deliveries: ";
 
 
@@ -818,7 +790,7 @@ namespace MTYD.ViewModel
             Debug.WriteLine("delivery entry key used: " + savedAdd);
 
             //DisplayAlert("Success", "delivery info saved.", "OK");
-            saveDeliv.IsVisible = false;
+            //saveDeliv.IsVisible = false;
         }
 
         public static string GetXMLElement(XElement element, string name)
@@ -844,17 +816,23 @@ namespace MTYD.ViewModel
         private void DeliveryAdd_TextChanged(object sender, TextChangedEventArgs e)
         {
             paymentStack.IsVisible = false;
-            saveDeliv.IsVisible = true;
+            //saveDeliv.IsVisible = true;
         }
 
         private void ContactInfo_TextChanged(object sender, TextChangedEventArgs e)
         {
-            saveContact.IsVisible = true;
+            //saveContact.IsVisible = true;
         }
 
         async Task clickedProceed(object sender, EventArgs e)
         {
             Preferences.Set("price", Preferences.Get("subtotal", ""));
+
+            checkoutAdd = AddressEntry.Text;
+            checkoutUnit = AptEntry.Text;
+            checkoutCity = CityEntry.Text;
+            checkoutState = StateEntry.Text;
+            checkoutZip = ZipEntry.Text;
 
             clickedSaveContact(sender, e);
             clickedDeliv(sender, e);
@@ -999,7 +977,7 @@ namespace MTYD.ViewModel
             Button b = (Button)sender;
             if (b.Text == "Save")
                 DisplayAlert("Success", "Contact info saved.", "OK");
-            saveContact.IsVisible = false;
+            //saveContact.IsVisible = false;
         }
 
         async void clickedBack(System.Object sender, System.EventArgs e)
@@ -1020,40 +998,56 @@ namespace MTYD.ViewModel
             {
                 grandTotalValue -= tipValue;
 
-                tipOpt1.BackgroundColor = Color.FromHex("#FFBA00");
-                tipOpt2.BackgroundColor = Color.FromHex("#F5F5F5");
-                tipOpt3.BackgroundColor = Color.FromHex("#F5F5F5");
-                tipOpt4.BackgroundColor = Color.FromHex("#F5F5F5");
+                tipOpt1.BackgroundColor = Color.FromHex("#F26522");
+                tipOpt2.BackgroundColor = Color.FromHex("#ffffff");
+                tipOpt3.BackgroundColor = Color.FromHex("#ffffff");
+                tipOpt4.BackgroundColor = Color.FromHex("#ffffff");
+                tipOpt1.TextColor = Color.FromHex("#ffffff");
+                tipOpt2.TextColor = Color.FromHex("#000000");
+                tipOpt3.TextColor = Color.FromHex("#000000");
+                tipOpt4.TextColor = Color.FromHex("#000000");
                 tipPrice.Text = "$0";
             }
             else if (button1.Text == tipOpt2.Text)
             {
                 grandTotalValue -= tipValue;
 
-                tipOpt1.BackgroundColor = Color.FromHex("#F5F5F5");
-                tipOpt2.BackgroundColor = Color.FromHex("#FFBA00");
-                tipOpt3.BackgroundColor = Color.FromHex("#F5F5F5");
-                tipOpt4.BackgroundColor = Color.FromHex("#F5F5F5");
+                tipOpt1.BackgroundColor = Color.FromHex("#ffffff");
+                tipOpt2.BackgroundColor = Color.FromHex("#F26522");
+                tipOpt3.BackgroundColor = Color.FromHex("#ffffff");
+                tipOpt4.BackgroundColor = Color.FromHex("#ffffff");
+                tipOpt1.TextColor = Color.FromHex("#000000");
+                tipOpt2.TextColor = Color.FromHex("#ffffff");
+                tipOpt3.TextColor = Color.FromHex("#000000");
+                tipOpt4.TextColor = Color.FromHex("#000000");
                 tipPrice.Text = tipOpt2.Text;
             }
             else if (button1.Text == tipOpt3.Text)
             {
                 grandTotalValue -= tipValue;
 
-                tipOpt1.BackgroundColor = Color.FromHex("#F5F5F5");
-                tipOpt2.BackgroundColor = Color.FromHex("#F5F5F5");
-                tipOpt3.BackgroundColor = Color.FromHex("#FFBA00");
-                tipOpt4.BackgroundColor = Color.FromHex("#F5F5F5");
+                tipOpt1.BackgroundColor = Color.FromHex("#ffffff");
+                tipOpt2.BackgroundColor = Color.FromHex("#ffffff");
+                tipOpt3.BackgroundColor = Color.FromHex("#F26522");
+                tipOpt4.BackgroundColor = Color.FromHex("#ffffff");
+                tipOpt1.TextColor = Color.FromHex("#000000");
+                tipOpt2.TextColor = Color.FromHex("#000000");
+                tipOpt3.TextColor = Color.FromHex("#ffffff");
+                tipOpt4.TextColor = Color.FromHex("#000000");
                 tipPrice.Text = tipOpt3.Text;
             }
             else
             {
                 grandTotalValue -= tipValue;
 
-                tipOpt1.BackgroundColor = Color.FromHex("#F5F5F5");
-                tipOpt2.BackgroundColor = Color.FromHex("#F5F5F5");
-                tipOpt3.BackgroundColor = Color.FromHex("#F5F5F5");
-                tipOpt4.BackgroundColor = Color.FromHex("#FFBA00");
+                tipOpt1.BackgroundColor = Color.FromHex("#ffffff");
+                tipOpt2.BackgroundColor = Color.FromHex("#ffffff");
+                tipOpt3.BackgroundColor = Color.FromHex("#ffffff");
+                tipOpt4.BackgroundColor = Color.FromHex("#F26522");
+                tipOpt1.TextColor = Color.FromHex("#000000");
+                tipOpt2.TextColor = Color.FromHex("#000000");
+                tipOpt3.TextColor = Color.FromHex("#000000");
+                tipOpt4.TextColor = Color.FromHex("#ffffff");
                 tipPrice.Text = tipOpt4.Text;
             }
 
@@ -1310,11 +1304,16 @@ namespace MTYD.ViewModel
             newPayment.delivery_last_name = LNameEntry.Text;
             newPayment.delivery_email = emailEntry.Text;
             newPayment.delivery_phone = PhoneEntry.Text;
-            newPayment.delivery_address = AddressEntry.Text;
-            newPayment.delivery_unit = Preferences.Get("unitNum", "");
-            newPayment.delivery_city = CityEntry.Text;
-            newPayment.delivery_state = StateEntry.Text;
-            newPayment.delivery_zip = ZipEntry.Text;
+            //newPayment.delivery_address = AddressEntry.Text;
+            //newPayment.delivery_unit = Preferences.Get("unitNum", "");
+            //newPayment.delivery_city = CityEntry.Text;
+            //newPayment.delivery_state = StateEntry.Text;
+            //newPayment.delivery_zip = ZipEntry.Text;
+            newPayment.delivery_address = checkoutAdd;
+            newPayment.delivery_unit = checkoutUnit;
+            newPayment.delivery_city = checkoutCity;
+            newPayment.delivery_state = checkoutState;
+            newPayment.delivery_zip = checkoutZip;
             //newPayment.delivery_instructions = DeliveryEntry;
             newPayment.delivery_instructions = DeliveryEntry.Text;
             newPayment.delivery_longitude = "";
@@ -1514,6 +1513,9 @@ namespace MTYD.ViewModel
         // FUNCTION  1:
         public async void CheckouWithStripe(System.Object sender, System.EventArgs e)
         {
+            onStripeScreen = true;
+
+
             paymentMethod = "STRIPE";
             fillEntries();
 
@@ -2049,6 +2051,8 @@ namespace MTYD.ViewModel
         // FUNCTION  4:
         public void CancelViaStripe(System.Object sender, System.EventArgs e)
         {
+            onStripeScreen = false;
+
             headingGrid.IsVisible = true;
             checkoutButton.IsVisible = true;
             backButton.IsVisible = true;
@@ -2480,7 +2484,7 @@ namespace MTYD.ViewModel
             if (((Entry)sender).Equals(AddressEntry))
             {
                 paymentStack.IsVisible = false;
-                saveDeliv.IsVisible = true;
+                //saveDeliv.IsVisible = true;
                 addr.OnAddressChanged(addressList, Addresses, _addressText);
             }
             else

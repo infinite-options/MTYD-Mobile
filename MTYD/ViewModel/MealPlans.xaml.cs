@@ -49,6 +49,7 @@ namespace MTYD.ViewModel
 
         public MealPlans(string firstName, string lastName, string email)
         {
+            info_obj = null;
             activePlans.Clear();
             itemsArray.Clear();
             purchIdArray.Clear();
@@ -66,7 +67,10 @@ namespace MTYD.ViewModel
             NavigationPage.SetHasNavigationBar(this, false);
             checkPlatform(height, width);
             getMealsSelected();
-            GetMealPlans();
+            _ = GetMealPlans();
+
+            //if (namesArray.Count != 0)
+            //    planPicker.SelectedIndex = 0;
         }
 
         public async void getFrequency()
@@ -236,65 +240,8 @@ namespace MTYD.ViewModel
                 this.userProfileInfo.Clear();
                 //Console.WriteLine("info_obj: " + info_obj);
 
-                ////ArrayList item_price = new ArrayList();
-                ////ArrayList num_items = new ArrayList();
-                ////ArrayList payment_frequency = new ArrayList();
-                ////ArrayList groupArray = new ArrayList();
-
-                //if ((info_obj["result"]).ToString() == "[]")
-                //{
-                //    Console.WriteLine("no info");
-
-                //    FNameEntry.Placeholder = "First Name*";
-                //    LNameEntry.Placeholder = "Last Name*";
-                //    emailEntry.Placeholder = "Email*";
-                //    AddressEntry.Placeholder = "Street*";
-                //    AptEntry.Placeholder = "Unit";
-                //    CityEntry.Placeholder = "City*";
-                //    StateEntry.Placeholder = "State*";
-                //    ZipEntry.Placeholder = "Zip*";
-                //    PhoneEntry.Placeholder = "Phone Number*";
-
-
-                //return;
-                //}
-
-                //Console.WriteLine("delivery first name: " + (info_obj["result"])[0]["selection_uid"]);
-                //FNameEntry.Text = (info_obj["result"])[0]["delivery_first_name"].ToString();
-                //if (FNameEntry.Text == "")
-                //    FNameEntry.Text = "First Name*";
-
-                //LNameEntry.Text = (info_obj["result"])[0]["delivery_last_name"].ToString();
-                //if (LNameEntry.Text == "")
-                //    LNameEntry.Text = "Last Name*";
-
-                //emailEntry.Text = (info_obj["result"])[0]["delivery_email"].ToString();
-                //if (emailEntry.Text == "")
-                //    emailEntry.Text = "Email*";
-
-                //AddressEntry.Text = (info_obj["result"])[0]["delivery_address"].ToString();
-                //if (AddressEntry.Text == "")
-                //    AddressEntry.Text = "Street*";
-
-                //AptEntry.Text = (info_obj["result"])[0]["delivery_unit"].ToString();
-                //if (AptEntry.Text == "")
-                //    AptEntry.Text = "Unit";
-
-                //CityEntry.Text = (info_obj["result"])[0]["delivery_city"].ToString();
-                //if (CityEntry.Text == "")
-                //    CityEntry.Text = "City*";
-
-                //StateEntry.Text = (info_obj["result"])[0]["delivery_state"].ToString();
-                //if (StateEntry.Text == "")
-                //    StateEntry.Text = "State*";
-
-                //ZipEntry.Text = (info_obj["result"])[0]["delivery_zip"].ToString();
-                //if (ZipEntry.Text == "")
-                //    ZipEntry.Text = "Zip*";
-
-                //PhoneEntry.Text = (info_obj["result"])[0]["delivery_phone_num"].ToString();
-                //if (PhoneEntry.Text == "")
-                //    PhoneEntry.Text = "Phone Number*";
+                while (info_obj == null)
+                    await Task.Delay(100);
             }
         }
 
@@ -312,10 +259,27 @@ namespace MTYD.ViewModel
 
             Console.WriteLine("after frequency " + frequency);
 
-            if ((info_obj["result"]).ToString() == "[]")
+            if (info_obj == null)
             {
-                return;
+                while (info_obj == null)
+                    await Task.Delay(100);
+
+                if (info_obj != null && (info_obj["result"]).ToString() == "[]")
+                {
+                    return;
+                }
             }
+            else
+            {
+                if ((info_obj["result"]).ToString() == "[]")
+                {
+                    return;
+                }
+            }
+            //if ((info_obj["result"]).ToString() == "[]")
+            //{
+            //    return;
+            //}
 
             //old
             //chosenPurchUid = (info_obj["result"])[planPicker.SelectedIndex]["purchase_uid"].ToString();
@@ -485,6 +449,9 @@ namespace MTYD.ViewModel
                 planPicker.ItemsSource = namesArray;
                 Console.WriteLine("namesArray contents:" + namesArray[0].ToString());
                 //SubscriptionPicker.Title = namesArray[0];
+
+                if (namesArray.Count != 0)
+                    planPicker.SelectedIndex = 0;
 
                 Console.WriteLine("END OF GET MEAL PLANS FUNCTION");
             }

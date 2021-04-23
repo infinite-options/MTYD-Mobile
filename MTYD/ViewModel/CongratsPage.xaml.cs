@@ -57,6 +57,7 @@ namespace MTYD.ViewModel
             {
                 menu.IsVisible = false;
                 innerGrid.IsVisible = false;
+                createAccount.IsVisible = false;
             }
 
             InitializeSignUpPost();
@@ -139,75 +140,73 @@ namespace MTYD.ViewModel
 
             if (Device.RuntimePlatform == Device.iOS)
             {
-                heading.FontSize = width / 32;
-                heading.Margin = new Thickness(0, 0, 0, 30);
+                heading.WidthRequest = width / 3;
 
-                congratsTitle.FontSize = width / 25;
-                expectTitle.FontSize = width / 30;
-                createAccountTitle.FontSize = width / 30;
+                //congratsTitle.FontSize = width / 25;
+                //expectTitle.FontSize = width / 30;
+                //createAccountTitle.FontSize = width / 30;
 
-                expect1.HeightRequest = width / 10;
+                //expect1.HeightRequest = width / 10;
 
-                googleButton.HeightRequest = width / 13;
-                googleButton.WidthRequest = width / 13;
-                googleButton.CornerRadius = (int)(width / 26);
-                fbButton.HeightRequest = width / 13;
-                fbButton.WidthRequest = width / 13;
-                fbButton.CornerRadius = (int)(width / 26);
-                appleButton.HeightRequest = width / 13;
-                appleButton.WidthRequest = width / 13;
-                appleButton.CornerRadius = (int)(width / 26);
+                //googleButton.HeightRequest = width / 13;
+                //googleButton.WidthRequest = width / 13;
+                //googleButton.CornerRadius = (int)(width / 26);
+                //fbButton.HeightRequest = width / 13;
+                //fbButton.WidthRequest = width / 13;
+                //fbButton.CornerRadius = (int)(width / 26);
+                //appleButton.HeightRequest = width / 13;
+                //appleButton.WidthRequest = width / 13;
+                //appleButton.CornerRadius = (int)(width / 26);
 
-                passwordFrame.WidthRequest = width / 3;
-                passwordFrame.HeightRequest = width / 20;
-                confirmPasswordFrame.WidthRequest = width / 3;
-                passwordFrame.HeightRequest = width / 20;
+                //passwordFrame.WidthRequest = width / 3;
+                //passwordFrame.HeightRequest = width / 20;
+                //confirmPasswordFrame.WidthRequest = width / 3;
+                //passwordFrame.HeightRequest = width / 20;
 
-                finishButton.WidthRequest = width / 5;
-                finishButton.HeightRequest = width / 20;
-                finishButton.CornerRadius = (int)(width / 40);
+                //finishButton.WidthRequest = width / 5;
+                //finishButton.HeightRequest = width / 20;
+                //finishButton.CornerRadius = (int)(width / 40);
 
-                divider.Margin = new Thickness(width / 15, height / 80, width / 15, height / 100);
+                //divider.Margin = new Thickness(width / 15, height / 80, width / 15, height / 100);
 
-                //skipButton.WidthRequest = width / 2;
-                skipButton.HeightRequest = width / 20;
-                skipButton.CornerRadius = (int)(width / 40);
+                ////skipButton.WidthRequest = width / 2;
+                //skipButton.HeightRequest = width / 20;
+                //skipButton.CornerRadius = (int)(width / 40);
             }
             else //Android
             {
-                heading.FontSize = width / 40;
-                heading.Margin = new Thickness(0, 0, 0, 25);
+                heading.WidthRequest = width / 3;
 
-                congratsTitle.FontSize = width / 35;
-                expectTitle.FontSize = width / 35;
-                createAccountTitle.FontSize = width / 35;
+                //congratsTitle.FontSize = width / 35;
+                //expectTitle.FontSize = width / 35;
+                //createAccountTitle.FontSize = width / 35;
 
-                expect1.HeightRequest = width / 15;
+                //expect1.HeightRequest = width / 15;
 
-                googleButton.HeightRequest = width / 15;
-                googleButton.WidthRequest = width / 15;
-                googleButton.CornerRadius = (int)(width / 30);
-                fbButton.HeightRequest = width / 15;
-                fbButton.WidthRequest = width / 15;
-                fbButton.CornerRadius = (int)(width / 30);
-                appleButton.HeightRequest = width / 15;
-                appleButton.WidthRequest = width / 15;
-                appleButton.CornerRadius = (int)(width / 30);
+                //googleButton.HeightRequest = width / 15;
+                //googleButton.WidthRequest = width / 15;
+                //googleButton.CornerRadius = (int)(width / 30);
+                //fbButton.HeightRequest = width / 15;
+                //fbButton.WidthRequest = width / 15;
+                //fbButton.CornerRadius = (int)(width / 30);
+                //appleButton.HeightRequest = width / 15;
+                //appleButton.WidthRequest = width / 15;
+                //appleButton.CornerRadius = (int)(width / 30);
 
-                passwordFrame.WidthRequest = width / 3;
-                passwordFrame.HeightRequest = width / 30;
-                confirmPasswordFrame.WidthRequest = width / 3;
-                passwordFrame.HeightRequest = width / 30;
+                //passwordFrame.WidthRequest = width / 3;
+                //passwordFrame.HeightRequest = width / 30;
+                //confirmPasswordFrame.WidthRequest = width / 3;
+                //passwordFrame.HeightRequest = width / 30;
 
-                finishButton.WidthRequest = width / 5;
-                finishButton.HeightRequest = width / 20;
-                finishButton.CornerRadius = (int)(width / 40);
+                //finishButton.WidthRequest = width / 5;
+                //finishButton.HeightRequest = width / 20;
+                //finishButton.CornerRadius = (int)(width / 40);
 
-                divider.Margin = new Thickness(width / 15, height / 80, width / 15, height / 120);
+                //divider.Margin = new Thickness(width / 15, height / 80, width / 15, height / 120);
 
-                skipButton.WidthRequest = width / 2;
-                skipButton.HeightRequest = width / 20;
-                skipButton.CornerRadius = (int)(width / 40);
+                //skipButton.WidthRequest = width / 2;
+                //skipButton.HeightRequest = width / 20;
+                //skipButton.CornerRadius = (int)(width / 40);
             }
         }
 
@@ -236,6 +235,12 @@ namespace MTYD.ViewModel
         {
             MainPage mainPage = new MainPage();
             mainPage.facebookLoginButtonClicked(sender, e);
+        }
+
+        public async void selectMealClicked(object sender, EventArgs e)
+        {
+            Zones[] passZone = new Zones[0];
+            await Navigation.PushAsync(new Select(passZone, cust_firstName, cust_lastName, cust_email));
         }
 
         public void InitializeSignUpPost()
@@ -269,6 +274,7 @@ namespace MTYD.ViewModel
             await Navigation.PushAsync(new Select(passZone, cust_firstName, cust_lastName, cust_email));
         }
 
+        /*
         public async void finishClicked(object sender, EventArgs e)
         {
             if (passwordEntry.Text != null && passwordEntry.Text == confirmPasswordEntry.Text)
@@ -301,8 +307,6 @@ namespace MTYD.ViewModel
             {
                 await DisplayAlert("Error", "Please enter a password or click SKIP.", "OK");
                 return;
-                //Zones[] passZone = new Zones[0];
-                //await Navigation.PushAsync(new Select(passZone, cust_firstName, cust_lastName, cust_email));
             }
             //if (passwordEntry.Text != null)
             //{
@@ -413,7 +417,7 @@ namespace MTYD.ViewModel
             //    //await tagUser(Preferences.Get(savedEmail, ""), Preferences.Get(savedZip, ""));
             //    //SignUpNewUser(sender, e);
             //}
-        }
+        }*/
 
         public static string GetXMLElement(XElement element, string name)
         {

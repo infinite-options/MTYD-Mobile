@@ -230,6 +230,29 @@
     <BundleResource Include="Resources\info.png" />
     <BundleResource Include="Resources\heartoutline.png" />
     <BundleResource Include="Resources\heart.png" />
+    <BundleResource Include="Resources\new_background.png" />
+    <BundleResource Include="Resources\new_appleicon.png" />
+    <BundleResource Include="Resources\new_fbicon.png" />
+    <BundleResource Include="Resources\new_googleicon.png" />
+    <BundleResource Include="Resources\new_loginicon.png" />
+    <BundleResource Include="Resources\fbicon_white.png" />
+    <BundleResource Include="Resources\insicon_white.png" />
+    <BundleResource Include="Resources\button_card.png" />
+    <BundleResource Include="Resources\button_choose.png" />
+    <BundleResource Include="Resources\button_deliver.png" />
+    <BundleResource Include="Resources\button_search.png" />
+    <BundleResource Include="Resources\path1.png" />
+    <BundleResource Include="Resources\path2.png" />
+    <BundleResource Include="Resources\path3.png" />
+    <BundleResource Include="Resources\heading.png" />
+    <BundleResource Include="Resources\new_menu.png" />
+    <BundleResource Include="Resources\delivery_num_button.png" />
+    <BundleResource Include="Resources\meal_num_button_orange.png" />
+    <BundleResource Include="Resources\meal_num_button_yellow.png" />
+    <BundleResource Include="Resources\congrats_path3.png" />
+    <BundleResource Include="Resources\congrats_path4.png" />
+    <BundleResource Include="Resources\congrats_path1.png" />
+    <BundleResource Include="Resources\congrats_path2.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AppleSignIn\" />

@@ -575,7 +575,7 @@ namespace MTYD.ViewModel
 
                 if (addOnCount % 2 != 0)
                     addOnCount++;
-                weekOneAddOns.HeightRequest = 280 * ((addOnCount / 2));
+                weekOneAddOns.HeightRequest = 320 * ((addOnCount / 2));
                 Debug.WriteLine("mealCount:" + mealCount.ToString());
                 Debug.WriteLine("mealCount half:" + ((int)(mealCount / 2)).ToString());
                 Debug.WriteLine("height:" + weekOneMenu.HeightRequest.ToString());
