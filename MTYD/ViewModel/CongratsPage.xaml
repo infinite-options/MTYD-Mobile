@@ -11,8 +11,8 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     
-                    <BoxView x:Name="orangeBox" BackgroundColor="#FF9E19" HorizontalOptions="Fill"/>
-                    <Label x:Name="heading" Text="CONGRATS" FontAttributes="Bold" VerticalOptions="End" HorizontalTextAlignment="Center" TextColor="Black"/>
+                    <BoxView x:Name="orangeBox" BackgroundColor="#F26522" HorizontalOptions="Fill"/>
+                    <Image x:Name="heading" Source="heading.png" WidthRequest="80" VerticalOptions="End" HorizontalOptions="Center"/>
 
                      <Grid x:Name="innerGrid" VerticalOptions="End" HorizontalOptions="End">
                         <Grid.RowDefinitions>
@@ -20,12 +20,78 @@
                         </Grid.RowDefinitions>
                         <ImageButton x:Name="pfp" BackgroundColor="LightGray" VerticalOptions="End" HorizontalOptions="End" Clicked="clickedPfp"/>
                         <Label x:Name="initials" TextColor="Black" FontAttributes="Bold" VerticalOptions="Center"  HorizontalOptions="Center"/>
+                     </Grid>
+
+                     <ImageButton x:Name="menu" Source="new_menu.png" VerticalOptions="End" HorizontalOptions="Start" Clicked="clickedMenu"/>
+                </Grid>
+
+                <BoxView HeightRequest="10"/>
+
+                <Grid HorizontalOptions="Fill" ColumnSpacing="5" BackgroundColor="#f8bb17" Padding="20, 10" Margin="0, 0, 0, 15">
+                    <Label Text="Congratulations!" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Center" BackgroundColor="Transparent" FontSize="20"/>
+                </Grid>
+
+                <Label Text="Your first delivery will arrive on:" TextColor="Black" FontSize="18" HorizontalOptions="Start" Margin="20, 0"/>
+                <Label x:Name="firstDelivery" Text="" TextColor="Black" FontAttributes="Bold" FontSize="18" HorizontalOptions="Start" Margin="20, 0, 0, 10"/>
+                <Label Text="To your address:" TextColor="Black" FontSize="18" HorizontalOptions="Start" Margin="20, 0"/>
+                <Label x:Name="toAddress" Text="" TextColor="Black" FontAttributes="Bold" FontSize="18" HorizontalOptions="Start" Margin="20, 0, 0, 20"/>
+
+                <Label Text="What's next?" TextColor="Black" FontAttributes="Bold" HorizontalOptions="Center" FontSize="20"/>
+
+                <Grid x:Name="createAccount" RowSpacing="0" Margin="0, -5, 0, -10" IsVisible="false">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Image Grid.Row="0" Source="congrats_path1.png" HorizontalOptions="Start" Margin="80, 0, 0, -10"/>
+
+                    <Button Grid.Row="1" x:Name= "createAccountButton" BackgroundColor="#F26522" Text="Create an Account Password" TextColor="White" FontSize="18" Margin="50, 10, 50, 0" Padding="0, 15"
+                        CornerRadius="15"/>
+
+                    <Image Grid.Row="2" Source="congrats_path2.png"/>
+                </Grid>
+
+                <Button x:Name= "SelectMealButton" BackgroundColor="#F26522" Text="Select your meals" TextColor="White" FontSize="18" Margin="50, 10, 50, 0" Padding="0, 15"
+                        CornerRadius="15" Clicked="selectMealClicked"/>
+
+                <Grid RowSpacing="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Image Grid.Row="0" Source="congrats_path3.png"/>
+
+                    <Grid Grid.Row="1" Margin="50,0" ColumnSpacing="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Frame Grid.Column="0" HasShadow="False" BorderColor="#F26522" CornerRadius="20" HorizontalOptions="Start" VerticalOptions="Center"
+                               Padding="15, 15" WidthRequest="100">
+                            <StackLayout>
+                                <Label Text="Receive your" TextColor="Black" HorizontalTextAlignment="Center"/>
+                                <Label Text="meals" TextColor="Black" HorizontalTextAlignment="Center" Margin="-5"/>
+                            </StackLayout>
+                        </Frame>
+
+                        <Frame Grid.Column="1" HasShadow="False" BorderColor="#F26522" CornerRadius="20" HorizontalOptions="End" VerticalOptions="Center"
+                               Padding="15, 15" WidthRequest="100">
+                            <StackLayout>
+                                <Label Text="Heat and" TextColor="Black" HorizontalTextAlignment="Center"/>
+                                <Label Text="enjoy!" TextColor="Black" HorizontalTextAlignment="Center" Margin="-5"/>
+                            </StackLayout>
+                        </Frame>
                     </Grid>
 
-                     <ImageButton x:Name="menu" Source="menu2.png" VerticalOptions="End" HorizontalOptions="Start" BackgroundColor="Transparent" Clicked="clickedMenu"/>
+                    <Image Grid.Row="2" Source="congrats_path4.png"/>
                 </Grid>
             
-                <StackLayout Padding="30, 0">
+                <!--<StackLayout Padding="30, 0" IsVisible="false" >
                  
 
                     <BoxView HeightRequest="20"/>
@@ -113,7 +179,6 @@
                         <Button x:Name="finishButton" BackgroundColor="#f0a13f" BorderColor="Black" BorderWidth="2" Margin="0,10"
                                 Text="SIGN UP" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Center" Clicked="finishClicked"/>
 
-                        <!-- or divider -->
                         <Grid x:Name="divider" VerticalOptions="Center" ColumnSpacing="15">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="1*"/>
@@ -135,7 +200,7 @@
                                 Text="SKIP TO MEAL SELECTION" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Center" Clicked="skipClicked"/>
 
                     </StackLayout>
-                </StackLayout>
+                </StackLayout>-->
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>

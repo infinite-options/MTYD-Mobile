@@ -8,35 +8,13 @@
     <ContentPage.Content>
         <ScrollView x:Name="scroller">
             <StackLayout x:Name="StackL" BackgroundColor="White">
-
-                <!--<AbsoluteLayout>
-
-                    <BoxView x:Name="orangeBox" BackgroundColor="#FF9E19" 
-                           Margin="0, -100, 0, 0"
-                           AbsoluteLayout.LayoutBounds="0.5, 0, 1, 70"
-                           AbsoluteLayout.LayoutFlags="PositionProportional,WidthProportional"/>
-
-                    <Label Text="DELIVERY INFO" FontSize="25" FontAttributes="Bold"
-                           AbsoluteLayout.LayoutBounds="0.5, 0.23"
-                           AbsoluteLayout.LayoutFlags="PositionProportional"/>
-
-                    <ImageButton x:Name="pfp" BackgroundColor="LightGray" HeightRequest="40" WidthRequest="40"
-                                 AbsoluteLayout.LayoutBounds="0.93, 0.15" Clicked="clickedPfp"
-                                 AbsoluteLayout.LayoutFlags="PositionProportional"/>
-
-                    <ImageButton x:Name="menu" Source="menu.png" HeightRequest="40" WidthRequest="40"
-                                 AbsoluteLayout.LayoutBounds="0.07, 0.15" Scale="0.8" Clicked="clickedMenu"
-                                 AbsoluteLayout.LayoutFlags="PositionProportional"/>
-                </AbsoluteLayout>-->
-
-                <Grid x:Name="headingGrid">
+                    <!--<Grid x:Name="headingGrid">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     
                     <BoxView x:Name="orangeBox" BackgroundColor="#FF9E19" HorizontalOptions="Fill"/>
                     <Label x:Name="heading" Text="CHECKOUT" FontAttributes="Bold" VerticalOptions="End" HorizontalTextAlignment="Center" TextColor="Black"/>
-                    <!--<Label x:Name="heading" Text="MENU THIS WEEK" FontAttributes="Bold" VerticalOptions="End" HorizontalTextAlignment="Center" TextColor="Black"/>-->
                     <Grid x:Name="innerGrid" VerticalOptions="End" HorizontalOptions="End">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
@@ -48,13 +26,91 @@
 
                     <ImageButton x:Name="menu" Source="menu2.png" VerticalOptions="End" HorizontalOptions="Start" BackgroundColor="Transparent" Clicked="clickedMenu"/>
                     <Button x:Name="topBackButton" BackgroundColor="Transparent" Text="&lt;" TextColor="Black" FontAttributes="Bold" FontSize="25" HorizontalOptions="Start" VerticalOptions="End" IsVisible="false" Clicked="clickedBack"/>
+                </Grid>-->
+
+                <Grid x:Name="headingGrid">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    
+                    <BoxView x:Name="orangeBox" BackgroundColor="#F26522" HorizontalOptions="Fill"/>
+                    <Image x:Name="heading" Source="heading.png" WidthRequest="80" VerticalOptions="End" HorizontalOptions="Center"/>
+
+                     <Grid x:Name="innerGrid" VerticalOptions="End" HorizontalOptions="End">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <ImageButton x:Name="pfp" BackgroundColor="LightGray" VerticalOptions="End" HorizontalOptions="End" Clicked="clickedPfp"/>
+                        <Label x:Name="initials" TextColor="Black" FontAttributes="Bold" VerticalOptions="Center"  HorizontalOptions="Center"/>
+                     </Grid>
+
+                     <ImageButton x:Name="menu" Source="new_menu.png" VerticalOptions="End" HorizontalOptions="Start" Clicked="clickedMenu"/>
                 </Grid>
 
+                <BoxView HeightRequest="10"/>
+
             <StackLayout x:Name="mainStack">
+                <Grid HorizontalOptions="Fill" ColumnSpacing="5" BackgroundColor="#f8bb16" Padding="20, 10" Margin="0, 0, 0, 10">
+                    <Label Text="Delivery Details" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Start" BackgroundColor="Transparent" FontSize="18"/>
+                </Grid>
 
-                <Label x:Name="spacer" HeightRequest="5"/>
+                <Grid x:Name="FirstandLast" HorizontalOptions="Center" VerticalOptions="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="16*"/>
+                        <ColumnDefinition Width="16*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
 
-                <Grid x:Name="DelivGrid" HorizontalOptions="Fill" VerticalOptions="Center" HeightRequest="35">
+                   <Frame x:Name="firstName" Grid.Row="0" Grid.Column="0" Padding="10,5" Margin="20,0.5,1,0.5" BackgroundColor="White" HasShadow="False"
+                          BorderColor="#F26522" CornerRadius="10">
+                        <Entry x:Name="FNameEntry" Keyboard="Text" FontSize="17" TextColor="Black" Placeholder="First Name*" PlaceholderColor="Black"
+                               TextChanged="ContactInfo_TextChanged"/>
+                   </Frame>
+
+                   <Frame x:Name="lastName" Grid.Row="0" Grid.Column="1" Padding="10,5" Margin="1,0.5,20,0.5" BackgroundColor="White" HasShadow="False"
+                          BorderColor="#F26522" CornerRadius="10">
+                        <Entry x:Name="LNameEntry" Keyboard="Text" FontSize="17" TextColor="Black" Placeholder="Last Name*" PlaceholderColor="Black"
+                               TextChanged="ContactInfo_TextChanged"/>
+                   </Frame>
+                </Grid>
+
+                <Grid x:Name="Email" HorizontalOptions="Center" VerticalOptions="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="16*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                   <Frame x:Name="emailAdd" Grid.Row="0" Grid.Column="0" Padding="10,5" Margin="20,0.5" BackgroundColor="White" HasShadow="False"
+                          BorderColor="#F26522" CornerRadius="10">
+                        <Entry x:Name="emailEntry" Keyboard="Email" FontSize="17" TextColor="Black" Placeholder="Email Address*" PlaceholderColor="Black"
+                               TextChanged="ContactInfo_TextChanged"/>
+                   </Frame>
+
+                </Grid>
+
+                <Grid x:Name="Phone" HorizontalOptions="Center" VerticalOptions="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="16*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                   <Frame x:Name="phoneNum" Grid.Row="0" Grid.Column="0" Padding="10,5" Margin="20,0.5" BackgroundColor="White" HasShadow="False"
+                          BorderColor="#F26522" CornerRadius="10">
+
+                        <Entry x:Name="PhoneEntry" MaxLength="10" Keyboard="Numeric" FontSize="17" TextColor="Black" Placeholder="Phone Number*" PlaceholderColor="Black"
+                               TextChanged="ContactInfo_TextChanged"/>
+
+                   </Frame>
+
+                </Grid>
+
+                <!--<Grid x:Name="DelivGrid" HorizontalOptions="Fill" VerticalOptions="Center" HeightRequest="35">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="3*"/>
                         <ColumnDefinition Width="1.3*"/>
@@ -69,11 +125,9 @@
                     <Button x:Name="saveDeliv" BorderColor="Black" BorderWidth="2" Text="Save" FontSize="15" HeightRequest="35" CornerRadius="17" TextColor="Black"
                             HorizontalOptions="Fill" BackgroundColor="#FFBA00" Grid.Row="0" Grid.Column="1" Margin="0,0,20,0" Clicked="clickedDeliv"/>
 
-                </Grid>
-                <!--<Label Text="DELIVERY ADDRESS" HorizontalOptions="Start" FontSize="22"
-                       Margin="25,0,0,0" FontAttributes="Bold"/>-->
+                </Grid>-->
 
-                <Label x:Name="spacer1" HeightRequest="3"/>
+                <!--<Label x:Name="spacer1" HeightRequest="3"/>-->
 
 
                 <Grid x:Name="St" HorizontalOptions="Center" VerticalOptions="Center">
@@ -84,15 +138,11 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
-                   <Frame x:Name="street" Padding="10,5" Margin="20,0.5" BackgroundColor="#FFE5B4"
-                          Grid.Row="0" Grid.Column="0" HasShadow="False" >
-
-                        <Entry x:Name="AddressEntry" Keyboard="Text" FontAttributes="Bold" FontSize="17" Placeholder="Street Address*"
-                               WidthRequest="24" BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4" Text="{Binding AddressText}"
-                               TextChanged="OnAddressChanged" Focused="addressEntryFocused" Unfocused="addressEntryUnfocused"/>
-
+                   <Frame x:Name="street" Grid.Row="0" Grid.Column="0" Padding="10,5" Margin="20,0.5" BackgroundColor="White" HasShadow="False"
+                          BorderColor="#F26522" CornerRadius="10">
+                        <Entry x:Name="AddressEntry" Keyboard="Text" FontSize="17" TextColor="Black" Placeholder="Street Address*" PlaceholderColor="Black"
+                               Text="{Binding AddressText}" TextChanged="OnAddressChanged" Focused="addressEntryFocused" Unfocused="addressEntryUnfocused"/>
                    </Frame>
-
                 </Grid>
 
                 <ListView x:Name="addressList" ItemsSource="{Binding Addresses}" IsVisible="false" Margin="15, 0, 15, 30" ItemSelected="addressSelected">
@@ -107,42 +157,22 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="1*"/>
-                        <!--<ColumnDefinition Width="12*"/>-->
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
-                   <Frame x:Name="unit" Padding="10,5" Margin="20,0.5,1,0.5" BackgroundColor="#FFE5B4"
-                          Grid.Row="0" Grid.Column="0" HasShadow="False">
-
-                        <Entry x:Name="AptEntry" Keyboard="Text" FontAttributes="Bold"
-                   FontSize="17" Placeholder="Unit"
-                    WidthRequest="8"
-                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4" TextChanged="DeliveryAdd_TextChanged"/>
-
+                   <Frame x:Name="unit" Grid.Row="0" Grid.Column="0" Padding="10,5" Margin="20,0.5,1,0.5" BackgroundColor="White" HasShadow="False"
+                          BorderColor="#F26522" CornerRadius="10">
+                        <Entry x:Name="AptEntry" Keyboard="Text" FontSize="17" TextColor="Black" Placeholder="Unit" PlaceholderColor="Black"
+                               TextChanged="DeliveryAdd_TextChanged"/>
                    </Frame>
 
-                   <Frame x:Name="city" Padding="10,5" Margin="1,0.5,20,0.5" BackgroundColor="#FFE5B4"
-                          Grid.Row="0" Grid.Column="1" HasShadow="False">
-
-                        <Entry x:Name="CityEntry" Keyboard="Text" FontAttributes="Bold"
-                   FontSize="17" Placeholder="City*"
-                    WidthRequest="12"
-                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4" TextChanged="DeliveryAdd_TextChanged"/>
-
+                   <Frame x:Name="city" Grid.Row="0" Grid.Column="1" Padding="10,5" Margin="1,0.5,20,0.5" BackgroundColor="White" HasShadow="False"
+                          BorderColor="#F26522" CornerRadius="10">
+                        <Entry x:Name="CityEntry" Keyboard="Text" FontSize="17" TextColor="Black" Placeholder="City*" PlaceholderColor="Black"
+                               TextChanged="DeliveryAdd_TextChanged"/>
                    </Frame>
-
-                   <!--<Frame x:Name="state" Padding="10,5" Margin="1,0.5,20,0.5" BackgroundColor="#FFE5B4"
-                          Grid.Row="0" Grid.Column="2" HasShadow="False">
-
-                        <Entry x:Name="StateEntry" Keyboard="Text" FontAttributes="Bold"
-                   FontSize="17" 
-                    WidthRequest="8"
-                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"/>
-
-                   </Frame>-->
-
                 </Grid>
 
 
@@ -155,38 +185,18 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
-                    <Frame x:Name="state" Padding="10,5" Margin="20,0.5,1,0.5" BackgroundColor="#FFE5B4"
-                          Grid.Row="0" Grid.Column="0" HasShadow="False">
-
-                        <Entry x:Name="StateEntry" Keyboard="Text" FontAttributes="Bold"
-                   FontSize="17" Placeholder="State*"
-                    WidthRequest="8"
-                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4" TextChanged="DeliveryAdd_TextChanged"/>
-
+                    <Frame x:Name="state" Grid.Row="0" Grid.Column="0" Padding="10,5" Margin="20,0.5,1,0.5" BackgroundColor="White" HasShadow="False"
+                          BorderColor="#F26522" CornerRadius="10">
+                        <Entry x:Name="StateEntry" Keyboard="Text" FontSize="17" TextColor="Black" Placeholder="State*" PlaceholderColor="Black"
+                               TextChanged="DeliveryAdd_TextChanged"/>
                    </Frame>
 
-                   <Frame x:Name="zipCode" Padding="10,5" Margin="1,0.5,20,0.5" BackgroundColor="#FFE5B4"
-                          Grid.Row="0" Grid.Column="1" HasShadow="False">
-
-                        <Entry x:Name="ZipEntry" Keyboard="Numeric" FontAttributes="Bold"
-                   FontSize="17" Placeholder="Zip*"
-                    WidthRequest="12"
-                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4" TextChanged="DeliveryAdd_TextChanged"/>
-
+                   <Frame x:Name="zipCode" Grid.Row="0" Grid.Column="1" Padding="10,5" Margin="1,0.5,20,0.5" BackgroundColor="White" HasShadow="False"
+                          BorderColor="#F26522" CornerRadius="10">
+                        <Entry x:Name="ZipEntry" Keyboard="Numeric" FontSize="17" TextColor="Black" Placeholder="Zip Code*" PlaceholderColor="Black"
+                               TextChanged="DeliveryAdd_TextChanged"/>
                    </Frame>
-
-                   <!--<Frame x:Name="phoneNum" Padding="10,5" Margin="1,0.5,20,0.5" BackgroundColor="#FFE5B4"
-                          Grid.Row="0" Grid.Column="1" HasShadow="False">
-
-                        <Entry x:Name="PhoneEntry" MaxLength="10" Keyboard="Numeric" FontAttributes="Bold"
-                   FontSize="17" 
-                    WidthRequest="12"
-                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"/>
-
-                   </Frame>-->
-
                 </Grid>
-
 
                 <Grid x:Name="deliveryInstructions" HorizontalOptions="Center" VerticalOptions="Center">
                     <Grid.ColumnDefinitions>
@@ -196,30 +206,25 @@
                         <RowDefinition Height="120*"/>
                     </Grid.RowDefinitions>
 
-                   <Frame x:Name="deliveryInstr" Padding="10,5" Margin="20,0.5" BackgroundColor="#FFE5B4"
-                          Grid.Row="0" Grid.Column="0" HasShadow="False" >
-
-                        <Editor x:Name="DeliveryEntry" Keyboard="Text" FontAttributes="Bold"
-                   FontSize="17" TextColor="Black" PlaceholderColor="#B4B4B4" Placeholder="Delivery Instructions (for example:&#x0a;gate code, or where to put&#x0a;your meals if you're not home)"
-                   HeightRequest="100" WidthRequest="24" Margin="0,2,0,0" TextChanged="DeliveryAdd_TextChanged"
-                   BackgroundColor="#FFE5B4"  />
-
+                   <Frame x:Name="deliveryInstr" Grid.Row="0" Grid.Column="0" Padding="10,5" Margin="20,0.5" BackgroundColor="White" HasShadow="False"
+                          BorderColor="#F26522" CornerRadius="10">
+                        <Editor x:Name="DeliveryEntry" Keyboard="Text" FontSize="17" TextColor="Black" HeightRequest="80" PlaceholderColor="Black"
+                                Placeholder="Delivery Instructions (for example:&#x0a;gate code, or where to put&#x0a;your meals if you're not home)" TextChanged="DeliveryAdd_TextChanged"/>
                    </Frame>
-
                 </Grid>
 
-                <Frame x:Name="mapFrame" HasShadow="False" BackgroundColor="Gray" Padding="0" HeightRequest="200">
+                <Frame x:Name="mapFrame" HasShadow="False" BackgroundColor="Gray" Padding="0" HeightRequest="200" Margin="20, 10" CornerRadius="10">
                     <maps:Map
                         x:Name="map"
                         IsVisible="true">
                     </maps:Map>
                 </Frame>
 
-                <BoxView HeightRequest="5"/>
+                <!--<BoxView HeightRequest="5"/>-->
 
                 <!--contact info-->
 
-                <Grid x:Name="ContactGrid" HorizontalOptions="Fill" VerticalOptions="Center" HeightRequest="35">
+                <!--<Grid x:Name="ContactGrid" HorizontalOptions="Fill" VerticalOptions="Center" HeightRequest="35">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="3*"/>
                         <ColumnDefinition Width="1.3*"/>
@@ -236,10 +241,10 @@
 
                 </Grid>
 
-                <BoxView HeightRequest="3"/>
+                <BoxView HeightRequest="3"/>-->
 
 
-                <Grid x:Name="FirstandLast" HorizontalOptions="Center" VerticalOptions="Center">
+                <!--<Grid x:Name="FirstandLast" HorizontalOptions="Center" VerticalOptions="Center">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="16*"/>
                         <ColumnDefinition Width="16*"/>
@@ -308,212 +313,178 @@
 
                    </Frame>
 
-                </Grid>
+                </Grid>-->
                 
-                <Button x:Name="proceedButton" Margin="20,15" HeightRequest="50" CornerRadius="25" BackgroundColor="#FFBA00" BorderColor="Black" BorderWidth="2" TextColor="Black" FontSize="Medium" Text="PROCEED TO PAYMENT" HorizontalOptions="Fill" Clicked="clickedDeliv"/>
+                <Button x:Name="proceedButton" BackgroundColor="#F26522" TextColor="White" FontSize="18" Margin="50, 10, 50, 10" Padding="0, 10"
+                        CornerRadius="15" Text="Proceed" Clicked="clickedDeliv"/>
+
             </StackLayout>
 
 
-                <!--<Label HeightRequest="5"/>-->
+            <!--payment summary-->
 
+            <StackLayout x:Name="paymentStack" IsVisible="false">
 
-        <!--payment summary-->
+                <Grid HorizontalOptions="Fill" ColumnSpacing="5" BackgroundColor="#f8bb16" Padding="20, 10" Margin="0, 10, 0, 10">
+                    <Label Text="Payment Summary" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Start" BackgroundColor="Transparent" FontSize="18"/>
+                </Grid>
 
-        <StackLayout x:Name="paymentStack" IsVisible="false">
-                <Label x:Name="spacer2" HeightRequest="10"/>
+                <Grid Margin="20, 0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="3*"/>
+                    </Grid.ColumnDefinitions>
 
-                <Label Text="PAYMENT SUMMARY" HorizontalOptions="Start" FontSize="22"
-                       Margin="20,0,0,0" FontAttributes="Bold" Grid.Column="0" Grid.Row="0"/>
+                    <Label Grid.Column="0" Text="Your Box" FontAttributes="Bold" TextColor="Black"/>
+                    <Label Grid.Column="1" x:Name="meal_delivery_num" FontAttributes="Bold" TextColor="Black" HorizontalOptions="End"/>
+                </Grid>
 
-                <Label HeightRequest="3"/>
+                <BoxView HeightRequest="1" Color="Black" Margin="20, 0"/>
 
-                <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="3*"/>
-                    <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
+                <Grid Margin="20, 10, 20, 0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
 
-                <Label x:Name="subtotalTitle" Text="Subtotal: " Margin="10,0,0,0" FontSize="14" HorizontalOptions="Start" TextColor="Black" FontAttributes="Bold"/>
-                <Label Grid.Column="1" x:Name="subtotalPrice" FontSize="14" Margin="0,0,10,0" HorizontalOptions="End" TextColor="Black" FontAttributes="Bold"/>
+                    <Label x:Name="subtotalTitle" Text="Subtotal" FontSize="14" HorizontalOptions="Start" TextColor="Black"/>
+                    <Label Grid.Column="1" x:Name="subtotalPrice" FontSize="14" HorizontalOptions="End" TextColor="Black"/>
 
-            </Grid>
+                </Grid>
 
-            <BoxView HeightRequest="3" Margin="5,2"/>
+                <BoxView HeightRequest="0.5" Color="Black" Margin="20, 0"/>
 
-            <!--<Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="4*"/>
-                    <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
+                <Grid Margin="20, 5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
 
-                <Label x:Name="addOnsTitle" Text="Add-Ons: " Margin="10,0,0,0" FontSize="14" HorizontalOptions="Start" TextColor="Black" FontAttributes="Bold"/>
-                <Label Grid.Column="1" x:Name="addOnsPrice" FontSize="14" Margin="0,0,10,0" HorizontalOptions="End" TextColor="Black" FontAttributes="Bold"/>
+                    <Label x:Name="discountTitle" Text="Discount" FontSize="14" HorizontalOptions="Start" TextColor="Black"/>
+                    <Label Grid.Column="1" x:Name="discountPrice" FontSize="14" HorizontalOptions="End" TextColor="Black"/>
 
-            </Grid>
+                </Grid>
 
-            <BoxView HeightRequest="3" Margin="5,2" />-->
+                <BoxView HeightRequest="0.5" Color="Black" Margin="20, 0"/>
 
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="4*"/>
-                    <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
+                <Grid Margin="20, 5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
 
-                <Label x:Name="discountTitle" Text="Discount: " Margin="10,0,0,0" FontSize="14" HorizontalOptions="Start" TextColor="Black" FontAttributes="Bold"/>
-                <Label Grid.Column="1" x:Name="discountPrice" FontSize="14" Margin="0,0,10,0" HorizontalOptions="End" TextColor="Black" FontAttributes="Bold"/>
+                    <Label x:Name="deliveryTitle" Text="Delivery Fee" FontSize="14" HorizontalOptions="Start" TextColor="Black"/>
+                    <Label Grid.Column="1" x:Name="deliveryFeePrice" FontSize="14" HorizontalOptions="End" TextColor="Black"/>
 
-            </Grid>
+                </Grid>
 
-            <BoxView HeightRequest="3" Margin="5,2" />
+                <BoxView HeightRequest="0.5" Color="Black" Margin="20, 0"/>
 
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="4*"/>
-                    <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
+                <Grid Margin="20, 5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
 
-                <Label x:Name="deliveryTitle" Text="Delivery Fee: " Margin="10,0,0,0" FontSize="14" HorizontalOptions="Start" TextColor="Black" FontAttributes="Bold"/>
-                <Label Grid.Column="1" x:Name="deliveryFeePrice" FontSize="14" Margin="0,0,10,0" HorizontalOptions="End" TextColor="Black" FontAttributes="Bold"/>
+                    <Label Text="Service Fee" FontSize="14" HorizontalOptions="Start" TextColor="Black"/>
+                    <Label Grid.Column="1" x:Name="serviceFeePrice" FontSize="14" HorizontalOptions="End" TextColor="Black"/>
 
-            </Grid>
+                </Grid>
 
-            <BoxView HeightRequest="3" Margin="5,2" />
+                <BoxView HeightRequest="0.5" Color="Black" Margin="20, 0"/>
 
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="4*"/>
-                    <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
+                <Grid Margin="20, 5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
 
-                <Label Text="Service Fee: " Margin="10,0,0,0" FontSize="14" HorizontalOptions="Start" TextColor="Black" FontAttributes="Bold"/>
-                <Label Grid.Column="1" x:Name="serviceFeePrice" FontSize="14" Margin="0,0,10,0" HorizontalOptions="End" TextColor="Black" FontAttributes="Bold"/>
+                    <Label Text="Taxes" FontSize="14" HorizontalOptions="Start" TextColor="Black"/>
+                    <Label Grid.Column="1" x:Name="taxPrice" FontSize="14" HorizontalOptions="End" TextColor="Black"/>
 
-            </Grid>
+                </Grid>
 
-            <BoxView HeightRequest="3" Margin="5,2" />
+                <BoxView HeightRequest="0.5" Color="Black" Margin="20, 0"/> 
 
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="4*"/>
-                    <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
+                <Grid Margin="20, 5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
 
-                <Label Text="Taxes: " Margin="10,0,0,0" FontSize="14" HorizontalOptions="Start" TextColor="Black" FontAttributes="Bold"/>
-                <Label Grid.Column="1" x:Name="taxPrice" FontSize="14" Margin="0,0,10,0" HorizontalOptions="End" TextColor="Black" FontAttributes="Bold"/>
+                    <Label Text="Chef and Driver Tip" FontSize="14" HorizontalOptions="Start" TextColor="Black"/>
+                    <Label Grid.Column="1" x:Name="tipPrice" FontSize="14" HorizontalOptions="End" TextColor="Black"/>
 
-            </Grid>
+                </Grid>
 
-            <BoxView HeightRequest="3" Margin="5,2" />
+                <Grid Margin="20, 10, 20, 0" HeightRequest="30">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
 
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="4*"/>
-                    <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
+                    <Button x:Name="tipOpt1" CornerRadius="5" Text="No Tip" Grid.Column="0" HorizontalOptions="Fill" VerticalOptions="Fill" Margin="0, 0, 20, 0"
+                            BorderColor="#F26522" BorderWidth="1" BackgroundColor="White" Clicked="clickedTip" TextColor="Black" FontSize="Micro"/>
+                    <Button x:Name="tipOpt2" CornerRadius="5" Text="$2" Grid.Column="1" HorizontalOptions="Fill" VerticalOptions="Fill" Margin="10, 0"
+                            BorderColor="#F26522" BorderWidth="1" BackgroundColor="#F26522" Clicked="clickedTip" TextColor="White" FontSize="Micro"/>
+                    <Button x:Name="tipOpt3" CornerRadius="5" Text="$3" Grid.Column="2" HorizontalOptions="Fill" VerticalOptions="Fill" Margin="10, 0"
+                            BorderColor="#F26522" BorderWidth="1" BackgroundColor="White" Clicked="clickedTip" TextColor="Black" FontSize="Micro"/>
+                    <Button x:Name="tipOpt4" CornerRadius="5" Text="$5" Grid.Column="3" HorizontalOptions="Fill" VerticalOptions="Fill" Margin="20, 0, 0, 0"
+                            BorderColor="#F26522" BorderWidth="1" BackgroundColor="White" Clicked="clickedTip" TextColor="Black" FontSize="Micro"/>
 
-                <Label Text="Chef and Driver Tip: " Margin="10,0,0,0" FontSize="14" HorizontalOptions="Start" TextColor="Black" FontAttributes="Bold"/>
-                <Label Grid.Column="1" x:Name="tipPrice" FontSize="14" Margin="0,0,10,0" HorizontalOptions="End" TextColor="Black" FontAttributes="Bold"/>
+                </Grid>
 
-            </Grid>
+                <Grid Margin="20, 10" HeightRequest="35">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="1.3*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
 
-            <Grid Margin="25,1" HeightRequest="40">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
+                    <Frame Padding="10,0" HorizontalOptions="Fill" CornerRadius="10" HasShadow="False" BackgroundColor="White" Grid.Column="0" BorderColor="#F26522">
+                        <Entry x:Name="ambassTitle" Placeholder="Enter Ambassador Code" IsTextPredictionEnabled="False" FontSize="Micro"
+                               BackgroundColor="White" PlaceholderColor="Black" TextColor="Black"/>
+                    </Frame>
 
-                <Button x:Name="tipOpt1" CornerRadius="20" Text="No Tip" Grid.Column="0" HorizontalOptions="Fill" VerticalOptions="Fill" TextColor="Black"
-                        Margin="3,0" BorderColor="Black" BorderWidth="2" FontSize="Small" BackgroundColor="#F5F5F5" Clicked="clickedTip"/>
-                <Button x:Name="tipOpt2" CornerRadius="20" Text="$2" Grid.Column="1" HorizontalOptions="Fill" VerticalOptions="Fill" Margin="3,0"
-                        BorderColor="Black" BorderWidth="2" FontSize="Small" BackgroundColor="#FFBA00" Clicked="clickedTip" TextColor="Black"/>
-                <Button x:Name="tipOpt3" CornerRadius="20" Text="$3" Grid.Column="2" HorizontalOptions="Fill" VerticalOptions="Fill" Margin="3,0"
-                        BorderColor="Black" BorderWidth="2" FontSize="Small" BackgroundColor="#F5F5F5" Clicked="clickedTip" TextColor="Black"/>
-                <Button x:Name="tipOpt4" CornerRadius="20" Text="$5" Grid.Column="3" HorizontalOptions="Fill" VerticalOptions="Fill" Margin="3,0"
-                        BorderColor="Black" BorderWidth="2" FontSize="Small" BackgroundColor="#F5F5F5" Clicked="clickedTip" TextColor="Black"/>
+                    <Button Grid.Column="1" x:Name="verifyCode" Text="Verify" CornerRadius="10" TextColor="White" FontSize="14" HorizontalOptions="Start" Padding="25, 0"
+                            BackgroundColor="#F26522" Clicked="clickedVerifyCode"/>
 
-            </Grid>
-            
+                    <Label Grid.Column="2" x:Name="ambassDisc" FontSize="14" HorizontalOptions="End" TextColor="Black" VerticalOptions="Center"/>
 
-            <BoxView HeightRequest="3" Margin="5,2" />
+                </Grid>
 
+                <BoxView HeightRequest="0.5" Color="Black" Margin="20, 0"/> 
 
-            <Grid Margin="10,0,0,3">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="1.3*"/>
-                    <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
+                <Grid Margin="20, 5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
 
-                <Frame Padding="5,5" HorizontalOptions="Fill" CornerRadius="23" HasShadow="False" BackgroundColor="LightGray" Grid.Column="0" HeightRequest="40">
-                    <Entry x:Name="ambassTitle" Placeholder="Enter Ambassador Code" FontSize="Small" IsTextPredictionEnabled="False"
-                           BackgroundColor="LightGray" PlaceholderColor="#F5F5F5" TextColor="Black"/>
-                </Frame>
+                    <Label Text="Total" FontSize="16" HorizontalOptions="Start" TextColor="Black" FontAttributes="Bold"/>
+                    <Label Grid.Column="1" x:Name="grandTotalPrice" FontSize="16" HorizontalOptions="End" TextColor="Black" FontAttributes="Bold"/>
 
-                <!--<Frame x:Name="zipCode" Padding="10,5" Margin="1,0.5,20,0.5" BackgroundColor="#FFE5B4"
-                          Grid.Row="0" Grid.Column="1" HasShadow="False">
+                </Grid>
 
-                        <Entry x:Name="ZipEntry" Keyboard="Numeric" FontAttributes="Bold"
-                   FontSize="17" 
-                    WidthRequest="12"
-                   BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"/>
+                <Grid HorizontalOptions="Fill" ColumnSpacing="5" BackgroundColor="#f8bb16" Padding="20, 10" Margin="0, 10, 0, 10">
+                    <Label Text="Complete Payment" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Start" BackgroundColor="Transparent" FontSize="18"/>
+                </Grid>
 
-                   </Frame>-->
+                <Grid Margin="50,10" RowSpacing="20">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
 
-                <Button Grid.Column="1" x:Name="verifyCode" Text="Verify" HeightRequest="35" CornerRadius="25" TextColor="Black" FontSize="Small" HorizontalOptions="Fill" BackgroundColor="#FFBA00" BorderColor="Black" BorderWidth="2" Margin="10,0,20,0" Clicked="clickedVerifyCode"/>
-                <!--<Label Text="Discount" Margin="10,0,0,0" FontSize="14" HorizontalOptions="Start" TextColor="Black" FontAttributes="Bold"/>-->
-                <Label Grid.Column="2" x:Name="ambassDisc" FontSize="14" Margin="0,0,10,0" HorizontalOptions="End" TextColor="Black" FontAttributes="Bold" VerticalOptions="Center"/>
+                    <Button Grid.Row="0" Text="STRIPE" CornerRadius="15" TextColor="White" HorizontalOptions="Fill" BackgroundColor="#F26522" Clicked="CheckouWithStripe"/>
 
-            </Grid>
+                    <Button Grid.Row="1" Text="PAYPAL" CornerRadius="15" TextColor="White" HorizontalOptions="Fill" BackgroundColor="#F26522" Clicked="CheckouWithPayPayl"/>
 
-            <BoxView HeightRequest="1" Margin="5,2" BackgroundColor="LightGray"/>
+                </Grid>
 
-
-
-            
-
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
-
-                <Label Text="Total" Margin="10,0,0,0" FontSize="14" HorizontalOptions="Start" TextColor="Black" FontAttributes="Bold"/>
-                <Label Grid.Column="1" x:Name="grandTotalPrice" FontSize="14" Margin="0,0,10,0" HorizontalOptions="End" TextColor="Black" FontAttributes="Bold"/>
-
-            </Grid>
-
-            <Label HeightRequest="5"/>
-
-            <Label Text="PAYMENT OPTIONS" HorizontalOptions="Start" FontSize="22"
-                       Margin="20,0,0,0" FontAttributes="Bold" Grid.Column="0" Grid.Row="0"/>
-
-            <Grid RowSpacing="10" Margin="20,0,0,0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="40"/>
-                    <RowDefinition Height="40"/>
-                    <RowDefinition Height="40"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1.5*"/>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
-
-                <Button BorderColor="Black" BorderWidth="2" Text="STRIPE" FontSize="Small" HeightRequest="40" CornerRadius="20" TextColor="Black"
-                            HorizontalOptions="Fill" BackgroundColor="#FFBA00" Grid.Row="0" Grid.Column="0" Clicked="CheckouWithStripe"/>
-
-            <Button BorderColor="Black" BorderWidth="2" Text="PAYPAL" FontSize="Small" HeightRequest="40" CornerRadius="20" TextColor="Black"
-                            HorizontalOptions="Fill" BackgroundColor="#FFBA00" Grid.Row="1" Grid.Column="0" Clicked="CheckouWithPayPayl"/>
-
-            </Grid>
-
-            
-
-
-
-    </StackLayout>
+            </StackLayout>
 
         <!--verify info payment screen for stripe and paypal-->
         <Frame HasShadow="False" x:Name="PaymentScreen" HeightRequest="0" VerticalOptions="Start">
