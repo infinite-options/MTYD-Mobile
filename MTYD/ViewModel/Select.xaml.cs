@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 using Xamarin.Essentials;
 using System.ComponentModel;
 using System.Diagnostics;
-using Xamarin.CommunityToolkit;
+//using Xamarin.CommunityToolkit;
 
 namespace MTYD.ViewModel
 {
@@ -46,6 +46,7 @@ namespace MTYD.ViewModel
                 PropertyChanged(this, new PropertyChangedEventArgs("mealsLeft"));
             }
         }
+
     }
     //==========================================
 
@@ -248,6 +249,9 @@ namespace MTYD.ViewModel
 
                 addOns.FontSize = width / 32;
 
+                dropDownButton.WidthRequest = (width / 2) + 20;
+                dropDownList.WidthRequest = (width / 2) + 20;
+
                 //weekOneAddOns.HeightRequest = height / 6.8;
 
             }
@@ -265,6 +269,14 @@ namespace MTYD.ViewModel
         //    var content = client.DownloadString(url3);
         //    var obj = JsonConvert.DeserializeObject<ZonesDto>(content);
         //}
+        void addy_ItemSelected(System.Object sender, Xamarin.Forms.SelectedItemChangedEventArgs e)
+        {
+            dropDownText.Text = (string)dropDownList.SelectedItem;
+            Debug.WriteLine("addy index selected: " + ((ArrayList)dropDownList.ItemsSource).IndexOf(dropDownText.Text));
+
+            dropDownList.IsVisible = false;
+            planChange(sender, e);
+        }
 
         async void getFavorites()
         {
@@ -299,6 +311,14 @@ namespace MTYD.ViewModel
                 favDict.Add(favoritesList, true);
 
             }
+        }
+
+        async void clickedExpand(System.Object sender, System.EventArgs e)
+        {
+            if (dropDownList.IsVisible == false)
+                dropDownList.IsVisible = true;
+            else dropDownList.IsVisible = false;
+
         }
 
         async void clickedPfp(System.Object sender, System.EventArgs e)
@@ -387,7 +407,7 @@ namespace MTYD.ViewModel
 
                         string source;
                         if (favDict.ContainsKey(obj.Result[i].MealUid) == true)
-                            source = "filledHeart.png";
+                            source = "leftFilledHeart.png";
                         else source = "leftHeart.png";
 
                         Color backgroundColor;
@@ -465,8 +485,14 @@ namespace MTYD.ViewModel
 
                         string source;
                         if (favDict.ContainsKey(obj.Result[i].MealUid) == true)
-                            source = "filledHeart.png";
+                            source = "leftFilledHeart.png";
                         else source = "leftHeart.png";
+
+                        Color backgroundColor;
+
+                        if (mealQty > 0)
+                            backgroundColor = Color.FromHex("#F8BB17");
+                        else backgroundColor = Color.White;
 
                         Meals2.Add(new MealInfo
                         {
@@ -474,6 +500,7 @@ namespace MTYD.ViewModel
                             MealCalories = "Cal: " + obj.Result[i].MealCalories.ToString(),
                             MealImage = obj.Result[i].MealPhotoUrl,
                             MealQuantity = mealQty,
+                            Background = backgroundColor,
                             MealPrice = obj.Result[i].MealPrice,
                             ItemUid = obj.Result[i].MealUid,
                             MealDesc = obj.Result[i].MealDesc,
@@ -495,8 +522,8 @@ namespace MTYD.ViewModel
                     mealCount++;
                 if (addOnCount % 2 != 0)
                     addOnCount++;
-                weekOneMenu.HeightRequest = 320 * ((mealCount / 2));
-                weekOneAddOns.HeightRequest = 320 * ((addOnCount / 2));
+                weekOneMenu.HeightRequest = 302 * ((mealCount / 2));
+                weekOneAddOns.HeightRequest = 302 * ((addOnCount / 2));
                 //weekOneMenu.ItemsSource = Meals1;
                 //commented out to test
                 //if (mealCount % 2 != 0)
@@ -661,7 +688,8 @@ namespace MTYD.ViewModel
                     surpriseBttn.TextColor = Color.Black;
 
 
-                    string s = SubscriptionPicker.SelectedItem.ToString();
+                    //string s = SubscriptionPicker.SelectedItem.ToString();
+                    string s = dropDownText.Text;
                     s = s.Substring(0, 2);
 
                     totalCount.Text = "0";
@@ -691,7 +719,8 @@ namespace MTYD.ViewModel
                 else if (isAlreadySelected == false)
                 {
                     Debug.WriteLine("isalreadyselected=false");
-                    string s = SubscriptionPicker.SelectedItem.ToString();
+                    //string s = SubscriptionPicker.SelectedItem.ToString();
+                    string s = dropDownText.Text;
                     s = s.Substring(0, 2);
                     Preferences.Set("total", int.Parse(s));
                     Console.WriteLine("before false");
@@ -741,7 +770,8 @@ namespace MTYD.ViewModel
 
 
 
-                    string s = SubscriptionPicker.SelectedItem.ToString();
+                    //string s = SubscriptionPicker.SelectedItem.ToString();
+                    string s = dropDownText.Text;
                     s = s.Substring(0, 2);
                     Preferences.Set("total", int.Parse(s));
                     Console.WriteLine("before skip");
@@ -783,7 +813,8 @@ namespace MTYD.ViewModel
 
 
 
-                    string s = SubscriptionPicker.SelectedItem.ToString();
+                    //string s = SubscriptionPicker.SelectedItem.ToString();
+                    string s = dropDownText.Text;
                     s = s.Substring(0, 2);
                     Preferences.Set("total", int.Parse(s));
                     Console.WriteLine("before surprise");
@@ -930,7 +961,8 @@ namespace MTYD.ViewModel
                 surpriseBttn.TextColor = Color.Black;
 
 
-                string s = SubscriptionPicker.SelectedItem.ToString();
+                //string s = SubscriptionPicker.SelectedItem.ToString();
+                string s = dropDownText.Text;
                 s = s.Substring(0, 2);
 
                 totalCount.Text = "0";
@@ -959,7 +991,8 @@ namespace MTYD.ViewModel
             }
             else if (isAlreadySelected == false)
             {
-                string s = SubscriptionPicker.SelectedItem.ToString();
+                //string s = SubscriptionPicker.SelectedItem.ToString();
+                string s = dropDownText.Text;
                 s = s.Substring(0, 2);
                 Preferences.Set("total", int.Parse(s));
                 Console.WriteLine("before false");
@@ -1008,7 +1041,8 @@ namespace MTYD.ViewModel
 
 
 
-                string s = SubscriptionPicker.SelectedItem.ToString();
+                //string s = SubscriptionPicker.SelectedItem.ToString();
+                string s = dropDownText.Text;
                 s = s.Substring(0, 2);
                 Preferences.Set("total", int.Parse(s));
                 Console.WriteLine("before skip");
@@ -1049,7 +1083,8 @@ namespace MTYD.ViewModel
 
 
 
-                string s = SubscriptionPicker.SelectedItem.ToString();
+                //string s = SubscriptionPicker.SelectedItem.ToString();
+                string s = dropDownText.Text;
                 s = s.Substring(0, 2);
                 Preferences.Set("total", int.Parse(s));
                 Console.WriteLine("before surprise");
@@ -1102,22 +1137,22 @@ namespace MTYD.ViewModel
             qtyDict.Clear();
             qtyDict_addon.Clear();
             //getUserMeals();
-            if (SubscriptionPicker.SelectedItem.ToString().Substring(0, 2).Equals("5 "))
-            {
-                mealsAllowed = 5;
-            }
-            else if (SubscriptionPicker.SelectedItem.ToString().Substring(0, 2).Equals("10"))
-            {
-                mealsAllowed = 10;
-            }
-            else if (SubscriptionPicker.SelectedItem.ToString().Substring(0, 2).Equals("15"))
-            {
-                mealsAllowed = 15;
-            }
-            else if (SubscriptionPicker.SelectedItem.ToString().Substring(0, 2).Equals("20"))
-            {
-                mealsAllowed = 20;
-            }
+            //if (SubscriptionPicker.SelectedItem.ToString().Substring(0, 2).Equals("5 "))
+            //{
+            //    mealsAllowed = 5;
+            //}
+            //else if (SubscriptionPicker.SelectedItem.ToString().Substring(0, 2).Equals("10"))
+            //{
+            //    mealsAllowed = 10;
+            //}
+            //else if (SubscriptionPicker.SelectedItem.ToString().Substring(0, 2).Equals("15"))
+            //{
+            //    mealsAllowed = 15;
+            //}
+            //else if (SubscriptionPicker.SelectedItem.ToString().Substring(0, 2).Equals("20"))
+            //{
+            //    mealsAllowed = 20;
+            //}
             Console.WriteLine("meals allowed " + mealsAllowed);
             
             isSkip = false;
@@ -1139,7 +1174,11 @@ namespace MTYD.ViewModel
             */
             if ((string)Application.Current.Properties["platform"] != "GUEST")
             {
-                int indexOfMealPlanSelected = (int)SubscriptionPicker.SelectedIndex;
+                //int indexOfMealPlanSelected = (int)SubscriptionPicker.SelectedIndex;
+                int indexOfMealPlanSelected = ((ArrayList)dropDownList.ItemsSource).IndexOf(dropDownText.Text);
+                if (indexOfMealPlanSelected < 0)
+                    indexOfMealPlanSelected = 0;
+                Debug.WriteLine("index of meal plan selected in plan change: " + indexOfMealPlanSelected.ToString());
                 Preferences.Set("purchId", purchIdArray[indexOfMealPlanSelected].ToString());
                 Console.WriteLine("Purch Id: " + Preferences.Get("purchId", ""));
                 //testing
@@ -1171,7 +1210,8 @@ namespace MTYD.ViewModel
                     surpriseFrame.BackgroundColor = Color.White;
                     surpriseBttn.TextColor = Color.Black;
 
-                    string s = SubscriptionPicker.SelectedItem.ToString();
+                    //string s = SubscriptionPicker.SelectedItem.ToString();
+                    string s = dropDownText.Text;
                     s = s.Substring(0, 2);
 
                     totalCount.Text = "0";
@@ -1200,7 +1240,8 @@ namespace MTYD.ViewModel
                 }
                 else if (isAlreadySelected == false)
                 {
-                    string s = SubscriptionPicker.SelectedItem.ToString();
+                    //string s = SubscriptionPicker.SelectedItem.ToString();
+                    string s = dropDownText.Text;
                     s = s.Substring(0, 2);
                     Preferences.Set("total", int.Parse(s));
                     Console.WriteLine("before false");
@@ -1244,11 +1285,12 @@ namespace MTYD.ViewModel
                     saveFrame.BackgroundColor = Color.White;
                     saveBttn.TextColor = Color.Black;
 
-                    indexOfMealPlanSelected = (int)SubscriptionPicker.SelectedIndex;
+                    indexOfMealPlanSelected = ((ArrayList)dropDownList.ItemsSource).IndexOf(dropDownText.Text);
                     Preferences.Set("purchId", purchIdArray[indexOfMealPlanSelected].ToString());
                     Console.WriteLine("Purch Id: " + Preferences.Get("purchId", ""));
 
-                    string s = SubscriptionPicker.SelectedItem.ToString();
+                    //string s = SubscriptionPicker.SelectedItem.ToString();
+                    string s = dropDownText.Text;
                     s = s.Substring(0, 2);
                     Preferences.Set("total", int.Parse(s));
                     Console.WriteLine("before skip");
@@ -1287,11 +1329,12 @@ namespace MTYD.ViewModel
                     saveFrame.BackgroundColor = Color.White;
                     saveBttn.TextColor = Color.Black;
 
-                    indexOfMealPlanSelected = (int)SubscriptionPicker.SelectedIndex;
+                    indexOfMealPlanSelected = ((ArrayList)dropDownList.ItemsSource).IndexOf(dropDownText.Text);
                     Preferences.Set("purchId", purchIdArray[indexOfMealPlanSelected].ToString());
                     Console.WriteLine("Purch Id: " + Preferences.Get("purchId", ""));
 
-                    string s = SubscriptionPicker.SelectedItem.ToString();
+                    //string s = SubscriptionPicker.SelectedItem.ToString();
+                    string s = dropDownText.Text;
                     s = s.Substring(0, 2);
                     Preferences.Set("total", int.Parse(s));
                     Console.WriteLine("before surprise");
@@ -1371,7 +1414,8 @@ namespace MTYD.ViewModel
                 //Preferences.Set("purchId", purchIdArray[indexOfMealPlanSelected].ToString());
                 //Console.WriteLine("Purch Id: " + Preferences.Get("purchId", ""));
 
-                string s = SubscriptionPicker.SelectedItem.ToString();
+                //string s = SubscriptionPicker.SelectedItem.ToString();
+                string s = dropDownText.Text;
                 s = s.Substring(0, 2);
                 Preferences.Set("total", int.Parse(s));
                 Console.WriteLine("before surprise");
@@ -1443,7 +1487,7 @@ namespace MTYD.ViewModel
             //ms.MealQuantity++;
 
             //favoriting
-            if (b.Source.ToString().Equals("File: emptyHeart.png"))
+            if (b.Source.ToString().Equals("File: leftHeart.png"))
             {
                 favDict.Add(ms.ItemUid, true);
                 UpdateFavPost updateFav = new UpdateFavPost();
@@ -1459,7 +1503,7 @@ namespace MTYD.ViewModel
                 Debug.WriteLine("json object sent:  " + updateFavSerializedObj.ToString());
                 Debug.WriteLine("message received:  " + message.ToString());
                 //b.Source = "heart.png";
-                ms.HeartSource = "filledHeart.png";
+                ms.HeartSource = "leftFilledHeart.png";
 
             }
             //unfavoriting
@@ -1725,6 +1769,7 @@ namespace MTYD.ViewModel
             Button b = (Button)sender;
                 MealInfo ms = b.BindingContext as MealInfo;
                 ms.MealQuantity++;
+            ms.Background = Color.FromHex("#F8BB17");
         }
 
         private async void clickDecrease(object sender, EventArgs e)
@@ -1856,7 +1901,9 @@ namespace MTYD.ViewModel
                     skipBttn.TextColor = Color.Black;
 
                     ms.MealQuantity--;
-                }
+                    if (ms.MealQuantity == 0)
+                        ms.Background = Color.White;
+            }
         }
 
         protected async Task GetMealPlans()
@@ -1869,7 +1916,9 @@ namespace MTYD.ViewModel
                 namesArray.Add(Preferences.Get("item_name", "").Substring(0, 1) + " Meal Plan");
                 SubscriptionPicker.ItemsSource = namesArray;
                 //mealPlansList.ItemsSource = namesArray;
+                dropDownList.ItemsSource = namesArray;
                 SubscriptionPicker.SelectedItem = namesArray[0].ToString();
+                dropDownList.SelectedItem = namesArray[0].ToString();
                 //Preferences.Get("item_name", "").Substring(0, 1) + " Meals for " + Preferences.Get("freqSelected", "") + " Deliveries): 
             }
             else
@@ -1939,7 +1988,9 @@ namespace MTYD.ViewModel
                     //Console.WriteLine("namesArray contents:" + namesArray[0].ToString() + " " + namesArray[1].ToString() + " " + namesArray[2].ToString() + " ");
                     SubscriptionPicker.ItemsSource = namesArray;
                     //mealPlansList.ItemsSource = namesArray;
+                    dropDownList.ItemsSource = namesArray;
                     SubscriptionPicker.SelectedItem = namesArray[0].ToString();
+                    dropDownList.SelectedItem = namesArray[0].ToString();
                     Console.WriteLine("namesArray contents:" + namesArray[0].ToString());
                     //SubscriptionPicker.Title = namesArray[0];
 
@@ -2148,6 +2199,9 @@ namespace MTYD.ViewModel
             foreach (var ms in Meals1)
                 ms.Background = Color.White;
 
+            foreach (var ms in Meals2)
+                ms.Background = Color.White;
+
             selectedDotw = "SKIP";
             //addOnSelected = false;
             //qtyDict.Clear();
@@ -2200,11 +2254,12 @@ namespace MTYD.ViewModel
             selectedDate.status = "Skipped";
             DisplayAlert("Delivery Skipped", "You won't receive any meals for this delivery cycle. We'll extend your subscription accordingly.", "OK");
             mealsSaved.Clear();
-            int indexOfMealPlanSelected = (int)SubscriptionPicker.SelectedIndex;
+            int indexOfMealPlanSelected = ((ArrayList)dropDownList.ItemsSource).IndexOf(dropDownText.Text);
             Preferences.Set("purchId", purchIdArray[indexOfMealPlanSelected].ToString());
             Console.WriteLine("Purch Id: " + Preferences.Get("purchId", ""));
 
-            string s = SubscriptionPicker.SelectedItem.ToString();
+            //string s = SubscriptionPicker.SelectedItem.ToString();
+            string s = dropDownText.Text;
             s = s.Substring(0, 2);
             Preferences.Set("total", int.Parse(s));
             totalCount.Text = Preferences.Get("total", 0).ToString();
@@ -2267,11 +2322,12 @@ namespace MTYD.ViewModel
             //postData();
             //DisplayAlert("SUPRISE", "You will be surprised with a randomized meal selection. If you want to select meals again for this meal plan then click the RESET button!", "OK");
             mealsSaved.Clear();
-            int indexOfMealPlanSelected = (int)SubscriptionPicker.SelectedIndex;
+            int indexOfMealPlanSelected = ((ArrayList)dropDownList.ItemsSource).IndexOf(dropDownText.Text);
             Preferences.Set("purchId", purchIdArray[indexOfMealPlanSelected].ToString());
             Console.WriteLine("Purch Id: " + Preferences.Get("purchId", ""));
 
-            string s = SubscriptionPicker.SelectedItem.ToString();
+            //string s = SubscriptionPicker.SelectedItem.ToString();
+            string s = dropDownText.Text;
             s = s.Substring(0, 2);
             Preferences.Set("total", int.Parse(s));
             totalCount.Text = Preferences.Get("total", 0).ToString();
@@ -2287,7 +2343,10 @@ namespace MTYD.ViewModel
         {
             foreach (var ms in Meals1)
                 ms.Background = Color.White;
-            
+
+            foreach (var ms in Meals2)
+                ms.Background = Color.White;
+
 
             //set delivery day of the week
             string tempHolder = selectedDate.fullDateTime;
@@ -2352,11 +2411,12 @@ namespace MTYD.ViewModel
 
             DisplayAlert("SURPRISE", "We'll select a random assortment of nutritious, healthy meals for you!", "OK");
             mealsSaved.Clear();
-            int indexOfMealPlanSelected = (int)SubscriptionPicker.SelectedIndex;
+            int indexOfMealPlanSelected = ((ArrayList)dropDownList.ItemsSource).IndexOf(dropDownText.Text);
             Preferences.Set("purchId", purchIdArray[indexOfMealPlanSelected].ToString());
             Console.WriteLine("Purch Id: " + Preferences.Get("purchId", ""));
 
-            string s = SubscriptionPicker.SelectedItem.ToString();
+            //string s = SubscriptionPicker.SelectedItem.ToString();
+            string s = dropDownText.Text;
             s = s.Substring(0, 2);
             Preferences.Set("total", int.Parse(s));
             totalCount.Text = Preferences.Get("total", 0).ToString();
@@ -2971,11 +3031,12 @@ namespace MTYD.ViewModel
 
             }
 
-            int indexOfMealPlanSelected = (int)SubscriptionPicker.SelectedIndex;
+            int indexOfMealPlanSelected = ((ArrayList)dropDownList.ItemsSource).IndexOf(dropDownText.Text);
             Preferences.Set("purchId", purchIdArray[indexOfMealPlanSelected].ToString());
             Console.WriteLine("Purch Id: " + Preferences.Get("purchId", ""));
 
-            string s = SubscriptionPicker.SelectedItem.ToString();
+            //string s = SubscriptionPicker.SelectedItem.ToString();
+            string s = dropDownText.Text;
             s = s.Substring(0, 2);
             Preferences.Set("total", int.Parse(s));
             totalCount.Text = Preferences.Get("total", 0).ToString();

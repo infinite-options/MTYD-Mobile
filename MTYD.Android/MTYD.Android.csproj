@@ -106,6 +106,12 @@
     <PackageReference Include="Xamarin.CommunityToolkit">
       <Version>1.1.0</Version>
     </PackageReference>
+    <PackageReference Include="Xamarin.CommunityToolkit.Markup">
+      <Version>1.1.0</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.Forms.DropdownMenu">
+      <Version>1.0.2</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>
@@ -418,6 +424,14 @@
       <Generator></Generator>
     </AndroidResource>
     <AndroidResource Include="Resources\drawable\plate.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\planSelecter.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\leftFilledHeart.png">
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>

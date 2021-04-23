@@ -26,6 +26,9 @@ using Stripe;
 
 namespace MTYD.ViewModel
 {
+
+
+
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class PaymentPage : ContentPage
     {
@@ -595,7 +598,8 @@ namespace MTYD.ViewModel
                         directSignUp.latitude = Preferences.Get("user_latitude", "");
                         directSignUp.longitude = Preferences.Get("user_longitude", "");
                         directSignUp.referral_source = "MOBILE";
-                        directSignUp.role = "CUSTOMER";
+                        //directSignUp.role = "CUSTOMER";
+                        directSignUp.role = "GUEST";
                         directSignUp.mobile_access_token = "FALSE";
                         directSignUp.mobile_refresh_token = "FALSE";
                         directSignUp.user_access_token = "FALSE";
@@ -1889,25 +1893,114 @@ namespace MTYD.ViewModel
                             mode = "LIVE";
                             SK = Constant.LiveSK;
                         }
-                        //Carlos original code
-                        //if (content.Contains("Test"))
-                        //{
-                        //    mode = "TEST";
-                        //    SK = Constant.TestSK;
-                        //}
-                        //else if (content.Contains("Live"))
-                        //{
-                        //    mode = "LIVE";
-                        //    SK = Constant.LiveSK;
-                        //}
+                    //Carlos original code
+                    //if (content.Contains("Test"))
+                    //{
+                    //    mode = "TEST";
+                    //    SK = Constant.TestSK;
+                    //}
+                    //else if (content.Contains("Live"))
+                    //{
+                    //    mode = "LIVE";
+                    //    SK = Constant.LiveSK;
+                    //}
 
-                        Debug.WriteLine("MODE          : " + mode);
+                    //stripe payment intent url: https://huo8rhh76i.execute-api.us-west-1.amazonaws.com/dev/api/v2/createPaymentIntent
+                    //the endpoint returns the payment intent, doesn't make any charges
+                    //assemble a STPPaymentIntentParams object, put payment details and the PaymentIntent client secret
+                    //complete the payment by calling the STPPaymentHandler confirmPayment function
+                    /*
+                      
+                     {   
+                        "currency": "usd",   
+                        "customer_uid": "100-000142",
+                        "business_code": "M4METEST",
+                        "item_uid": "320-000054",
+                        "num_items": 5,
+                        "num_deliveries": 9,
+                        "delivery_discount": 13,
+                        "payment_summary": {     
+                            "mealSubPrice": "45.00",     
+                            "discountAmount": "5.85",    
+                            "addOns": "0.00",     
+                            "tip": "2.00",     
+                            "serviceFee": "0.00",     
+                            "deliveryFee": "0.00",     
+                            "taxRate": 0,     
+                            "taxAmount": "0.00",
+                            "ambassadorDiscount": "0.00",     
+                            "total": "41.15",     
+                            "subtotal": "41.15"   
+                        } 
+                    }
+                     */
+
+                    //trying to implement stripe with payment intent and payment method
+                    GetPaymentIntent newPaymentIntent = new GetPaymentIntent();
+                    newPaymentIntent.currency = "usd";
+                    newPaymentIntent.customer_uid = (string)Xamarin.Forms.Application.Current.Properties["user_id"];
+                    newPaymentIntent.business_code = DeliveryEntry.Text.Trim();
+                    newPaymentIntent.item_uid = Preferences.Get("item_uid", "");
+                    newPaymentIntent.num_items = Int32.Parse(Preferences.Get("item_name", "").Substring(0, Preferences.Get("item_name", "").IndexOf(" ")));
+                    newPaymentIntent.num_deliveries = Int32.Parse(Preferences.Get("freqSelected", ""));
+                    newPaymentIntent.delivery_discount = Math.Round(Double.Parse(discountPrice.Text.Substring(discountPrice.Text.IndexOf("$") + 1)) / Double.Parse(subtotalPrice.Text.Substring(subtotalPrice.Text.IndexOf("$") + 1)), 0);
+                    PaymentSummary paymentSum = new PaymentSummary();
+                    paymentSum.mealSubPrice = subtotalPrice.Text.Substring(subtotalPrice.Text.IndexOf("$") + 1);
+                    paymentSum.discountAmount = discountPrice.Text.Substring(discountPrice.Text.IndexOf("$") + 1);
+                    paymentSum.addOns = "0.00";
+                    paymentSum.tip = tipPrice.Text.Substring(tipPrice.Text.IndexOf("$") + 1);
+                    paymentSum.serviceFee = serviceFeePrice.Text.Substring(serviceFeePrice.Text.IndexOf("$") + 1);
+                    paymentSum.deliveryFee = deliveryFeePrice.Text.Substring(deliveryFeePrice.Text.IndexOf("$") + 1);
+                    paymentSum.taxRate = tax;
+                    paymentSum.taxAmount = taxPrice.Text.Substring(taxPrice.Text.IndexOf("$") + 1);
+                    paymentSum.ambassadorDiscount = ambassDisc.Text.Substring(ambassDisc.Text.IndexOf("$") + 1);
+                    paymentSum.total = grandTotalPrice.Text.Substring(grandTotalPrice.Text.IndexOf("$") + 1);
+                    paymentSum.subtotal = grandTotalPrice.Text.Substring(grandTotalPrice.Text.IndexOf("$") + 1);
+                    newPaymentIntent.payment_summary = paymentSum;
+
+
+                    var paymentIntentJSONString = JsonConvert.SerializeObject(newPaymentIntent);
+                    Console.WriteLine("paymentIntentJSONString" + paymentIntentJSONString);
+                    var content3 = new StringContent(paymentIntentJSONString, Encoding.UTF8, "application/json");
+                    Console.WriteLine("Content: " + content3);
+                    var client3 = new System.Net.Http.HttpClient();
+                    var response3 = await client3.PostAsync("https://huo8rhh76i.execute-api.us-west-1.amazonaws.com/dev/api/v2/createPaymentIntent", content3);
+                    var message3 = await response3.Content.ReadAsStringAsync();
+                    Debug.WriteLine("create payment intent response: " + message3);
+                    string payIntent = message3.Substring(1, message3.IndexOf("secret") - 2);
+                    Debug.WriteLine("only the payment intent: " + message3.Substring(1, message3.IndexOf("secret") - 2));
+                    string secret = message3.Substring(message3.IndexOf("secret") + 7);
+                    secret = secret.Substring(0, secret.IndexOf("\""));
+                    Debug.WriteLine("only the secret: " + secret);
+                    string clientSec = message3.Substring(1);
+                    clientSec = clientSec.Substring(0, clientSec.IndexOf("\""));
+                    Debug.WriteLine("client secret: " + clientSec);
+
+                    PaymentMethodCard payWithCard = new PaymentMethodCard();
+
+                    Debug.WriteLine("MODE          : " + mode);
                         Debug.WriteLine("STRIPE SECRET : " + SK);
 
                         //Debug.WriteLine("SK" + SK);
                         StripeConfiguration.ApiKey = SK;
 
-                        string CardNo = cardHolderNumber.Text.Trim();
+                    Dictionary<String, Object> card = new Dictionary<string, object>();
+                    card.Add("number", "4242424242424242");
+                    card.Add("exp_month", 4);
+                    card.Add("exp_year", 2022);
+                    card.Add("cvc", "314");
+                    Dictionary<String, Object> param = new Dictionary<string, object>();
+                    param.Add("type", "card");
+                    param.Add("card", card);
+
+                    //Stripe.PaymentMethodCard
+                    Stripe.PaymentMethod paymentMethod = new Stripe.PaymentMethod();
+                    Stripe.PaymentMethodCard paywith = new Stripe.PaymentMethodCard();
+                    //var req = await stripe.createPaymentMethod();
+                    StripeClient stripeClient = new StripeClient();
+                    
+
+                    string CardNo = cardHolderNumber.Text.Trim();
                         string expMonth = cardExpMonth.Text.Trim();
                         string expYear = cardExpYear.Text.Trim();
                         string cardCvv = cardCVV.Text.Trim();
@@ -1919,26 +2012,30 @@ namespace MTYD.ViewModel
                         stripeOption.ExpMonth = Convert.ToInt64(expMonth);
                         stripeOption.ExpYear = Convert.ToInt64(expYear);
                         stripeOption.Cvc = cardCvv;
-
+                        
+                        
                         Debug.WriteLine("step 2 reached");
                         // Step 2: Assign card to token object
                         TokenCreateOptions stripeCard = new TokenCreateOptions();
                         stripeCard.Card = stripeOption;
-
+                    
                         TokenService service = new TokenService();
                         Stripe.Token newToken = service.Create(stripeCard);
-
+                   
                         Debug.WriteLine("step 3 reached");
                         // Step 3: Assign the token to the soruce 
                         var option = new SourceCreateOptions();
                         option.Type = SourceType.Card;
                         option.Currency = "usd";
                         option.Token = newToken.Id;
-
+                    
                         var sourceService = new SourceService();
                         Source source = sourceService.Create(option);
 
-                        Debug.WriteLine("step 4 reached");
+                    source.ClientSecret = clientSec;
+                    //source.Card
+
+                    Debug.WriteLine("step 4 reached");
                         // Step 4: Create customer
                         CustomerCreateOptions customer = new CustomerCreateOptions();
                         customer.Name = cardHolderName.Text.Trim();
@@ -1951,15 +2048,15 @@ namespace MTYD.ViewModel
                             cardHolderUnit.Text = "";
                         }
                         customer.Address = new AddressOptions { City = cardCity.Text.Trim(), Country = Constant.Contry, Line1 = cardHolderAddress.Text.Trim(), Line2 = cardHolderUnit.Text.Trim(), PostalCode = cardZip.Text.Trim(), State = cardState.Text.Trim() };
-
+                  
                         var customerService = new CustomerService();
                         var cust = customerService.Create(customer);
-
+                   
                         Debug.WriteLine("step 5 reached");
                         // Step 5: Charge option
                         var chargeOption = new ChargeCreateOptions();
                         chargeOption.Amount = (long)RemoveDecimalFromTotalAmount(total);
-
+                   
                         Debug.WriteLine("hopefully correct total: " + total);
                         chargeOption.Currency = "usd";
                         chargeOption.ReceiptEmail = cardHolderEmail.Text.ToLower().Trim();
@@ -1974,7 +2071,9 @@ namespace MTYD.ViewModel
                         Debug.WriteLine("step 6 reached");
                         // Step 6: charge the customer COMMENTED OUT FOR TESTING, backend already charges stripe so we don't have to do it here
                         var chargeService = new ChargeService();
+                    
                         Charge charge = chargeService.Create(chargeOption);
+                        //charge.PaymentIntent = (PaymentIntent)payIntent;
                         Debug.WriteLine("charge: " + charge.ToString());
                         Debug.WriteLine("charge id: " + charge.ToString().Substring(charge.ToString().IndexOf("id") + 3, charge.ToString().IndexOf(">") - charge.ToString().IndexOf("id") - 3));
                         //chargeId = charge.ToString().Substring(charge.ToString().IndexOf("id") + 3, charge.ToString().IndexOf(">") - charge.ToString().IndexOf("id") - 3);
@@ -2051,6 +2150,35 @@ namespace MTYD.ViewModel
                 await DisplayAlert("Alert!", ex.Message, "OK");
             }
         }
+
+        //private void pay()
+        //{
+        //    //if (!this.paymentIntentClientSecret)
+        //    //{
+        //    //    NSLog("PaymentIntent hasn\'t been created");
+        //    //    return;
+        //    //}
+        //    STPPaymentMethodCardParams* cardParams = this.cardTextField.cardParams;
+        //    STPPaymentMethodParams* paymentMethodParams = STPPaymentMethodParams.paramsWithCard(cardParams) billingDetails(null) metadata(null);
+        //    STPPaymentIntentParams* paymentIntentParams = STPPaymentIntentParams.alloc().initWithClientSecret(this.paymentIntentClientSecret);
+        //    paymentIntentParams.paymentMethodParams = paymentMethodParams;
+        //    STPPaymentHandler* paymentHandler = STPPaymentHandler.sharedHandler();
+        //    paymentHandler.confirmPayment(paymentIntentParams) withAuthenticationContext(this) completion((status, paymentIntent, error) => {
+        //        dispatch_async(dispatch_get_main_queue(), () => {
+        //            switch (status)
+        //            {
+        //                case STPPaymentHandlerActionStatusFailed:
+        //                    this.displayAlertWithTitle("Payment failed") message((error.localizedDescription ? null : "")) restartDemo(false);
+        //                case STPPaymentHandlerActionStatusCanceled:
+        //                    this.displayAlertWithTitle("Payment canceled") message((error.localizedDescription ? null : "")) restartDemo(false);
+        //                case STPPaymentHandlerActionStatusSucceeded:
+        //                    this.displayAlertWithTitle("Payment succeeded") message((paymentIntent.description ? null : "")) restartDemo(true);
+        //                default:
+        //                    break;
+        //            }
+        //        });
+        //    });
+        //}
 
         // FUNCTION  3:
         public int RemoveDecimalFromTotalAmount(string amount)
