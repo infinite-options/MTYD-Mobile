@@ -30,10 +30,18 @@
                     </StackLayout>
 
                     <Frame BackgroundColor="White" Margin="50, 0, 50, 10" HeightRequest="25" CornerRadius="15" BorderColor="#f26522" HasShadow="false">
-                        <Entry Placeholder="Enter Zip Code" Keyboard="Numeric" HorizontalTextAlignment="Center" TextColor="Black" PlaceholderColor="Black"/>
+                        <Entry x:Name="AddressEntry" Text="{Binding AddressText}" TextChanged="OnAddressChanged" TextColor="Black" PlaceholderColor="#B4B4B4" Placeholder="Enter Address"
+                              HorizontalTextAlignment="Center" Focused="addressEntryFocused" Unfocused="addressEntryUnfocused"/>
                     </Frame>
-                    <!--<Button x:Name="button_EnterZipCode" BackgroundColor="White" Margin="50, 0, 50, 10" HeightRequest="60" CornerRadius="15" BorderColor="#f26522"
-                            BorderWidth="2" Text="Enter Zip Code" TextColor="Black" FontSize="20"/>-->
+
+                    <ListView x:Name="addressList" ItemsSource="{Binding Addresses}" IsVisible="false" Margin="50, 0, 50, 30" HeightRequest="200"
+                              ItemSelected="addressSelected">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <TextCell Text="{Binding Address}"/>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                   </ListView>
 
                     <Button x:Name="button_ViewMeals" BackgroundColor="#f26522" Margin="50, 0, 50, 0" HeightRequest="60" CornerRadius="15"
                             Text="View Meals" TextColor="White" FontSize="20" Clicked="clickedExplore"/>

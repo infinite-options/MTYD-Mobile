@@ -21,6 +21,7 @@ namespace MTYD.Model
         public event PropertyChangedEventHandler PropertyChanged;
         private CancellationTokenSource throttleCts = new CancellationTokenSource();
         string zip;
+        bool selected = false;
 
         public async Task GetPlacesPredictionsAsync(ListView addressList, ObservableCollection<AddressAutocomplete> Addresses, string _addressText)
         {
@@ -36,7 +37,7 @@ namespace MTYD.Model
                         string json = await message.Content.ReadAsStringAsync().ConfigureAwait(false);
 
                         PlacesLocationPredictions predictionList = await Task.Run(() => JsonConvert.DeserializeObject<PlacesLocationPredictions>(json)).ConfigureAwait(false);
-
+                        
                         if (predictionList.Status == "OK")
                         {
                             Addresses.Clear();
@@ -98,6 +99,10 @@ namespace MTYD.Model
 
         public void OnAddressChanged(ListView addressList, ObservableCollection<AddressAutocomplete> Addresses, string _addressText)
         {
+            if (!selected)
+            {
+                addressList.IsVisible = true;
+            }
             Interlocked.Exchange(ref this.throttleCts, new CancellationTokenSource()).Cancel();
             Task.Delay(TimeSpan.FromMilliseconds(500), this.throttleCts.Token)
                 .ContinueWith(
@@ -109,10 +114,15 @@ namespace MTYD.Model
 
         public void addressEntryFocused(ListView addressList, Grid[] grids)
         {
-            addressList.IsVisible = true;
+            //addressList.IsVisible = true;
             foreach (Grid g in grids) {
                 g.IsVisible = false;
             }
+        }
+
+        public void addressEntryFocused(ListView addressList)
+        {
+            //addressList.IsVisible = true;
         }
 
         public void addressEntryUnfocused(ListView addressList, Grid[] grids)
@@ -124,6 +134,11 @@ namespace MTYD.Model
             }
         }
 
+        public void addressEntryUnfocused(ListView addressList)
+        {
+            addressList.IsVisible = false;
+        }
+
         public void addressSelected(ListView addressList, Grid[] grids, Entry AddressEntry, Entry CityEntry, Entry StateEntry, Entry ZipEntry)
         {
             addressList.IsVisible = false;
@@ -132,10 +147,23 @@ namespace MTYD.Model
                 g.IsVisible = true;
             }
 
+            selected = true;
+
             AddressEntry.Text = ((AddressAutocomplete)addressList.SelectedItem).Street;
             CityEntry.Text = ((AddressAutocomplete)addressList.SelectedItem).City;
             StateEntry.Text = ((AddressAutocomplete)addressList.SelectedItem).State;
             ZipEntry.Text = ((AddressAutocomplete)addressList.SelectedItem).ZipCode;
+
+        }
+
+        public void addressSelected(ListView addressList, Entry AddressEntry)
+        {
+            addressList.IsVisible = false;
+
+            selected = true;
+
+            AddressEntry.Text = ((AddressAutocomplete)addressList.SelectedItem).Street + ", " + ((AddressAutocomplete)addressList.SelectedItem).City
+                + ", " + ((AddressAutocomplete)addressList.SelectedItem).State + " " + ((AddressAutocomplete)addressList.SelectedItem).ZipCode;
 
         }
 

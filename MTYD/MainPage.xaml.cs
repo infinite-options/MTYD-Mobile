@@ -31,6 +31,8 @@ using Newtonsoft.Json.Linq;
 using MTYD.Model;
 using System.Collections.ObjectModel;
 using MTYD.Interfaces;
+using System.Xml.Linq;
+using Xamarin.Forms.Maps;
 
 //testing
 namespace MTYD
@@ -53,10 +55,13 @@ namespace MTYD
         List<string> menuNames;
         List<string> menuImages;
         string cust_firstName; string cust_lastName; string cust_email;
-
+        WebClient client4 = new WebClient();
         Account account;
         [Obsolete]
         AccountStore store;
+        Address addr;
+        bool withinZones = false;
+        Zones[] passingZones;
 
         public MainPage()
         {
@@ -65,7 +70,9 @@ namespace MTYD
             Console.WriteLine("Width = " + width.ToString());
             Console.WriteLine("Height = " + height.ToString());
             //DisplayAlert("Hello", "main page constructor called", "OK");
+            addr = new Address();
             InitializeComponent();
+            BindingContext = this;
 
             string version = "";
             string build = "";
@@ -96,7 +103,7 @@ namespace MTYD
             //var vm = new LoginViewModel();
             vm.AppleError += AppleError;
             //vm.PlatformError += PlatformError;
-            BindingContext = vm;
+            //BindingContext = vm;
 
             if (Device.RuntimePlatform == Device.Android)
             {
@@ -1840,6 +1847,216 @@ namespace MTYD
         void clickedIns(System.Object sender, System.EventArgs e)
         {
             Launcher.OpenAsync(new Uri("https://www.instagram.com/mealsfor.me/"));
+        }
+
+        // Auto-complete
+        private ObservableCollection<AddressAutocomplete> _addresses;
+        public ObservableCollection<AddressAutocomplete> Addresses
+        {
+            get => _addresses ?? (_addresses = new ObservableCollection<AddressAutocomplete>());
+            set
+            {
+                if (_addresses != value)
+                {
+                    _addresses = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private string _addressText;
+        public string AddressText
+        {
+            get => _addressText;
+            set
+            {
+                if (_addressText != value)
+                {
+                    _addressText = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private void OnAddressChanged(object sender, EventArgs eventArgs)
+        {
+            addr.OnAddressChanged(addressList, Addresses, _addressText);
+        }
+
+        private void addressEntryFocused(object sender, EventArgs eventArgs)
+        {
+            addr.addressEntryFocused(addressList);
+        }
+
+        private void addressEntryUnfocused(object sender, EventArgs eventArgs)
+        {
+            addr.addressEntryUnfocused(addressList);
+        }
+
+        async void addressSelected(System.Object sender, System.EventArgs e)
+        {
+            addr.addressSelected(addressList, AddressEntry);
+            string inputAddress = AddressEntry.Text;
+
+            string[] addressSplit = inputAddress.Split(',');
+            string addr1 = addressSplit[0].Trim();
+            string city = addressSplit[1].Trim();
+            string state = addressSplit[2].Trim().Substring(0, 2);
+            string zip = addressSplit[2].Trim().Substring(3);
+
+            //int start = 0;
+            //int end = inputAddress.Substring(start).IndexOf(",");
+            //Console.WriteLine(start + ", " + end);
+            //string addr1 = inputAddress.Substring(start, end);
+            //Console.WriteLine(addr1);
+
+            //start = end + 2;
+            //end = inputAddress.Substring(start).IndexOf(",") + start;
+            //Console.WriteLine(start + ", " + end);
+            //string city = inputAddress.Substring(start, end);
+            //Console.WriteLine(city);
+
+            //start = end + 2;
+            //end = inputAddress.Substring(start).IndexOf(" ") + start;
+            //Console.WriteLine(start + ", " + end);
+            //string state = inputAddress.Substring(start, end);
+            //Console.WriteLine(state);
+
+            //start = end + 1;
+            //Console.WriteLine(start);
+            //string zip = inputAddress.Substring(start);
+            //Console.WriteLine(zip);
+
+            // Setting request for USPS API
+            XDocument requestDoc = new XDocument(
+                new XElement("AddressValidateRequest",
+                new XAttribute("USERID", "400INFIN1745"),
+                new XElement("Revision", "1"),
+                new XElement("Address",
+                new XAttribute("ID", "0"),
+                new XElement("Address1", addr1),
+                new XElement("Address2", ""),
+                new XElement("City", city),
+                new XElement("State", state),
+                new XElement("Zip5", zip),
+                new XElement("Zip4", "")
+                     )
+                 )
+             );
+            var url = "http://production.shippingapis.com/ShippingAPI.dll?API=Verify&XML=" + requestDoc;
+            Console.WriteLine(url);
+            var client2 = new WebClient();
+            var response2 = client2.DownloadString(url);
+
+            var xdoc = XDocument.Parse(response2.ToString());
+            Console.WriteLine("xdoc begin");
+            Console.WriteLine(xdoc);
+
+
+            string latitude = "0";
+            string longitude = "0";
+            foreach (XElement element in xdoc.Descendants("Address"))
+            {
+                if (GetXMLElement(element, "Error").Equals(""))
+                {
+                    if (GetXMLElement(element, "DPVConfirmation").Equals("Y") || GetXMLElement(element, "DPVConfirmation").Equals("D") || GetXMLElement(element, "DPVConfirmation").Equals("S"))
+                    {
+                        Geocoder geoCoder = new Geocoder();
+
+                        Debug.WriteLine("$" + AddressEntry.Text.Trim() + "$");
+                        IEnumerable<Position> approximateLocations = await geoCoder.GetPositionsForAddressAsync(AddressEntry.Text.Trim());
+                        Position position = approximateLocations.FirstOrDefault();
+
+                        latitude = $"{position.Latitude}";
+                        longitude = $"{position.Longitude}";
+
+                        //used for createaccount endpoint
+                        Preferences.Set("user_latitude", latitude);
+                        Preferences.Set("user_longitude", longitude);
+                        Debug.WriteLine("user latitude: " + latitude);
+                        Debug.WriteLine("user longitude: " + longitude);
+
+                        //https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/categoricalOptions/-121.8866517,37.2270928 long,lat
+                        //var request3 = new HttpRequestMessage();
+                        //Console.WriteLine("user_id: " + (string)Application.Current.Properties["user_id"]);
+                        //Debug.WriteLine("latitude: " + latitude + ", longitude: " + longitude);
+                        string url3 = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/categoricalOptions/" + longitude + "," + latitude;
+                        //request3.RequestUri = new Uri(url3);
+                        //request3.Method = HttpMethod.Get;
+                        //var client3 = new HttpClient();
+                        //HttpResponseMessage response3 = await client3.SendAsync(request3);
+                        Debug.WriteLine("categorical options url: " + url3);
+
+                        var content = client4.DownloadString(url3);
+                        var obj = JsonConvert.DeserializeObject<ZonesDto>(content);
+
+                        //HttpContent content3 = response3.Content;
+                        //Console.WriteLine("content: " + content3);
+                        //var userString3 = await content3.ReadAsStringAsync();
+                        //Debug.WriteLine("userString3: " + userString3);
+                        //JObject info_obj3 = JObject.Parse(userString3);
+                        if (obj.Result.Length == 0)
+                        {
+                            withinZones = false;
+                        }
+                        else
+                        {
+                            Debug.WriteLine("first business: " + obj.Result[0].business_name);
+                            passingZones = obj.Result;
+                            withinZones = true;
+                        }
+
+                        break;
+                    }
+                    //else if (GetXMLElement(element, "DPVConfirmation").Equals("D"))
+                    //{
+                    //    await DisplayAlert("Alert!", "Please enter a unit number.", "Ok");
+                    //    return;
+                    //}
+                    else
+                    {
+                        //await DisplayAlert("Alert!", "Seems like your address is invalid.", "Ok");
+                        //return;
+                    }
+                }
+                else
+                {   // USPS sents an error saying address not found in there records. In other words, this address is not valid because it does not exits.
+                    //Console.WriteLine("Seems like your address is invalid.");
+                    //await DisplayAlert("Alert!", "Error from USPS. The address you entered was not found.", "Ok");
+                    //return;
+                }
+            }
+            if (latitude == "0" || longitude == "0")
+            {
+                await DisplayAlert("We couldn't find your address", "Please check for errors.", "OK");
+            }
+            else if (withinZones == false)
+            {
+                await DisplayAlert("Sorry", "Address is not within any of our delivery zones.", "OK");
+            }
+            else
+            {
+                //bool subscribe = await DisplayAlert("Valid Address", "Your address is within our zone.", "Sign Up", "Continue Exploring");
+                //if (subscribe)
+                //{
+                //    await Navigation.PushAsync(new SubscriptionPage("Welcome", "Guest", "welcome@guest.com"));
+                //}
+                //else
+                //{
+                //}
+                await DisplayAlert("Valid Address", "Your address is within our zone.", "OK");
+            }
+            //addressList.IsVisible = false;
+        }
+
+        public static string GetXMLElement(XElement element, string name)
+        {
+            var el = element.Element(name);
+            if (el != null)
+            {
+                return el.Value;
+            }
+            return "";
         }
     }
 }
