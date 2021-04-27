@@ -114,7 +114,7 @@ namespace MTYD.Model
 
         public void addressEntryFocused(ListView addressList, Grid[] grids)
         {
-            //addressList.IsVisible = true;
+            addressList.IsVisible = true;
             foreach (Grid g in grids) {
                 g.IsVisible = false;
             }
@@ -165,6 +165,7 @@ namespace MTYD.Model
             AddressEntry.Text = ((AddressAutocomplete)addressList.SelectedItem).Street + ", " + ((AddressAutocomplete)addressList.SelectedItem).City
                 + ", " + ((AddressAutocomplete)addressList.SelectedItem).State + " " + ((AddressAutocomplete)addressList.SelectedItem).ZipCode;
 
+            selected = false;
         }
 
         protected void OnPropertyChanged(string propertyName)

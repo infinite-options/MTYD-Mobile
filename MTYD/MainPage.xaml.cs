@@ -170,6 +170,7 @@ namespace MTYD
             pfp.CornerRadius = (int)(width / 40);
             //pfp.Margin = new Thickness(0, 0, 23, 27);
             innerGrid.Margin = new Thickness(0, 0, 23, 27);
+            fade.Margin = new Thickness(0, -height / 3, 0, 0);
 
             if (Preferences.Get("profilePicLink", "") == "")
             {
@@ -194,24 +195,6 @@ namespace MTYD
             if (width == 1125 && height == 2436) //iPhone X only
             {
                 Console.WriteLine("entered for iPhone X");
-
-                //username and password entry
-                //grid2.Margin = new Thickness(width / 22, height / 90, width / 22, 0);
-                //loginUsername.Margin = new Thickness(0, height / (-120), 0, height / (-120));
-                //loginPassword.Margin = new Thickness(0, height / (-120), width / 55, height / (-120));
-                //userFrame.CornerRadius = 27;
-                //passFrame.CornerRadius = 27;
-
-                //login and signup buttons
-                //loginButton.HeightRequest = height / 47;
-                //signUpButton.HeightRequest = height / 47;
-                //loginButton.WidthRequest = width / 10;
-                //signUpButton.WidthRequest = width / 10;
-                //loginButton.CornerRadius = (int)(height / 94);
-                //signUpButton.CornerRadius = (int)(height / 94);
-
-                //or divider
-                //grid4.Margin = new Thickness(width / 16, height / 80, width / 16, height / 100);
 
                 //social media buttons
                 googleLoginButton.HeightRequest = width / 17;
@@ -314,8 +297,6 @@ namespace MTYD
             orangeBox.HeightRequest = height / 2;
             orangeBox.Margin = new Thickness(0, -height / 2.2, 0, 0);
             orangeBox.CornerRadius = height / 40;
-            //logo.HeightRequest = width / 15;
-            //logo.Margin = new Thickness(0, 0, 0, 30);
             innerGrid.Margin = new Thickness(0, 0, 23, 27);
 
             menu.HeightRequest = width / 25;
@@ -1904,29 +1885,6 @@ namespace MTYD
             string state = addressSplit[2].Trim().Substring(0, 2);
             string zip = addressSplit[2].Trim().Substring(3);
 
-            //int start = 0;
-            //int end = inputAddress.Substring(start).IndexOf(",");
-            //Console.WriteLine(start + ", " + end);
-            //string addr1 = inputAddress.Substring(start, end);
-            //Console.WriteLine(addr1);
-
-            //start = end + 2;
-            //end = inputAddress.Substring(start).IndexOf(",") + start;
-            //Console.WriteLine(start + ", " + end);
-            //string city = inputAddress.Substring(start, end);
-            //Console.WriteLine(city);
-
-            //start = end + 2;
-            //end = inputAddress.Substring(start).IndexOf(" ") + start;
-            //Console.WriteLine(start + ", " + end);
-            //string state = inputAddress.Substring(start, end);
-            //Console.WriteLine(state);
-
-            //start = end + 1;
-            //Console.WriteLine(start);
-            //string zip = inputAddress.Substring(start);
-            //Console.WriteLine(zip);
-
             // Setting request for USPS API
             XDocument requestDoc = new XDocument(
                 new XElement("AddressValidateRequest",
@@ -2032,21 +1990,22 @@ namespace MTYD
             }
             else if (withinZones == false)
             {
-                await DisplayAlert("Sorry", "Address is not within any of our delivery zones.", "OK");
+                fade.IsVisible = true;
+                CheckAddressGrid.IsVisible = true;
+                CheckAddressHeading.Text = "Oops!";
+                CheckAddressBody.Text = "Sorry, it looks like we don’t deliver to your Zip Code yet. Please feel free to leave us your email address and we will let you know as soon as we come to your neighborhood.";
+                EmailFrame.IsVisible = true;
+                OkayButton.Text = "Okay";
             }
             else
             {
-                //bool subscribe = await DisplayAlert("Valid Address", "Your address is within our zone.", "Sign Up", "Continue Exploring");
-                //if (subscribe)
-                //{
-                //    await Navigation.PushAsync(new SubscriptionPage("Welcome", "Guest", "welcome@guest.com"));
-                //}
-                //else
-                //{
-                //}
-                await DisplayAlert("Valid Address", "Your address is within our zone.", "OK");
+                fade.IsVisible = true;
+                CheckAddressGrid.IsVisible = true;
+                CheckAddressHeading.Text = "Hooray!";
+                CheckAddressBody.Text = "We are so glad that we deliver to your neighborhood. Please click Okay to continue enjoying MealsFor.Me";
+                EmailFrame.IsVisible = false;
+                OkayButton.Text = "Explore Meals";
             }
-            //addressList.IsVisible = false;
         }
 
         public static string GetXMLElement(XElement element, string name)
@@ -2057,6 +2016,23 @@ namespace MTYD
                 return el.Value;
             }
             return "";
+        }
+
+        void xButtonClicked(System.Object sender, System.EventArgs e)
+        {
+            fade.IsVisible = false;
+            CheckAddressGrid.IsVisible = false;
+        }
+
+        async void OkayClicked(System.Object sender, System.EventArgs e)
+        {
+            if (EmailFrame.IsVisible && EmailEntry.Text != null && EmailEntry.Text.Length != 0)
+            {
+                // add email to new neighborhood notification list
+            }
+            fade.IsVisible = false;
+            CheckAddressGrid.IsVisible = false;
+            Application.Current.MainPage = new NavigationPage(new ExploreMeals());
         }
     }
 }

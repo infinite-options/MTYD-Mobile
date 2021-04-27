@@ -26,6 +26,9 @@ namespace MTYD
         public SignUpPost directSignUp = new SignUpPost();
         public bool isAddessValidated = false;
         Address addr;
+        WebClient client4 = new WebClient();
+        bool withinZones = false;
+        Zones[] passingZones;
 
         public CarlosSignUp()
         {
@@ -40,6 +43,13 @@ namespace MTYD
 
         public void checkPlatform(double height, double width)
         {
+            Xamarin.Forms.NavigationPage.SetHasNavigationBar(this, false);
+            orangeBox.HeightRequest = height / 2;
+            orangeBox.Margin = new Thickness(0, -height / 2, 0, 0);
+            orangeBox.CornerRadius = height / 40;
+            heading.WidthRequest = width / 3;
+            fade.Margin = new Thickness(0, -height / 3, 0, 0);
+
             if (Device.RuntimePlatform == Device.iOS)
             {
                 appleSignupFrame.WidthRequest = width / 3.5;
@@ -58,32 +68,15 @@ namespace MTYD
                 googleSignupButton.HeightRequest = width / 25;
                 googleSignupText.FontSize = width / 50;
 
-                orDivider.WidthRequest = width / 2.5;
-                emailOption.FontSize = width / 35;
-
-                firstName.HeightRequest = width / 30;
-                FNameEntry.FontSize = width / 55;
-                LNameEntry.FontSize = width / 55;
-                emailEntry.FontSize = width / 55;
-                reenterEmailEntry.FontSize = width / 55;
-                passwordEntry.FontSize = width / 55;
-                reenterPasswordEntry.FontSize = width / 55;
-                AddressEntry.FontSize = width / 55;
-                AptEntry.FontSize = width / 55;
-                CityEntry.FontSize = width / 55;
-                StateEntry.FontSize = width / 55;
-                ZipEntry.FontSize = width / 55;
-                PhoneEntry.FontSize = width / 55;
-
                 addressList.HeightRequest = width / 5;
 
-                backButton.WidthRequest = width / 8;
-                backButton.HeightRequest = width / 17;
-                backButton.CornerRadius = (int)(width / 34);
+                //backButton.WidthRequest = width / 8;
+                //backButton.HeightRequest = width / 17;
+                //backButton.CornerRadius = (int)(width / 34);
 
-                SignUpButton.WidthRequest = width / 8;
-                SignUpButton.HeightRequest = width / 17;
-                SignUpButton.CornerRadius = (int)(width / 34);
+                //SignUpButton.WidthRequest = width / 8;
+                //SignUpButton.HeightRequest = width / 17;
+                //SignUpButton.CornerRadius = (int)(width / 34);
             }
             else //Android
             {
@@ -103,30 +96,13 @@ namespace MTYD
                 googleSignupButton.HeightRequest = width / 35;
                 googleSignupText.FontSize = width / 65;
 
-                orDivider.WidthRequest = width / 4;
-                emailOption.FontSize = width / 55;
+                //backButton.WidthRequest = width / 10;
+                //backButton.HeightRequest = width / 25;
+                //backButton.CornerRadius = (int)(width / 50);
 
-                firstName.HeightRequest = width / 45;
-                FNameEntry.FontSize = width / 70;
-                LNameEntry.FontSize = width / 70;
-                emailEntry.FontSize = width / 70;
-                reenterEmailEntry.FontSize = width / 70;
-                passwordEntry.FontSize = width / 70;
-                reenterPasswordEntry.FontSize = width / 70;
-                AddressEntry.FontSize = width / 70;
-                AptEntry.FontSize = width / 70;
-                CityEntry.FontSize = width / 70;
-                StateEntry.FontSize = width / 70;
-                ZipEntry.FontSize = width / 70;
-                PhoneEntry.FontSize = width / 70;
-
-                backButton.WidthRequest = width / 10;
-                backButton.HeightRequest = width / 25;
-                backButton.CornerRadius = (int)(width / 50);
-
-                SignUpButton.WidthRequest = width / 10;
-                SignUpButton.HeightRequest = width / 25;
-                SignUpButton.CornerRadius = (int)(width / 50);
+                //SignUpButton.WidthRequest = width / 10;
+                //SignUpButton.HeightRequest = width / 25;
+                //SignUpButton.CornerRadius = (int)(width / 50);
             }
         }
 
@@ -161,48 +137,8 @@ namespace MTYD
             Application.Current.MainPage = new MainPage();
         }
 
-        async void ValidateAddressClick(object sender, System.EventArgs e)
+        async void SignupClicked(object sender, System.EventArgs e)
         {
-            if (emailEntry.Text != null)
-            {
-                directSignUp.email = emailEntry.Text.ToLower().Trim();
-            }
-            else
-            {
-                await DisplayAlert("Error", "Please enter a valid email address.", "OK");
-            }
-
-            if (reenterEmailEntry.Text != null)
-            {
-                string conformEmail = reenterEmailEntry.Text.ToLower().Trim();
-                if (!directSignUp.email.Equals(conformEmail))
-                {
-                    await DisplayAlert("Error", "Your email doesn't match", "OK");
-                }
-            }
-            else
-            {
-                await DisplayAlert("Error", "Please enter a valid email address.", "OK");
-            }
-
-            if (passwordEntry.Text != null)
-            {
-                directSignUp.password = passwordEntry.Text.Trim();
-            }
-            else
-            {
-                await DisplayAlert("Error", "Please enter a password", "OK");
-            }
-
-            if (reenterPasswordEntry.Text != null)
-            {
-                string password = reenterPasswordEntry.Text.Trim();
-                if (!directSignUp.password.Equals(password))
-                {
-                    await DisplayAlert("Error", "Your password doesn't match", "OK");
-                }
-            }
-
             if (FNameEntry.Text != null)
             {
                 directSignUp.first_name = FNameEntry.Text.Trim();
@@ -210,6 +146,7 @@ namespace MTYD
             else
             {
                 await DisplayAlert("Error", "Please enter your first name.", "OK");
+                return;
             }
 
             if (LNameEntry.Text != null)
@@ -219,150 +156,62 @@ namespace MTYD
             else
             {
                 await DisplayAlert("Error", "Please enter your last name.", "OK");
+                return;
             }
 
-            if (AddressEntry.Text != null)
+            if (emailEntry.Text != null)
             {
-                directSignUp.address = AddressEntry.Text.Trim();
+                directSignUp.email = emailEntry.Text.ToLower().Trim();
             }
             else
             {
-                await DisplayAlert("Error", "Please enter your address", "OK");
+                await DisplayAlert("Error", "Please enter a valid email address.", "OK");
+                return;
             }
 
-            if (AptEntry.Text != null)
+            if (reenterEmailEntry.Text != null)
             {
-                directSignUp.unit = AptEntry.Text.Trim();
-            }
-
-            if (CityEntry.Text != null)
-            {
-                directSignUp.city = CityEntry.Text.Trim();
+                string conformEmail = reenterEmailEntry.Text.ToLower().Trim();
+                if (!directSignUp.email.Equals(conformEmail))
+                {
+                    await DisplayAlert("Error", "Your email doesn't match", "OK");
+                    return;
+                }
             }
             else
             {
-                await DisplayAlert("Error", "Please enter your city", "OK");
+                await DisplayAlert("Error", "Please enter a valid email address.", "OK");
+                return;
             }
 
-            if (StateEntry.Text != null)
+            if (passwordEntry.Text != null)
             {
-                directSignUp.state = StateEntry.Text.Trim();
+                directSignUp.password = passwordEntry.Text.Trim();
             }
             else
             {
-                await DisplayAlert("Error", "Please enter your state", "OK");
+                await DisplayAlert("Error", "Please enter a password", "OK");
+                return;
             }
 
-            if (ZipEntry.Text != null)
+            if (reenterPasswordEntry.Text != null)
             {
-                directSignUp.zip_code = ZipEntry.Text.Trim();
-            }
-            else
-            {
-                await DisplayAlert("Error", "Please enter your zipcode", "OK");
-            }
-
-            if (PhoneEntry.Text != null && PhoneEntry.Text.Length == 10)
-            {
-                directSignUp.phone_number = PhoneEntry.Text.Trim();
-            }
-            else
-            {
-                await DisplayAlert("Error", "Please enter your phone number", "OK");
+                string password = reenterPasswordEntry.Text.Trim();
+                if (!directSignUp.password.Equals(password))
+                {
+                    await DisplayAlert("Error", "Your password doesn't match", "OK");
+                    return;
+                }
             }
 
             if (directSignUp.unit == null)
             {
                 directSignUp.unit = "";
             }
-
-            // Setting request for USPS API
-            XDocument requestDoc = new XDocument(
-                new XElement("AddressValidateRequest",
-                new XAttribute("USERID", "400INFIN1745"),
-                new XElement("Revision", "1"),
-                new XElement("Address",
-                new XAttribute("ID", "0"),
-                new XElement("Address1", directSignUp.address),
-                new XElement("Address2", directSignUp.unit),
-                new XElement("City", directSignUp.city),
-                new XElement("State", directSignUp.state),
-                new XElement("Zip5", directSignUp.zip_code),
-                new XElement("Zip4", "")
-                     )
-                 )
-             );
-            var url = "http://production.shippingapis.com/ShippingAPI.dll?API=Verify&XML=" + requestDoc;
-            Console.WriteLine(url);
-            var client = new WebClient();
-            var response = client.DownloadString(url);
-
-            var xdoc = XDocument.Parse(response.ToString());
-            Console.WriteLine(xdoc);
-            string latitude = "0";
-            string longitude = "0";
-            foreach (XElement element in xdoc.Descendants("Address"))
-            {
-                if (GetXMLElement(element, "Error").Equals(""))
-                {
-                    if (GetXMLElement(element, "DPVConfirmation").Equals("Y") && GetXMLElement(element, "Zip5").Equals(directSignUp.zip_code) && GetXMLElement(element, "City").Equals(directSignUp.city.ToUpper())) // Best case
-                    {
-                        // Get longitude and latitide because we can make a deliver here. Move on to next page.
-                        // Console.WriteLine("The address you entered is valid and deliverable by USPS. We are going to get its latitude & longitude");
-                        //GetAddressLatitudeLongitude();
-                        Geocoder geoCoder = new Geocoder();
-                        
-                        IEnumerable<Position> approximateLocations = await geoCoder.GetPositionsForAddressAsync(directSignUp.address + "," + directSignUp.city + "," + directSignUp.state);
-                        Position position = approximateLocations.FirstOrDefault();
-
-                        latitude = $"{position.Latitude}";
-                        longitude = $"{position.Longitude}";
-
-                        directSignUp.latitude = latitude;
-                        directSignUp.longitude = longitude;
-                        //map.MapType = MapType.Street;
-                        //var mapSpan = new MapSpan(position, 0.001, 0.001);
-
-                        //Pin address = new Pin();
-                        //address.Label = "Delivery Address";
-                        //address.Type = PinType.SearchResult;
-                        //address.Position = position;
-
-                        //map.MoveToRegion(mapSpan);
-                        //map.Pins.Add(address);
-
-                        break;
-                    }
-                    else if (GetXMLElement(element, "DPVConfirmation").Equals("D"))
-                    {
-                        //await DisplayAlert("Alert!", "Address is missing information like 'Apartment number'.", "Ok");
-                        //return;
-                    }
-                    else
-                    {
-                        //await DisplayAlert("Alert!", "Seems like your address is invalid.", "Ok");
-                        //return;
-                    }
-                }
-                else
-                {   // USPS sents an error saying address not found in there records. In other words, this address is not valid because it does not exits.
-                    //Console.WriteLine("Seems like your address is invalid.");
-                    //await DisplayAlert("Alert!", "Error from USPS. The address you entered was not found.", "Ok");
-                    //return;
-                }
-            }
-            if (latitude == "0" || longitude == "0")
-            {
-                await DisplayAlert("We couldn't find your address", "Please check for errors.", "Ok");
-            }
-            else
-            {
-                isAddessValidated = true;
-                await DisplayAlert("We validated your address", "Please click on the Sign up button to create your account!", "OK");
-                await Application.Current.SavePropertiesAsync();
-                await tagUser(emailEntry.Text, ZipEntry.Text);
-                SignUpNewUser(sender, e);
-            }
+            
+            await Application.Current.SavePropertiesAsync();
+            await tagUser(emailEntry.Text, ZipEntry.Text);
+            SignUpNewUser(sender, e);
         }
 
         public static string GetXMLElement(XElement element, string name)
@@ -572,6 +421,189 @@ namespace MTYD
         async void addressSelected(System.Object sender, System.EventArgs e)
         {
             addr.addressSelected(addressList, new Grid[] { UnitCity, StateZip }, AddressEntry, CityEntry, StateEntry, ZipEntry);
+        }
+
+        async void continueClicked(System.Object sender, System.EventArgs e)
+        {
+            if (AddressEntry.Text != null)
+            {
+                directSignUp.address = AddressEntry.Text.Trim();
+            }
+            else
+            {
+                await DisplayAlert("Error", "Please enter your address", "OK");
+            }
+
+            if (AptEntry.Text != null)
+            {
+                directSignUp.unit = AptEntry.Text.Trim();
+            }
+
+            if (CityEntry.Text != null)
+            {
+                directSignUp.city = CityEntry.Text.Trim();
+            }
+            else
+            {
+                await DisplayAlert("Error", "Please enter your city", "OK");
+            }
+
+            if (StateEntry.Text != null)
+            {
+                directSignUp.state = StateEntry.Text.Trim();
+            }
+            else
+            {
+                await DisplayAlert("Error", "Please enter your state", "OK");
+            }
+
+            if (ZipEntry.Text != null)
+            {
+                directSignUp.zip_code = ZipEntry.Text.Trim();
+            }
+            else
+            {
+                await DisplayAlert("Error", "Please enter your zipcode", "OK");
+            }
+
+            if (PhoneEntry.Text != null && PhoneEntry.Text.Length == 10)
+            {
+                directSignUp.phone_number = PhoneEntry.Text.Trim();
+            }
+            else
+            {
+                await DisplayAlert("Error", "Please enter your phone number", "OK");
+            }
+
+            // Setting request for USPS API
+            XDocument requestDoc = new XDocument(
+                new XElement("AddressValidateRequest",
+                new XAttribute("USERID", "400INFIN1745"),
+                new XElement("Revision", "1"),
+                new XElement("Address",
+                new XAttribute("ID", "0"),
+                new XElement("Address1", directSignUp.address),
+                new XElement("Address2", directSignUp.unit),
+                new XElement("City", directSignUp.city),
+                new XElement("State", directSignUp.state),
+                new XElement("Zip5", directSignUp.zip_code),
+                new XElement("Zip4", "")
+                     )
+                 )
+             );
+            var url = "http://production.shippingapis.com/ShippingAPI.dll?API=Verify&XML=" + requestDoc;
+            Console.WriteLine(url);
+            var client = new WebClient();
+            var response = client.DownloadString(url);
+
+            var xdoc = XDocument.Parse(response.ToString());
+            Console.WriteLine(xdoc);
+            string latitude = "0";
+            string longitude = "0";
+            foreach (XElement element in xdoc.Descendants("Address"))
+            {
+                if (GetXMLElement(element, "Error").Equals(""))
+                {
+                    if (GetXMLElement(element, "DPVConfirmation").Equals("Y") || GetXMLElement(element, "DPVConfirmation").Equals("D") || GetXMLElement(element, "DPVConfirmation").Equals("S"))
+                    {
+                        Geocoder geoCoder = new Geocoder();
+
+                        IEnumerable<Position> approximateLocations = await geoCoder.GetPositionsForAddressAsync(directSignUp.address + "," + directSignUp.city + "," + directSignUp.state);
+                        Position position = approximateLocations.FirstOrDefault();
+
+                        latitude = $"{position.Latitude}";
+                        longitude = $"{position.Longitude}";
+
+                        directSignUp.latitude = latitude;
+                        directSignUp.longitude = longitude;
+
+                        string url3 = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/categoricalOptions/" + longitude + "," + latitude;
+
+                        var content = client4.DownloadString(url3);
+                        var obj = JsonConvert.DeserializeObject<ZonesDto>(content);
+
+                        if (obj.Result.Length == 0)
+                        {
+                            withinZones = false;
+                        }
+                        else
+                        {
+                            Debug.WriteLine("first business: " + obj.Result[0].business_name);
+                            passingZones = obj.Result;
+                            withinZones = true;
+                        }
+
+                        break;
+                    }
+                    else if (GetXMLElement(element, "DPVConfirmation").Equals("D"))
+                    {
+                        //await DisplayAlert("Alert!", "Address is missing information like 'Apartment number'.", "Ok");
+                        //return;
+                    }
+                    else
+                    {
+                        //await DisplayAlert("Alert!", "Seems like your address is invalid.", "Ok");
+                        //return;
+                    }
+                }
+                else
+                {   // USPS sents an error saying address not found in there records. In other words, this address is not valid because it does not exits.
+                    //Console.WriteLine("Seems like your address is invalid.");
+                    //await DisplayAlert("Alert!", "Error from USPS. The address you entered was not found.", "Ok");
+                    //return;
+                }
+            }
+            if (latitude == "0" || longitude == "0")
+            {
+                await DisplayAlert("We couldn't find your address", "Please check for errors.", "Ok");
+            }
+            else if (withinZones == false)
+            {
+                fade.IsVisible = true;
+                CheckAddressGrid.IsVisible = true;
+                CheckAddressHeading.Text = "Oops!";
+                CheckAddressBody.Text = "Sorry, it looks like we don’t deliver to your Zip Code yet. Please feel free to leave us your email address and we will let you know as soon as we come to your neighborhood.";
+                EmailFrame.IsVisible = true;
+                OkayButton.Text = "Okay";
+            }
+            else
+            {
+                fade.IsVisible = true;
+                CheckAddressGrid.IsVisible = true;
+                CheckAddressHeading.Text = "Hooray!";
+                CheckAddressBody.Text = "We are so glad that we deliver to your neighborhood. Please click Continue to complete the Sign Up process.";
+                EmailFrame.IsVisible = false;
+                OkayButton.Text = "Continue";
+
+                isAddessValidated = true;
+                
+            }
+        }
+
+        void xButtonClicked(System.Object sender, System.EventArgs e)
+        {
+            fade.IsVisible = false;
+            CheckAddressGrid.IsVisible = false;
+            if (CheckAddressHeading.Text == "Hooray!")
+            {
+                addressEntries.IsVisible = false;
+                mainEntries.IsVisible = true;
+            }
+        }
+
+        async void OkayClicked(System.Object sender, System.EventArgs e)
+        {
+            if (EmailFrame.IsVisible && EmailEntry.Text != null && EmailEntry.Text.Length != 0)
+            {
+                // add email to new neighborhood notification list
+            }
+            fade.IsVisible = false;
+            CheckAddressGrid.IsVisible = false;
+            if (CheckAddressHeading.Text == "Hooray!")
+            {
+                addressEntries.IsVisible = false;
+                mainEntries.IsVisible = true;
+            }
         }
     }
 }

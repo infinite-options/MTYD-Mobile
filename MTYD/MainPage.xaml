@@ -48,111 +48,6 @@
 
                     <BoxView HeightRequest="20"/>
 
-                    <!-- username and password entry, forget password -->
-                    <!--<Grid x:Name="grid2" HorizontalOptions="Center" VerticalOptions="Center" RowSpacing="20">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/> 
-                        </Grid.RowDefinitions>
-
-
-                        <Frame x:Name="userFrame" BackgroundColor="#FFE5B4" CornerRadius="25">
-                    
-                           <Entry x:Name="loginUsername" FontAttributes="Bold"
-                           FontSize="16" Placeholder="USERNAME" Keyboard="Email"
-                           BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4">
-
-                           </Entry>
-
-                        </Frame>
-
-
-                        <Frame x:Name="passFrame" BackgroundColor="#FFE5B4" Grid.Row="1" CornerRadius="25">
-                    
-                           <Entry x:Name="loginPassword" Keyboard="Text" FontAttributes="Bold"
-                           FontSize="16" Placeholder="PASSWORD" IsPassword="True" TextColor="Black"
-                           BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"/>   
-                   
-                        </Frame>
-
-                        <ImageButton Grid.Row="1" x:Name="seePassword" HorizontalOptions="End" VerticalOptions="Center"
-                                 HeightRequest="28" WidthRequest="28" Source="eye.png" Margin="0,0,6,0"
-                                 Aspect="AspectFit" Opacity="0.5" Clicked="clickedSeePassword" />
-
-                        <Button x:Name="forgotPass" Text="Forgot Password?" TextColor="White" HorizontalOptions="End" FontSize="15"
-                                Grid.Row="2" Margin="0,-25,10,0" VerticalOptions="Center" BackgroundColor="Transparent" Clicked="clickedForgotPass"/>
-                
-                    </Grid>-->
-
-                    <!-- login and signup buttons -->
-                    <!--<Grid x:Name="grid3" VerticalOptions="Center" ColumnSpacing="25" Margin="0,10,0,0">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="1*"/>
-                        </Grid.ColumnDefinitions>
-
-                        <Button x:Name="loginButton" Text="LOG IN" FontSize="17" FontAttributes="Bold"
-                            BackgroundColor="#F59A28" TextColor= "White" HorizontalOptions="End"
-                            Clicked="clickedLogin"/>
-
-                        <Button x:Name= "signUpButton" Text="SIGN UP" FontSize="17" FontAttributes="Bold"
-                            BackgroundColor="#F59A28" TextColor= "White" HorizontalOptions="Start"
-                            Grid.Column="1" Clicked="clickedSignUp"></Button>
-
-                    </Grid>-->
-
-                    <!--<BoxView HeightRequest="20"/>-->
-
-                    <!-- or divider -->
-                    <!--<Grid x:Name="grid4" VerticalOptions="Center" ColumnSpacing="15">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="1*" />
-                        </Grid.ColumnDefinitions>
-
-                        <Label Grid.Column="1" Text="or" FontSize="15" TextColor="White"
-                               HorizontalTextAlignment="Center"/>
-
-                        <BoxView BackgroundColor="#C49F3F" HeightRequest="1" Grid.Column="0"
-                                 VerticalOptions="Center" HorizontalOptions="Fill"/>
-                        <BoxView BackgroundColor="#C49F3F" HeightRequest="1" Grid.Column="2"
-                                 VerticalOptions="Center" HorizontalOptions="Fill"/>
-
-                    </Grid>-->
-
-
-                    <!--<Label Text="LOG IN OR SIGN UP WITH" TextColor="White" FontSize="18" HorizontalTextAlignment="Center"/>-->
-
-
-                    <!-- social media buttons -->
-                    <!--<Grid x:Name="grid5" VerticalOptions="Center" ColumnSpacing="5">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="1*" />
-                        </Grid.ColumnDefinitions>
-
-                        <ImageButton x:Name="googleLoginButton" HorizontalOptions="End" BackgroundColor="#DD4B39" 
-                                  Clicked="googleLoginButtonClicked" Source="googleicon2.png" Aspect="AspectFill"/>
-
-                        <ImageButton Grid.Column="1" x:Name="facebookLoginButton" BackgroundColor="#6C9BE8" HorizontalOptions="Center"
-                                 Source="fbicon.png" Clicked="facebookLoginButtonClicked" Aspect="AspectFill"/>
-
-                        <ImageButton Grid.Column="2" x:Name="appleLoginButton" HorizontalOptions="Start" BackgroundColor="#E4E4E4"
-                                  Clicked="appleLoginButtonClicked" Source="appleicon2.png" Aspect="AspectFill"/>
-
-                    </Grid>-->
-
-                    
-
                 </StackLayout>
 
                 <StackLayout x:Name="MenuBar">
@@ -205,7 +100,7 @@
                         </Frame>
                         <Button Grid.Row="1" x:Name="fbSignupButton" BackgroundColor="Transparent" CornerRadius="15" HorizontalOptions="Center" Clicked="facebookLoginButtonClicked"/>
 
-                        <Frame x:Name="googleSignupFrame" Grid.Row="2" BackgroundColor="#6583e8" HasShadow="False" CornerRadius="15" HorizontalOptions="Center" Padding="10">
+                        <Frame x:Name="googleSignupFrame" Grid.Row="2" BackgroundColor="#db4437" HasShadow="False" CornerRadius="15" HorizontalOptions="Center" Padding="10">
                             <StackLayout Orientation="Horizontal">
                                 <Image Source="googleicon3.png" VerticalOptions="Center" Margin="5, 0, 5, 0"/>
                                 <Label x:Name="googleSignupText" Text="Continue with Google" TextColor="White" VerticalOptions="Center"/>
@@ -242,8 +137,8 @@
                         </Frame>
 
                         <ImageButton Grid.Row="1" x:Name="seePassword" HorizontalOptions="End" VerticalOptions="Center"
-                                 HeightRequest="28" WidthRequest="28" Source="eye.png" Margin="0,0,6,0"
-                                 Aspect="AspectFit" Opacity="0.5" Clicked="clickedSeePassword" />
+                                 HeightRequest="28" WidthRequest="28" Source="eye.png" Margin="0,0,10,0"
+                                 Aspect="AspectFit" Clicked="clickedSeePassword"/>
 
                         <Button x:Name="forgotPass" Text="Forgot password?" TextColor="Black" HorizontalOptions="End" FontSize="14"
                                 Grid.Row="2" Margin="0,-15,10,0" VerticalOptions="Center" BackgroundColor="Transparent" Clicked="clickedForgotPass"/>
@@ -483,257 +378,6 @@
                     
                 </StackLayout>
 
-                <!--<StackLayout x:Name="intro" BackgroundColor="White">
-                    <BoxView HeightRequest="20" Opacity="1"/>
-                    <Label Opacity="1" Text="How It Works" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Center" BackgroundColor="Transparent" FontSize="35"/>
-
-
-                    <BoxView HeightRequest="5"/>
-
-                    <Label Opacity="1" x:Name="introParagraph" HorizontalOptions="FillAndExpand" TextColor="#909090" HorizontalTextAlignment="Center"
-                           Text="Explore -> Purchase -> Choose -> Enjoy" FontAttributes="Bold"/>
-
-                    <BoxView HeightRequest="50"/>
-
-                     Explore Grid 
-                    <Grid HorizontalOptions="Center" RowSpacing="10">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-
-                        <Image Grid.Row="0" x:Name="searchPic" Source="search.png" Aspect="AspectFit"/>
-
-                        <Grid Grid.Row="1" HorizontalOptions="Center">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-
-                            <Button x:Name="first" Grid.Column="0" HorizontalOptions="End" VerticalOptions="Center" BackgroundColor="#FFBA00" TextColor="Black" Text="1" FontAttributes="Bold" Margin="0,0,10,0"/>
-
-                            <Label x:Name="step1" Grid.Column="1" Text="EXPLORE" TextColor="Black" FontAttributes="Bold" HorizontalOptions="Start" VerticalOptions="Center"/>
-
-                        </Grid>
-
-                        <Button Grid.RowSpan="2" BackgroundColor="Transparent" Clicked="clickedExplore"/>
-                    </Grid>
-
-                    <BoxView HeightRequest="3"/>
-                    
-                    <Label x:Name="sub1" Text="Let your pallete be your guide. Explore the different cuisines (we have three!) and dishes available."
-                           TextColor="#909090" HorizontalTextAlignment="Center" Margin="25, 0, 25, 0"/>
-
-                    <BoxView HeightRequest="50"/>
-
-                     Purchase Grid 
-                    <Grid HorizontalOptions="Center" RowSpacing="10">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-
-                        <Image Grid.Row="0" x:Name="cardPic" Source="cards.png" Aspect="AspectFit"/>
-
-                        <Grid Grid.Row="1" HorizontalOptions="Center">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-
-                            <Button x:Name="second" Grid.Column="0" HorizontalOptions="End" VerticalOptions="Center" BackgroundColor="#FFBA00" TextColor="Black" Text="2" FontAttributes="Bold" Margin="0,0,10,0"/>
-
-                            <Label x:Name="step2" Grid.Column="1" Text="PURCHASE" TextColor="Black" FontAttributes="Bold" HorizontalOptions="Start" VerticalOptions="Center"/>
-                    
-                        </Grid>
-
-                        <Button Grid.RowSpan="2" BackgroundColor="Transparent" Clicked="clickedPurchase"/>
-                    </Grid>
-
-                    <BoxView HeightRequest="3"/>
-
-                    <Label x:Name="sub2" Text="Purchase a Meal Plan. Pre-pay with PayPal or Stripe. Get discounts if you purchase 2 or 4 weeks in advance."
-                           TextColor="#909090" HorizontalTextAlignment="Center" Margin="25, 0, 25, 0"/>
-
-                    <BoxView HeightRequest="50"/>
-
-                     Choose Grid 
-                    <Grid HorizontalOptions="Center" RowSpacing="10">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-
-                        <Image Grid.Row="0" x:Name="pickPic" Source="pick.png" Aspect="AspectFit"/>
-
-                        <Grid Grid.Row="1" HorizontalOptions="Center">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-
-                            <Button x:Name="third" Grid.Column="0" HorizontalOptions="End" VerticalOptions="Center" BackgroundColor="#FFBA00" TextColor="Black" Text="3" FontAttributes="Bold" Margin="0,0,10,0"/>
-
-                            <Label x:Name="step3" Grid.Column="1" Text="CHOOSE" TextColor="Black" FontAttributes="Bold" HorizontalOptions="Start" VerticalOptions="Center"/>
-                    
-                        </Grid>
-
-                        <Button Grid.RowSpan="2" BackgroundColor="Transparent" Clicked="clickedExplore"/>
-                    </Grid>
-
-                    <BoxView HeightRequest="3"/>
-
-                    <Label x:Name="sub3" Text="Choose the meals you want to receive each delivery up to 4 weeks in advance."
-                           TextColor="#909090" HorizontalTextAlignment="Center" Margin="25, 0, 25, 0"/>
-
-                    <BoxView HeightRequest="50"/>
-
-                     Enjoy Grid 
-                    <Grid HorizontalOptions="Center" RowSpacing="10">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-
-                        <Image Grid.Row="0" x:Name="delivPic" Source="deliveryGuy.png" Aspect="AspectFit"/>
-
-                        <Grid Grid.Row="1" HorizontalOptions="Center">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-
-                            <Button x:Name="fourth" Grid.Column="0" HorizontalOptions="End" VerticalOptions="Center" BackgroundColor="#FFBA00" TextColor="Black" Text="4" FontAttributes="Bold" Margin="0,0,10,0"/>
-
-                            <Label x:Name="step4" Grid.Column="1" Text="ENJOY" TextColor="Black" FontAttributes="Bold" HorizontalTextAlignment="Start" VerticalOptions="Center"/>
-
-                        </Grid>
-                    </Grid>
-
-                    <BoxView HeightRequest="3"/>
-
-                    <Label x:Name="sub4" Text="Heat, enjoy, and stay healthy!"
-                           TextColor="#909090" HorizontalTextAlignment="Center" Margin="25, 0, 25, 0"/>
-
-                    <BoxView HeightRequest="40"/>
-
-                     Upcoming Menu ScrollView 
-                    <Label Text="UPCOMING MENUS" TextColor="Black" FontAttributes="Bold" FontSize="30"
-                           Margin="20, 20, 20, 20"/>
-
-                    <ScrollView Orientation="Horizontal" Margin="20, 0, 0, 20"
-                                HorizontalScrollBarVisibility="Always">
-                        <Grid x:Name="upcomingMenuGrid">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="250"/>
-                            </Grid.RowDefinitions>
-                        </Grid>
-                    </ScrollView>
-
-                     Partners 
-                    <Grid HorizontalOptions="Center" Margin="20, 20, 20, 20">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="200"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1*"/>
-                        </Grid.ColumnDefinitions>
-
-                        <Label x:Name="partners" Grid.Row="0" Text="OUR PARTNER CHEFS &amp; RESTAURANTS" TextColor="Black" FontAttributes="Bold" HorizontalOptions="Start"/>
-
-                        <Grid Grid.Row="1" HorizontalOptions="Center">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="1*"/>
-                            </Grid.ColumnDefinitions>
-
-                            <Image Grid.Column="0" Source="PonoHawaiianLogo.png" VerticalOptions="Center"/>
-
-                            <Image Grid.Column="1" Source="NityaAyurvedaLogo.png" VerticalOptions="Center"/>
-                        </Grid>
-                    </Grid>
-
-                    <Label Text="WHY TRY MealsFor.Me" HorizontalOptions="Center" FontSize="30" TextColor="Black"
-                           FontAttributes="Bold" Margin="20, 20, 20, 20"/>
-
-                
-                    <CarouselView x:Name="TheCarousel" IndicatorView="indicatorView" HeightRequest="200" Margin="30, 0, 30, 0">
-                        <CarouselView.ItemTemplate>
-                            <DataTemplate>
-                                <StackLayout>
-                                    <Label HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center"
-                                           Text="{Binding .}" TextColor="Black" FontSize="20"/>
-                                </StackLayout>
-                            </DataTemplate>
-                        </CarouselView.ItemTemplate>
-                    </CarouselView>
-
-                    <IndicatorView x:Name="indicatorView" HorizontalOptions="Fill" IndicatorsShape="Circle"
-                                   IndicatorColor="LightGray" IndicatorSize="10" SelectedIndicatorColor="Black"  Margin="30, 0, 30, 0"/>
-
-                    <BoxView HeightRequest="5"/>
-
-                     Footer 
-                    <Grid BackgroundColor="#F59A28">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-
-                        <Button x:Name="ambassadorBtn" Grid.Row="0" BackgroundColor="White" BorderColor="Black" BorderWidth="1" HorizontalOptions="CenterAndExpand"
-                                Text="Become an Ambassador" TextColor="Black" Margin="0, 30, 0, 20"/>
-
-                        <Grid Grid.Row="1" HorizontalOptions="Center" ColumnSpacing="30" Margin="0, 20, 0, 20">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="1*"/>
-                            </Grid.ColumnDefinitions>
-
-                            <ImageButton Grid.Column="0" Source="fbOutlineLogo.png" WidthRequest="70" HorizontalOptions="End" Clicked="clickedFb"/>
-                            <ImageButton Grid.Column="1" Source="insOutlineLogo.png" WidthRequest="70" HorizontalOptions="Start" Clicked="clickedIns"/>
-                        </Grid>
-
-                        <Frame Grid.Row="2" HeightRequest="90" WidthRequest="280" BackgroundColor="White" CornerRadius="10" Padding="0"
-                               HorizontalOptions="Center" VerticalOptions="Center" HasShadow="False" Margin="0, 20, 0, 30">
-                            <Image Source="logo.png" HeightRequest="100" Aspect="AspectFit"/>
-                        </Frame>
-                        <Label Grid.Row="3" x:Name="appVersion" VerticalOptions="Center" HorizontalOptions="Center" Margin="0,0,0,20" HeightRequest="20"/>
-                    </Grid>
-                </StackLayout>-->
             </StackLayout>
 
             <BoxView x:Name="fade" BackgroundColor="White" Opacity="0.6" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" IsVisible="false"/>
@@ -797,85 +441,24 @@
                     </StackLayout>
                 </Grid>
 
-            <!-- old UI -->
-            <!-- username and password entry, forget password -->
-            <!--<StackLayout IsVisible="false">
-                    <Grid x:Name="grid2" HorizontalOptions="Center" VerticalOptions="Center" RowSpacing="20">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/> 
-                        </Grid.RowDefinitions>
+                <Grid x:Name="CheckAddressGrid" VerticalOptions="Start" IsVisible="false" Margin="50, 120">
+                    <Frame BorderColor="#f26522" CornerRadius="0" HasShadow="False">
+                        <StackLayout>
+                            <ImageButton Source="xButton.png" Aspect="AspectFit" HorizontalOptions="End" Margin="-10" WidthRequest="30" Clicked="xButtonClicked"/>
 
+                            <Label x:Name="CheckAddressHeading" Text="Hooray!" FontAttributes="Bold" FontSize="25" HorizontalOptions="Center" Margin="0, 0, 0, 20"/>
 
-                        <Frame x:Name="userFrame" BackgroundColor="#FFE5B4" CornerRadius="25">
-                    
-                           <Entry x:Name="loginUsername" FontAttributes="Bold"
-                           FontSize="16" Placeholder="USERNAME" Keyboard="Email"
-                           BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4">
+                            <Label x:Name="CheckAddressBody" Text="We are so glad that we deliver to your neighborhood. Please click Okay to continue enjoying MealsFor.Me"
+                                   HorizontalOptions="Center" HorizontalTextAlignment="Center" HeightRequest="150" FontSize="16" Margin="15, 0"/>
 
-                           </Entry>
+                            <Frame x:Name="EmailFrame" BorderColor="#f26522" CornerRadius="10" HasShadow="false" Padding="15, 5" IsVisible="false">
+                                <Entry x:Name="EmailEntry" Placeholder="Email" TextColor="Black"/>
+                            </Frame>
 
-                        </Frame>
-
-
-                        <Frame x:Name="passFrame" BackgroundColor="#FFE5B4" Grid.Row="1" CornerRadius="25">
-                    
-                           <Entry x:Name="loginPassword" Keyboard="Text" FontAttributes="Bold"
-                           FontSize="16" Placeholder="PASSWORD" IsPassword="True" TextColor="Black"
-                           BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"/>   
-                   
-                        </Frame>
-
-                        <ImageButton Grid.Row="1" x:Name="seePassword" HorizontalOptions="End" VerticalOptions="Center"
-                                 HeightRequest="28" WidthRequest="28" Source="eye.png" Margin="0,0,6,0"
-                                 Aspect="AspectFit" Opacity="0.5" Clicked="clickedSeePassword" />
-
-                        <Button x:Name="forgotPass" Text="Forgot Password?" TextColor="White" HorizontalOptions="End" FontSize="15"
-                                Grid.Row="2" Margin="0,-25,10,0" VerticalOptions="Center" BackgroundColor="Transparent" Clicked="clickedForgotPass"/>
-                
-                    </Grid>
-
-                     login and signup buttons 
-                    <Grid x:Name="grid3" VerticalOptions="Center" ColumnSpacing="25" Margin="0,10,0,0">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="1*"/>
-                        </Grid.ColumnDefinitions>
-
-                        <Button x:Name="loginButton" Text="LOG IN" FontSize="17" FontAttributes="Bold"
-                            BackgroundColor="#F59A28" TextColor= "White" HorizontalOptions="End"
-                            Clicked="clickedLogin"/>
-
-                        <Button x:Name= "signUpButton" Text="SIGN UP" FontSize="17" FontAttributes="Bold"
-                            BackgroundColor="#F59A28" TextColor= "White" HorizontalOptions="Start"
-                            Grid.Column="1" Clicked="clickedSignUp"></Button>
-
-                    </Grid>
-
-                    <BoxView HeightRequest="20"/>
-
-                     or divider 
-                    <Grid x:Name="grid4" VerticalOptions="Center" ColumnSpacing="15">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="1*" />
-                        </Grid.ColumnDefinitions>
-
-                        <Label Grid.Column="1" Text="or" FontSize="15" TextColor="White"
-                               HorizontalTextAlignment="Center"/>
-
-                        <BoxView BackgroundColor="#C49F3F" HeightRequest="1" Grid.Column="0"
-                                 VerticalOptions="Center" HorizontalOptions="Fill"/>
-                        <BoxView BackgroundColor="#C49F3F" HeightRequest="1" Grid.Column="2"
-                                 VerticalOptions="Center" HorizontalOptions="Fill"/>
-
-                    </Grid>
-                </StackLayout>-->
+                            <Button x:Name="OkayButton" Text="Explore Meals" BackgroundColor="#f26522" TextColor="White" Margin="50, 20, 50, 10" CornerRadius="10" Clicked="OkayClicked"/>
+                        </StackLayout>
+                    </Frame>
+                </Grid>
          </Grid>
 
 
