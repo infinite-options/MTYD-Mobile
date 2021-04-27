@@ -522,8 +522,8 @@ namespace MTYD.ViewModel
                     mealCount++;
                 if (addOnCount % 2 != 0)
                     addOnCount++;
-                weekOneMenu.HeightRequest = 302 * ((mealCount / 2));
-                weekOneAddOns.HeightRequest = 302 * ((addOnCount / 2));
+                weekOneMenu.HeightRequest = 290 * ((mealCount / 2));
+                weekOneAddOns.HeightRequest = 290 * ((addOnCount / 2));
                 //weekOneMenu.ItemsSource = Meals1;
                 //commented out to test
                 //if (mealCount % 2 != 0)
@@ -1969,17 +1969,24 @@ namespace MTYD.ViewModel
                         foreach (JObject config in newobj)
                         {
                             Console.WriteLine("Inside foreach loop in GetmealsPlan func");
-                            //string qty = (string)config["qty"];
+                            string qty = (string)config["qty"];
                             string name = (string)config["name"];
+
+                            name = name.Substring(0, name.IndexOf(" "));
+                            name = name + " Meals, ";
+                            qty = qty + " Deliveries";
                             //string price = (string)config["price"];
                             //string mealid = (string)config["item_uid"];
+                            string purchIdCurrent = purchIdArray[i].ToString().Substring(4);
+                            //while (purchIdCurrent.Substring(0, 1) == "0")
+                            //    purchIdCurrent = purchIdCurrent.Substring(1);
 
                             //only includes meal plan name
                             //namesArray.Add(name);
 
                             //adds purchase uid to front of meal plan name
                             //namesArray.Add(purchIdArray[i].ToString().Substring(4) + " : " + name);
-                            namesArray.Add(name + " : " + purchIdArray[i].ToString().Substring(4));
+                            namesArray.Add(name + qty + " : " + purchIdCurrent);
                         }
                     }
                     Console.WriteLine("Outside foreach in GetmealsPlan func");
@@ -2274,6 +2281,8 @@ namespace MTYD.ViewModel
 
         private void surprise()
         {
+            Debug.WriteLine("surprise() entered");
+
             //set delivery day of the week
             string tempHolder = selectedDate.fullDateTime;
             Debug.WriteLine("year:" + tempHolder.Substring(0, 4));
@@ -2341,6 +2350,8 @@ namespace MTYD.ViewModel
         }
         private async void surpriseMealSelection(object sender, EventArgs e)
         {
+            Debug.WriteLine("surpriseMealSelection entered");
+
             foreach (var ms in Meals1)
                 ms.Background = Color.White;
 

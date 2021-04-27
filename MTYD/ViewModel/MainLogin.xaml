@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="MTYD.ViewModel.MainLogin">
+
+    <ContentPage.Content>
+        <ScrollView>
+        <Grid VerticalOptions="CenterAndExpand">
+            <StackLayout>
+                <StackLayout x:Name="MenuBar">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                    
+                        <BoxView x:Name="orangeBox" BackgroundColor="#F26522" HorizontalOptions="Fill"/>
+                        <Image x:Name="heading" Source="heading.png" Margin="0,0,0,10" VerticalOptions="End" HorizontalOptions="Center"/>
+
+                        <!--<Grid x:Name="innerGrid" VerticalOptions="End" HorizontalOptions="End">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <ImageButton x:Name="pfp" BackgroundColor="LightGray" VerticalOptions="End" HorizontalOptions="End" Clicked="clickedPfp"/>
+                            <Label x:Name="initials" TextColor="Black" FontAttributes="Bold" VerticalOptions="Center"  HorizontalOptions="Center"/>
+
+                        </Grid>-->
+                        <ImageButton x:Name="menu" Source="new_menu.png" VerticalOptions="End" HorizontalOptions="Start" Clicked="clickedMenu"/>
+                    </Grid>
+                </StackLayout>
+
+                <StackLayout x:Name="LoginPage">
+                    <Label Text="Login" HorizontalOptions="Center" FontAttributes="Bold" FontSize="25" Margin="0, 20"></Label>
+
+                    <Grid Margin="80, 0" RowSpacing="8">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Frame x:Name="appleSignupFrame" Grid.Row="0" BackgroundColor="#516de5" HasShadow="False" CornerRadius="15" HorizontalOptions="Center" Padding="10">
+                            <StackLayout Orientation="Horizontal">
+                                <Image Source="appleicon3.png" VerticalOptions="Center" Margin="5, 0, 5, 0"/>
+                                <Label x:Name="appleSignupText" Text="Continue with Apple" TextColor="White" VerticalOptions="Center"/>
+                            </StackLayout>
+                        </Frame>
+                        <Button Grid.Row="0" x:Name="appleSignupButton" BackgroundColor="Transparent" CornerRadius="15" HorizontalOptions="Center" Clicked="appleLoginButtonClicked"/>
+
+                        <Frame x:Name="fbSignupFrame" Grid.Row="1" BackgroundColor="#4c5a91" HasShadow="False" CornerRadius="15" HorizontalOptions="Center" Padding="10">
+                            <StackLayout Orientation="Horizontal">
+                                <Image Source="facebookicon3.png" VerticalOptions="Center" Margin="5, 0, 5, 0"/>
+                                <Label x:Name="fbSignupText" Text="Continue with Facebook" TextColor="White" VerticalOptions="Center"/>
+                            </StackLayout>
+                        </Frame>
+                        <Button Grid.Row="1" x:Name="fbSignupButton" BackgroundColor="Transparent" CornerRadius="15" HorizontalOptions="Center" Clicked="facebookLoginButtonClicked"/>
+
+                        <Frame x:Name="googleSignupFrame" Grid.Row="2" BackgroundColor="#6583e8" HasShadow="False" CornerRadius="15" HorizontalOptions="Center" Padding="10">
+                            <StackLayout Orientation="Horizontal">
+                                <Image Source="googleicon3.png" VerticalOptions="Center" Margin="5, 0, 5, 0"/>
+                                <Label x:Name="googleSignupText" Text="Continue with Google" TextColor="White" VerticalOptions="Center"/>
+                            </StackLayout>
+                        </Frame>
+                        <Button Grid.Row="2" x:Name="googleSignupButton" BackgroundColor="Transparent" CornerRadius="15" HorizontalOptions="Center" Clicked="googleLoginButtonClicked"/>
+                    </Grid>
+
+                    <Label Text="OR" HorizontalOptions="Center" TextColor="Black" FontAttributes="Bold" FontSize="25" Margin="0, 20"></Label>
+
+                    <Grid HorizontalOptions="Center" VerticalOptions="Center" RowSpacing="10" Margin="20, 0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/> 
+                        </Grid.RowDefinitions>
+
+
+                        <Frame x:Name="userFrame" BackgroundColor="White" BorderColor="#F26522" CornerRadius="15" HasShadow="False" Padding="10, 15">
+                    
+                           <Entry x:Name="loginUsername" Keyboard="Email" FontSize="16" Placeholder="Username"
+                                  TextColor="Black" BackgroundColor="White" PlaceholderColor="Black">
+
+                           </Entry>
+
+                        </Frame>
+
+
+                        <Frame x:Name="passFrame" BackgroundColor="White" BorderColor="#F26522" Grid.Row="1" CornerRadius="15" HasShadow="False" Padding="10, 15">
+                    
+                           <Entry x:Name="loginPassword" Keyboard="Text" FontSize="16" Placeholder="Password" IsPassword="True"
+                                  TextColor="Black" BackgroundColor="White" PlaceholderColor="Black"/>   
+                   
+                        </Frame>
+
+                        <ImageButton Grid.Row="1" x:Name="seePassword" HorizontalOptions="End" VerticalOptions="Center"
+                                 HeightRequest="28" WidthRequest="28" Source="eye.png" Margin="0,0,6,0"
+                                 Aspect="AspectFit" Opacity="0.5" Clicked="clickedSeePassword" />
+
+                        <Button x:Name="forgotPass" Text="Forgot password?" TextColor="Black" HorizontalOptions="End" FontSize="14"
+                                Grid.Row="2" Margin="0,-15,10,0" VerticalOptions="Center" BackgroundColor="Transparent" Clicked="clickedForgotPass"/>
+                
+                    </Grid>
+
+                    <Button x:Name= "loginButton" BackgroundColor="#F26522" Clicked="clickedLogin" Text="Login" TextColor="White" Margin="50, 10"
+                        FontAttributes="Bold" CornerRadius="15"/>
+
+                    <Label Text="Don't have an account?" TextColor="Black" HorizontalOptions="Center" Margin="0, 10, 0, 0"/>
+
+                    <Button x:Name= "signUpButton" BackgroundColor="White" Clicked="clickedSignUp" Text="Sign up" TextColor="#F26522" Margin="50, 0"
+                        FontAttributes="Bold" CornerRadius="15" BorderColor="#F26522" BorderWidth="2"/>
+                </StackLayout>
+
+            </StackLayout>
+
+
+            <!-- old UI -->
+            <!-- username and password entry, forget password -->
+         </Grid>
+
+
+     </ScrollView>
+        </ContentPage.Content>
+</ContentPage>

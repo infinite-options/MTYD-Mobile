@@ -11,7 +11,7 @@
                     </Grid.RowDefinitions>
                     
                     <BoxView x:Name="orangeBox" BackgroundColor="#FF9E19" HorizontalOptions="Fill"/>
-                    <Label x:Name="heading" Text="MENU THIS WEEK" FontAttributes="Bold" VerticalOptions="End" HorizontalTextAlignment="Center" TextColor="Black"/>
+                    <Label x:Name="heading" Text="UPCOMING MENUS" FontAttributes="Bold" VerticalOptions="End" HorizontalTextAlignment="Center" TextColor="Black"/>
                     <Grid x:Name="innerGrid" VerticalOptions="End" HorizontalOptions="End">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
@@ -21,7 +21,7 @@
 
                     </Grid>
 
-                    <ImageButton x:Name="menu" Source="menu2.png" VerticalOptions="End" HorizontalOptions="Start" BackgroundColor="Transparent" Clicked="clickedMenu"/>
+                    <ImageButton x:Name="menu" Source="new_menu.png" VerticalOptions="End" HorizontalOptions="Start" BackgroundColor="Transparent" Clicked="clickedMenu"/>
 
                 </Grid>
                 <!--CARLOS UI REARRANGING -->
@@ -47,18 +47,18 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="2*"/>
+                        <!--<ColumnDefinition Width="2*"/>-->
                         <ColumnDefinition Width="3*"/>
                     </Grid.ColumnDefinitions>
 
-                <Label Text="Upcoming Menus" Margin="0,20,0,0" TextColor="Black" FontAttributes="Bold" FontSize="Small" HorizontalOptions="Center" VerticalOptions="Start"/>
+                <!--<Label Text="Upcoming Menus" Margin="0,20,0,0" TextColor="Black" FontAttributes="Bold" FontSize="Small" HorizontalOptions="Center" VerticalOptions="Start"/>-->
 
-                <StackLayout Grid.Column="1">
+                <StackLayout Grid.Column="0">
 
                     <Grid>
-                    <ImageButton x:Name="dropDownButton" BackgroundColor="Transparent" Source="planSelecter.png" HeightRequest="60" Aspect="AspectFit" Clicked="clickedExpand"/>
-                    <Label x:Name="dropDownText" VerticalOptions="Center" HorizontalOptions="Start" Margin="15,0,0,0" TextColor="White" FontSize="Small" BackgroundColor="Transparent"/>
-                    <Button BackgroundColor="Transparent" HeightRequest="60" HorizontalOptions="Fill" Clicked="clickedExpand"/>
+                    <ImageButton x:Name="dropDownButton" BackgroundColor="Transparent" Source="planSelecter.png" HeightRequest="55" Aspect="AspectFit" Clicked="clickedExpand"/>
+                    <Label x:Name="dropDownText" VerticalOptions="Center" HorizontalOptions="Start" Margin="20,0,0,0" TextColor="White" FontSize="Medium" FontAttributes="Bold" BackgroundColor="Transparent"/>
+                    <Button BackgroundColor="Transparent" HeightRequest="55" HorizontalOptions="Fill" Clicked="clickedExpand"/>
                     </Grid>
 
                     <ListView x:Name="dropDownList" IsVisible="false" HeightRequest="300" ItemSelected="addy_ItemSelected" HorizontalOptions="End" Margin="0, -5, 0, 0">

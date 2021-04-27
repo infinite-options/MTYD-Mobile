@@ -82,6 +82,7 @@ namespace MTYD.ViewModel
         string guestSalt = "";
         string checkoutAdd, checkoutUnit, checkoutCity, checkoutState, checkoutZip;
         bool onStripeScreen = false;
+        bool onCardAdd = false;
 
         Model.Address addr;
 
@@ -241,7 +242,8 @@ namespace MTYD.ViewModel
                 orangeBox.HeightRequest = height / 2;
                 orangeBox.Margin = new Thickness(0, -height / 2.2, 0, 0);
                 orangeBox.CornerRadius = height / 40;
-                heading.WidthRequest = width / 3;
+                //heading.WidthRequest = width / 3;
+                heading.WidthRequest = width / 5;
                 pfp.HeightRequest = width / 20;
                 pfp.WidthRequest = width / 20;
                 pfp.CornerRadius = (int)(width / 40);
@@ -545,6 +547,8 @@ namespace MTYD.ViewModel
                 Button receiving = (Button)sender;
                 if (receiving.Text != "Save")
                 {
+                    CheckouWithStripe(receiving, e);
+
                     clickedSaveContact(receiving, e);
                     if ((string)Xamarin.Forms.Application.Current.Properties["platform"] == "GUEST")
                     {
@@ -1555,32 +1559,32 @@ namespace MTYD.ViewModel
                 //PaymentScreen.Margin = new Thickness(0, -PaymentScreen.HeightRequest / 2, 0, 0);
                 //PayPalScreen.Height = this.Height - (this.Height / 8);
 
-                headingGrid.IsVisible = false;
-                mainStack.IsVisible = false;
-                paymentStack.IsVisible = false;
-                checkoutButton.IsVisible = false;
-                backButton.IsVisible = false;
-                PaymentScreen.HeightRequest = deviceHeight;
-                PayPalScreen.Height = deviceHeight - (deviceHeight / 8);
+                //headingGrid.IsVisible = false;
+                //mainStack.IsVisible = false;
+                //paymentStack.IsVisible = false;
+                //checkoutButton.IsVisible = false;
+                //backButton.IsVisible = false;
+                //PaymentScreen.HeightRequest = deviceHeight;
+                //PayPalScreen.Height = deviceHeight - (deviceHeight / 8);
 
                 //PayPalScreen.Height = ;
-                StripeScreen.Height = 0;
-                orangeBox.HeightRequest = 0;
+                //StripeScreen.Height = 0;
+                //orangeBox.HeightRequest = 0;
                 if ((string)Xamarin.Forms.Application.Current.Properties["platform"] == "DIRECT")
                 {
-                    PaymentScreen.HeightRequest = this.Height * 1.5;
-                    PayPalScreen.Height = (this.Height - (this.Height / 8)) * 1.5;
-                    spacer6.IsVisible = true;
+                    //PaymentScreen.HeightRequest = this.Height * 1.5;
+                    //PayPalScreen.Height = (this.Height - (this.Height / 8)) * 1.5;
+                    //spacer6.IsVisible = true;
                     passLabel.IsVisible = true;
-                    spacer7.IsVisible = true;
+                    //spacer7.IsVisible = true;
                     password.IsVisible = true;
                     passwordEntry.IsVisible = true;
                     password.WidthRequest = cardAddFrame.Width;
                     //passwordEntry.WidthRequest = purchDescFrame.Width;
-                    spacer8.IsVisible = true;
+                    //spacer8.IsVisible = true;
                     spacer9.IsVisible = true;
                 }
-                await scroller.ScrollToAsync(0, -40, false);
+                //await scroller.ScrollToAsync(0, -40, false);
             }
             else
             {
@@ -2028,7 +2032,8 @@ namespace MTYD.ViewModel
                             cardHolderUnit.Text = "";
                         }
                         customer.Address = new AddressOptions { City = cardCity.Text.Trim(), Country = Constant.Contry, Line1 = cardHolderAddress.Text.Trim(), Line2 = cardHolderUnit.Text.Trim(), PostalCode = cardZip.Text.Trim(), State = cardState.Text.Trim() };
-                  
+                        
+                        
                         var customerService = new CustomerService();
                         var cust = customerService.Create(customer);
                    
@@ -2082,7 +2087,7 @@ namespace MTYD.ViewModel
                             {
                                 spacer6.IsVisible = true;
                                 passLabel.IsVisible = true;
-                                spacer7.IsVisible = true;
+                                //spacer7.IsVisible = true;
                                 password.IsVisible = true;
                                 passwordEntry.IsVisible = true;
                                 spacer8.IsVisible = true;
@@ -2607,24 +2612,48 @@ namespace MTYD.ViewModel
             }
         }
 
+        private string _addressText2;
+        public string AddressText2
+        {
+            get => _addressText2;
+            set
+            {
+                if (_addressText2 != value)
+                {
+                    _addressText2 = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        string origAdd = "";
+        string origUnit = "";
+        string origCity = "";
+        string origState = "";
+        string origZip = "";
+
         private void OnAddressChanged(object sender, TextChangedEventArgs eventArgs)
         {
-            if (((Entry)sender).Equals(AddressEntry) && onStripeScreen == true)
-            {
-                var ent = (Entry)sender;
-                ent.Text = eventArgs.OldTextValue;
-                return;
-            }
+            Debug.WriteLine("onaddresschanged entered with: " + ((Entry)sender).Placeholder);
+            //if (((Entry)sender).Equals(AddressEntry) && onCardAdd == true)
+            //{
+            //    Debug.WriteLine("first if of onAddressChanged");
+            //    var ent = (Entry)sender;
+            //    ent.Text = eventArgs.OldTextValue;
+            //    return;
+            //}
 
-            if (((Entry)sender).Equals(AddressEntry))
+            if (((Entry)sender).Equals(AddressEntry) && onCardAdd == false)
             {
+                Debug.WriteLine("second if of onAddressChanged");
                 paymentStack.IsVisible = false;
                 //saveDeliv.IsVisible = true;
                 addr.OnAddressChanged(addressList, Addresses, _addressText);
             }
             else
             {
-                addr.OnAddressChanged(addressList2, Addresses, _addressText);
+                Debug.WriteLine("third if of onAddressChanged");
+                addr.OnAddressChanged(addressList2, Addresses, _addressText2);
             }
         }
 
@@ -2635,6 +2664,8 @@ namespace MTYD.ViewModel
             }
             else
             {
+                if (((Entry)sender).Equals(cardHolderAddress))
+                    onCardAdd = true;
                 addressListFrame.IsVisible = true;
                 addr.addressEntryFocused(addressList2, new Grid[] { CityStateZip });
             }
@@ -2648,6 +2679,8 @@ namespace MTYD.ViewModel
             }
             else
             {
+                if (((Entry)sender).Equals(cardHolderAddress))
+                    onCardAdd = false;
                 addressListFrame.IsVisible = false;
                 addr.addressEntryUnfocused(addressList2, new Grid[] { UnitGrid, CityStateZip });
             }

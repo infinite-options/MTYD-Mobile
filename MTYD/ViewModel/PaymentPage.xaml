@@ -34,7 +34,7 @@
                     </Grid.RowDefinitions>
                     
                     <BoxView x:Name="orangeBox" BackgroundColor="#F26522" HorizontalOptions="Fill"/>
-                    <Image x:Name="heading" Source="heading.png" WidthRequest="80" VerticalOptions="End" HorizontalOptions="Center"/>
+                    <Image x:Name="heading" Source="heading.png"  VerticalOptions="End" HorizontalOptions="Center"/>
 
                      <Grid x:Name="innerGrid" VerticalOptions="End" HorizontalOptions="End">
                         <Grid.RowDefinitions>
@@ -472,15 +472,207 @@
                     <Label Text="Complete Payment" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Start" BackgroundColor="Transparent" FontSize="18"/>
                 </Grid>
 
+
+
+    <!--stripe credit card section-->
+          <StackLayout x:Name="completePaymentStack">
+                <Grid HorizontalOptions="Center" VerticalOptions="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="5*"/>
+                        <!--<ColumnDefinition Width="1*"/>-->
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                   <Frame  Grid.Row="0" Grid.Column="0" Padding="10,5" Margin="20,10,20,1" BackgroundColor="White" HasShadow="False"
+                          BorderColor="#F26522" CornerRadius="10">
+                        <Entry x:Name="cardHolderName" Keyboard="Text" FontSize="17" TextColor="Black" Placeholder="Cardholder Name*" PlaceholderColor="Black"
+                               />
+                   </Frame>
+
+                </Grid>
+
+                <Grid HorizontalOptions="Center" VerticalOptions="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="5*"/>
+                        <!--<ColumnDefinition Width="1*"/>-->
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                   <Frame  Grid.Row="0" Grid.Column="0" Padding="10,5" Margin="20,1" BackgroundColor="White" HasShadow="False"
+                          BorderColor="#F26522" CornerRadius="10">
+                        <Entry x:Name="cardHolderNumber" Keyboard="Text" FontSize="17" TextColor="Black" Placeholder="Card Number*" MaxLength="16" PlaceholderColor="Black"
+                               />
+                   </Frame>
+
+                </Grid>
+
+                <Grid HorizontalOptions="Center" VerticalOptions="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                   <Frame  Grid.Row="0" Grid.Column="0" Padding="10,5" Margin="20,1,2,1" BackgroundColor="White" HasShadow="False"
+                          BorderColor="#F26522" CornerRadius="10">
+                        <Entry x:Name="cardExpMonth" Keyboard="Numeric" FontSize="17" TextColor="Black" Placeholder="Exp MM*" MaxLength="2" PlaceholderColor="Black"
+                               />
+                   </Frame>
+
+                   <Frame  Grid.Row="0" Grid.Column="1" Padding="10,5" Margin="1,1,2,1" BackgroundColor="White" HasShadow="False"
+                          BorderColor="#F26522" CornerRadius="10">
+                        <Entry x:Name="cardExpYear" Keyboard="Numeric" FontSize="17" TextColor="Black" Placeholder="Exp YY*" MaxLength="2" PlaceholderColor="Black"
+                               />
+                   </Frame>
+
+                    <Frame  Grid.Row="0" Grid.Column="2" Padding="10,5" Margin="2,1,20,1" BackgroundColor="White" HasShadow="False"
+                          BorderColor="#F26522" CornerRadius="10">
+                        <Entry x:Name="cardCVV" Keyboard="Numeric" FontSize="17" TextColor="Black" Placeholder="CVV*" MaxLength="3" PlaceholderColor="Black"
+                               />
+                   </Frame>
+                </Grid>
+
+                <Frame x:Name="cardAddFrame" Padding="10,5" Margin="20,0.5,20,0.5" HasShadow="False" BorderColor="#F26522" CornerRadius="10">
+                            <Entry Placeholder="Billing Address*" x:Name="cardHolderAddress" FontSize="17" PlaceholderColor="Black"
+                                   Text="{Binding AddressText2}" TextChanged="OnAddressChanged" Focused="addressEntryFocused" Unfocused="addressEntryUnfocused"></Entry>
+                        </Frame>
+
+                        <Frame x:Name="addressListFrame" HeightRequest="180" HasShadow="False" BackgroundColor="White" IsVisible="false" Padding="0">
+                            <ListView x:Name="addressList2" ItemsSource="{Binding Addresses}" IsVisible="false" ItemSelected="addressSelected">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextCell Text="{Binding Address}"/>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </Frame>
+
+                        <Grid x:Name="UnitGrid">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+
+                            <Frame x:Name="Unit" Padding="10,5" Margin="20,0.5,1,0.5" BorderColor="#F26522" HasShadow="False" CornerRadius="10">
+                                <Entry Placeholder="Unit" x:Name="cardHolderUnit" FontSize="17"   PlaceholderColor="Black"></Entry>
+                            </Frame>
+
+                            <Frame  Grid.Row="0" Grid.Column="1" Padding="10,5" Margin="1,0.5,20,0.5" BorderColor="#F26522" HasShadow="False" CornerRadius="10">
+                                <Entry Placeholder="City*" x:Name="cardCity" FontSize="17"  PlaceholderColor="Black" ></Entry>
+                            </Frame>
+                        </Grid>
+                        
+                        <Grid x:Name="CityStateZip">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <Frame Grid.Row="0" Grid.Column="0" Padding="10,5" Margin="20,0.5,1,0.5" BorderColor="#F26522" HasShadow="False" CornerRadius="10">
+                                <Entry Placeholder="State*" x:Name="cardState" FontSize="17" PlaceholderColor="Black" ></Entry>
+                            </Frame>
+                            <Frame Grid.Row="0" Grid.Column="1" Padding="10,5" Margin="1,0.5,20,0.5" BorderColor="#F26522" HasShadow="False" CornerRadius="10">
+                                <Entry Placeholder="Zip*" x:Name="cardZip" FontSize="17"  PlaceholderColor="Black" ></Entry>
+                            </Frame>
+                        </Grid>
+                <!--<Grid HorizontalOptions="Center" VerticalOptions="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="5*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                   <Frame  Grid.Row="0" Grid.Column="0" Padding="10,5" Margin="20,1" BackgroundColor="White" HasShadow="False"
+                          BorderColor="#F26522" CornerRadius="10">
+                        <Entry  Keyboard="Text" FontSize="17" TextColor="Black" Placeholder="Billing Address*" PlaceholderColor="Black"
+                               />
+                   </Frame>
+
+                </Grid>
+
+                <Grid HorizontalOptions="Center" VerticalOptions="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="5*"/>
+                        <ColumnDefinition Width="8*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                   <Frame  Grid.Row="0" Grid.Column="0" Padding="10,5" Margin="20,1,2,1" BackgroundColor="White" HasShadow="False"
+                          BorderColor="#F26522" CornerRadius="10">
+                        <Entry  Keyboard="Text" FontSize="17" TextColor="Black" Placeholder="Unit" PlaceholderColor="Black"
+                               />
+                   </Frame>
+
+                    <Frame  Grid.Row="0" Grid.Column="1" Padding="10,5" Margin="2,1,20,1" BackgroundColor="White" HasShadow="False"
+                          BorderColor="#F26522" CornerRadius="10">
+                        <Entry Keyboard="Text" FontSize="17" TextColor="Black" Placeholder="City*" PlaceholderColor="Black"
+                               />
+                   </Frame>
+                </Grid>
+
+                <Grid HorizontalOptions="Center" VerticalOptions="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                   <Frame  Grid.Row="0" Grid.Column="0" Padding="10,5" Margin="20,1,2,1" BackgroundColor="White" HasShadow="False"
+                          BorderColor="#F26522" CornerRadius="10">
+                        <Entry  Keyboard="Text" FontSize="17" TextColor="Black" Placeholder="State*" PlaceholderColor="Black"
+                               />
+                   </Frame>
+
+                    <Frame  Grid.Row="0" Grid.Column="1" Padding="10,5" Margin="2,1,20,1" BackgroundColor="White" HasShadow="False"
+                          BorderColor="#F26522" CornerRadius="10">
+                        <Entry Keyboard="Numeric" FontSize="17" TextColor="Black" Placeholder="Zip*" PlaceholderColor="Black"
+                               />
+                   </Frame>
+                </Grid>-->
+
+                <Label x:Name="passLabel" Text="Enter password to confirm" Margin="20,10,0,0" HorizontalOptions="Start" FontSize="22"
+                        FontAttributes="Bold"/>
+
+                <BoxView x:Name="spacer9" HeightRequest="3"></BoxView>
+
+                <Label x:Name="spacer7" IsVisible="false" HeightRequest="5"/>
+
+                <Frame x:Name="password" Padding="10,5" Margin="20,0" BackgroundColor="White"
+                HasShadow="False" BorderColor="#F26522" CornerRadius="10">
+
+                    <Entry x:Name="passwordEntry" Keyboard="Text"
+                   FontSize="17" Placeholder="Password*"
+                    IsPassword="True"
+                    PlaceholderColor="Black"/>
+
+                </Frame>
+              
+            </StackLayout>
+
                 <Grid Margin="50,10" RowSpacing="20">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>
                     </Grid.RowDefinitions>
 
-                    <Button Grid.Row="0" Text="STRIPE" CornerRadius="15" TextColor="White" HorizontalOptions="Fill" BackgroundColor="#F26522" Clicked="CheckouWithStripe"/>
+                    <Button Grid.Row="0" Text="Complete Payment" CornerRadius="15" TextColor="White" HorizontalOptions="Fill" BackgroundColor="#F26522" Clicked="PayViaStripe"/>
 
-                    <Button Grid.Row="1" Text="PAYPAL" CornerRadius="15" TextColor="White" HorizontalOptions="Fill" BackgroundColor="#F26522" Clicked="CheckouWithPayPayl"/>
+                    <Button Grid.Row="1" Text="PAYPAL" IsVisible="false" CornerRadius="15" TextColor="White" HorizontalOptions="Fill" BackgroundColor="#F26522" Clicked="CheckouWithPayPayl"/>
 
                 </Grid>
 
@@ -516,13 +708,13 @@
                         <Frame  Padding="10,5" Margin="0,0.5,1,0.5" BackgroundColor="#FFE5B4" HasShadow="False" CornerRadius="24">
                             <Entry Placeholder="Email Address*" x:Name="cardHolderEmail" FontAttributes="Bold" FontSize="17" BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4" HeightRequest="35"></Entry>
                         </Frame>
-                        <Frame  Padding="10,5" Margin="0,0.5,1,0.5" BackgroundColor="#FFE5B4" HasShadow="False" CornerRadius="24">
+                        <!--<Frame  Padding="10,5" Margin="0,0.5,1,0.5" BackgroundColor="#FFE5B4" HasShadow="False" CornerRadius="24">
                              <Entry Placeholder="Cardholder Name*" x:Name="cardHolderName" FontAttributes="Bold" FontSize="17"  BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4" HeightRequest="35"></Entry>
-                        </Frame>
+                        </Frame>-->
 
-                        <Frame  Padding="10,5" Margin="0,0.5,1,0.5" BackgroundColor="#FFE5B4" HasShadow="False" CornerRadius="24">
+                        <!--<Frame  Padding="10,5" Margin="0,0.5,1,0.5" BackgroundColor="#FFE5B4" HasShadow="False" CornerRadius="24">
                              <Entry Placeholder="Card Number*" x:Name="cardHolderNumber" Keyboard="Numeric" MaxLength="16" FontAttributes="Bold" FontSize="17"  BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4" HeightRequest="35"></Entry>
-                        </Frame>
+                        </Frame>-->
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -533,7 +725,7 @@
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
 
-                            <Frame Grid.Row="0" Grid.Column="0" Padding="10,5" Margin="0,0.5,1,0.5" BackgroundColor="#FFE5B4" HasShadow="False" CornerRadius="24" HeightRequest="35">
+                            <!--<Frame Grid.Row="0" Grid.Column="0" Padding="10,5" Margin="0,0.5,1,0.5" BackgroundColor="#FFE5B4" HasShadow="False" CornerRadius="24" HeightRequest="35">
                                 <Entry Placeholder="Exp MM*" x:Name="cardExpMonth" MaxLength="2" Keyboard="Numeric" FontAttributes="Bold" FontSize="17"  BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"></Entry>
                             </Frame>
                             <Frame Grid.Row="0" Grid.Column="1" Padding="10,5" Margin="0,0.5,1,0.5" BackgroundColor="#FFE5B4" HasShadow="False" CornerRadius="24" HeightRequest="35">
@@ -541,10 +733,10 @@
                             </Frame>
                             <Frame Grid.Row="0" Grid.Column="2" Padding="10,5" Margin="0,0.5,1,0.5" BackgroundColor="#FFE5B4" HasShadow="False" CornerRadius="24" HeightRequest="35">
                                 <Entry Placeholder="CVV*" x:Name="cardCVV" MaxLength="3" Keyboard="Numeric" FontAttributes="Bold" FontSize="17"  BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"></Entry>
-                            </Frame>
+                            </Frame>-->
 
                         </Grid>
-                        <Frame x:Name="cardAddFrame" Padding="10,5" Margin="0,0.5,1,0.5" BackgroundColor="#FFE5B4" HasShadow="False" CornerRadius="24">
+                        <!--<Frame x:Name="cardAddFrame" Padding="10,5" Margin="0,0.5,1,0.5" BackgroundColor="#FFE5B4" HasShadow="False" CornerRadius="24">
                             <Entry Placeholder="Address*" x:Name="cardHolderAddress" FontAttributes="Bold" FontSize="17"  BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4" HeightRequest="35"
                                    Text="{Binding AddressText}" TextChanged="OnAddressChanged" Focused="addressEntryFocused" Unfocused="addressEntryUnfocused"></Entry>
                         </Frame>
@@ -584,14 +776,14 @@
                             <Frame Grid.Row="0" Grid.Column="2" Padding="10,5" Margin="0,0.5,1,0.5" BackgroundColor="#FFE5B4" HasShadow="False" CornerRadius="24" HeightRequest="35">
                                 <Entry Placeholder="Zip*" x:Name="cardZip" FontAttributes="Bold" FontSize="17"  BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4" ></Entry>
                             </Frame>
-                        </Grid>
+                        </Grid>-->
                         <!--<Frame x:Name="purchDescFrame" Padding="10,5" Margin="0,0.5,1,0.5" BackgroundColor="#FFE5B4" HasShadow="False" CornerRadius="24">
                             <Entry Placeholder="Purchase Description*" x:Name="cardDescription" FontAttributes="Bold" FontSize="17"  BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4" HeightRequest="35"></Entry>
                         </Frame>-->
 
                         <BoxView x:Name="spacer6"  HeightRequest="10"></BoxView>
 
-            <Label x:Name="passLabel" Text="ENTER PASSWORD TO CONFIRM*" IsVisible="false" HorizontalOptions="Start" FontSize="22"
+            <!--<Label x:Name="passLabel" Text="ENTER PASSWORD TO CONFIRM*" IsVisible="false" HorizontalOptions="Start" FontSize="22"
                         FontAttributes="Bold"/>
 
                 <BoxView x:Name="spacer9" IsVisible="false" HeightRequest="10"></BoxView>
@@ -606,7 +798,7 @@
                    HeightRequest="35" IsPassword="True"
                    BackgroundColor="#FFE5B4" PlaceholderColor="#B4B4B4"/>
 
-                </Frame>
+                </Frame>-->
 
                 <Label x:Name="spacer8"  IsVisible="false" HeightRequest="5"/>
 

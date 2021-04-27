@@ -121,6 +121,7 @@ namespace MTYD
             cust_email = email;
             InitializeComponent();
 
+
             var cvItems = new List<string>
             {
                 "Who has time?\n\nSave time and money! Ready to heat meals come to your door and you can order up to 10 deliveries in advance so you know what's coming!",
@@ -234,9 +235,33 @@ namespace MTYD
                 googleSignupButton.WidthRequest = width / 3.5;
                 googleSignupButton.HeightRequest = width / 25;
                 googleSignupText.FontSize = width / 50;
+                appleLoginButton.HeightRequest = width / 17;
+                appleLoginButton.WidthRequest = width / 17;
+                appleLoginButton.CornerRadius = (int)(width / 34);
+                googleLoginButton.HeightRequest = width / 15;
+                googleLoginButton.WidthRequest = width / 15;
+                googleLoginButton.CornerRadius = (int)(width / 30);
+                facebookLoginButton.HeightRequest = width / 19;
+                facebookLoginButton.WidthRequest = width / 19;
+                facebookLoginButton.CornerRadius = (int)(width / 38);
+                directLoginButton.HeightRequest = width / 17;
+                directLoginButton.WidthRequest = width / 17;
+                directLoginButton.CornerRadius = (int)(width / 34);
             }
             else //android
             {
+                appleLoginButton.HeightRequest = width / 10;
+                appleLoginButton.WidthRequest = width / 10;
+                appleLoginButton.CornerRadius = (int)(width / 20);
+                googleLoginButton.HeightRequest = width / 10;
+                googleLoginButton.WidthRequest = width / 10;
+                googleLoginButton.CornerRadius = (int)(width / 20);
+                facebookLoginButton.HeightRequest = width / 10;
+                facebookLoginButton.WidthRequest = width / 10;
+                facebookLoginButton.CornerRadius = (int)(width / 20);
+                directLoginButton.HeightRequest = width / 10;
+                directLoginButton.WidthRequest = width / 10;
+                directLoginButton.CornerRadius = (int)(width / 20);
             }
         }
 
@@ -1624,6 +1649,7 @@ namespace MTYD
 
         public async void directLoginButtonClicked(object sender, EventArgs e)
         {
+            Application.Current.MainPage = new MainLogin();
 
             HomePage.IsVisible = false;
             BackgroundImageSource = null;

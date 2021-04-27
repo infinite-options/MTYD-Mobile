@@ -33,6 +33,7 @@
     <PackageReference Include="Xamarin.CommunityToolkit" Version="1.1.0" />
     <PackageReference Include="Xamarin.CommunityToolkit.Markup" Version="1.1.0" />
     <PackageReference Include="Xamarin.Forms.DropdownMenu" Version="1.0.2" />
+    <PackageReference Include="Rg.Plugins.Popup" Version="2.0.0.11" />
   </ItemGroup>
   
   <ItemGroup>

@@ -27,8 +27,8 @@
     <MtouchArch>x86_64</MtouchArch>
     <MtouchLink>SdkOnly</MtouchLink>
     <MtouchDebug>true</MtouchDebug>
-    <CodesignKey>Apple Development: Jonathan Ly (MS5P32VUQF)</CodesignKey>
-    <CodesignProvision>VS: com.infiniteoptions.MTYD Development</CodesignProvision>
+    <CodesignKey>Apple Distribution: Infinite Options, LLC (8V66NC2T37)</CodesignKey>
+    <CodesignProvision>MTYD</CodesignProvision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>
@@ -167,6 +167,9 @@
     <PackageReference Include="Xamarin.Forms.DropdownMenu">
       <Version>1.0.2</Version>
     </PackageReference>
+    <PackageReference Include="Rg.Plugins.Popup">
+      <Version>2.0.0.11</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
@@ -244,6 +247,29 @@
     <BundleResource Include="Resources\plate.png" />
     <BundleResource Include="Resources\planSelecter.png" />
     <BundleResource Include="Resources\leftFilledHeart.png" />
+    <BundleResource Include="Resources\heading.png" />
+    <BundleResource Include="Resources\new_menu.png" />
+    <BundleResource Include="Resources\meal_num_button_orange.png" />
+    <BundleResource Include="Resources\meal_num_button_yellow.png" />
+    <BundleResource Include="Resources\delivery_num_button.png" />
+    <BundleResource Include="Resources\new_appleicon.png" />
+    <BundleResource Include="Resources\new_background.png" />
+    <BundleResource Include="Resources\new_fbicon.png" />
+    <BundleResource Include="Resources\new_googleicon.png" />
+    <BundleResource Include="Resources\new_loginicon.png" />
+    <BundleResource Include="Resources\button_card.png" />
+    <BundleResource Include="Resources\button_choose.png" />
+    <BundleResource Include="Resources\button_deliver.png" />
+    <BundleResource Include="Resources\button_search.png" />
+    <BundleResource Include="Resources\path1.png" />
+    <BundleResource Include="Resources\path2.png" />
+    <BundleResource Include="Resources\path3.png" />
+    <BundleResource Include="Resources\fbicon_white.png" />
+    <BundleResource Include="Resources\insicon_white.png" />
+    <BundleResource Include="Resources\plainPlanSelecter.png" />
+    <BundleResource Include="Resources\circleX.png" />
+    <BundleResource Include="Resources\congrats_path1.png" />
+    <BundleResource Include="Resources\congrats_path2.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AppleSignIn\" />
