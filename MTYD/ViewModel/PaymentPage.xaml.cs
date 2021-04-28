@@ -85,7 +85,7 @@ namespace MTYD.ViewModel
         bool onCardAdd = false;
 
         Model.Address addr;
-
+        
         // CREDENTIALS CLASS
         public class Credentials
         {

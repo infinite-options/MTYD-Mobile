@@ -1,6 +1,8 @@
-﻿using MTYD.Model;
+﻿using MTYD.Constants;
+using MTYD.Model;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Stripe;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -19,8 +21,16 @@ using Xamarin.Forms.Xaml;
 
 namespace MTYD.ViewModel
 {
+
+
     public partial class SubscriptionModal : ContentPage
     {
+        // CREDENTIALS CLASS
+        public class Credentials
+        {
+            public string key { get; set; }
+        }
+
         string cust_firstName; string cust_lastName; string cust_email;
         public ObservableCollection<Plans> NewPlan = new ObservableCollection<Plans>();
 
@@ -29,9 +39,12 @@ namespace MTYD.ViewModel
         string m1f1name = "", m1f2name = "", m1f3name = "", m2f1name = "", m2f2name = "", m2f3name = "", m3f1name = "", m3f2name = "", m3f3name = "", m4f1name = "", m4f2name = "", m4f3name = "";
         string m1f1uid = "", m1f2uid = "", m1f3uid = "", m2f1uid = "", m2f2uid = "", m2f3uid = "", m3f1uid = "", m3f2uid = "", m3f3uid = "", m4f1uid = "", m4f2uid = "", m4f3uid = "";
 
-        string socialLogin; string refresh_token; string cc_num; string cc_exp_year; string cc_exp_month; string cc_cvv; string purchase_id;
+        string socialLogin; string refresh_token; string cc_num; string cc_exp_year; string cc_exp_month; string cc_cvv; string purchase_id, purchase_uid;
         string new_item_id; string customer_id; string itm_business_uid; string cc_zip; string cc_exp_date; string qty; string numMeal;
-        string passedAdd, passedUnit, passedCity, passedState, passedZip;
+        string passedAdd, passedUnit, passedCity, passedState, passedZip, phoneNum;
+        string chargeId = ""; string delivInstructions, startDeliv;
+        string updatedDiscount, updatedDue, updatedTax, updatedTip, updatedService, updatedDelivery, updatedSub, updatedAmb;
+        string lati, longi;
 
         int mealSelected;
         int deliverySelected;
@@ -41,12 +54,15 @@ namespace MTYD.ViewModel
         double total;
         WebClient client4 = new WebClient();
         double taxRate = 0;
+        double extraCharge = 0;
+        bool shouldCharge = false;
 
         public object NavigationStack { get; private set; }
 
 
-        public SubscriptionModal(string firstName, string lastName, string email, string social, string token, string num, string expDate, string cvv, string zip, string purchaseID, string businessID, string itemID, string customerID, string quantity, string numOfMeals, string add, string unit, string city, string state, string zipDeliv)
+        public SubscriptionModal(string firstName, string lastName, string email, string social, string token, string num, string expDate, string cvv, string zip, string purchaseID, string purchaseUID, string businessID, string itemID, string customerID, string quantity, string numOfMeals, string add, string unit, string city, string state, string zipDeliv, string delivInstr, string startDeliveryDate, string phoneNumber)
         {
+            //purchase id is used for charges, purchase uid is used for refunds (change_purchase)
             cust_firstName = firstName;
             cust_lastName = lastName;
             cust_email = email;
@@ -55,11 +71,17 @@ namespace MTYD.ViewModel
             var height = DeviceDisplay.MainDisplayInfo.Height;
 
             Console.WriteLine("next entered");
-            socialLogin = social; refresh_token = token; cc_num = num; cc_exp_date = expDate; cc_cvv = cvv; purchase_id = purchaseID;
+            socialLogin = social; refresh_token = token; cc_num = num; cc_exp_date = expDate; cc_cvv = cvv; purchase_id = purchaseID; purchase_uid = purchaseUID;
             new_item_id = itemID; customer_id = customerID; cc_zip = zip; itm_business_uid = businessID; qty = quantity; numMeal = numOfMeals;
-            passedAdd = add.Trim(); passedUnit = unit.Trim(); passedCity = city.Trim(); passedState = state.Trim(); passedZip = zipDeliv.Trim();
+            passedAdd = add.Trim(); passedUnit = unit.Trim(); passedCity = city.Trim(); passedState = state.Trim(); passedZip = zipDeliv.Trim(); delivInstructions = delivInstr;
+            startDeliv = startDeliveryDate; phoneNum = phoneNumber;
             Debug.WriteLine("new_item_id: " + new_item_id);
-
+            Debug.WriteLine("deliv instructions passed in: " + delivInstr);
+            Debug.WriteLine("exp date passed: " + cc_exp_date);
+            Debug.WriteLine("exp year: " + cc_exp_date.Substring(cc_exp_date.IndexOf("-") - 2, 2));
+            cc_exp_year = cc_exp_date.Substring(cc_exp_date.IndexOf("-") - 2, 2);
+            cc_exp_month = cc_exp_date.Substring(cc_exp_date.IndexOf("-") + 1, 2);
+            Debug.WriteLine("exp month: " + cc_exp_date.Substring(cc_exp_date.IndexOf("-") + 1, 2));
             Debug.WriteLine("Address passed in: " + passedAdd + ", unit: " + passedUnit + ", " + passedCity + ", " + passedState + " " + passedZip);
 
             Console.WriteLine("next2 entered");
@@ -777,7 +799,8 @@ namespace MTYD.ViewModel
                             longitude = $"{position.Longitude}";
 
 
-
+                            lati = latitude;
+                            longi = longitude;
                             //used for createaccount endpoint
                             Preferences.Set("user_latitude", latitude);
                             Preferences.Set("user_longitude", longitude);
@@ -811,25 +834,25 @@ namespace MTYD.ViewModel
                             var content = client4.DownloadString(url3);
                             var obj = JsonConvert.DeserializeObject<ZonesDto>(content);
 
-                                Debug.WriteLine("first business: " + obj.Result[0].business_name);
-                                taxRate = obj.Result[0].tax_rate / 100;
-                                //deliveryFee = obj.Result[0].delivery_fee;
-                                //serviceFee = obj.Result[0].service_fee;
-                                //passingZones = obj.Result;
-                                //withinZones = true;
-                            }
-
-                            break;
+                            Debug.WriteLine("first business: " + obj.Result[0].business_name);
+                            taxRate = obj.Result[0].tax_rate / 100;
+                            //deliveryFee = obj.Result[0].delivery_fee;
+                            //serviceFee = obj.Result[0].service_fee;
+                            //passingZones = obj.Result;
+                            //withinZones = true;
                         }
+
+                        break;
+                    }
                 }
 
 
 
 
                 var request3 = new HttpRequestMessage();
-                Debug.WriteLine("subscriptionModal trying to delete this purchase uid: " + purchase_id.ToString());
+                Debug.WriteLine("subscriptionModal trying to delete this purchase uid: " + purchase_uid.ToString());
                 //request2.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/refund_calculator?purchase_uid=" + purchase_id);
-                request3.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_purchase/" + purchase_id);
+                request3.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_purchase/" + purchase_uid);
                 request3.Method = HttpMethod.Get;
                 var client3 = new HttpClient();
                 HttpResponseMessage response3 = await client3.SendAsync(request3);
@@ -840,17 +863,27 @@ namespace MTYD.ViewModel
                     var userString3 = await content3.ReadAsStringAsync();
                     JObject refund_obj = JObject.Parse(userString3);
 
-
+                    //string updatedDiscount, updatedDue, updatedTax, updatedTip, updatedService, updatedDelivery, updatedSub, updatedAmb;
                     Debug.WriteLine("first start" + refund_obj.ToString());
                     Debug.WriteLine("this is what I'm getting: " + refund_obj["refund_amount"].ToString());
                     double amt = Double.Parse(refund_obj["refund_amount"].ToString());
-                    double newTotal = Math.Round(Double.Parse(TotalPrice.Text.Substring(1)) * (1 + taxRate),2);
+                    double basePrice_dub = deliverySelected * itemPrices[deliverySelected - 1, 6 - mealSelected];
+                    //double basePrice_dub = itemPrices[deliverySelected - 1, 6 - mealSelected];
+                    double discountAmt_dub = deliverySelected * itemPrices[deliverySelected - 1, 6 - mealSelected] * discounts[deliverySelected - 1, 6 - mealSelected] / 100.0;
+                    updatedDiscount = discountAmt_dub.ToString();
+                    updatedSub = basePrice_dub.ToString();
+                    updatedTax = Math.Round(Double.Parse(TotalPrice.Text.Substring(1)) * (taxRate), 2).ToString();
+                    double newTotal = Math.Round(Double.Parse(TotalPrice.Text.Substring(1)) * (1 + taxRate), 2);
                     Debug.WriteLine("this is the amount for tax: " + Math.Round(Double.Parse(TotalPrice.Text.Substring(1)) * (taxRate), 2).ToString());
                     Debug.WriteLine("tax rate from categorical options: " + taxRate.ToString());
                     Debug.WriteLine("newTotal: " + newTotal.ToString());
                     newTotal += Double.Parse(refund_obj["delivery_fee"].ToString());
                     newTotal += Double.Parse(refund_obj["service_fee"].ToString());
                     newTotal += Double.Parse(refund_obj["driver_tip"].ToString());
+                    updatedTip = refund_obj["driver_tip"].ToString();
+                    updatedService = refund_obj["service_fee"].ToString();
+                    updatedDelivery = refund_obj["delivery_fee"].ToString();
+                    updatedAmb = refund_obj["ambassador_code"].ToString();
                     newTotal = Math.Round(newTotal, 2);
                     Debug.WriteLine("amt before subtracting: " + amt.ToString());
                     Debug.WriteLine("newTotal before subtracting: " + newTotal.ToString());
@@ -871,10 +904,14 @@ namespace MTYD.ViewModel
                     {
                         correct *= -1;
                         await DisplayAlert("Extra Charge", "You will be charged $" + correct.ToString() + " for this plan change.", "OK");
+                        extraCharge = correct;
+                        updatedDue = extraCharge.ToString();
+                        shouldCharge = true;
                     }
                     else
                     {
                         await DisplayAlert("Reimbursement", "You will be reimbursed $" + correct.ToString() + " for this plan change.", "OK");
+                        shouldCharge = false;
                     }
 
                     SignUpButton.Text = "SAVE CHANGES";
@@ -882,92 +919,455 @@ namespace MTYD.ViewModel
             }
             else
             {
-                int length = (TotalPrice.Text).Length;
-                string price = TotalPrice.Text.Substring(1, length - 1);
-                Preferences.Set("price", price);
-
-                Console.WriteLine("Price selected: " + price);
-
-                PurchaseInfo2 updated = new PurchaseInfo2();
-
-                //if direct login
-                if (socialLogin == "NULL")
+                if (shouldCharge == true)
                 {
-                    var request2 = new HttpRequestMessage();
-                    Console.WriteLine("user_id: " + (string)Application.Current.Properties["user_id"]);
-                    string url2 = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
-                    //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + (string)Application.Current.Properties["user_id"];
-                    //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + "100-000256";
-                    request2.RequestUri = new Uri(url2);
-                    //request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/get_delivery_info/400-000453");
-                    request2.Method = HttpMethod.Get;
-                    var client2 = new HttpClient();
-                    HttpResponseMessage response2 = await client2.SendAsync(request2);
+                    int length = (TotalPrice.Text).Length;
+                    string price = TotalPrice.Text.Substring(1, length - 1);
+                    Preferences.Set("price", price);
 
-                    if (response2.StatusCode == System.Net.HttpStatusCode.OK)
+                    Console.WriteLine("Price selected: " + price);
+
+                    PurchaseInfo2 updated = new PurchaseInfo2();
+
+                    //if direct login
+                    if (socialLogin == "NULL")
                     {
-                        HttpContent content2 = response2.Content;
-                        Console.WriteLine("content: " + content2);
-                        var userString2 = await content2.ReadAsStringAsync();
-                        var info_obj2 = JObject.Parse(userString2);
+                        var request2 = new HttpRequestMessage();
+                        Console.WriteLine("user_id: " + (string)Xamarin.Forms.Application.Current.Properties["user_id"]);
+                        string url2 = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Xamarin.Forms.Application.Current.Properties["user_id"];
+                        //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + (string)Application.Current.Properties["user_id"];
+                        //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + "100-000256";
+                        request2.RequestUri = new Uri(url2);
+                        //request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/get_delivery_info/400-000453");
+                        request2.Method = HttpMethod.Get;
+                        var client2 = new HttpClient();
+                        HttpResponseMessage response2 = await client2.SendAsync(request2);
 
-                        //updated.password = (info_obj2["result"])[0]["password_hashed"].ToString();
+                        if (response2.StatusCode == System.Net.HttpStatusCode.OK)
+                        {
+                            HttpContent content3 = response2.Content;
+                            Console.WriteLine("content: " + content3);
+                            var userString2 = await content3.ReadAsStringAsync();
+                            var info_obj2 = JObject.Parse(userString2);
+
+                            //updated.password = (info_obj2["result"])[0]["password_hashed"].ToString();
+                        }
                     }
+
+                    //start of stripe processing if there is an additional charge********************************************
+
+                    var total = extraCharge.ToString();
+                    var clientHttp = new System.Net.Http.HttpClient();
+                    var stripe = new Credentials();
+                    if (delivInstructions == "M4METEST" || delivInstructions == "M4ME TEST")
+                        stripe.key = Constant.TestPK;
+                    else stripe.key = Constant.LivePK;
+
+                    var stripeObj = JsonConvert.SerializeObject(stripe);
+                    var stripeContent = new StringContent(stripeObj, Encoding.UTF8, "application/json");
+                    var RDSResponse = await clientHttp.PostAsync(Constant.StripeModeUrl, stripeContent);
+                    var content = await RDSResponse.Content.ReadAsStringAsync();
+
+                    Debug.WriteLine("key to send JSON: " + stripeObj);
+                    Debug.WriteLine("Response from key: " + content);
+                    Debug.WriteLine("RDSResponse" + RDSResponse.IsSuccessStatusCode.ToString());
+                    if (RDSResponse.IsSuccessStatusCode)
+                    {
+                        //Carlos original code
+                        //if (content != "200")
+                        //if (content.Contains("200"))
+                        //{
+                        //Debug.WriteLine("error encountered");
+                        string SK = "";
+                        string mode = "";
+
+                        if (stripeObj.Contains("test"))
+                        {
+                            mode = "TEST";
+                            SK = Constant.TestSK;
+                        }
+                        else if (stripeObj.Contains("live"))
+                        {
+                            mode = "LIVE";
+                            SK = Constant.LiveSK;
+                        }
+                        //Carlos original code
+                        //if (content.Contains("Test"))
+                        //{
+                        //    mode = "TEST";
+                        //    SK = Constant.TestSK;
+                        //}
+                        //else if (content.Contains("Live"))
+                        //{
+                        //    mode = "LIVE";
+                        //    SK = Constant.LiveSK;
+                        //}
+
+
+
+                        //trying to implement stripe with payment intent and payment method
+                        //GetPaymentIntent newPaymentIntent = new GetPaymentIntent();
+                        //newPaymentIntent.currency = "usd";
+                        //newPaymentIntent.customer_uid = (string)Xamarin.Forms.Application.Current.Properties["user_id"];
+                        //newPaymentIntent.business_code = DeliveryEntry.Text.Trim();
+                        //newPaymentIntent.item_uid = Preferences.Get("item_uid", "");
+                        //newPaymentIntent.num_items = Int32.Parse(Preferences.Get("item_name", "").Substring(0, Preferences.Get("item_name", "").IndexOf(" ")));
+                        //newPaymentIntent.num_deliveries = Int32.Parse(Preferences.Get("freqSelected", ""));
+                        //newPaymentIntent.delivery_discount = Math.Round(Double.Parse(discountPrice.Text.Substring(discountPrice.Text.IndexOf("$") + 1)) / Double.Parse(subtotalPrice.Text.Substring(subtotalPrice.Text.IndexOf("$") + 1)), 0);
+                        //PaymentSummary paymentSum = new PaymentSummary();
+                        //paymentSum.mealSubPrice = subtotalPrice.Text.Substring(subtotalPrice.Text.IndexOf("$") + 1);
+                        //paymentSum.discountAmount = discountPrice.Text.Substring(discountPrice.Text.IndexOf("$") + 1);
+                        //paymentSum.addOns = "0.00";
+                        //paymentSum.tip = tipPrice.Text.Substring(tipPrice.Text.IndexOf("$") + 1);
+                        //paymentSum.serviceFee = serviceFeePrice.Text.Substring(serviceFeePrice.Text.IndexOf("$") + 1);
+                        //paymentSum.deliveryFee = deliveryFeePrice.Text.Substring(deliveryFeePrice.Text.IndexOf("$") + 1);
+                        //paymentSum.taxRate = tax;
+                        //paymentSum.taxAmount = taxPrice.Text.Substring(taxPrice.Text.IndexOf("$") + 1);
+                        //paymentSum.ambassadorDiscount = ambassDisc.Text.Substring(ambassDisc.Text.IndexOf("$") + 1);
+                        //paymentSum.total = grandTotalPrice.Text.Substring(grandTotalPrice.Text.IndexOf("$") + 1);
+                        //paymentSum.subtotal = grandTotalPrice.Text.Substring(grandTotalPrice.Text.IndexOf("$") + 1);
+                        //newPaymentIntent.payment_summary = paymentSum;
+
+
+                        //var paymentIntentJSONString = JsonConvert.SerializeObject(newPaymentIntent);
+                        //Console.WriteLine("paymentIntentJSONString" + paymentIntentJSONString);
+                        //var content3 = new StringContent(paymentIntentJSONString, Encoding.UTF8, "application/json");
+                        //Console.WriteLine("Content: " + content3);
+                        //var client3 = new System.Net.Http.HttpClient();
+                        //var response3 = await client3.PostAsync("https://huo8rhh76i.execute-api.us-west-1.amazonaws.com/dev/api/v2/createPaymentIntent", content3);
+                        //var message3 = await response3.Content.ReadAsStringAsync();
+                        //Debug.WriteLine("create payment intent response: " + message3);
+                        //string payIntent = message3.Substring(1, message3.IndexOf("secret") - 2);
+                        //Debug.WriteLine("only the payment intent: " + message3.Substring(1, message3.IndexOf("secret") - 2));
+                        //string secret = message3.Substring(message3.IndexOf("secret") + 7);
+                        //secret = secret.Substring(0, secret.IndexOf("\""));
+                        //Debug.WriteLine("only the secret: " + secret);
+                        //string clientSec = message3.Substring(1);
+                        //clientSec = clientSec.Substring(0, clientSec.IndexOf("\""));
+                        //Debug.WriteLine("client secret: " + clientSec);
+
+                        //PaymentMethodCard payWithCard = new PaymentMethodCard();
+
+                        Debug.WriteLine("MODE          : " + mode);
+                        Debug.WriteLine("STRIPE SECRET : " + SK);
+
+                        //Debug.WriteLine("SK" + SK);
+                        StripeConfiguration.ApiKey = SK;
+
+                        //Dictionary<String, Object> card = new Dictionary<string, object>();
+                        //card.Add("number", "4242424242424242");
+                        //card.Add("exp_month", 4);
+                        //card.Add("exp_year", 2022);
+                        //card.Add("cvc", "314");
+                        //Dictionary<String, Object> param = new Dictionary<string, object>();
+                        //param.Add("type", "card");
+                        //param.Add("card", card);
+
+                        ////Stripe.PaymentMethodCard
+                        //Stripe.PaymentMethod paymentMethod = new Stripe.PaymentMethod();
+                        //Stripe.PaymentMethodCard paywith = new Stripe.PaymentMethodCard();
+                        ////var req = await stripe.createPaymentMethod();
+                        //StripeClient stripeClient = new StripeClient();
+                        //string cc_num; string cc_exp_year; string cc_exp_month; string cc_cvv;
+
+                        string CardNo = cc_num.Trim();
+                        string expMonth = cc_exp_month.Trim();
+                        string expYear = cc_exp_year.Trim();
+                        string cardCvv = cc_cvv.Trim();
+
+                        Debug.WriteLine("step 1 reached");
+                        // Step 1: Create Card
+                        TokenCardOptions stripeOption = new TokenCardOptions();
+                        stripeOption.Number = CardNo;
+                        stripeOption.ExpMonth = Convert.ToInt64(expMonth);
+                        stripeOption.ExpYear = Convert.ToInt64(expYear);
+                        stripeOption.Cvc = cardCvv;
+
+
+                        Debug.WriteLine("step 2 reached");
+                        // Step 2: Assign card to token object
+                        TokenCreateOptions stripeCard = new TokenCreateOptions();
+                        stripeCard.Card = stripeOption;
+
+                        TokenService service = new TokenService();
+                        Stripe.Token newToken = service.Create(stripeCard);
+
+                        Debug.WriteLine("step 3 reached");
+                        // Step 3: Assign the token to the soruce 
+                        var option = new SourceCreateOptions();
+                        option.Type = SourceType.Card;
+                        option.Currency = "usd";
+                        option.Token = newToken.Id;
+
+                        var sourceService = new SourceService();
+                        Source source = sourceService.Create(option);
+
+                        //source.ClientSecret = clientSec;
+                        //source.Card
+
+                        Debug.WriteLine("step 4 reached");
+                        // Step 4: Create customer
+                        CustomerCreateOptions customer = new CustomerCreateOptions();
+                        //NEED CARDHOLDER NAME
+                        customer.Name = cust_firstName + " " + cust_lastName;
+                        customer.Email = cust_email.ToLower().Trim();
+                        //if (cardDescription.Text == "" || cardDescription.Text == null)
+                        customer.Description = "";
+                        //else customer.Description = cardDescription.Text.Trim();
+                        if (passedUnit == null)
+                        {
+                            passedUnit = "";
+                        }
+                        //NEED CARDHOLDER ADDRESS
+                        customer.Address = new AddressOptions { City = passedCity.Trim(), Country = Constant.Contry, Line1 = passedAdd.Trim(), Line2 = passedUnit.Trim(), PostalCode = passedZip.Trim(), State = passedState.Trim() };
+
+
+                        var customerService = new CustomerService();
+                        var cust = customerService.Create(customer);
+
+                        Debug.WriteLine("step 5 reached");
+                        // Step 5: Charge option
+                        var chargeOption = new ChargeCreateOptions();
+                        chargeOption.Amount = (long)RemoveDecimalFromTotalAmount(total);
+
+                        Debug.WriteLine("hopefully correct total: " + total);
+                        chargeOption.Currency = "usd";
+                        chargeOption.ReceiptEmail = cust_email.ToLower().Trim();
+                        chargeOption.Customer = cust.Id;
+                        chargeOption.Source = source.Id;
+                        //if (cardDescription.Text == "" || cardDescription.Text == null)
+                        chargeOption.Description = "";
+                        //else chargeOption.Description = cardDescription.Text.Trim();
+
+                        //chargeOption.Description = cardDescription.Text.Trim();
+
+                        Debug.WriteLine("step 6 reached");
+                        // Step 6: charge the customer COMMENTED OUT FOR TESTING, backend already charges stripe so we don't have to do it here
+                        var chargeService = new ChargeService();
+
+                        Charge charge = chargeService.Create(chargeOption);
+                        //charge.PaymentIntent = (PaymentIntent)payIntent;
+                        Debug.WriteLine("charge: " + charge.ToString());
+                        Debug.WriteLine("charge id: " + charge.ToString().Substring(charge.ToString().IndexOf("id") + 3, charge.ToString().IndexOf(">") - charge.ToString().IndexOf("id") - 3));
+                        //chargeId = charge.ToString().Substring(charge.ToString().IndexOf("id") + 3, charge.ToString().IndexOf(">") - charge.ToString().IndexOf("id") - 3);
+                        if (charge.Status == "succeeded")
+                        {
+                            chargeId = charge.ToString().Substring(charge.ToString().IndexOf("id") + 3, charge.ToString().IndexOf(">") - charge.ToString().IndexOf("id") - 3);
+
+
+                            Debug.WriteLine("STRIPE PAYMENT WAS SUCCESSFUL");
+                            //end of stripe payment frontend processing
+
+                            //done from checkout button clicked
+                        }
+                        else
+                        {
+                            //await Navigation.PopAsync(false);
+                            // Fail
+                            await DisplayAlert("Ooops", "Payment was not succesfull. Please try again", "OK");
+                        }
+                    }
+
+                    //end of stripe processing*******************************************************************************************
+
+                    //else updated.password = "NULL";
+
+                    //updated.password = password;
+                    //updated.refresh_token = refresh_token;
+                    //updated.cc_num = cc_num;
+                    List<Item> list1 = new List<Item>();
+                    Item item1 = new Item();
+                    item1.qty = Preferences.Get("freqSelected", "");
+                    item1.name = Preferences.Get("mealSelected", "") + " Meal Plan";
+                    //item1.price = Preferences.Get("price", "");
+                    item1.price = Preferences.Get("itemPrice", "00.00");
+                    item1.item_uid = Preferences.Get("item_uid", "");
+                    item1.itm_business_uid = itm_business_uid;
+                    list1.Add(item1);
+                    updated.items = list1;
+
+                    updatePurchase updatePur = new updatePurchase();
+                    updatePur.start_delivery_date = startDeliv;
+                    updatePur.purchaseId = purchase_id;
+                    updatePur.amount_due = updatedDue;
+                    updatePur.amount_discount = updatedDiscount;
+                    updatePur.amount_paid = updatedDue;
+                    updatePur.coupon_id = "";
+                    updatePur.charge_id = chargeId;
+                    updatePur.payment_type = "STRIPE";
+                    updatePur.cc_num = cc_num;
+                    updatePur.cc_exp_date = cc_exp_date;
+                    updatePur.cc_cvv = cc_cvv;
+                    updatePur.cc_zip = cc_zip;
+                    updatePur.taxes = updatedTax;
+                    updatePur.tip = updatedTip;
+                    updatePur.service_fee = updatedService;
+                    updatePur.delivery_fee = updatedDelivery;
+                    updatePur.subtotal = updatedSub;
+                    updatePur.amb = updatedAmb;
+                    updatePur.customer_uid = (string)Xamarin.Forms.Application.Current.Properties["user_id"];
+                    updatePur.delivery_first_name = cust_firstName;
+                    updatePur.delivery_last_name = cust_lastName;
+                    updatePur.delivery_email = cust_email;
+                    updatePur.delivery_phone = phoneNum;
+                    updatePur.delivery_address = passedAdd;
+                    updatePur.delivery_unit = passedUnit;
+                    updatePur.delivery_state = passedState;
+                    updatePur.delivery_city = passedCity;
+                    updatePur.delivery_zip = passedZip;
+                    updatePur.delivery_instructions = delivInstructions;
+                    updatePur.delivery_longitude = longi;
+                    updatePur.delivery_latitude = lati;
+                    updatePur.items = list1;
+                    updatePur.order_instructions = "";
+                    updatePur.purchase_notes = "";
+
+                    var updateJSONString = JsonConvert.SerializeObject(updatePur);
+                    Console.WriteLine("updatedJSONString" + updateJSONString);
+                    var content2 = new StringContent(updateJSONString, Encoding.UTF8, "application/json");
+                    Console.WriteLine("updatedContent: " + content2);
+                    /*var request = new HttpRequestMessage();
+                    request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/checkout");
+                    request.Method = HttpMethod.Post;
+                    request.Content = content;*/
+                    var client = new HttpClient();
+                    Debug.WriteLine("url we are posting to: " + "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/update_pay_pur_mobile");
+                    //var response = client.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_purchase_id", content);
+                    var response = client.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/update_pay_pur_mobile", content2);
+                    // HttpResponseMessage response = await client.SendAsync(request);
+                    Console.WriteLine("RESPONSE TO update purchase   " + response.Result);
+                    Console.WriteLine("update JSON OBJECT BEING SENT: " + updateJSONString);
+
+                    //var newPaymentJSONString = JsonConvert.SerializeObject(updated);
+                    //Console.WriteLine("updatedJSONString" + newPaymentJSONString);
+                    //var content2 = new StringContent(newPaymentJSONString, Encoding.UTF8, "application/json");
+                    //Console.WriteLine("updatedContent: " + content2);
+                    ///*var request = new HttpRequestMessage();
+                    //request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/checkout");
+                    //request.Method = HttpMethod.Post;
+                    //request.Content = content;*/
+                    //var client = new HttpClient();
+                    //Debug.WriteLine("url we are posting to: " + "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_purchase/" + purchase_id);
+                    ////var response = client.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_purchase_id", content);
+                    //var response = client.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_purchase/" + purchase_id, content2);
+                    //// HttpResponseMessage response = await client.SendAsync(request);
+                    //Console.WriteLine("RESPONSE TO CHECKOUT   " + response.Result);
+                    //Console.WriteLine("CHECKOUT JSON OBJECT BEING SENT: " + newPaymentJSONString);
+                    Console.WriteLine("clickedDone Func ENDED!");
+
+                    Zones[] zones = new Zones[] { };
+                    await Navigation.PushAsync(new Select(zones, cust_firstName, cust_lastName, cust_email));
+                    //old nav
+                    //await Navigation.PushAsync(new UserProfile(cust_firstName, cust_lastName, cust_email));
+                    //Application.Current.MainPage = new DeliveryBilling();
+                    //await NavigationPage.PushAsync(DeliveryBilling());
                 }
-                //else updated.password = "NULL";
+                else //a refund
+                {
+                    int length = (TotalPrice.Text).Length;
+                    string price = TotalPrice.Text.Substring(1, length - 1);
+                    Preferences.Set("price", price);
 
-                //updated.password = password;
-                //updated.refresh_token = refresh_token;
-                //updated.cc_num = cc_num;
-                //testing
-                updated.cc_num = cc_num;
-                updated.cc_exp_date = cc_exp_date;
-                //updated.cc_exp_year = cc_exp_year;
-                //updated.cc_exp_month = cc_exp_month;
-                updated.cc_cvv = cc_cvv;
-                updated.purchase_id = purchase_id;
-                //updated.purchase_id = "400-000019";
-                updated.new_item_id = Preferences.Get("item_uid", "");
-                updated.customer_email = cust_email;
-                updated.cc_zip = cc_zip;
-                updated.start_delivery_date = "";
+                    Console.WriteLine("Price selected: " + price);
 
-                List<Item> list1 = new List<Item>();
-                Item item1 = new Item();
-                item1.qty = Preferences.Get("freqSelected", "");
-                item1.name = Preferences.Get("mealSelected", "") + " Meal Plan";
-                //item1.price = Preferences.Get("price", "");
-                item1.price = Preferences.Get("itemPrice", "00.00");
-                item1.item_uid = updated.new_item_id;
-                item1.itm_business_uid = itm_business_uid;
-                list1.Add(item1);
-                updated.items = list1;
+                    PurchaseInfo2 updated = new PurchaseInfo2();
 
-                var newPaymentJSONString = JsonConvert.SerializeObject(updated);
-                Console.WriteLine("updatedJSONString" + newPaymentJSONString);
-                var content = new StringContent(newPaymentJSONString, Encoding.UTF8, "application/json");
-                Console.WriteLine("updatedContent: " + content);
-                /*var request = new HttpRequestMessage();
-                request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/checkout");
-                request.Method = HttpMethod.Post;
-                request.Content = content;*/
-                var client = new HttpClient();
-                Debug.WriteLine("url we are posting to: " + "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_purchase/" + purchase_id);
-                //var response = client.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_purchase_id", content);
-                var response = client.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_purchase/" + purchase_id, content);
-                // HttpResponseMessage response = await client.SendAsync(request);
-                Console.WriteLine("RESPONSE TO CHECKOUT   " + response.Result);
-                Console.WriteLine("CHECKOUT JSON OBJECT BEING SENT: " + newPaymentJSONString);
-                Console.WriteLine("clickedDone Func ENDED!");
+                    //if direct login
+                    if (socialLogin == "NULL")
+                    {
+                        var request2 = new HttpRequestMessage();
+                        Console.WriteLine("user_id: " + (string)Xamarin.Forms.Application.Current.Properties["user_id"]);
+                        string url2 = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Xamarin.Forms.Application.Current.Properties["user_id"];
+                        //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + (string)Application.Current.Properties["user_id"];
+                        //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + "100-000256";
+                        request2.RequestUri = new Uri(url2);
+                        //request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/get_delivery_info/400-000453");
+                        request2.Method = HttpMethod.Get;
+                        var client2 = new HttpClient();
+                        HttpResponseMessage response2 = await client2.SendAsync(request2);
 
-                Zones[] zones = new Zones[] { };
-                await Navigation.PushAsync(new Select(zones, cust_firstName, cust_lastName, cust_email));
-                //old nav
-                //await Navigation.PushAsync(new UserProfile(cust_firstName, cust_lastName, cust_email));
-                //Application.Current.MainPage = new DeliveryBilling();
-                //await NavigationPage.PushAsync(DeliveryBilling());
+                        if (response2.StatusCode == System.Net.HttpStatusCode.OK)
+                        {
+                            HttpContent content3 = response2.Content;
+                            Console.WriteLine("content: " + content3);
+                            var userString2 = await content3.ReadAsStringAsync();
+                            var info_obj2 = JObject.Parse(userString2);
+
+                            //updated.password = (info_obj2["result"])[0]["password_hashed"].ToString();
+                        }
+                    }
+
+                   
+
+                    //else updated.password = "NULL";
+
+                    //updated.password = password;
+                    //updated.refresh_token = refresh_token;
+                    //updated.cc_num = cc_num;
+                    //testing
+                    updated.cc_num = cc_num;
+                    updated.cc_exp_date = cc_exp_date;
+                    //updated.cc_exp_year = cc_exp_year;
+                    //updated.cc_exp_month = cc_exp_month;
+                    updated.cc_cvv = cc_cvv;
+                    updated.purchase_id = purchase_uid;
+                    //updated.purchase_id = "400-000019";
+                    updated.new_item_id = Preferences.Get("item_uid", "");
+                    updated.customer_email = cust_email;
+                    updated.cc_zip = cc_zip;
+                    updated.start_delivery_date = "";
+
+                    List<Item> list1 = new List<Item>();
+                    Item item1 = new Item();
+                    item1.qty = Preferences.Get("freqSelected", "");
+                    item1.name = Preferences.Get("mealSelected", "") + " Meal Plan";
+                    //item1.price = Preferences.Get("price", "");
+                    item1.price = Preferences.Get("itemPrice", "00.00");
+                    item1.item_uid = updated.new_item_id;
+                    item1.itm_business_uid = itm_business_uid;
+                    list1.Add(item1);
+                    updated.items = list1;
+
+
+
+                    var newPaymentJSONString = JsonConvert.SerializeObject(updated);
+                    Console.WriteLine("updatedJSONString" + newPaymentJSONString);
+                    var content2 = new StringContent(newPaymentJSONString, Encoding.UTF8, "application/json");
+                    Console.WriteLine("updatedContent: " + content2);
+                    /*var request = new HttpRequestMessage();
+                    request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/checkout");
+                    request.Method = HttpMethod.Post;
+                    request.Content = content;*/
+                    var client = new HttpClient();
+                    Debug.WriteLine("url we are posting to: " + "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_purchase/" + purchase_uid);
+                    //var response = client.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_purchase_id", content);
+                    var response = client.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_purchase/" + purchase_uid, content2);
+                    // HttpResponseMessage response = await client.SendAsync(request);
+                    Console.WriteLine("RESPONSE TO CHECKOUT   " + response.Result);
+                    Console.WriteLine("CHECKOUT JSON OBJECT BEING SENT: " + newPaymentJSONString);
+                    Console.WriteLine("clickedDone Func ENDED!");
+
+                    Zones[] zones = new Zones[] { };
+                    await Navigation.PushAsync(new Select(zones, cust_firstName, cust_lastName, cust_email));
+                }
             }
         }
+
+            // FUNCTION  3:
+            public int RemoveDecimalFromTotalAmount(string amount)
+            {
+                var stringAmount = "";
+                var arrayAmount = amount.ToCharArray();
+                for (int i = 0; i < arrayAmount.Length; i++)
+                {
+                    if ((int)arrayAmount[i] != (int)'.')
+                    {
+                        stringAmount += arrayAmount[i];
+                    }
+                }
+                System.Diagnostics.Debug.WriteLine(stringAmount);
+                return Int32.Parse(stringAmount);
+            }
 
         public static string GetXMLElement(XElement element, string name)
         {
@@ -990,7 +1390,7 @@ namespace MTYD.ViewModel
             Console.WriteLine("navigation stack count: " + Navigation.NavigationStack.Count);
             if (Navigation.NavigationStack.Count == 1)
             {
-                Application.Current.MainPage = new MainPage();
+                Xamarin.Forms.Application.Current.MainPage = new MainPage();
             }
             else
             {

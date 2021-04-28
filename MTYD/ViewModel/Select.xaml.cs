@@ -193,11 +193,25 @@ namespace MTYD.ViewModel
         {
             if (Device.RuntimePlatform == Device.iOS)
             {
+                //open menu adjustments
+                orangeBox2.HeightRequest = height / 2;
+                orangeBox2.Margin = new Thickness(0, -height / 2.2, 0, 0);
+                orangeBox2.CornerRadius = height / 40;
+                heading2.WidthRequest = width / 5.3;
+                menu2.HeightRequest = width / 25;
+                menu2.WidthRequest = width / 25;
+                menu2.Margin = new Thickness(25, 0, 0, 30);
+                //open menu adjustments
+
                 orangeBox.HeightRequest = height / 2;
                 orangeBox.Margin = new Thickness(0, -height / 2.2, 0, 0);
                 orangeBox.CornerRadius = height / 40;
+                //orangeBox2.HeightRequest = height / 2;
+                //orangeBox2.Margin = new Thickness(0, -height / 2.2, 0, 0);
+                //orangeBox2.CornerRadius = height / 40;
                 heading.FontSize = width / 32;
                 heading.Margin = new Thickness(0, 0, 0, 30);
+                //heading2.WidthRequest = width / 5.3;
                 pfp.HeightRequest = width / 20;
                 pfp.WidthRequest = width / 20;
                 pfp.CornerRadius = (int)(width / 40);
@@ -224,6 +238,9 @@ namespace MTYD.ViewModel
                 menu.HeightRequest = width / 25;
                 menu.WidthRequest = width / 25;
                 menu.Margin = new Thickness(25, 0, 0, 30);
+                //menu2.HeightRequest = width / 25;
+                //menu2.WidthRequest = width / 25;
+                //menu2.Margin = new Thickness(0, 0, 25, 15);
 
                 //selectPlanFrame.Margin = new Thickness(25, 7);
                 //selectPlanFrame.Padding = new Thickness(15, 5);
@@ -3053,5 +3070,56 @@ namespace MTYD.ViewModel
             totalCount.Text = Preferences.Get("total", 0).ToString();
             Preferences.Set("origMax", int.Parse(s));
         }
+
+        //start of menu functions
+        void clickedOpenMenu(object sender, EventArgs e)
+        {
+            openedMenu.IsVisible = true;
+        }
+
+        void clickedCloseMenu(object sender, EventArgs e)
+        {
+            openedMenu.IsVisible = false;
+        }
+
+        async void clickedLanding(System.Object sender, System.EventArgs e)
+        {
+            await Navigation.PushAsync(new MainPage(first, last, email), false);
+            //Navigation.RemovePage(this.Navigation.NavigationStack[this.Navigation.NavigationStack.Count - 2]);
+        }
+
+        async void clickedMealPlan(System.Object sender, System.EventArgs e)
+        {
+            await Navigation.PushAsync(new MealPlans(first, last, email), false);
+            //Navigation.RemovePage(this.Navigation.NavigationStack[this.Navigation.NavigationStack.Count - 2]);
+        }
+
+        async void clickedSelect(System.Object sender, System.EventArgs e)
+        {
+            if (Preferences.Get("canChooseSelect", false) == false)
+                DisplayAlert("Error", "please purchase a meal plan first", "OK");
+            else
+            {
+                Zones[] zones = new Zones[] { };
+                await Navigation.PushAsync(new Select(zones, first, last, email), false);
+                //Navigation.RemovePage(this.Navigation.NavigationStack[this.Navigation.NavigationStack.Count - 2]);
+            }
+        }
+
+        async void clickedSubscription(System.Object sender, System.EventArgs e)
+        {
+            await Navigation.PushAsync(new SubscriptionPage(first, last, email), false);
+            //Navigation.RemovePage(this.Navigation.NavigationStack[this.Navigation.NavigationStack.Count - 2]);
+        }
+
+        void clickedLogout(System.Object sender, System.EventArgs e)
+        {
+            Application.Current.Properties.Remove("user_id");
+            Application.Current.Properties["platform"] = "GUEST";
+            Application.Current.Properties.Remove("time_stamp");
+            //Application.Current.Properties.Remove("platform");
+            Application.Current.MainPage = new MainPage();
+        }
+        //end of menu functions
     }
 }

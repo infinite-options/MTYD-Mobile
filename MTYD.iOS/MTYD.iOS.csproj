@@ -271,6 +271,7 @@
     <BundleResource Include="Resources\congrats_path1.png" />
     <BundleResource Include="Resources\congrats_path2.png" />
     <BundleResource Include="Resources\xButton.png" />
+    <BundleResource Include="Resources\closeMenu.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AppleSignIn\" />
