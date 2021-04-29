@@ -197,7 +197,7 @@
                 <BoxView x:Name="divider6" HeightRequest="2" HorizontalOptions="Fill" VerticalOptions="Center" BackgroundColor="White"/>
 
 
-                <!--<Grid x:Name="payGrid" ColumnSpacing="15">
+                <Grid x:Name="payGrid" ColumnSpacing="15">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
@@ -207,7 +207,7 @@
                     </Grid.ColumnDefinitions>
 
 
-                    <Label Grid.Column="1" x:Name="explore" Text="TESTING PAYMENTPAGE" HorizontalOptions="StartAndExpand" VerticalOptions="Center" FontAttributes="Bold" FontSize="25" TextColor="White"/>
+                    <Label Grid.Column="1" x:Name="explore" Text="TESTING MEAL PLANS" HorizontalOptions="StartAndExpand" VerticalOptions="Center" FontAttributes="Bold" FontSize="25" TextColor="White"/>
                     
                     <Image x:Name="explorePic" VerticalOptions="Center" HorizontalOptions="Start" Source="profile.png"/>
 
@@ -216,7 +216,7 @@
 
                 </Grid>
 
-                <BoxView x:Name="divider7" HeightRequest="2" HorizontalOptions="Fill" VerticalOptions="Center" BackgroundColor="White"/>-->
+                <BoxView x:Name="divider7" HeightRequest="2" HorizontalOptions="Fill" VerticalOptions="Center" BackgroundColor="White"/>
 
 
                 <Grid x:Name="logoutGrid" ColumnSpacing="15">

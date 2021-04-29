@@ -22,7 +22,7 @@
 
                     </Grid>
 
-                    <ImageButton x:Name="menu" Source="new_menu.png" VerticalOptions="End" HorizontalOptions="Start" BackgroundColor="Transparent" Clicked="clickedOpenMenu"/>
+                    <ImageButton x:Name="menu" Source="new_menu.png" VerticalOptions="End" HorizontalOptions="Start" BackgroundColor="Transparent" Clicked="clickedMenu"/>
 
                 </Grid>
                 <!--CARLOS UI REARRANGING -->
