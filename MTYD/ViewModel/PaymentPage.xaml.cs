@@ -2632,7 +2632,8 @@ namespace MTYD.ViewModel
         string origState = "";
         string origZip = "";
 
-        private void OnAddressChanged(object sender, TextChangedEventArgs eventArgs)
+        //added async
+        private async void OnAddressChanged(object sender, TextChangedEventArgs eventArgs)
         {
             Debug.WriteLine("onaddresschanged entered with: " + ((Entry)sender).Placeholder);
             //if (((Entry)sender).Equals(AddressEntry) && onCardAdd == true)
@@ -2647,27 +2648,40 @@ namespace MTYD.ViewModel
             {
                 Debug.WriteLine("second if of onAddressChanged");
                 paymentStack.IsVisible = false;
-                //saveDeliv.IsVisible = true;
-                addr.OnAddressChanged(addressList, Addresses, _addressText);
+                addressList.IsVisible = true;
+                UnitCity.IsVisible = false;
+                StateZip.IsVisible = false;
+                addressList.ItemsSource = await addr.GetPlacesPredictionsAsync(AddressEntry.Text);
+                //addr.OnAddressChanged(addressList, Addresses, _addressText);
             }
             else
             {
-                Debug.WriteLine("third if of onAddressChanged");
-                addr.OnAddressChanged(addressList2, Addresses, _addressText2);
+                //jonathan's code
+                // Debug.WriteLine("third if of onAddressChanged");
+                // addr.OnAddressChanged(addressList2, Addresses, _addressText2);
+
+                addressListFrame.IsVisible = true;
+                addressList2.IsVisible = true;
+                CityStateZip.IsVisible = false;
+                addressList2.ItemsSource = await addr.GetPlacesPredictionsAsync(AddressEntry.Text);
+                //addr.OnAddressChanged(addressList2, Addresses, _addressText);
             }
         }
 
         private void addressEntryFocused(object sender, EventArgs eventArgs)
         {
-            if (((Entry)sender).Equals(AddressEntry)) {
-                addr.addressEntryFocused(addressList, new Grid[] { UnitCity, StateZip });
+            if (((Entry)sender).Equals(AddressEntry))
+            {
+                //addr.addressEntryFocused(addressList, new Grid[] { UnitCity, StateZip });
             }
             else
             {
                 if (((Entry)sender).Equals(cardHolderAddress))
                     onCardAdd = true;
-                addressListFrame.IsVisible = true;
-                addr.addressEntryFocused(addressList2, new Grid[] { CityStateZip });
+
+                //commented out in ashley's code
+                // addressListFrame.IsVisible = true;
+                // addr.addressEntryFocused(addressList2, new Grid[] { CityStateZip });
             }
         }
 
@@ -2691,11 +2705,17 @@ namespace MTYD.ViewModel
             if (((ListView)sender).Equals(addressList))
             {
                 addr.addressSelected(addressList, new Grid[] { UnitCity, StateZip }, AddressEntry, CityEntry, StateEntry, ZipEntry);
+                addressList.IsVisible = false;
+                UnitCity.IsVisible = true;
+                StateZip.IsVisible = true;
             }
             else
             {
-                addressListFrame.IsVisible = false;
                 addr.addressSelected(addressList2, new Grid[] { UnitGrid, CityStateZip }, cardHolderAddress, cardCity, cardState, cardZip);
+                addressListFrame.IsVisible = false;
+                addressList2.IsVisible = false;
+                UnitGrid.IsVisible = true;
+                CityStateZip.IsVisible = true;
             }
         }
     }

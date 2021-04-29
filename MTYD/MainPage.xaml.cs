@@ -1885,9 +1885,11 @@ namespace MTYD
             }
         }
 
-        private void OnAddressChanged(object sender, EventArgs eventArgs)
+        private async void OnAddressChanged(object sender, EventArgs eventArgs)
         {
-            addr.OnAddressChanged(addressList, Addresses, _addressText);
+            addressList.IsVisible = true;
+            addressList.ItemsSource = await addr.GetPlacesPredictionsAsync(AddressEntry.Text);
+            //addr.OnAddressChanged(addressList, Addresses, _addressText);
         }
 
         private void addressEntryFocused(object sender, EventArgs eventArgs)
@@ -1903,13 +1905,14 @@ namespace MTYD
         async void addressSelected(System.Object sender, System.EventArgs e)
         {
             addr.addressSelected(addressList, AddressEntry);
+            addressList.IsVisible = false;
             string inputAddress = AddressEntry.Text;
 
             string[] addressSplit = inputAddress.Split(',');
             string addr1 = addressSplit[0].Trim();
             string city = addressSplit[1].Trim();
-            string state = addressSplit[2].Trim().Substring(0, 2);
-            string zip = addressSplit[2].Trim().Substring(3);
+            string state = addressSplit[2].Trim();
+            //string zip = addressSplit[2].Trim().Substring(3);
 
             // Setting request for USPS API
             XDocument requestDoc = new XDocument(
@@ -1922,7 +1925,7 @@ namespace MTYD
                 new XElement("Address2", ""),
                 new XElement("City", city),
                 new XElement("State", state),
-                new XElement("Zip5", zip),
+                new XElement("Zip5", ""),
                 new XElement("Zip4", "")
                      )
                  )

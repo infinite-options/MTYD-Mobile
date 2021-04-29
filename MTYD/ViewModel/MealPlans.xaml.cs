@@ -979,14 +979,10 @@ namespace MTYD.ViewModel
             }
         }
 
-        public async Task GetPlacesPredictionsAsync()
+        private async void OnAddressChanged(object sender, EventArgs eventArgs)
         {
-            await addr.GetPlacesPredictionsAsync(addressList, Addresses, _addressText);
-        }
-
-        private void OnAddressChanged(object sender, EventArgs eventArgs)
-        {
-            addr.OnAddressChanged(addressList, Addresses, _addressText);
+            addressList.ItemsSource = await addr.GetPlacesPredictionsAsync(AddressEntry.Text);
+            //addr.OnAddressChanged(addressList, Addresses, _addressText);
         }
 
         private void addressEntryFocused(object sender, EventArgs eventArgs)

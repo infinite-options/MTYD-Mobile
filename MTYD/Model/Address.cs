@@ -8,6 +8,7 @@ using System.Threading;
 using MTYD.Constants;
 using System.ComponentModel;
 using Xamarin.Forms;
+using System.Diagnostics;
 
 namespace MTYD.Model
 {
@@ -20,63 +21,77 @@ namespace MTYD.Model
         private ObservableCollection<AddressAutocomplete> _addresses;
         public event PropertyChangedEventHandler PropertyChanged;
         private CancellationTokenSource throttleCts = new CancellationTokenSource();
-        string zip;
-        bool selected = false;
+        //string zip;
 
-        public async Task GetPlacesPredictionsAsync(ListView addressList, ObservableCollection<AddressAutocomplete> Addresses, string _addressText)
+        public async Task<ObservableCollection<AddressAutocomplete>> GetPlacesPredictionsAsync(string _addressText)
         {
-            CancellationToken cancellationToken = new CancellationTokenSource(TimeSpan.FromMinutes(2)).Token;
-
-            using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, string.Format(GooglePlacesApiAutoCompletePath, Constant.GooglePlacesApiKey, WebUtility.UrlEncode(_addressText))))
+            try
             {
+                ObservableCollection<AddressAutocomplete> list = new ObservableCollection<AddressAutocomplete>();
+                CancellationToken cancellationToken = new CancellationTokenSource(TimeSpan.FromMinutes(2)).Token;
 
-                using (HttpResponseMessage message = await HttpClientInstance.SendAsync(request, HttpCompletionOption.ResponseContentRead, cancellationToken).ConfigureAwait(false))
+                using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, string.Format(GooglePlacesApiAutoCompletePath, Constant.GooglePlacesApiKey, WebUtility.UrlEncode(_addressText))))
                 {
-                    if (message.IsSuccessStatusCode)
+
+                    using (HttpResponseMessage message = await HttpClientInstance.SendAsync(request, HttpCompletionOption.ResponseContentRead, cancellationToken).ConfigureAwait(false))
                     {
-                        string json = await message.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-                        PlacesLocationPredictions predictionList = await Task.Run(() => JsonConvert.DeserializeObject<PlacesLocationPredictions>(json)).ConfigureAwait(false);
-                        
-                        if (predictionList.Status == "OK")
+                        if (message.IsSuccessStatusCode)
                         {
-                            Addresses.Clear();
-                            if (predictionList.Predictions.Count > 0)
-                            {
-                                foreach (Prediction prediction in predictionList.Predictions)
-                                {
-                                    string[] predictionSplit = prediction.Description.Split(',');
+                            string json = await message.Content.ReadAsStringAsync().ConfigureAwait(false);
 
-                                    Console.WriteLine("Place ID: " + prediction.PlaceId);
-                                    await setZipcode(prediction.PlaceId);
-                                    Console.WriteLine("After setZipcode:\n" + prediction.Description.Trim() + "\n" + predictionSplit[0].Trim() + "\n" + predictionSplit[1].Trim() + "\n" + predictionSplit[2].Trim() + "\n" + zip);
-                                    Addresses.Add(new AddressAutocomplete
+                            PlacesLocationPredictions predictionList = await Task.Run(() => JsonConvert.DeserializeObject<PlacesLocationPredictions>(json)).ConfigureAwait(false);
+
+                            if (predictionList.Status == "OK")
+                            {
+                                //Addresses.Clear();
+                                if (predictionList.Predictions.Count > 0)
+                                {
+                                    foreach (Prediction prediction in predictionList.Predictions)
                                     {
-                                        Address = prediction.Description.Trim(),
-                                        Street = predictionSplit[0].Trim(),
-                                        City = predictionSplit[1].Trim(),
-                                        State = predictionSplit[2].Trim(),
-                                        ZipCode = zip,
-                                    });
-                                    addressList.ItemsSource = Addresses;
+                                        string[] predictionSplit = prediction.Description.Split(',');
+
+                                        Console.WriteLine("Place ID: " + prediction.PlaceId);
+                                        //await setZipcode(prediction.PlaceId);
+                                        Console.WriteLine("After setZipcode:\n" + prediction.Description.Trim() + "\n" + predictionSplit[0].Trim() + "\n" + predictionSplit[1].Trim() + "\n" + predictionSplit[2].Trim());
+                                        list.Add(new AddressAutocomplete
+                                        {
+                                            Address = prediction.Description.Trim(),
+                                            Street = predictionSplit[0].Trim(),
+                                            City = predictionSplit[1].Trim(),
+                                            State = predictionSplit[2].Trim(),
+                                            ZipCode = "",
+                                            PredictionID = prediction.PlaceId
+                                        });
+                                        //addressList.ItemsSource = Addresses;
+                                    }
                                 }
                             }
-                        }
-                        else
-                        {
-                            Addresses.Clear();
+                            //else
+                            //{
+                            //    Addresses.Clear();
+                            //}
                         }
                     }
                 }
+                return list;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                return null;
             }
         }
 
-        private async Task setZipcode(string placeId)
+        private async Task<string> getZipcode(string placeId)
         {
+            Console.WriteLine("0");
             CancellationToken cancellationToken = new CancellationTokenSource(TimeSpan.FromMinutes(2)).Token;
+            Console.WriteLine("1");
             string s = string.Format(GooglePlacesApiDetailsPath, Constant.GooglePlacesApiKey, WebUtility.UrlEncode(placeId));
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, s);
+            Console.WriteLine("2");
             HttpResponseMessage message = await HttpClientInstance.SendAsync(request, HttpCompletionOption.ResponseContentRead, cancellationToken).ConfigureAwait(false);
+            Console.WriteLine("3");
             if (message.IsSuccessStatusCode)
             {
                 string json = await message.Content.ReadAsStringAsync().ConfigureAwait(false);
@@ -87,34 +102,33 @@ namespace MTYD.Model
 
                 foreach (var components in placesDetailsResult.Result.AddressComponents)
                 {
-                    if (components.Types[0] == "postal_code")
+                    if (components.Types.Count != 0 && components.Types[0] == "postal_code")
                     {
-                        zip = components.LongName;
+                        return components.LongName;
                     }
                 }
-
-                Console.WriteLine("Zip code: " + zip);
             }
+            return "";
         }
 
-        public void OnAddressChanged(ListView addressList, ObservableCollection<AddressAutocomplete> Addresses, string _addressText)
-        {
-            if (!selected)
-            {
-                addressList.IsVisible = true;
-            }
-            Interlocked.Exchange(ref this.throttleCts, new CancellationTokenSource()).Cancel();
-            Task.Delay(TimeSpan.FromMilliseconds(500), this.throttleCts.Token)
-                .ContinueWith(
-                delegate { GetPlacesPredictionsAsync(addressList, Addresses, _addressText); },
-                CancellationToken.None,
-                TaskContinuationOptions.OnlyOnRanToCompletion,
-                TaskScheduler.FromCurrentSynchronizationContext());
-        }
+        //public void OnAddressChanged(ListView addressList, ObservableCollection<AddressAutocomplete> Addresses, string _addressText)
+        //{
+        //    if (!selected)
+        //    {
+        //        addressList.IsVisible = true;
+        //    }
+        //    Interlocked.Exchange(ref this.throttleCts, new CancellationTokenSource()).Cancel();
+        //    Task.Delay(TimeSpan.FromMilliseconds(500), this.throttleCts.Token)
+        //        .ContinueWith(
+        //        delegate { GetPlacesPredictionsAsync(addressList, Addresses, _addressText); },
+        //        CancellationToken.None,
+        //        TaskContinuationOptions.OnlyOnRanToCompletion,
+        //        TaskScheduler.FromCurrentSynchronizationContext());
+        //}
 
         public void addressEntryFocused(ListView addressList, Grid[] grids)
         {
-            addressList.IsVisible = true;
+            //addressList.IsVisible = true;
             foreach (Grid g in grids) {
                 g.IsVisible = false;
             }
@@ -141,31 +155,22 @@ namespace MTYD.Model
 
         public void addressSelected(ListView addressList, Grid[] grids, Entry AddressEntry, Entry CityEntry, Entry StateEntry, Entry ZipEntry)
         {
-            addressList.IsVisible = false;
             foreach (Grid g in grids)
             {
                 g.IsVisible = true;
             }
 
-            selected = true;
-
             AddressEntry.Text = ((AddressAutocomplete)addressList.SelectedItem).Street;
             CityEntry.Text = ((AddressAutocomplete)addressList.SelectedItem).City;
             StateEntry.Text = ((AddressAutocomplete)addressList.SelectedItem).State;
-            ZipEntry.Text = ((AddressAutocomplete)addressList.SelectedItem).ZipCode;
-
+            //ZipEntry.Text = ((AddressAutocomplete)addressList.SelectedItem).ZipCode;
+            ZipEntry.Text = getZipcode(((AddressAutocomplete)addressList.SelectedItem).PredictionID).Result;
         }
 
         public void addressSelected(ListView addressList, Entry AddressEntry)
         {
-            addressList.IsVisible = false;
-
-            selected = true;
-
             AddressEntry.Text = ((AddressAutocomplete)addressList.SelectedItem).Street + ", " + ((AddressAutocomplete)addressList.SelectedItem).City
-                + ", " + ((AddressAutocomplete)addressList.SelectedItem).State + " " + ((AddressAutocomplete)addressList.SelectedItem).ZipCode;
-
-            selected = false;
+                + ", " + ((AddressAutocomplete)addressList.SelectedItem).State + ", " + getZipcode(((AddressAutocomplete)addressList.SelectedItem).PredictionID).Result;
         }
 
         protected void OnPropertyChanged(string propertyName)
