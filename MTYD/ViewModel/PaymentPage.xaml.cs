@@ -2479,29 +2479,37 @@ namespace MTYD.ViewModel
             }
         }
 
-        private void OnAddressChanged(object sender, EventArgs eventArgs)
+        private async void OnAddressChanged(object sender, EventArgs eventArgs)
         {
             if (((Entry)sender).Equals(AddressEntry))
             {
                 paymentStack.IsVisible = false;
-                //saveDeliv.IsVisible = true;
-                addr.OnAddressChanged(addressList, Addresses, _addressText);
+                addressList.IsVisible = true;
+                UnitCity.IsVisible = false;
+                StateZip.IsVisible = false;
+                addressList.ItemsSource = await addr.GetPlacesPredictionsAsync(AddressEntry.Text);
+                //addr.OnAddressChanged(addressList, Addresses, _addressText);
             }
             else
             {
-                addr.OnAddressChanged(addressList2, Addresses, _addressText);
+                addressListFrame.IsVisible = true;
+                addressList2.IsVisible = true;
+                CityStateZip.IsVisible = false;
+                addressList2.ItemsSource = await addr.GetPlacesPredictionsAsync(AddressEntry.Text);
+                //addr.OnAddressChanged(addressList2, Addresses, _addressText);
             }
         }
 
         private void addressEntryFocused(object sender, EventArgs eventArgs)
         {
-            if (((Entry)sender).Equals(AddressEntry)) {
-                addr.addressEntryFocused(addressList, new Grid[] { UnitCity, StateZip });
+            if (((Entry)sender).Equals(AddressEntry))
+            {
+                //addr.addressEntryFocused(addressList, new Grid[] { UnitCity, StateZip });
             }
             else
             {
-                addressListFrame.IsVisible = true;
-                addr.addressEntryFocused(addressList2, new Grid[] { CityStateZip });
+                //addressListFrame.IsVisible = true;
+                //addr.addressEntryFocused(addressList2, new Grid[] { CityStateZip });
             }
         }
 
@@ -2523,11 +2531,17 @@ namespace MTYD.ViewModel
             if (((ListView)sender).Equals(addressList))
             {
                 addr.addressSelected(addressList, new Grid[] { UnitCity, StateZip }, AddressEntry, CityEntry, StateEntry, ZipEntry);
+                addressList.IsVisible = false;
+                UnitCity.IsVisible = true;
+                StateZip.IsVisible = true;
             }
             else
             {
-                addressListFrame.IsVisible = false;
                 addr.addressSelected(addressList2, new Grid[] { UnitGrid, CityStateZip }, cardHolderAddress, cardCity, cardState, cardZip);
+                addressListFrame.IsVisible = false;
+                addressList2.IsVisible = false;
+                UnitGrid.IsVisible = true;
+                CityStateZip.IsVisible = true;
             }
         }
     }

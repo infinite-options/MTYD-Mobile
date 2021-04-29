@@ -1393,14 +1393,18 @@ namespace MTYD.ViewModel
             }
         }
 
-        private void OnAddressChanged(object sender, EventArgs eventArgs)
+        private async void OnAddressChanged(object sender, EventArgs eventArgs)
         {
-            addr.OnAddressChanged(addressList, Addresses, _addressText);
+            addressList.IsVisible = true;
+            UnitCity.IsVisible = false;
+            StateZip.IsVisible = false;
+            addressList.ItemsSource = await addr.GetPlacesPredictionsAsync(AddressEntry.Text);
+            //addr.OnAddressChanged(addressList, Addresses, _addressText);
         }
 
         private void addressEntryFocused(object sender, EventArgs eventArgs)
         {
-            addr.addressEntryFocused(addressList, new Grid[] { UnitCity, StateZip });
+            //addr.addressEntryFocused(addressList, new Grid[] { UnitCity, StateZip });
         }
 
         private void addressEntryUnfocused(object sender, EventArgs eventArgs)
@@ -1411,7 +1415,9 @@ namespace MTYD.ViewModel
         async void addressSelected(System.Object sender, System.EventArgs e)
         {
             addr.addressSelected(addressList, new Grid[] { UnitCity, StateZip }, AddressEntry, CityEntry, StateEntry, ZipEntry);
-
+            addressList.IsVisible = false;
+            UnitCity.IsVisible = true;
+            StateZip.IsVisible = true;
         }
 
         /*

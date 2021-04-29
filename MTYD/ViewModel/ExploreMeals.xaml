@@ -477,7 +477,7 @@
                               Focused="addressEntryFocused" Unfocused="addressEntryUnfocused"/>
                    </Frame>
 
-                   <ListView x:Name="addressList" ItemsSource="{Binding Addresses}" IsVisible="false" Margin="15, 0, 15, 30" ItemSelected="addressSelected">
+                   <ListView x:Name="addressList" ItemsSource="{Binding Addresses}" IsVisible="false" Margin="15, 0, 15, 30" ItemSelected="addressSelected" HeightRequest="200">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <TextCell Text="{Binding Address}"/>
