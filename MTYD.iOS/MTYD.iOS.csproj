@@ -252,18 +252,6 @@
     <BundleResource Include="Resources\meal_num_button_orange.png" />
     <BundleResource Include="Resources\meal_num_button_yellow.png" />
     <BundleResource Include="Resources\delivery_num_button.png" />
-    <BundleResource Include="Resources\fbicon_white.png" />
-    <BundleResource Include="Resources\insicon_white.png" />
-    <BundleResource Include="Resources\plainPlanSelecter.png" />
-    <BundleResource Include="Resources\circleX.png" />
-    <BundleResource Include="Resources\congrats_path1.png" />
-    <BundleResource Include="Resources\congrats_path2.png" />
-    <BundleResource Include="Resources\xButton.png" />
-    <BundleResource Include="Resources\closeMenu.png" />
-    <BundleResource Include="Resources\new_background.png" />
-    <BundleResource Include="Resources\path1.png" />
-    <BundleResource Include="Resources\path2.png" />
-    <BundleResource Include="Resources\path3.png" />
     <BundleResource Include="Resources\new_appleicon.png" />
     <BundleResource Include="Resources\new_background.png" />
     <BundleResource Include="Resources\new_fbicon.png" />
@@ -273,9 +261,22 @@
     <BundleResource Include="Resources\button_choose.png" />
     <BundleResource Include="Resources\button_deliver.png" />
     <BundleResource Include="Resources\button_search.png" />
-    <BundleResource Include="Resources\congrats_path3.png" />
-    <BundleResource Include="Resources\meal_num_button_big.png" />
-    <BundleResource Include="Resources\congrats_path4.png" />
+    <BundleResource Include="Resources\path1.png" />
+    <BundleResource Include="Resources\path2.png" />
+    <BundleResource Include="Resources\path3.png" />
+    <BundleResource Include="Resources\fbicon_white.png" />
+    <BundleResource Include="Resources\insicon_white.png" />
+    <BundleResource Include="Resources\plainPlanSelecter.png" />
+    <BundleResource Include="Resources\circleX.png" />
+    <BundleResource Include="Resources\congrats_path1.png" />
+    <BundleResource Include="Resources\congrats_path2.png" />
+    <BundleResource Include="Resources\xButton.png" />
+    <BundleResource Include="Resources\closeMenu.png" />
+    <BundleResource Include="Resources\saveButton.png" />
+    <BundleResource Include="Resources\MPcard.png" />
+    <BundleResource Include="Resources\MPtrash.png" />
+    <BundleResource Include="Resources\MPbox.png" />
+    <BundleResource Include="Resources\MPplate.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AppleSignIn\" />
