@@ -7,7 +7,7 @@
         <Grid VerticalOptions="CenterAndExpand">
             <StackLayout>
                 <StackLayout x:Name="HomePage">
-                    <Grid HorizontalOptions="End" Margin="0,0,15,0" RowSpacing="10">
+                    <Grid HorizontalOptions="End" Margin="0,0,15,0" RowSpacing="8">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="1*" />
                             <RowDefinition Height="1*" />
@@ -29,8 +29,8 @@
                         <Image Source="MealsForMeMainPage.png" HeightRequest="100"></Image>
                     </StackLayout>
 
-                    <Frame BackgroundColor="White" Margin="50, 0, 50, 10" HeightRequest="25" CornerRadius="15" BorderColor="#f26522" HasShadow="false">
-                        <Entry x:Name="AddressEntry" Text="{Binding AddressText}" TextChanged="OnAddressChanged" TextColor="Black" PlaceholderColor="#B4B4B4" Placeholder="Enter Address"
+                    <Frame BackgroundColor="White" Margin="50, 0, 50, 10" HeightRequest="20" CornerRadius="15" BorderColor="#f26522" HasShadow="false">
+                        <Entry x:Name="AddressEntry" Text="{Binding AddressText}" TextChanged="OnAddressChanged" TextColor="Black" PlaceholderColor="#B4B4B4" Placeholder="Search Your Address"
                               HorizontalTextAlignment="Center" Focused="addressEntryFocused" Unfocused="addressEntryUnfocused"/>
                     </Frame>
 
@@ -43,7 +43,7 @@
                         </ListView.ItemTemplate>
                    </ListView>
 
-                    <Button x:Name="button_ViewMeals" BackgroundColor="#f26522" Margin="50, 0, 50, 0" HeightRequest="60" CornerRadius="15"
+                    <Button x:Name="button_ViewMeals" BackgroundColor="#f26522" Margin="50, 0, 50, 0" HeightRequest="55" CornerRadius="15"
                             Text="View Meals" TextColor="White" FontSize="20" Clicked="clickedExplore"/>
 
                     <BoxView HeightRequest="20"/>
@@ -176,7 +176,7 @@
                 </StackLayout>
 
                 <StackLayout x:Name="LandingPage" Grid.Row="1">
-                    <Image Grid.Row="1" x:Name="landingPic" Source="landing_pic.png" Aspect="AspectFit" HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand"/>
+                    <!--<Image Grid.Row="1" x:Name="landingPic" Source="landing_pic.png" Aspect="AspectFit" HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand"/>-->
 
                     <Button x:Name="discounts" Text="Our Special Discounts" FontSize="17" HorizontalOptions="End" TextColor="White" BackgroundColor="Transparent" Margin="0,0,10,0" Clicked="clickedDiscounts"/>
 

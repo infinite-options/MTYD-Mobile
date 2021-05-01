@@ -162,6 +162,9 @@ namespace MTYD.ViewModel
                 clickedDeliv(proceedButton, e);
             }
 
+            addressList.IsVisible = false;
+            UnitCity.IsVisible = true;
+            StateZip.IsVisible = true;
         }
 
         public PaymentPage(string Fname, string Lname, string email)
@@ -1273,6 +1276,10 @@ namespace MTYD.ViewModel
                 //if (Preferences.Get(purchaseDescription, "") != "")
                 //    cardDescription.Text = Preferences.Get(purchaseDescription, "");
             }
+            addressListFrame.IsVisible = false;
+            addressList2.IsVisible = false;
+            UnitGrid.IsVisible = true;
+            CityStateZip.IsVisible = true;
         }
 
         protected async Task setPaymentInfo()
