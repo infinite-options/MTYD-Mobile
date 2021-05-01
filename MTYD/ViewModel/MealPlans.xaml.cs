@@ -25,6 +25,7 @@ namespace MTYD.ViewModel
         string cust_firstName; string cust_lastName; string cust_email;
         public ObservableCollection<Plans> userProfileInfo = new ObservableCollection<Plans>();
         public ObservableCollection<PaymentInfo> NewPlan = new ObservableCollection<PaymentInfo>();
+        public static ObservableCollection<MealPlanItem> mealPlanColl = new ObservableCollection<MealPlanItem>();
         PaymentInfo orderInfo;
         ArrayList itemsArray = new ArrayList();
         ArrayList purchIdArray = new ArrayList();
@@ -46,9 +47,12 @@ namespace MTYD.ViewModel
         string stateToPass;
         string zipToPass;
         Address addr;
+        MealPlanItem prevPlan = null;
+
 
         public MealPlans(string firstName, string lastName, string email)
         {
+            mealPlanColl.Clear();
             info_obj = null;
             activePlans.Clear();
             itemsArray.Clear();
@@ -69,8 +73,84 @@ namespace MTYD.ViewModel
             getMealsSelected();
             _ = GetMealPlans();
 
+
+
+            //if (AddressEntry.Text != "" && AddressEntry.Text != null)
+            //    setMap();
+
+            //            Position position = new Position(Double.Parse(Preferences.Get("user_latitude", "").ToString()), Double.Parse(Preferences.Get("user_longitude", "").ToString()));
+            //map.MapType = MapType.Street;
+            //var mapSpan = new MapSpan(position, 0.001, 0.001);
+            //Pin address = new Pin();
+            //address.Label = "Delivery Address";
+            //address.Type = PinType.SearchResult;
+            //address.Position = position;
+            //map.MoveToRegion(mapSpan);
+            //map.Pins.Add(address);
+
             //if (namesArray.Count != 0)
             //    planPicker.SelectedIndex = 0;
+        }
+
+        public async void setMap()
+        {
+            // Setting request for USPS API
+            XDocument requestDoc = new XDocument(
+                new XElement("AddressValidateRequest",
+                new XAttribute("USERID", "400INFIN1745"),
+                new XElement("Revision", "1"),
+                new XElement("Address",
+                new XAttribute("ID", "0"),
+                new XElement("Address1", AddressEntry.Text.Trim()),
+                new XElement("Address2", AptEntry.Text.Trim()),
+                new XElement("City", CityEntry.Text.Trim()),
+                new XElement("State", StateEntry.Text.Trim()),
+                new XElement("Zip5", ZipEntry.Text.Trim()),
+                new XElement("Zip4", "")
+                     )
+                 )
+             );
+            var url = "http://production.shippingapis.com/ShippingAPI.dll?API=Verify&XML=" + requestDoc;
+            Console.WriteLine(url);
+            var client2 = new WebClient();
+            var response2 = client2.DownloadString(url);
+
+            var xdoc = XDocument.Parse(response2.ToString());
+
+            string latitude = "0";
+            string longitude = "0";
+            foreach (XElement element in xdoc.Descendants("Address"))
+            {
+                if (GetXMLElement(element, "Error").Equals(""))
+                {
+                    if (GetXMLElement(element, "DPVConfirmation").Equals("Y") && GetXMLElement(element, "Zip5").Equals(ZipEntry.Text.Trim()) && GetXMLElement(element, "City").Equals(CityEntry.Text.ToUpper().Trim())) // Best case
+                    {
+                        // Get longitude and latitide because we can make a deliver here. Move on to next page.
+                        // Console.WriteLine("The address you entered is valid and deliverable by USPS. We are going to get its latitude & longitude");
+                        //GetAddressLatitudeLongitude();
+                        Geocoder geoCoder = new Geocoder();
+
+                        IEnumerable<Position> approximateLocations = await geoCoder.GetPositionsForAddressAsync(AddressEntry.Text.Trim() + "," + CityEntry.Text.Trim() + "," + StateEntry.Text.Trim());
+                        Position position = approximateLocations.FirstOrDefault();
+
+                        latitude = $"{position.Latitude}";
+                        longitude = $"{position.Longitude}";
+
+                        //directSignUp.latitude = latitude;
+                        //directSignUp.longitude = longitude;
+                        map.MapType = MapType.Street;
+                        var mapSpan = new MapSpan(position, 0.001, 0.001);
+
+                        Pin address = new Pin();
+                        address.Label = "Delivery Address";
+                        address.Type = PinType.SearchResult;
+                        address.Position = position;
+
+                        map.MoveToRegion(mapSpan);
+                        map.Pins.Add(address);
+                    }
+                }
+            }
         }
 
         public async void getFrequency()
@@ -94,23 +174,23 @@ namespace MTYD.ViewModel
                 var freq_obj = JObject.Parse(userString);
                 this.userProfileInfo.Clear();
 
-                frequency = (freq_obj["result"])[planPicker.SelectedIndex]["payment_frequency"].ToString();
-                Console.WriteLine("frequency: " + (freq_obj["result"])[planPicker.SelectedIndex]["payment_frequency"].ToString());
-                if (frequency == "2")
-                {
-                    freq.Text = "2 WEEKS";
-                    ticketPic.Source = "Discount5.png";
-                }
-                else if (frequency == "4")
-                {
-                    freq.Text = "4 WEEKS";
-                    ticketPic.Source = "Discount10.png";
-                }
-                else
-                {
-                    freq.Text = "WEEKLY";
-                    ticketPic.Source = "noDiscount.png";
-                }
+                frequency = (freq_obj["result"])[currentIndex]["payment_frequency"].ToString();
+                Console.WriteLine("frequency: " + (freq_obj["result"])[currentIndex]["payment_frequency"].ToString());
+                //if (frequency == "2")
+                //{
+                //    freq.Text = "2 WEEKS";
+                //    ticketPic.Source = "Discount5.png";
+                //}
+                //else if (frequency == "4")
+                //{
+                //    freq.Text = "4 WEEKS";
+                //    ticketPic.Source = "Discount10.png";
+                //}
+                //else
+                //{
+                //    freq.Text = "WEEKLY";
+                //    ticketPic.Source = "noDiscount.png";
+                //}
             }
 
         }
@@ -119,11 +199,22 @@ namespace MTYD.ViewModel
         {
             if (Device.RuntimePlatform == Device.iOS)
             {
+                //open menu adjustments
+                orangeBox2.HeightRequest = height / 2;
+                orangeBox2.Margin = new Thickness(0, -height / 2.2, 0, 0);
+                orangeBox2.CornerRadius = height / 40;
+                heading2.WidthRequest = width / 5;
+                menu2.HeightRequest = width / 25;
+                menu2.WidthRequest = width / 25;
+                menu2.Margin = new Thickness(25, 0, 0, 30);
+                heading.WidthRequest = width / 5;
+                //heading adjustments
+
                 orangeBox.HeightRequest = height / 2;
                 orangeBox.Margin = new Thickness(0, -height / 2.2, 0, 0);
                 orangeBox.CornerRadius = height / 40;
-                heading.FontSize = width / 32;
-                heading.Margin = new Thickness(0, 0, 0, 30);
+                //heading.FontSize = width / 32;
+                //heading.Margin = new Thickness(0, 0, 0, 30);
                 pfp.HeightRequest = width / 20;
                 pfp.WidthRequest = width / 20;
                 pfp.CornerRadius = (int)(width / 40);
@@ -151,34 +242,34 @@ namespace MTYD.ViewModel
                 menu.WidthRequest = width / 25;
                 menu.Margin = new Thickness(25, 0, 0, 30);
 
-                mealPlanGrid.Margin = new Thickness(width / 40, 10, width / 40, 5);
-                selectPlanFrame.Margin = new Thickness(10, 0, 0, 0);
-                selectPlanFrame.Padding = new Thickness(15, 5);
-                selectPlanFrame.HeightRequest = height / 55;
-                planPicker.FontSize = width / 43;
+                //mealPlanGrid.Margin = new Thickness(width / 40, 10, width / 40, 5);
+                //selectPlanFrame.Margin = new Thickness(10, 0, 0, 0);
+                //selectPlanFrame.Padding = new Thickness(15, 5);
+                //selectPlanFrame.HeightRequest = height / 55;
+                //planPicker.FontSize = width / 43;
                 //planPicker.VerticalOptions = LayoutOptions.Fill;
-                planPicker.HorizontalOptions = LayoutOptions.Fill;
-                changeMealPlan.Margin = new Thickness(10, 0, 0, 0);
-                changeMealPlan.FontSize = width / 40;
-                changeMealPlan.HeightRequest = height / 45;
-                changeMealPlan.CornerRadius = (int)height / 90;
+                //planPicker.HorizontalOptions = LayoutOptions.Fill;
+                //changeMealPlan.Margin = new Thickness(10, 0, 0, 0);
+                //changeMealPlan.FontSize = width / 40;
+                //changeMealPlan.HeightRequest = height / 45;
+                //changeMealPlan.CornerRadius = (int)height / 90;
 
-                mainGrid.Margin = new Thickness(width / 50);
-                mainFrame.CornerRadius = 20;
-                innerStack.Margin = new Thickness(width / 100);
-                delivery.FontSize = width / 38;
-                saveInfo.CornerRadius = (int)(height / 80);
-                saveInfo.FontSize = width / 38;
+                //mainGrid.Margin = new Thickness(width / 50);
+                //mainFrame.CornerRadius = 20;
+                //innerStack.Margin = new Thickness(width / 100);
+                //delivery.FontSize = width / 38;
+                //saveInfo.CornerRadius = (int)(height / 80);
+                //saveInfo.FontSize = width / 38;
 
-                FName.CornerRadius = 21;
-                LName.CornerRadius = 21;
-                emailAdd.CornerRadius = 21;
-                street.CornerRadius = 21;
-                unit.CornerRadius = 21;
-                city.CornerRadius = 21;
-                state.CornerRadius = 21;
-                zipCode.CornerRadius = 21;
-                phoneNum.CornerRadius = 21;
+                //FName.CornerRadius = 21;
+                //LName.CornerRadius = 21;
+                //emailAdd.CornerRadius = 21;
+                //street.CornerRadius = 21;
+                //unit.CornerRadius = 21;
+                //city.CornerRadius = 21;
+                //state.CornerRadius = 21;
+                //zipCode.CornerRadius = 21;
+                //phoneNum.CornerRadius = 21;
                 FNameEntry.FontSize = width / 45;
                 LNameEntry.FontSize = width / 45;
                 emailEntry.FontSize = width / 45;
@@ -192,19 +283,28 @@ namespace MTYD.ViewModel
 
                 addressList.HeightRequest = width / 5;
 
-                pay.FontSize = width / 38;
+                //pay.FontSize = width / 38;
 
-                card.FontSize = width / 55;
-                cardPic.WidthRequest = width / 10;
-                cardNum.FontSize = width / 70;
+                //card.FontSize = width / 55;
+                //cardPic.WidthRequest = width / 10;
+                //cardNum.FontSize = width / 70;
 
-                freq.FontSize = width / 55;
-                ticketPic.WidthRequest = width / 10;
-                ticketPic.HeightRequest = width / 10;
+                //freq.FontSize = width / 55;
+                //ticketPic.WidthRequest = width / 10;
+                //ticketPic.HeightRequest = width / 10;
             }
             else //android
             {
-
+                //open menu adjustments
+                orangeBox2.HeightRequest = height / 2;
+                orangeBox2.Margin = new Thickness(0, -height / 2.2, 0, 0);
+                orangeBox2.CornerRadius = height / 40;
+                heading2.WidthRequest = width / 5;
+                menu2.HeightRequest = width / 25;
+                menu2.WidthRequest = width / 25;
+                menu2.Margin = new Thickness(25, 0, 0, 30);
+                heading.WidthRequest = width / 5;
+                //heading adjustments
             }
         }
 
@@ -247,12 +347,28 @@ namespace MTYD.ViewModel
 
         private async void planChange(object sender, EventArgs e)
         {
+            if (prevPlan != null)
+            {
+                prevPlan.Background = Color.White;
+                prevPlan.FontColor = Color.Black;
+            }
+            Button b = (Button)sender;
+            MealPlanItem item = b.BindingContext as MealPlanItem;
+            //MealPlanItem item = (MealPlanItem)sender;
+            int selectedIndex = item.Index;
+            item.Background = Color.FromHex("#F26522");
+            item.FontColor = Color.White;
+            prevPlan = item;
+
+            currentIndex = selectedIndex;
+
             Console.WriteLine("planChange entered");
             planChangeCalled = true;
-            selectPlanFrame.BackgroundColor = Color.FromHex("#FF6505");
-            coverPickerBorder.BorderColor = Color.FromHex("#FF6505");
-            planPicker.TextColor = Color.White;
-            planPicker.BackgroundColor = Color.FromHex("#FF6505");
+            //selectPlanFrame.BackgroundColor = Color.FromHex("#FF6505");
+            //coverPickerBorder.BorderColor = Color.FromHex("#FF6505");
+
+            //planPicker.TextColor = Color.White;
+            //planPicker.BackgroundColor = Color.FromHex("#FF6505");
 
             Console.WriteLine("before frequency " + frequency);
             getFrequency();
@@ -282,81 +398,83 @@ namespace MTYD.ViewModel
             //}
 
             //old
+            //if (prevPlan != null)
+            //{
+            //    prevPlan.Background = Color.White;
+            //    prevPlan.FontColor = Color.Black;
+            //}
+
+            //MealPlanItem item = (MealPlanItem)sender;
+            //int selectedIndex = item.Index;
+            //item.Background = Color.FromHex("#F26522");
+            //item.FontColor = Color.White;
+            //prevPlan = item;
+
             //chosenPurchUid = (info_obj["result"])[planPicker.SelectedIndex]["purchase_uid"].ToString();
-            chosenPurchUid = purchIdArray[planPicker.SelectedIndex].ToString();
+            //chosenPurchUid = purchIdArray[planPicker.SelectedIndex].ToString();
+            chosenPurchUid = purchIdArray[selectedIndex].ToString();
+            //chosenPurchUid = purchIdArray[PlanCollectionView.].ToString();
             Debug.WriteLine("selected chosen purch id in plan change: " + chosenPurchUid.ToString());
 
             //currentIndex = planPicker.SelectedIndex;
             //Debug.WriteLine("current index: " + currentIndex.ToString());
-            string tet = planPicker.SelectedItem.ToString();
-            Debug.WriteLine("picker text: " + tet);
-            currentPlan = planPicker.SelectedItem.ToString();
-            currentIndex = planPicker.SelectedIndex;
+            //string tet = planPicker.SelectedItem.ToString();
+            //Debug.WriteLine("picker text: " + tet);
+            string plan = item.PlanName.Substring(0, item.PlanName.IndexOf(" ")) + " Meal Plan";
+            currentPlan = plan;
 
-            FNameEntry.Text = (info_obj["result"])[planPicker.SelectedIndex]["delivery_first_name"].ToString();
+            //currentIndex = selectedIndex;
 
-            LNameEntry.Text = (info_obj["result"])[planPicker.SelectedIndex]["delivery_last_name"].ToString();
-            emailEntry.Text = (info_obj["result"])[planPicker.SelectedIndex]["delivery_email"].ToString();
-            AddressEntry.Text = (info_obj["result"])[planPicker.SelectedIndex]["delivery_address"].ToString();
-            AptEntry.Text = (info_obj["result"])[planPicker.SelectedIndex]["delivery_unit"].ToString();
+            FNameEntry.Text = (info_obj["result"])[selectedIndex]["delivery_first_name"].ToString();
+
+            LNameEntry.Text = (info_obj["result"])[selectedIndex]["delivery_last_name"].ToString();
+            emailEntry.Text = (info_obj["result"])[selectedIndex]["delivery_email"].ToString();
+            AddressEntry.Text = (info_obj["result"])[selectedIndex]["delivery_address"].ToString();
+            AptEntry.Text = (info_obj["result"])[selectedIndex]["delivery_unit"].ToString();
 
             if (AptEntry.Text == "NULL")
             {
                 AptEntry.Text = "";
             }
 
-            CityEntry.Text = (info_obj["result"])[planPicker.SelectedIndex]["delivery_city"].ToString();
-            StateEntry.Text = (info_obj["result"])[planPicker.SelectedIndex]["delivery_state"].ToString();
-            ZipEntry.Text = (info_obj["result"])[planPicker.SelectedIndex]["delivery_zip"].ToString();
-            PhoneEntry.Text = (info_obj["result"])[planPicker.SelectedIndex]["delivery_phone_num"].ToString();
+            CityEntry.Text = (info_obj["result"])[selectedIndex]["delivery_city"].ToString();
+            StateEntry.Text = (info_obj["result"])[selectedIndex]["delivery_state"].ToString();
+            ZipEntry.Text = (info_obj["result"])[selectedIndex]["delivery_zip"].ToString();
+            PhoneEntry.Text = (info_obj["result"])[selectedIndex]["delivery_phone_num"].ToString();
             //instructionsEntry.Text = (info_obj["result"])[planPicker.SelectedIndex]["delivery_instructions"].ToString();
 
-            string creditCardNum = (info_obj["result"])[planPicker.SelectedIndex]["cc_num"].ToString();
-            cardNum.Text = creditCardNum.Substring(creditCardNum.Length - 2);
-            cardNum.Text = "**************" + cardNum.Text;
+            WebClient client4 = new WebClient();
+            string url3 = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/predict_autopay_day/" + chosenPurchUid;
+            Debug.WriteLine("next billing date url: " + url3);
+            var content = client4.DownloadString(url3);
+            var obj = JsonConvert.DeserializeObject<nextDelivDate>(content);
 
-            string itemsStr = (info_obj["result"])[planPicker.SelectedIndex]["items"].ToString();
+            Debug.WriteLine("next date: " + obj.MenuDate);
+            Debug.WriteLine("year: " + obj.MenuDate.Substring(0, 4));
+            Debug.WriteLine("month: " + obj.MenuDate.Substring(5, 2));
+            Debug.WriteLine("day: " + obj.MenuDate.Substring(8, 2));
+            var date1 = new DateTime(int.Parse(obj.MenuDate.Substring(0, 4)), int.Parse(obj.MenuDate.Substring(5, 2)), int.Parse(obj.MenuDate.Substring(8, 2)));
+            nextDate.Text = date1.ToString("D");
+
+            nextAmount.Text = "$" + obj.Total;
+
+            string creditCardNum = (info_obj["result"])[selectedIndex]["cc_num"].ToString();
+            //cardNum.Text = creditCardNum.Substring(creditCardNum.Length - 2);
+            //cardNum.Text = "**************" + cardNum.Text;
+            cardNum1.Text = "**********" + creditCardNum.Substring(creditCardNum.Length - 2);
+
+
+            string itemsStr = (info_obj["result"])[selectedIndex]["items"].ToString();
             Console.WriteLine("items: " + itemsStr);
             Console.WriteLine("name: " + itemsStr.Substring(itemsStr.IndexOf("itm_business_uid") + 20, 10));
             Console.WriteLine("item_uid: " + itemsStr.Substring(itemsStr.IndexOf("item_uid") + 12, 10));
-            //Console.WriteLine("name: " + )
 
-            //orderInfo.customer_uid = (info_obj["result"])[planPicker.SelectedIndex]["customer_uid"].ToString();
-            //orderInfo.business_uid = (info_obj["result"])[planPicker.SelectedIndex]["business_uid"].ToString();
-            //Console.WriteLine("items" + ((info_obj["result"])[planPicker.SelectedIndex]["items"]).ToString());
-            //orderInfo.salt = (info_obj["result"])[planPicker.SelectedIndex]["salt"].ToString();
-            //orderInfo.delivery_first_name = (info_obj["result"])[planPicker.SelectedIndex]["business_uid"].ToString();
-            //orderInfo.business_uid = (info_obj["result"])[planPicker.SelectedIndex]["business_uid"].ToString();
-            //orderInfo.business_uid = (info_obj["result"])[planPicker.SelectedIndex]["business_uid"].ToString();
-            //orderInfo.business_uid = (info_obj["result"])[planPicker.SelectedIndex]["business_uid"].ToString();
-            //    public string customer_uid { get; set; }
-            //public string business_uid { get; set; }
-            //public List<Item> items { get; set; }
-            //public string salt { get; set; }
-            //public string delivery_first_name { get; set; }
-            //public string delivery_last_name { get; set; }
-            //public string delivery_email { get; set; }
-            //public string delivery_phone { get; set; }
-            //public string delivery_address { get; set; }
-            //public string delivery_unit { get; set; }
-            //public string delivery_city { get; set; }
-            //public string delivery_state { get; set; }
-            //public string delivery_zip { get; set; }
-            //public string delivery_instructions { get; set; }
-            //public string delivery_longitude { get; set; }
-            //public string delivery_latitude { get; set; }
-            //public string order_instructions { get; set; }
-            //public string purchase_notes { get; set; }
-            //public string amount_due { get; set; }
-            //public string amount_discount { get; set; }
-            //public string amount_paid { get; set; }
-            //public string cc_num { get; set; }
-            //public string cc_exp_year { get; set; }
-            //public string cc_exp_month { get; set; }
-            //public string cc_cvv { get; set; }
-            //public string cc_zip { get; set; }
-
-
+            delivNum1.Text = itemsStr.Substring(itemsStr.IndexOf("qty") + 7, itemsStr.IndexOf("name") - itemsStr.IndexOf("qty") - 7 - 4);
+            //delivNum1.Text = delivNum1.Text.Substring(delivNum1.Text.IndexOf("\""));
+            mealNum1.Text = itemsStr.Substring(itemsStr.IndexOf("name") + 8, itemsStr.IndexOf("Meal Plan") - 1 - itemsStr.IndexOf("name") - 8);
+            //mealNum1.Text = mealNum1.Text.Substring(mealNum1.Text.IndexOf("Meal Plan") - 1);
+            if (AddressEntry.Text != "" && AddressEntry.Text != null)
+                setMap();
         }
 
         protected async Task GetMealPlans()
@@ -416,24 +534,48 @@ namespace MTYD.ViewModel
                 }
 
                 // Console.WriteLine("itemsArray contents:" + itemsArray[0]);
-
+                int index = 0;
                 for (int i = 0; i < itemsArray.Count; i++)
                 {
                     JArray newobj = Newtonsoft.Json.JsonConvert.DeserializeObject<JArray>(itemsArray[i].ToString());
 
                     Console.WriteLine("Inside forloop before foreach in GetmealsPlan func");
 
+
                     foreach (JObject config in newobj)
                     {
                         Console.WriteLine("Inside foreach loop in GetmealsPlan func");
-                        //string qty = (string)config["qty"];
+                        string qty = (string)config["qty"];
                         string name = (string)config["name"];
                         //string price = (string)config["price"];
                         //string mealid = (string)config["item_uid"];
+                        name = name.Substring(0, name.IndexOf(" "));
+                        name = name + " Meals, ";
+                        qty = qty + " Deliveries";
+                        //string price = (string)config["price"];
+                        //string mealid = (string)config["item_uid"];
+                        string purchIdCurrent = purchIdArray[i].ToString().Substring(4);
+                        //while (purchIdCurrent.Substring(0, 1) == "0")
+                        //    purchIdCurrent = purchIdCurrent.Substring(1);
 
                         //only includes meal plan name
                         //namesArray.Add(name);
 
+                        //adds purchase uid to front of meal plan name
+                        //namesArray.Add(purchIdArray[i].ToString().Substring(4) + " : " + name);
+                        namesArray.Add(name + qty + " : " + purchIdCurrent);
+                        //only includes meal plan name
+                        //namesArray.Add(name);
+                        mealPlanColl.Add(
+                            new MealPlanItem
+                            {
+                                Background = Color.White,
+                                FontColor = Color.Black,
+                                PlanName = name + qty + " : " + purchIdCurrent,
+                                Index = index
+                            }
+                        );
+                        index++;
                         //adds purchase uid to front of meal plan name
                         //namesArray.Add(purchIdArray[i].ToString().Substring(4) + " : " + name);
                         namesArray.Add(name + " : " + purchIdArray[i].ToString().Substring(4));
@@ -446,12 +588,21 @@ namespace MTYD.ViewModel
                 //Find unique number of meals
                 //firstIndex = namesArray[0].ToString();
                 //Console.WriteLine("namesArray contents:" + namesArray[0].ToString() + " " + namesArray[1].ToString() + " " + namesArray[2].ToString() + " ");
-                planPicker.ItemsSource = namesArray;
+                //planPicker.ItemsSource = namesArray;
+                PlanCollectionView.ItemsSource = mealPlanColl;
                 Console.WriteLine("namesArray contents:" + namesArray[0].ToString());
                 //SubscriptionPicker.Title = namesArray[0];
 
-                if (namesArray.Count != 0)
-                    planPicker.SelectedIndex = 0;
+                EventArgs e = new EventArgs();
+                if (mealPlanColl.Count != 0)
+                {
+                    Button b = new Button();
+                    b.BindingContext = mealPlanColl[0];
+                    planChange(b, e);
+                }
+
+                //if (namesArray.Count != 0)
+                //    planPicker.SelectedIndex = 0;
 
                 Console.WriteLine("END OF GET MEAL PLANS FUNCTION");
             }
@@ -465,20 +616,20 @@ namespace MTYD.ViewModel
                 return;
             }
 
-            string itemsStr = activePlans[planPicker.SelectedIndex]["items"].ToString();
+            string itemsStr = activePlans[currentIndex]["items"].ToString();
             string qty = itemsStr.Substring(itemsStr.IndexOf("qty") + 7);
             qty = qty.Substring(0, qty.IndexOf("\""));
             string numMeal = itemsStr.Substring(itemsStr.IndexOf("name") + 8);
             numMeal = numMeal.Substring(0, numMeal.IndexOf(" "));
             Debug.WriteLine("qty: " + qty);
-            string expDate = activePlans[planPicker.SelectedIndex]["cc_exp_date"].ToString();
+            string expDate = activePlans[currentIndex]["cc_exp_date"].ToString();
             //var testing = (info_obj["result"])[1];
             //string zip = testing["cc_zip"].ToString();
 
-            await Navigation.PushAsync(new SubscriptionModal(cust_firstName, cust_lastName, cust_email, activePlans[planPicker.SelectedIndex]["user_social_media"].ToString(), activePlans[planPicker.SelectedIndex]["mobile_refresh_token"].ToString(), activePlans[planPicker.SelectedIndex]["cc_num"].ToString(),
-                expDate.Substring(0, 10), 
-                activePlans[planPicker.SelectedIndex]["cc_cvv"].ToString(), activePlans[planPicker.SelectedIndex]["cc_zip"].ToString(), activePlans[planPicker.SelectedIndex]["purchase_id"].ToString(), activePlans[planPicker.SelectedIndex]["purchase_uid"].ToString(), itemsStr.Substring(itemsStr.IndexOf("itm_business_uid") + 20, 10),
-                itemsStr.Substring(itemsStr.IndexOf("item_uid") + 12, 10), activePlans[planPicker.SelectedIndex]["pur_customer_uid"].ToString(), qty, numMeal, AddressEntry.Text, AptEntry.Text, CityEntry.Text, StateEntry.Text, ZipEntry.Text, activePlans[planPicker.SelectedIndex]["delivery_instructions"].ToString(), activePlans[planPicker.SelectedIndex]["start_delivery_date"].ToString(), activePlans[planPicker.SelectedIndex]["delivery_phone_num"].ToString()), false);
+            await Navigation.PushAsync(new SubscriptionModal(cust_firstName, cust_lastName, cust_email, activePlans[currentIndex]["user_social_media"].ToString(), activePlans[currentIndex]["mobile_refresh_token"].ToString(), activePlans[currentIndex]["cc_num"].ToString(),
+                expDate.Substring(0, 10),
+                activePlans[currentIndex]["cc_cvv"].ToString(), activePlans[currentIndex]["cc_zip"].ToString(), activePlans[currentIndex]["purchase_id"].ToString(), activePlans[currentIndex]["purchase_uid"].ToString(), itemsStr.Substring(itemsStr.IndexOf("itm_business_uid") + 20, 10),
+                itemsStr.Substring(itemsStr.IndexOf("item_uid") + 12, 10), activePlans[currentIndex]["pur_customer_uid"].ToString(), qty, numMeal, AddressEntry.Text, AptEntry.Text, CityEntry.Text, StateEntry.Text, ZipEntry.Text, activePlans[currentIndex]["delivery_instructions"].ToString(), activePlans[currentIndex]["start_delivery_date"].ToString(), activePlans[currentIndex]["delivery_phone_num"].ToString()), false);
         }
 
         async void clickedInfo(System.Object sender, System.EventArgs e)
@@ -489,8 +640,8 @@ namespace MTYD.ViewModel
                 return;
             }
 
-            string itemsStr = activePlans[planPicker.SelectedIndex]["items"].ToString();
-            string expDate = activePlans[planPicker.SelectedIndex]["cc_exp_date"].ToString();
+            string itemsStr = activePlans[currentIndex]["items"].ToString();
+            string expDate = activePlans[currentIndex]["cc_exp_date"].ToString();
             Console.WriteLine("clickedInfo exp date: " + expDate);
             string mealPlan;
             int lengthOfPrice = itemsStr.IndexOf("item_uid") - itemsStr.IndexOf("price") - 13;
@@ -503,10 +654,10 @@ namespace MTYD.ViewModel
 
 
 
-            await Navigation.PushAsync(new OrderInfoModal(cust_firstName, cust_lastName, cust_email, "", activePlans[planPicker.SelectedIndex]["mobile_refresh_token"].ToString(), activePlans[planPicker.SelectedIndex]["cc_num"].ToString(),
+            await Navigation.PushAsync(new OrderInfoModal(cust_firstName, cust_lastName, cust_email, "", activePlans[currentIndex]["mobile_refresh_token"].ToString(), activePlans[currentIndex]["cc_num"].ToString(),
                 expDate.Substring(0, 4), expDate.Substring(5, 2),
-                activePlans[planPicker.SelectedIndex]["cc_cvv"].ToString(), activePlans[planPicker.SelectedIndex]["cc_zip"].ToString(), activePlans[planPicker.SelectedIndex]["purchase_uid"].ToString(), itemsStr.Substring(itemsStr.IndexOf("itm_business_uid") + 20, 10),
-                mealPlan, itemsStr.Substring(itemsStr.IndexOf("price") + 9, lengthOfPrice), itemsStr.Substring(itemsStr.IndexOf("item_uid") + 12, 10), activePlans[planPicker.SelectedIndex]["pur_customer_uid"].ToString()), false);
+                activePlans[currentIndex]["cc_cvv"].ToString(), activePlans[currentIndex]["cc_zip"].ToString(), activePlans[currentIndex]["purchase_uid"].ToString(), itemsStr.Substring(itemsStr.IndexOf("itm_business_uid") + 20, 10),
+                mealPlan, itemsStr.Substring(itemsStr.IndexOf("price") + 9, lengthOfPrice), itemsStr.Substring(itemsStr.IndexOf("item_uid") + 12, 10), activePlans[currentIndex]["pur_customer_uid"].ToString()), false);
         }
 
         async void clickedPfp(System.Object sender, System.EventArgs e)
@@ -614,16 +765,16 @@ namespace MTYD.ViewModel
 
                         //directSignUp.latitude = latitude;
                         //directSignUp.longitude = longitude;
-                        //map.MapType = MapType.Street;
-                        //var mapSpan = new MapSpan(position, 0.001, 0.001);
+                        map.MapType = MapType.Street;
+                        var mapSpan = new MapSpan(position, 0.001, 0.001);
 
-                        //Pin address = new Pin();
-                        //address.Label = "Delivery Address";
-                        //address.Type = PinType.SearchResult;
-                        //address.Position = position;
+                        Pin address = new Pin();
+                        address.Label = "Delivery Address";
+                        address.Type = PinType.SearchResult;
+                        address.Position = position;
 
-                        //map.MoveToRegion(mapSpan);
-                        //map.Pins.Add(address);
+                        map.MoveToRegion(mapSpan);
+                        map.Pins.Add(address);
 
                         break;
                     }
@@ -697,7 +848,7 @@ namespace MTYD.ViewModel
             //public string delivery_instructions { get; set; }
             DeliveryInfo delivery = new DeliveryInfo();
 
-            delivery.purchase_uid = (info_obj["result"])[planPicker.SelectedIndex]["purchase_uid"].ToString();
+            delivery.purchase_uid = (info_obj["result"])[currentIndex]["purchase_uid"].ToString();
             delivery.first_name = FNameEntry.Text;
             delivery.last_name = LNameEntry.Text;
             delivery.email = emailEntry.Text;
@@ -709,7 +860,7 @@ namespace MTYD.ViewModel
             delivery.state = StateEntry.Text;
             delivery.zip = ZipEntry.Text;
 
-            chosenIndex = planPicker.SelectedIndex;
+            chosenIndex = currentIndex;
 
             var newPaymentJSONString = JsonConvert.SerializeObject(delivery);
             // Console.WriteLine("newPaymentJSONString" + newPaymentJSONString);
@@ -809,16 +960,16 @@ namespace MTYD.ViewModel
 
                         //directSignUp.latitude = latitude;
                         //directSignUp.longitude = longitude;
-                        //map.MapType = MapType.Street;
-                        //var mapSpan = new MapSpan(position, 0.001, 0.001);
+                        map.MapType = MapType.Street;
+                        var mapSpan = new MapSpan(position, 0.001, 0.001);
 
-                        //Pin address = new Pin();
-                        //address.Label = "Delivery Address";
-                        //address.Type = PinType.SearchResult;
-                        //address.Position = position;
+                        Pin address = new Pin();
+                        address.Label = "Delivery Address";
+                        address.Type = PinType.SearchResult;
+                        address.Position = position;
 
-                        //map.MoveToRegion(mapSpan);
-                        //map.Pins.Add(address);
+                        map.MoveToRegion(mapSpan);
+                        map.Pins.Add(address);
 
                         break;
                     }
@@ -947,7 +1098,7 @@ namespace MTYD.ViewModel
                 }
             }
 
-            
+
         }
 
         // Auto-complete
@@ -979,26 +1130,196 @@ namespace MTYD.ViewModel
             }
         }
 
-        private async void OnAddressChanged(object sender, EventArgs eventArgs)
+        private async void OnAddressChanged(object sender, TextChangedEventArgs eventArgs)
         {
+            Debug.WriteLine("onaddresschanged entered with: " + ((Entry)sender).Placeholder);
+            //if (((Entry)sender).Equals(AddressEntry) && onCardAdd == true)
+            //{
+            //    Debug.WriteLine("first if of onAddressChanged");
+            //    var ent = (Entry)sender;
+            //    ent.Text = eventArgs.OldTextValue;
+            //    return;
+            //}
+            Debug.WriteLine("second if of onAddressChanged");
+            addressList.IsVisible = true;
+            UnitCity.IsVisible = false;
+            StateZip.IsVisible = false;
             addressList.ItemsSource = await addr.GetPlacesPredictionsAsync(AddressEntry.Text);
             //addr.OnAddressChanged(addressList, Addresses, _addressText);
         }
 
         private void addressEntryFocused(object sender, EventArgs eventArgs)
         {
-            addr.addressEntryFocused(addressList, new Grid[] { UnitCityState, ZipPhone });
+            //addr.addressEntryFocused(addressList, new Grid[] { UnitCityState, ZipPhone });
         }
 
         private void addressEntryUnfocused(object sender, EventArgs eventArgs)
         {
-            addr.addressEntryUnfocused(addressList, new Grid[] { UnitCityState, ZipPhone });
+            addr.addressEntryUnfocused(addressList, new Grid[] { UnitCity, StateZip });
         }
 
-        async void addressSelected(System.Object sender, System.EventArgs e)
+        private void addressSelected(System.Object sender, System.EventArgs e)
         {
-            addr.addressSelected(addressList, new Grid[] { UnitCityState, ZipPhone }, AddressEntry, CityEntry, StateEntry, ZipEntry);
+            addr.addressSelected(addressList, new Grid[] { UnitCity, StateZip }, AddressEntry, CityEntry, StateEntry, ZipEntry);
+            addressList.IsVisible = false;
+            UnitCity.IsVisible = true;
+            StateZip.IsVisible = true;
+        }
+
+        private async void clickedVerifyCode(object sender, EventArgs e)
+        {
+            AmbassCodePost AmbCode = new AmbassCodePost();
+            AmbCode.amb_email = ambassTitle.Text.Trim();
+            AmbCode.cust_email = emailEntry.Text.Trim();
+            var AmbSerializedObj = JsonConvert.SerializeObject(AmbCode);
+            var content4 = new StringContent(AmbSerializedObj, Encoding.UTF8, "application/json");
+            var client3 = new System.Net.Http.HttpClient();
+            var response3 = await client3.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/brandAmbassador/generate_coupon", content4);
+            var message = await response3.Content.ReadAsStringAsync();
+            Debug.WriteLine("RESPONSE TO verifyCode   " + response3.ToString());
+            Debug.WriteLine("json object sent:  " + AmbSerializedObj.ToString());
+            Debug.WriteLine("message received:  " + message.ToString());
+
+            if (message.Contains("discount_percent") == true)
+            {
+                var data = JsonConvert.DeserializeObject<AmbassadorCouponDto>(message);
+                //Application.Current.Properties["user_id"] = data.result[0].valid;
+
+
+                Debug.WriteLine("RESPONSE TO verifyCode   " + response3.ToString());
+                Debug.WriteLine("valid: " + data.result[0].valid);
+
+                //AmbassadorCoupon am = response3.Result;
+
+                string isValid = data.result[0].valid;
+
+                //string isValid = "yes";
+
+                if (isValid == "TRUE")
+                {
+                    verifyCode.IsVisible = false;
+                    double totalDiscount = 0;
+                    //double grandTotalValue = Double.Parse(grandTotalPrice.Text.Substring(1));
+
+                    //discountPrice.Text = "- $5";
+
+                    //add back the previous discount before calculating for the new discount
+                    if (ambassDisc.Text != null && ambassDisc.Text != "")
+                    {
+                        double codeValue = Double.Parse(ambassDisc.Text.Substring(ambassDisc.Text.IndexOf('$') + 1));
+                        //grandTotalValue = Double.Parse(grandTotalPrice.Text.Substring(1));
+                        //grandTotalValue += codeValue;
+                    }
+
+                    //totalDiscount += Math.Round(grandTotalValue * data.result[0].discount_percent, 2);
+                    totalDiscount += data.result[0].discount_amount;
+                    totalDiscount += data.result[0].discount_shipping;
+
+                    ambassDisc.Text = "- $" + totalDiscount.ToString();
+                    //grandTotalValue -= totalDiscount;
+
+                    //if (grandTotalValue <= 0)
+                    //    grandTotalValue = 0.00;
+
+                    //string grandTotalString = grandTotalValue.ToString();
+
+                    if (ambassDisc.Text.Contains(".") == false)
+                        ambassDisc.Text = ambassDisc.Text + ".00";
+                    else if (ambassDisc.Text.Substring(ambassDisc.Text.IndexOf(".") + 1).Length == 1)
+                        ambassDisc.Text = ambassDisc.Text + "0";
+                    else if (ambassDisc.Text.Substring(ambassDisc.Text.IndexOf(".") + 1).Length == 0)
+                        ambassDisc.Text = ambassDisc.Text + "00";
+
+
+
+                    //if (grandTotalString.Contains(".") == false)
+                    //    grandTotalString = grandTotalString + ".00";
+                    //else if (grandTotalString.Substring(grandTotalString.IndexOf(".") + 1).Length == 1)
+                    //    grandTotalString = grandTotalString + "0";
+                    //else if (grandTotalString.Substring(grandTotalString.IndexOf(".") + 1).Length == 0)
+                    //    grandTotalString = grandTotalString + "00";
+                    //Preferences.Set("price", grandTotalString);
+
+                    //grandTotalPrice.Text = "$" + grandTotalString;
+                }
+            }
+            else
+            {
+                if (ambassDisc.Text != null && ambassDisc.Text != "")
+                {
+                    double codeValue = Double.Parse(ambassDisc.Text.Substring(ambassDisc.Text.IndexOf('$') + 1));
+                    //double grandTotalValue = Double.Parse(grandTotalPrice.Text.Substring(1));
+                    //grandTotalValue += codeValue;
+
+                    //string grandTotalString = grandTotalValue.ToString();
+
+
+                    //if (grandTotalString.Contains(".") == false)
+                    //    grandTotalString = grandTotalString + ".00";
+                    //else if (grandTotalString.Substring(grandTotalString.IndexOf(".") + 1).Length == 1)
+                    //    grandTotalString = grandTotalString + "0";
+                    //else if (grandTotalString.Substring(grandTotalString.IndexOf(".") + 1).Length == 0)
+                    //    grandTotalString = grandTotalString + "00";
+                    //Preferences.Set("price", grandTotalString);
+
+                    //grandTotalPrice.Text = "$" + grandTotalString;
+
+                    DisplayAlert("Error", "invalid ambassador code", "OK");
+                    ambassDisc.Text = "-$0.00";
+                }
+            }
 
         }
+
+        //start of menu functions
+        void clickedOpenMenu(object sender, EventArgs e)
+        {
+            openedMenu.IsVisible = true;
+        }
+
+        void clickedCloseMenu(object sender, EventArgs e)
+        {
+            openedMenu.IsVisible = false;
+        }
+
+        async void clickedLanding(System.Object sender, System.EventArgs e)
+        {
+            await Navigation.PushAsync(new MainPage(cust_firstName, cust_lastName, cust_email), false);
+            //Navigation.RemovePage(this.Navigation.NavigationStack[this.Navigation.NavigationStack.Count - 2]);
+        }
+
+        async void clickedMealPlan(System.Object sender, System.EventArgs e)
+        {
+            await Navigation.PushAsync(new MealPlans(cust_firstName, cust_lastName, cust_email), false);
+            //Navigation.RemovePage(this.Navigation.NavigationStack[this.Navigation.NavigationStack.Count - 2]);
+        }
+
+        async void clickedSelect(System.Object sender, System.EventArgs e)
+        {
+            if (Preferences.Get("canChooseSelect", false) == false)
+                DisplayAlert("Error", "please purchase a meal plan first", "OK");
+            else
+            {
+                Zones[] zones = new Zones[] { };
+                await Navigation.PushAsync(new Select(zones, cust_firstName, cust_lastName, cust_email), false);
+                //Navigation.RemovePage(this.Navigation.NavigationStack[this.Navigation.NavigationStack.Count - 2]);
+            }
+        }
+
+        async void clickedSubscription(System.Object sender, System.EventArgs e)
+        {
+            await Navigation.PushAsync(new SubscriptionPage(cust_firstName, cust_lastName, cust_email), false);
+            //Navigation.RemovePage(this.Navigation.NavigationStack[this.Navigation.NavigationStack.Count - 2]);
+        }
+
+        void clickedLogout(System.Object sender, System.EventArgs e)
+        {
+            Application.Current.Properties.Remove("user_id");
+            Application.Current.Properties["platform"] = "GUEST";
+            Application.Current.Properties.Remove("time_stamp");
+            //Application.Current.Properties.Remove("platform");
+            Application.Current.MainPage = new MainPage();
+        }
+        //end of menu functions
     }
 }

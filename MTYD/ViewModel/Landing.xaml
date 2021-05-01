@@ -14,7 +14,7 @@
 
                     <Image Grid.Row="1" x:Name="landingPic" Source="landing_pic.png" Aspect="AspectFit" HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand"/>
 
-                    <BoxView x:Name="orangeBox" BackgroundColor="#FF9E19" HorizontalOptions="Fill"/>
+                    <BoxView x:Name="orangeBox" BackgroundColor="#FF6505" HorizontalOptions="Fill"/>
                     <Image x:Name="logo" Source="logo.png" VerticalOptions="End" HorizontalOptions="Center"/>
                     <!--<Label x:Name="heading" Text="MENU THIS WEEK" FontAttributes="Bold" VerticalOptions="End" HorizontalTextAlignment="Center" TextColor="Black"/>-->
                     <Grid x:Name="innerGrid" VerticalOptions="End" HorizontalOptions="End">
@@ -25,7 +25,7 @@
                     <Label x:Name="initials" TextColor="Black" FontAttributes="Bold" VerticalOptions="Center"  HorizontalOptions="Center"/>
 
                     </Grid>
-                    <ImageButton x:Name="menu" Source="menu2.png" VerticalOptions="End" BackgroundColor="Transparent" HorizontalOptions="Start" Clicked="clickedMenu"/>
+                    <ImageButton x:Name="menu" Source="new_menu.png" VerticalOptions="End" BackgroundColor="Transparent" HorizontalOptions="Start" Clicked="clickedMenu"/>
 
 
 

@@ -187,11 +187,22 @@ namespace MTYD.ViewModel
         {
             if (Device.RuntimePlatform == Device.iOS)
             {
+                ////open menu adjustments
+                //orangeBox2.HeightRequest = height / 2;
+                //orangeBox2.Margin = new Thickness(0, -height / 2.2, 0, 0);
+                //orangeBox2.CornerRadius = height / 40;
+                //heading2.WidthRequest = width / 5;
+                //menu2.HeightRequest = width / 25;
+                //menu2.WidthRequest = width / 25;
+                //menu2.Margin = new Thickness(25, 0, 0, 30);
+                //heading.WidthRequest = width / 5;
+                ////heading adjustments
+
                 orangeBox.HeightRequest = height / 2;
                 orangeBox.Margin = new Thickness(0, -height / 2.2, 0, 0);
                 orangeBox.CornerRadius = height / 40;
-                heading.FontSize = width / 32;
-                heading.Margin = new Thickness(0, 0, 0, 30);
+                //heading.FontSize = width / 32;
+                //heading.Margin = new Thickness(0, 0, 0, 30);
 
 
                 popUpFrame.Margin = new Thickness(0, height / 10, 0, 0);
@@ -238,7 +249,16 @@ namespace MTYD.ViewModel
             }
             else //android
             {
-
+                ////open menu adjustments
+                //orangeBox2.HeightRequest = height / 2;
+                //orangeBox2.Margin = new Thickness(0, -height / 2.2, 0, 0);
+                //orangeBox2.CornerRadius = height / 40;
+                //heading2.WidthRequest = width / 5;
+                //menu2.HeightRequest = width / 25;
+                //menu2.WidthRequest = width / 25;
+                //menu2.Margin = new Thickness(25, 0, 0, 30);
+                //heading.WidthRequest = width / 5;
+                ////heading adjustments
             }
             Debug.WriteLine("checkPlatform done");
         }
@@ -1239,5 +1259,7 @@ namespace MTYD.ViewModel
             fade.IsVisible = false;
             popUpFrame.IsVisible = false;
         }
+
+        
     }
 }

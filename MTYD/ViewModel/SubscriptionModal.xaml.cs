@@ -262,11 +262,22 @@ namespace MTYD.ViewModel
             Xamarin.Forms.NavigationPage.SetHasNavigationBar(this, false);
             if (Device.RuntimePlatform == Device.iOS)
             {
+                //open menu adjustments
+                orangeBox2.HeightRequest = height / 2;
+                orangeBox2.Margin = new Thickness(0, -height / 2.2, 0, 0);
+                orangeBox2.CornerRadius = height / 40;
+                heading2.WidthRequest = width / 5;
+                menu2.HeightRequest = width / 25;
+                menu2.WidthRequest = width / 25;
+                menu2.Margin = new Thickness(25, 0, 0, 30);
+                heading.WidthRequest = width / 5;
+                //heading adjustments
+
                 orangeBox.HeightRequest = height / 2;
                 orangeBox.Margin = new Thickness(0, -height / 2.2, 0, 0);
                 orangeBox.CornerRadius = height / 40;
-                heading.FontSize = width / 32;
-                heading.Margin = new Thickness(0, 0, 0, 30);
+                //heading.FontSize = width / 32;
+                //heading.Margin = new Thickness(0, 0, 0, 30);
                 pfp.HeightRequest = width / 20;
                 pfp.WidthRequest = width / 20;
                 pfp.CornerRadius = (int)(width / 40);
@@ -377,11 +388,22 @@ namespace MTYD.ViewModel
             }
             else //android
             {
+                //open menu adjustments
+                orangeBox2.HeightRequest = height / 2;
+                orangeBox2.Margin = new Thickness(0, -height / 2.2, 0, 0);
+                orangeBox2.CornerRadius = height / 40;
+                heading2.WidthRequest = width / 5;
+                menu2.HeightRequest = width / 25;
+                menu2.WidthRequest = width / 25;
+                menu2.Margin = new Thickness(25, 0, 0, 30);
+                heading.WidthRequest = width / 5;
+                //heading adjustments
+
                 orangeBox.HeightRequest = height / 2;
                 orangeBox.Margin = new Thickness(0, -height / 2.2, 0, 0);
                 orangeBox.CornerRadius = height / 40;
-                heading.FontSize = width / 45;
-                heading.Margin = new Thickness(0, 0, 0, 40);
+                //heading.FontSize = width / 45;
+                //heading.Margin = new Thickness(0, 0, 0, 40);
                 pfp.HeightRequest = width / 25;
                 pfp.WidthRequest = width / 25;
                 pfp.CornerRadius = (int)(width / 50);
@@ -1404,5 +1426,56 @@ namespace MTYD.ViewModel
             await Navigation.PushAsync(new Menu(cust_firstName, cust_lastName, cust_email));
             //Application.Current.MainPage = new Menu();
         }
+
+        //start of menu functions
+        void clickedOpenMenu(object sender, EventArgs e)
+        {
+            openedMenu.IsVisible = true;
+        }
+
+        void clickedCloseMenu(object sender, EventArgs e)
+        {
+            openedMenu.IsVisible = false;
+        }
+
+        async void clickedLanding(System.Object sender, System.EventArgs e)
+        {
+            await Navigation.PushAsync(new MainPage(cust_firstName, cust_lastName, cust_email), false);
+            //Navigation.RemovePage(this.Navigation.NavigationStack[this.Navigation.NavigationStack.Count - 2]);
+        }
+
+        async void clickedMealPlan(System.Object sender, System.EventArgs e)
+        {
+            await Navigation.PushAsync(new MealPlans(cust_firstName, cust_lastName, cust_email), false);
+            //Navigation.RemovePage(this.Navigation.NavigationStack[this.Navigation.NavigationStack.Count - 2]);
+        }
+
+        async void clickedSelect(System.Object sender, System.EventArgs e)
+        {
+            if (Preferences.Get("canChooseSelect", false) == false)
+                DisplayAlert("Error", "please purchase a meal plan first", "OK");
+            else
+            {
+                Zones[] zones = new Zones[] { };
+                await Navigation.PushAsync(new Select(zones, cust_firstName, cust_lastName, cust_email), false);
+                //Navigation.RemovePage(this.Navigation.NavigationStack[this.Navigation.NavigationStack.Count - 2]);
+            }
+        }
+
+        async void clickedSubscription(System.Object sender, System.EventArgs e)
+        {
+            await Navigation.PushAsync(new SubscriptionPage(cust_firstName, cust_lastName, cust_email), false);
+            //Navigation.RemovePage(this.Navigation.NavigationStack[this.Navigation.NavigationStack.Count - 2]);
+        }
+
+        void clickedLogout(System.Object sender, System.EventArgs e)
+        {
+            Xamarin.Forms.Application.Current.Properties.Remove("user_id");
+            Xamarin.Forms.Application.Current.Properties["platform"] = "GUEST";
+            Xamarin.Forms.Application.Current.Properties.Remove("time_stamp");
+            //Application.Current.Properties.Remove("platform");
+            Xamarin.Forms.Application.Current.MainPage = new MainPage();
+        }
+        //end of menu functions
     }
 }

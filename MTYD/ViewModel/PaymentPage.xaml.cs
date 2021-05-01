@@ -239,11 +239,22 @@ namespace MTYD.ViewModel
 
             if (Device.RuntimePlatform == Device.iOS)
             {
+                //open menu adjustments
+                orangeBox2.HeightRequest = height / 2;
+                orangeBox2.Margin = new Thickness(0, -height / 2.2, 0, 0);
+                orangeBox2.CornerRadius = height / 40;
+                heading2.WidthRequest = width / 5;
+                menu2.HeightRequest = width / 25;
+                menu2.WidthRequest = width / 25;
+                menu2.Margin = new Thickness(25, 0, 0, 30);
+                heading.WidthRequest = width / 5;
+                //heading adjustments
+
                 orangeBox.HeightRequest = height / 2;
                 orangeBox.Margin = new Thickness(0, -height / 2.2, 0, 0);
                 orangeBox.CornerRadius = height / 40;
                 //heading.WidthRequest = width / 3;
-                heading.WidthRequest = width / 5;
+                //heading.WidthRequest = width / 5;
                 pfp.HeightRequest = width / 20;
                 pfp.WidthRequest = width / 20;
                 pfp.CornerRadius = (int)(width / 40);
@@ -278,6 +289,17 @@ namespace MTYD.ViewModel
             }
             else //android
             {
+                //open menu adjustments
+                orangeBox2.HeightRequest = height / 2;
+                orangeBox2.Margin = new Thickness(0, -height / 2.2, 0, 0);
+                orangeBox2.CornerRadius = height / 40;
+                heading2.WidthRequest = width / 5;
+                menu2.HeightRequest = width / 25;
+                menu2.WidthRequest = width / 25;
+                menu2.Margin = new Thickness(25, 0, 0, 30);
+                heading.WidthRequest = width / 5;
+                //heading adjustments
+
                 orangeBox.CornerRadius = 35;
                 pfp.CornerRadius = 20;
 
@@ -295,7 +317,7 @@ namespace MTYD.ViewModel
                 zipCode.CornerRadius = 24;
                 phoneNum.CornerRadius = 24;
 
-                password.CornerRadius = 22;
+                //password.CornerRadius = 22;
                 password2.CornerRadius = 22;
                 checkoutButton.CornerRadius = 24;
 
@@ -1304,9 +1326,10 @@ namespace MTYD.ViewModel
             //newPayment.salt = "2020-09-22 21:55:17";
             //newPayment.salt = hashedPassword;
             //testing for paypal
-            if ((string)Xamarin.Forms.Application.Current.Properties["platform"] == "DIRECT")
-                newPayment.salt = hashedPassword;
-            else newPayment.salt = "";
+            //if ((string)Xamarin.Forms.Application.Current.Properties["platform"] == "DIRECT")
+            //    newPayment.salt = hashedPassword;
+            //else newPayment.salt = "";
+            newPayment.salt = "";
 
             newPayment.delivery_first_name = FNameEntry.Text;
             newPayment.delivery_last_name = LNameEntry.Text;
@@ -1575,14 +1598,14 @@ namespace MTYD.ViewModel
                     //PaymentScreen.HeightRequest = this.Height * 1.5;
                     //PayPalScreen.Height = (this.Height - (this.Height / 8)) * 1.5;
                     //spacer6.IsVisible = true;
-                    passLabel.IsVisible = true;
-                    //spacer7.IsVisible = true;
-                    password.IsVisible = true;
-                    passwordEntry.IsVisible = true;
-                    password.WidthRequest = cardAddFrame.Width;
-                    //passwordEntry.WidthRequest = purchDescFrame.Width;
-                    //spacer8.IsVisible = true;
-                    spacer9.IsVisible = true;
+                    //passLabel.IsVisible = true;
+                    ////spacer7.IsVisible = true;
+                    //password.IsVisible = true;
+                    //passwordEntry.IsVisible = true;
+                    //password.WidthRequest = cardAddFrame.Width;
+                    ////passwordEntry.WidthRequest = purchDescFrame.Width;
+                    ////spacer8.IsVisible = true;
+                    //spacer9.IsVisible = true;
                 }
                 //await scroller.ScrollToAsync(0, -40, false);
             }
@@ -1671,10 +1694,10 @@ namespace MTYD.ViewModel
                     await DisplayAlert("Error", "Please enter your zipcode", "OK");
                 }
 
-                if (passwordEntry.Text == null && (string)Xamarin.Forms.Application.Current.Properties["platform"] == "DIRECT")
-                {
-                    await DisplayAlert("Error", "Please enter your password", "OK");
-                }
+                //if (passwordEntry.Text == null && (string)Xamarin.Forms.Application.Current.Properties["platform"] == "DIRECT")
+                //{
+                //    await DisplayAlert("Error", "Please enter your password", "OK");
+                //}
 
                 await Navigation.PushAsync(new Loading());
 
@@ -1814,31 +1837,31 @@ namespace MTYD.ViewModel
                 }
                 //-------------validate address end
 
-                if ((string)Xamarin.Forms.Application.Current.Properties["platform"] == "DIRECT")
-                {
-                    Console.WriteLine("In set payment info: Hashing Password!");
-                    SHA512 sHA512 = new SHA512Managed();
-                    byte[] data = sHA512.ComputeHash(Encoding.UTF8.GetBytes(passwordEntry.Text + Preferences.Get("password_salt", "")));
-                    string hashedPassword2 = BitConverter.ToString(data).Replace("-", string.Empty).ToLower();
-                    Debug.WriteLine("hashedPassword: " + hashedPassword2);
-                    //byte[] data2 = sHA512.ComputeHash(Encoding.UTF8.GetBytes(passwordEntry.Text));
-                    //string hashedPassword3 = BitConverter.ToString(data).Replace("-", string.Empty).ToLower();
-                    //Debug.WriteLine("hashedPassword solo: " + hashedPassword2);
-                    //Debug.WriteLine("password_hashed: " + Preferences.Get("password_hashed", ""));
-                    Console.WriteLine("In set payment info:  Password Hashed!");
-                    if (Preferences.Get("password_hashed", "") != hashedPassword2)
-                    {
-                        await Navigation.PopAsync(false);
-                        Debug.WriteLine("wrong password entered");
-                        DisplayAlert("Error", "Wrong password entered.", "OK");
-                        return;
-                    }
-                    else
-                    {
-                        Debug.WriteLine("hash finished and ready");
-                        hashedPassword = hashedPassword2;
-                    }
-                }
+                //if ((string)Xamarin.Forms.Application.Current.Properties["platform"] == "DIRECT")
+                //{
+                //    Console.WriteLine("In set payment info: Hashing Password!");
+                //    SHA512 sHA512 = new SHA512Managed();
+                //    byte[] data = sHA512.ComputeHash(Encoding.UTF8.GetBytes(passwordEntry.Text + Preferences.Get("password_salt", "")));
+                //    string hashedPassword2 = BitConverter.ToString(data).Replace("-", string.Empty).ToLower();
+                //    Debug.WriteLine("hashedPassword: " + hashedPassword2);
+                //    //byte[] data2 = sHA512.ComputeHash(Encoding.UTF8.GetBytes(passwordEntry.Text));
+                //    //string hashedPassword3 = BitConverter.ToString(data).Replace("-", string.Empty).ToLower();
+                //    //Debug.WriteLine("hashedPassword solo: " + hashedPassword2);
+                //    //Debug.WriteLine("password_hashed: " + Preferences.Get("password_hashed", ""));
+                //    Console.WriteLine("In set payment info:  Password Hashed!");
+                //    if (Preferences.Get("password_hashed", "") != hashedPassword2)
+                //    {
+                //        await Navigation.PopAsync(false);
+                //        Debug.WriteLine("wrong password entered");
+                //        DisplayAlert("Error", "Wrong password entered.", "OK");
+                //        return;
+                //    }
+                //    else
+                //    {
+                //        Debug.WriteLine("hash finished and ready");
+                //        hashedPassword = hashedPassword2;
+                //    }
+                //}
 
                 //stripe frontend processing start
 
@@ -2085,11 +2108,11 @@ namespace MTYD.ViewModel
                             Task.Delay(500).Wait();
                             if ((string)Xamarin.Forms.Application.Current.Properties["platform"] == "DIRECT")
                             {
-                                spacer6.IsVisible = true;
-                                passLabel.IsVisible = true;
-                                //spacer7.IsVisible = true;
-                                password.IsVisible = true;
-                                passwordEntry.IsVisible = true;
+                                //spacer6.IsVisible = true;
+                                //passLabel.IsVisible = true;
+                                ////spacer7.IsVisible = true;
+                                //password.IsVisible = true;
+                                //passwordEntry.IsVisible = true;
                                 spacer8.IsVisible = true;
                             }
                             checkoutButton.Text = "CONTINUE";
@@ -2663,7 +2686,7 @@ namespace MTYD.ViewModel
                 addressListFrame.IsVisible = true;
                 addressList2.IsVisible = true;
                 CityStateZip.IsVisible = false;
-                addressList2.ItemsSource = await addr.GetPlacesPredictionsAsync(AddressEntry.Text);
+                addressList2.ItemsSource = await addr.GetPlacesPredictionsAsync(cardHolderAddress.Text);
                 //addr.OnAddressChanged(addressList2, Addresses, _addressText);
             }
         }
@@ -2718,5 +2741,56 @@ namespace MTYD.ViewModel
                 CityStateZip.IsVisible = true;
             }
         }
+
+        //start of menu functions
+        void clickedOpenMenu(object sender, EventArgs e)
+        {
+            openedMenu.IsVisible = true;
+        }
+
+        void clickedCloseMenu(object sender, EventArgs e)
+        {
+            openedMenu.IsVisible = false;
+        }
+
+        async void clickedLanding(System.Object sender, System.EventArgs e)
+        {
+            await Navigation.PushAsync(new MainPage(cust_firstName, cust_lastName, cust_email), false);
+            //Navigation.RemovePage(this.Navigation.NavigationStack[this.Navigation.NavigationStack.Count - 2]);
+        }
+
+        async void clickedMealPlan(System.Object sender, System.EventArgs e)
+        {
+            await Navigation.PushAsync(new MealPlans(cust_firstName, cust_lastName, cust_email), false);
+            //Navigation.RemovePage(this.Navigation.NavigationStack[this.Navigation.NavigationStack.Count - 2]);
+        }
+
+        async void clickedSelect(System.Object sender, System.EventArgs e)
+        {
+            if (Preferences.Get("canChooseSelect", false) == false)
+                DisplayAlert("Error", "please purchase a meal plan first", "OK");
+            else
+            {
+                Zones[] zones = new Zones[] { };
+                await Navigation.PushAsync(new Select(zones, cust_firstName, cust_lastName, cust_email), false);
+                //Navigation.RemovePage(this.Navigation.NavigationStack[this.Navigation.NavigationStack.Count - 2]);
+            }
+        }
+
+        async void clickedSubscription(System.Object sender, System.EventArgs e)
+        {
+            await Navigation.PushAsync(new SubscriptionPage(cust_firstName, cust_lastName, cust_email), false);
+            //Navigation.RemovePage(this.Navigation.NavigationStack[this.Navigation.NavigationStack.Count - 2]);
+        }
+
+        void clickedLogout(System.Object sender, System.EventArgs e)
+        {
+            Xamarin.Forms.Application.Current.Properties.Remove("user_id");
+            Xamarin.Forms.Application.Current.Properties["platform"] = "GUEST";
+            Xamarin.Forms.Application.Current.Properties.Remove("time_stamp");
+            //Application.Current.Properties.Remove("platform");
+            Xamarin.Forms.Application.Current.MainPage = new MainPage();
+        }
+        //end of menu functions
     }
 }

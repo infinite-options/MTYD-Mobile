@@ -272,6 +272,11 @@
     <BundleResource Include="Resources\congrats_path2.png" />
     <BundleResource Include="Resources\xButton.png" />
     <BundleResource Include="Resources\closeMenu.png" />
+    <BundleResource Include="Resources\saveButton.png" />
+    <BundleResource Include="Resources\MPcard.png" />
+    <BundleResource Include="Resources\MPtrash.png" />
+    <BundleResource Include="Resources\MPbox.png" />
+    <BundleResource Include="Resources\MPplate.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AppleSignIn\" />
