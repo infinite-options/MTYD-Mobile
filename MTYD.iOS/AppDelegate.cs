@@ -35,6 +35,7 @@ namespace MTYD.iOS
 
             //forms9patch
             Forms9Patch.iOS.Settings.Initialize(this);
+            //Syncfusion.XForms.iOS.Expander.SfExpanderRenderer.Init();
             LoadApplication(new App());
 
             base.FinishedLaunching(app, options);

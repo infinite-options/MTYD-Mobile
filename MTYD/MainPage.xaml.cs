@@ -128,6 +128,7 @@ namespace MTYD
             cust_email = email;
             InitializeComponent();
 
+
             var cvItems = new List<string>
             {
                 "Who has time?\n\nSave time and money! Ready to heat meals come to your door and you can order up to 10 deliveries in advance so you know what's coming!",
@@ -197,36 +198,60 @@ namespace MTYD
                 Console.WriteLine("entered for iPhone X");
 
                 //social media buttons
-                googleLoginButton.HeightRequest = width / 17;
-                googleLoginButton.WidthRequest = width / 17;
-                googleLoginButton.CornerRadius = (int)(width / 34);
-                facebookLoginButton.HeightRequest = width / 17;
-                facebookLoginButton.WidthRequest = width / 17;
-                facebookLoginButton.CornerRadius = (int)(width / 34);
-                appleLoginButton.HeightRequest = width / 17;
-                appleLoginButton.WidthRequest = width / 17;
-                appleLoginButton.CornerRadius = (int)(width / 34);
+                //googleLoginButton.HeightRequest = width / 17;
+                //googleLoginButton.WidthRequest = width / 17;
+                //googleLoginButton.CornerRadius = (int)(width / 34);
+                //facebookLoginButton.HeightRequest = width / 17;
+                //facebookLoginButton.WidthRequest = width / 17;
+                //facebookLoginButton.CornerRadius = (int)(width / 34);
+                //appleLoginButton.HeightRequest = width / 17;
+                //appleLoginButton.WidthRequest = width / 17;
+                //appleLoginButton.CornerRadius = (int)(width / 34);
             }
             else if (Device.RuntimePlatform == Device.iOS)
             {
-                appleSignupFrame.WidthRequest = width / 3.5;
-                appleSignupFrame.HeightRequest = width / 25;
-                appleSignupButton.WidthRequest = width / 3.5;
-                appleSignupButton.HeightRequest = width / 25;
-                appleSignupText.FontSize = width / 50;
-                fbSignupFrame.WidthRequest = width / 3.5;
-                fbSignupFrame.HeightRequest = width / 25;
-                fbSignupButton.WidthRequest = width / 3.5;
-                fbSignupButton.HeightRequest = width / 25;
-                fbSignupText.FontSize = width / 50;
-                googleSignupFrame.WidthRequest = width / 3.5;
-                googleSignupFrame.HeightRequest = width / 25;
-                googleSignupButton.WidthRequest = width / 3.5;
-                googleSignupButton.HeightRequest = width / 25;
-                googleSignupText.FontSize = width / 50;
+                //appleSignupFrame.WidthRequest = width / 3.5;
+                //appleSignupFrame.HeightRequest = width / 25;
+                //appleSignupButton.WidthRequest = width / 3.5;
+                //appleSignupButton.HeightRequest = width / 25;
+                //appleSignupText.FontSize = width / 50;
+                //fbSignupFrame.WidthRequest = width / 3.5;
+                //fbSignupFrame.HeightRequest = width / 25;
+                //fbSignupButton.WidthRequest = width / 3.5;
+                //fbSignupButton.HeightRequest = width / 25;
+                //fbSignupText.FontSize = width / 50;
+                //googleSignupFrame.WidthRequest = width / 3.5;
+                //googleSignupFrame.HeightRequest = width / 25;
+                //googleSignupButton.WidthRequest = width / 3.5;
+                //googleSignupButton.HeightRequest = width / 25;
+                //googleSignupText.FontSize = width / 50;
+                //appleLoginButton.HeightRequest = width / 17;
+                //appleLoginButton.WidthRequest = width / 17;
+                //appleLoginButton.CornerRadius = (int)(width / 34);
+                //googleLoginButton.HeightRequest = width / 15;
+                //googleLoginButton.WidthRequest = width / 15;
+                //googleLoginButton.CornerRadius = (int)(width / 30);
+                //facebookLoginButton.HeightRequest = width / 19;
+                //facebookLoginButton.WidthRequest = width / 19;
+                //facebookLoginButton.CornerRadius = (int)(width / 38);
+                //directLoginButton.HeightRequest = width / 17;
+                //directLoginButton.WidthRequest = width / 17;
+                //directLoginButton.CornerRadius = (int)(width / 34);
             }
             else //android
             {
+                //appleLoginButton.HeightRequest = width / 10;
+                //appleLoginButton.WidthRequest = width / 10;
+                //appleLoginButton.CornerRadius = (int)(width / 20);
+                //googleLoginButton.HeightRequest = width / 10;
+                //googleLoginButton.WidthRequest = width / 10;
+                //googleLoginButton.CornerRadius = (int)(width / 20);
+                //facebookLoginButton.HeightRequest = width / 10;
+                //facebookLoginButton.WidthRequest = width / 10;
+                //facebookLoginButton.CornerRadius = (int)(width / 20);
+                //directLoginButton.HeightRequest = width / 10;
+                //directLoginButton.WidthRequest = width / 10;
+                //directLoginButton.CornerRadius = (int)(width / 20);
             }
         }
 
@@ -298,6 +323,7 @@ namespace MTYD
             orangeBox.Margin = new Thickness(0, -height / 2.2, 0, 0);
             orangeBox.CornerRadius = height / 40;
             innerGrid.Margin = new Thickness(0, 0, 23, 27);
+            heading.WidthRequest = width / 3;
 
             menu.HeightRequest = width / 25;
             menu.WidthRequest = width / 25;
@@ -319,13 +345,7 @@ namespace MTYD
             }
             else pfp.Source = Preferences.Get("profilePicLink", "");
 
-            landingPic.Margin = new Thickness(0, -height / 30, 0, 0);
-
-            //partners.FontSize = width / 60;
-
-            //ambassadorBtn.WidthRequest = width / 4;
-            //ambassadorBtn.HeightRequest = width / 20;
-            //ambassadorBtn.CornerRadius = (int)(width / 40);
+            //landingPic.Margin = new Thickness(0, -height / 30, 0, 0);
 
             if (Device.RuntimePlatform == Device.iOS)
             {
@@ -1612,6 +1632,7 @@ namespace MTYD
 
         public async void directLoginButtonClicked(object sender, EventArgs e)
         {
+            Application.Current.MainPage = new MainLogin();
 
             HomePage.IsVisible = false;
             BackgroundImageSource = null;

@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="MTYD.ViewModel.GoogleLogin">
+
+ <StackLayout>
+     
+
+    <AbsoluteLayout>
+
+        <Image  AbsoluteLayout.LayoutBounds="1, -15, 2, 1"
+                AbsoluteLayout.LayoutFlags="All"
+                Source="landing.jpg" Aspect="AspectFill" Rotation="180"/>
+
+        <Image AbsoluteLayout.LayoutBounds="1,1,1,1"
+               AbsoluteLayout.LayoutFlags="All"
+               BackgroundColor="Black" Aspect="AspectFill" Opacity="0.5"/>
+
+        <Label Text="NUTRITION&#10;MADE EASY" FontAttributes="Bold" LineHeight="1"
+               AbsoluteLayout.LayoutBounds="0.5, 0.14"
+               AbsoluteLayout.LayoutFlags="PositionProportional"
+               FontSize="44" VerticalOptions="Center"
+               HorizontalTextAlignment="Center" Opacity="0.5"
+               TextColor="#FFFFFF" CharacterSpacing="3"/>
+
+        <Label x:Name="subHeading" Text="LOCAL. ORGANIC. RESPONSIBLE."
+               VerticalOptions="Center" TextColor="#FFB054" FontAttributes="Bold"
+               HorizontalTextAlignment="Center" FontSize="20" Opacity="0.5"
+               AbsoluteLayout.LayoutBounds="0.5, 0.26" CharacterSpacing="1"
+               AbsoluteLayout.LayoutFlags="PositionProportional"/>
+
+        <Frame x:Name="BackgroundOrange" BackgroundColor="#F59A28"
+               AbsoluteLayout.LayoutBounds="0.5, 0.53"
+               AbsoluteLayout.LayoutFlags="PositionProportional"
+               HeightRequest="310" WidthRequest="330"
+               CornerRadius="21"/>
+
+        <Frame x:Name="BackgroundWhite" BackgroundColor="White"
+               AbsoluteLayout.LayoutBounds="0.5, 0.527"
+               AbsoluteLayout.LayoutFlags="PositionProportional"
+               HeightRequest="300" WidthRequest="320"
+               CornerRadius="20" HasShadow="False"/>
+
+        <Button x:Name="backButton" Text="◀  BACK" FontSize="17" FontAttributes="Bold"
+                BackgroundColor="#F59A28" TextColor= "White"
+                HeightRequest="49" WidthRequest="120" CornerRadius="25"
+                AbsoluteLayout.LayoutBounds="0.1, 0.77"
+                AbsoluteLayout.LayoutFlags="PositionProportional"
+                Clicked="clickedBack" />
+
+        <!--IsClippedBounds on Frame w/ Image didn't work-->
+        <ImageButton  x:Name="googleIcon" AbsoluteLayout.LayoutBounds="0.14, 0.38"
+                      AbsoluteLayout.LayoutFlags="PositionProportional"
+                      BackgroundColor="#DD4B39"
+                      HeightRequest="60" WidthRequest="60" Source="googleicon2.png"
+                      Aspect="AspectFill"/>
+
+        <Label Text="CHOOSE AN ACCOUNT" BackgroundColor="Transparent"
+               FontSize="22" FontAttributes="Bold"
+               AbsoluteLayout.LayoutBounds="0.68, 0.37" AbsoluteLayout.LayoutFlags="PositionProportional"
+               />
+
+        <Label Text="to continue with Nutrition Made Easy" BackgroundColor="Transparent"
+               FontSize="12" AbsoluteLayout.LayoutBounds="0.59, 0.40"
+                AbsoluteLayout.LayoutFlags="PositionProportional"/>
+
+        <ImageButton  x:Name="profilePic1" AbsoluteLayout.LayoutBounds="0.15, 0.48"
+                      AbsoluteLayout.LayoutFlags="PositionProportional"
+                      BackgroundColor="Gray"
+                      HeightRequest="51" WidthRequest="51" 
+                      Aspect="AspectFill"/>
+
+        <ImageButton  x:Name="profilePic2" AbsoluteLayout.LayoutBounds="0.15, 0.57"
+                      AbsoluteLayout.LayoutFlags="PositionProportional"
+                      BackgroundColor="Gray"
+                      HeightRequest="51" WidthRequest="51" 
+                      Aspect="AspectFill"/>
+
+        <Button x:Name="addAccount" AbsoluteLayout.LayoutBounds="0.15, 0.66"
+                AbsoluteLayout.LayoutFlags="PositionProportional" Text=" + "
+                TextColor="#F59A28" HeightRequest="51" WidthRequest="51"
+                BorderColor="Gray" FontAttributes="Bold" FontSize="18" BorderWidth="1"/>
+
+        <BoxView x:Name="divider1" BackgroundColor="LightGray" HeightRequest="1" WidthRequest="300"
+                 AbsoluteLayout.LayoutBounds="0.5, 0.525"
+                 AbsoluteLayout.LayoutFlags="PositionProportional"/>
+
+        <BoxView x:Name="divider2" BackgroundColor="LightGray" HeightRequest="1" WidthRequest="300"
+                 AbsoluteLayout.LayoutBounds="0.5, 0.61"
+                 AbsoluteLayout.LayoutFlags="PositionProportional"/>
+
+        <Label Text="Thomas Rule" FontSize="16" FontAttributes="Bold" 
+               AbsoluteLayout.LayoutBounds="0.78, 0.475"
+               WidthRequest="250" HorizontalTextAlignment="Start"
+               AbsoluteLayout.LayoutFlags="PositionProportional"/>
+
+        <Label Text="rule.thomas@gmail.com" FontSize="13"
+               AbsoluteLayout.LayoutBounds="0.79, 0.495"
+               AbsoluteLayout.LayoutFlags="PositionProportional"
+               WidthRequest="250" HorizontalTextAlignment="Start"/>
+
+        <Label Text="Jason Bram" FontSize="16" FontAttributes="Bold" 
+               AbsoluteLayout.LayoutBounds="0.78, 0.56"
+               WidthRequest="250" HorizontalTextAlignment="Start"
+               AbsoluteLayout.LayoutFlags="PositionProportional"/>
+
+        <Label x:Name="secondEmail" Text="jason@gmail.com" FontSize="13"
+               AbsoluteLayout.LayoutBounds="0.79, 0.58"
+               AbsoluteLayout.LayoutFlags="PositionProportional"
+               WidthRequest="250" HorizontalTextAlignment="Start"/>
+
+        <Label Text="Add Another Account" FontSize="16" FontAttributes="Bold"
+               AnchorX="0" AnchorY="0" AbsoluteLayout.LayoutBounds="0.5, 0.655"
+               AbsoluteLayout.LayoutFlags="PositionProportional"/>
+
+        <Button HeightRequest="73" WidthRequest="360" AbsoluteLayout.LayoutBounds="0.5, 0.48"
+                AbsoluteLayout.LayoutFlags="PositionProportional"/>
+
+        <Button HeightRequest="73" WidthRequest="360" AbsoluteLayout.LayoutBounds="0.5, 0.575"
+                AbsoluteLayout.LayoutFlags="PositionProportional"/>
+
+        <Button HeightRequest="73" WidthRequest="360" AbsoluteLayout.LayoutBounds="0.5, 0.665"
+                AbsoluteLayout.LayoutFlags="PositionProportional"/>
+
+
+    </AbsoluteLayout>
+
+ </StackLayout>
+
+</ContentPage>

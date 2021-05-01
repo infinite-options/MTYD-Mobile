@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using Xamarin.Forms;
 
 namespace MTYD.Model
 {
@@ -8,6 +9,7 @@ namespace MTYD.Model
         int _mealQuantity;
         long _mealPrice;
         string _mealName, _mealCalories, _mealImage, _heartSource;
+        Color _background;
         bool _seeDesc, _seeImage;
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -27,6 +29,23 @@ namespace MTYD.Model
             get
             {
                 return _heartSource;
+            }
+
+        }
+
+        public Color Background
+        {
+            set
+            {
+                if (_background != value)
+                {
+                    _background = value;
+                    OnPropertyChanged("Background");
+                }
+            }
+            get
+            {
+                return _background;
             }
 
         }
@@ -149,6 +168,75 @@ namespace MTYD.Model
             }
 
         }
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+
+    public class MealPlanItem : INotifyPropertyChanged
+    {
+        string _planName;
+        Color _background, _fontColor;
+        public event PropertyChangedEventHandler PropertyChanged;
+
+
+        public Color Background
+        {
+            set
+            {
+                if (_background != value)
+                {
+                    _background = value;
+                    OnPropertyChanged("Background");
+                }
+            }
+            get
+            {
+                return _background;
+            }
+
+        }
+
+        public Color FontColor
+        {
+            set
+            {
+                if (_fontColor != value)
+                {
+                    _fontColor = value;
+                    OnPropertyChanged("FontColor");
+                }
+            }
+            get
+            {
+                return _fontColor;
+            }
+
+        }
+
+        public string PlanName
+        {
+            set
+            {
+                if (_planName != value)
+                {
+                    _planName = value;
+                    OnPropertyChanged("PlanName");
+                }
+            }
+            get
+            {
+                return _planName;
+            }
+
+        }
+
+
 
         protected void OnPropertyChanged(string propertyName)
         {

@@ -12,6 +12,9 @@ namespace MTYD.Model.Database
         [JsonProperty("message")]
         public string Message { get; set; }
 
+        [JsonProperty("code")]
+        public string Code { get; set; }
+
         [JsonProperty("result")]
         public Result[] Result { get; set; }
     }
@@ -117,11 +120,28 @@ namespace MTYD.Model.Database
         [JsonProperty("purchase_notes")]
         public string PurchaseNotes { get; set; }
 
+        //comes in as a string but its the bool value in all caps
+        [JsonProperty("delivery_status")]
+        public string DeliveryStatus { get; set; }
+
+        [JsonProperty("feedback_rating")]
+        public int FeedbackRating { get; set; }
+
+        [JsonProperty("feedback_notes")]
+        public string FeedbackNotes { get; set; }
+
+        //in the form 0000-00-00 00:00:00
+        [JsonProperty("cancel_date")]
+        public string CancelDate { get; set; }
+
         [JsonProperty("payment_uid")]
         public string PaymentUid { get; set; }
 
         [JsonProperty("payment_id")]
         public string PaymentId { get; set; }
+
+        [JsonProperty("pay_purchase_uid")]
+        public string PayPurchaseUid { get; set; }
 
         [JsonProperty("pay_purchase_id")]
         public string PayPurchaseId { get; set; }
@@ -139,7 +159,7 @@ namespace MTYD.Model.Database
         public double AmountDue { get; set; }
 
         [JsonProperty("amount_discount")]
-        public long AmountDiscount { get; set; }
+        public string AmountDiscount { get; set; }
 
         [JsonProperty("amount_paid")]
         public double AmountPaid { get; set; }

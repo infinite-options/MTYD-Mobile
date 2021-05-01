@@ -185,6 +185,46 @@ namespace MTYD.Model
         public string start_delivery_date { get; set; }
     }
 
+    public class updatePurchase
+    {
+        public string start_delivery_date { get; set; }
+        public string purchaseId { get; set; }
+        public string amount_due { get; set; }
+        public string amount_discount { get; set; }
+        public string amount_paid { get; set; }
+        public string coupon_id { get; set; }
+        public string charge_id { get; set; }
+        public string payment_type { get; set; }
+        public string cc_num { get; set; }
+        public string cc_exp_date { get; set; }
+        public string cc_cvv { get; set; }
+        public string cc_zip { get; set; }
+        public string taxes { get; set; }
+        public string tip { get; set; }
+        public string service_fee { get; set; }
+        public string delivery_fee { get; set; }
+        public string subtotal { get; set; }
+        //ambassador code
+        public string amb { get; set; }
+        public string customer_uid { get; set; }
+        public string delivery_first_name { get; set; }
+        public string delivery_last_name { get; set; }
+        public string delivery_email { get; set; }
+        public string delivery_phone { get; set; }
+        public string delivery_address { get; set; }
+        public string delivery_unit { get; set; }
+        public string delivery_city { get; set; }
+        public string delivery_state { get; set; }
+        public string delivery_zip { get; set; }
+        public string delivery_instructions { get; set; }
+        public string delivery_longitude { get; set; }
+        public string delivery_latitude { get; set; }
+        public List<Item> items { get; set; }
+        public string order_instructions { get; set; }
+        public string purchase_notes { get; set; }
+
+    }
+
     public class ProfileInfo
     {
         public string uid { get; set; }

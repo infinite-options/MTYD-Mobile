@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="MTYD.ViewModel.Profile">
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout x:Name="StackL" BackgroundColor="White">
+
+                <StackLayout BackgroundColor="LightGray">
+                    <Label Text="" Margin="60"/>
+                </StackLayout>
+
+                <Label Text="PERSONAL DETAILS" FontFamily="CapsRegular" TextColor="Black" HorizontalOptions="Start" FontSize="Large" Margin="30,0,0,0" FontAttributes="Bold"/>
+                <Label Text="First Name  Last Name" FontFamily="CapsRegular" TextColor="Black" HorizontalOptions="Start" FontSize="Medium" Margin="30,0,0,0" />
+                <Label Text="Johnj@gmail.com" FontFamily="CapsRegular" TextColor="Black" HorizontalOptions="Start" FontSize="Medium" Margin="30,0,0,0" />
+                <Label Text="000-000-0000" FontFamily="CapsRegular" TextColor="Black" HorizontalOptions="Start" FontSize="Medium" Margin="30,0,0,10" />
+
+                <Label Text="PAYMENT CARDS" FontFamily="CapsRegular" TextColor="Black" HorizontalOptions="Start" FontSize="Large" Margin="30,0,0,0" FontAttributes="Bold"/>
+
+                <Grid x:Name="ButtonStack1"
+                HorizontalOptions="Center"
+                VerticalOptions="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="12.5*" />
+                        <ColumnDefinition Width="12.5*" />
+                        <ColumnDefinition Width="12.5*" />
+                        <ColumnDefinition Width="12.5*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50" />
+                    </Grid.RowDefinitions>
+
+                    <ImageButton
+                    x:Name="card1"
+                    WidthRequest="150"
+                    HeightRequest="60"
+                    HorizontalOptions="Center"
+                    BackgroundColor="#F5F5F5"
+                    BorderColor="Black"
+                    BorderWidth="1"
+                    VerticalOptions="Start"
+                    Grid.Column="0"
+                    Grid.Row="0"
+                    CornerRadius="5"
+                     Margin="30,6,5,6"/>
+
+                    <ImageButton 
+                    x:Name="card2"
+                    WidthRequest="150"
+                    HeightRequest="60"
+                     Margin="20,6,10,6"
+                    HorizontalOptions="Center"
+                    BackgroundColor="#F5F5F5"
+                    BorderColor="Black"
+                    BorderWidth="1"
+                    VerticalOptions="Start"
+                    Grid.Column="1"
+                    Grid.Row="0"
+                    CornerRadius="5"/>
+
+                    <ImageButton 
+                    x:Name="card3"
+                    WidthRequest="150"
+                    HeightRequest="60"
+                     Margin="17,6,15,6"
+                    HorizontalOptions="Center"
+                    BackgroundColor="#F5F5F5"
+                    BorderColor="Black"
+                    BorderWidth="1"
+                    VerticalOptions="Start"
+                    Grid.Column="2"
+                    Grid.Row="0"
+                    CornerRadius="5"/>
+                </Grid>
+
+                <Label Text="BILLING ADDRESS" FontFamily="CapsRegular" TextColor="Black" HorizontalOptions="Start" FontSize="Large" Margin="30,10,0,0" FontAttributes="Bold"/>
+                <Label Text="Lorem ipsum dolor sit" FontFamily="CapsRegular" TextColor="Black" HorizontalOptions="Start" FontSize="Medium" Margin="30,0,0,0" />
+                <Label Text="amet, consectetur" FontFamily="CapsRegular" TextColor="Black" HorizontalOptions="Start" FontSize="Medium" Margin="30,0,0,0" />
+                <Label Text="adipiscing elit, sed do" FontFamily="CapsRegular" TextColor="Black" HorizontalOptions="Start" FontSize="Medium" Margin="30,0,0,10" />
+
+                <Label Text="ORDER HISTORY" FontFamily="CapsRegular" TextColor="Black" HorizontalOptions="Start" FontSize="Large" Margin="30,0,0,10" FontAttributes="Bold"/>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

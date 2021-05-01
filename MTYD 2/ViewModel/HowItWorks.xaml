@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="MTYD.ViewModel.HowItWorks">
+
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout>
+
+                <Label x:Name="heading" Text="NUTRITION MADE EASY" TextColor="Black" FontAttributes="Bold" HorizontalOptions="Center"/>
+                <BoxView HeightRequest="5"/>
+
+                <Label x:Name="introParagraph" HorizontalOptions="Center" TextColor="#909090" HorizontalTextAlignment="Center"
+                       Text="MealsFor.me makes it easy to have highly&#x0a;nutritious meals curated from a variety of&#x0a;sources delivered straight to your door. That&#x0a;way you are always sure to have a nutritious&#x0a;meal at your fingertips coupled with a wide&#x0a;variety of cuisines and tastes. Order what you&#x0a;want and eat healthy!"/>
+                <BoxView HeightRequest="5"/>
+
+                <Label x:Name="heading2" Text="3 EASY STEPS" TextColor="#FF6505" HorizontalOptions="Center" FontAttributes="Bold" TextDecorations="Underline"/>
+                <BoxView HeightRequest="3"/>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button x:Name="first" HorizontalOptions="Center" VerticalOptions="Center" BorderColor="#FF6505" BorderWidth="2" TextColor="#FF6505" Text="1" FontAttributes="Bold"/>
+
+                    <StackLayout Grid.Column="1">
+                        <Label x:Name="step1" Text="Find a subscription plan&#x0a;that works for you" TextColor="#FF9E19" FontAttributes="Bold" HorizontalTextAlignment="Start"/>
+                        <Label x:Name="sub1" Text="Pay weekly or get discounted&#x0a;pricing by pre-ordering" TextColor="#909090" HorizontalTextAlignment="Start"/>
+                    </StackLayout>
+
+                </Grid>
+                <BoxView HeightRequest="3"/>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button x:Name="second" HorizontalOptions="Center" VerticalOptions="Center" BorderColor="#FF6505" BorderWidth="2" TextColor="#FF6505" Text="2" FontAttributes="Bold"/>
+
+                    <StackLayout Grid.Column="1">
+                        <Label x:Name="step2" Text="Select the meals you&#x0a;want and click save" TextColor="#FF9E19" FontAttributes="Bold" HorizontalOptions="Start" HorizontalTextAlignment="Start"/>
+                        <Label x:Name="sub2" Text="Nutritional facts on&#x0a;each meal are provided" TextColor="#909090" HorizontalOptions="Start" HorizontalTextAlignment="Start"/>
+                    </StackLayout>
+
+                </Grid>
+                <BoxView HeightRequest="3"/>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button x:Name="third" HorizontalOptions="Center" VerticalOptions="Center" BorderColor="#FF6505" BorderWidth="2" TextColor="#FF6505" Text="3" FontAttributes="Bold"/>
+
+                    <StackLayout Grid.Column="1">
+                        <Label x:Name="step3" Text="Heat and enjoy" TextColor="#FF9E19" FontAttributes="Bold" HorizontalTextAlignment="Start"/>
+                        <Label x:Name="sub3" Text="Place old containers outside on&#x0a;your next delivery date" TextColor="#909090" HorizontalTextAlignment="Start"/>
+                    </StackLayout>
+
+                </Grid>
+                <BoxView HeightRequest="7"/>
+
+                <Button x:Name="browseMenu" HorizontalOptions="Center" Text="Browse our menu for this week" TextColor="#FF6505" FontAttributes="Bold" Clicked="clickedWeeksMeals"/>
+                <BoxView HeightRequest="1.5"/>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                
+                <Button x:Name="back" Text="◀ Back" HorizontalOptions="Center" TextColor="#FF9E19" FontAttributes="Bold" Clicked="clickedBack"/>
+                <Button Grid.Column="1" x:Name="signUp" Text="Sign Up" HorizontalOptions="Center" TextColor="#FF9E19" FontAttributes="Bold" Clicked="clickedBack"/>
+                </Grid>
+
+                <BoxView HeightRequest="5"/>
+
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

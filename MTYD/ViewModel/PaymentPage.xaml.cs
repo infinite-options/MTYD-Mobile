@@ -26,6 +26,9 @@ using Stripe;
 
 namespace MTYD.ViewModel
 {
+
+
+
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class PaymentPage : ContentPage
     {
@@ -79,9 +82,10 @@ namespace MTYD.ViewModel
         string guestSalt = "";
         string checkoutAdd, checkoutUnit, checkoutCity, checkoutState, checkoutZip;
         bool onStripeScreen = false;
+        bool onCardAdd = false;
 
         Model.Address addr;
-
+        
         // CREDENTIALS CLASS
         public class Credentials
         {
@@ -158,6 +162,9 @@ namespace MTYD.ViewModel
                 clickedDeliv(proceedButton, e);
             }
 
+            addressList.IsVisible = false;
+            UnitCity.IsVisible = true;
+            StateZip.IsVisible = true;
         }
 
         public PaymentPage(string Fname, string Lname, string email)
@@ -238,7 +245,8 @@ namespace MTYD.ViewModel
                 orangeBox.HeightRequest = height / 2;
                 orangeBox.Margin = new Thickness(0, -height / 2.2, 0, 0);
                 orangeBox.CornerRadius = height / 40;
-                heading.WidthRequest = width / 3;
+                //heading.WidthRequest = width / 3;
+                heading.WidthRequest = width / 5;
                 pfp.HeightRequest = width / 20;
                 pfp.WidthRequest = width / 20;
                 pfp.CornerRadius = (int)(width / 40);
@@ -542,6 +550,8 @@ namespace MTYD.ViewModel
                 Button receiving = (Button)sender;
                 if (receiving.Text != "Save")
                 {
+                    CheckouWithStripe(receiving, e);
+
                     clickedSaveContact(receiving, e);
                     if ((string)Xamarin.Forms.Application.Current.Properties["platform"] == "GUEST")
                     {
@@ -558,7 +568,8 @@ namespace MTYD.ViewModel
                         directSignUp.latitude = Preferences.Get("user_latitude", "");
                         directSignUp.longitude = Preferences.Get("user_longitude", "");
                         directSignUp.referral_source = "MOBILE";
-                        directSignUp.role = "CUSTOMER";
+                        //directSignUp.role = "CUSTOMER";
+                        directSignUp.role = "GUEST";
                         directSignUp.mobile_access_token = "FALSE";
                         directSignUp.mobile_refresh_token = "FALSE";
                         directSignUp.user_access_token = "FALSE";
@@ -1243,6 +1254,10 @@ namespace MTYD.ViewModel
                 //if (Preferences.Get(purchaseDescription, "") != "")
                 //    cardDescription.Text = Preferences.Get(purchaseDescription, "");
             }
+            addressListFrame.IsVisible = false;
+            addressList2.IsVisible = false;
+            cardUnitCity.IsVisible = true;
+            cardStateZip.IsVisible = true;
         }
 
         protected async Task setPaymentInfo()
@@ -1551,32 +1566,32 @@ namespace MTYD.ViewModel
                 //PaymentScreen.Margin = new Thickness(0, -PaymentScreen.HeightRequest / 2, 0, 0);
                 //PayPalScreen.Height = this.Height - (this.Height / 8);
 
-                headingGrid.IsVisible = false;
-                mainStack.IsVisible = false;
-                paymentStack.IsVisible = false;
-                checkoutButton.IsVisible = false;
-                backButton.IsVisible = false;
-                PaymentScreen.HeightRequest = deviceHeight;
-                PayPalScreen.Height = deviceHeight - (deviceHeight / 8);
+                //headingGrid.IsVisible = false;
+                //mainStack.IsVisible = false;
+                //paymentStack.IsVisible = false;
+                //checkoutButton.IsVisible = false;
+                //backButton.IsVisible = false;
+                //PaymentScreen.HeightRequest = deviceHeight;
+                //PayPalScreen.Height = deviceHeight - (deviceHeight / 8);
 
                 //PayPalScreen.Height = ;
-                StripeScreen.Height = 0;
-                orangeBox.HeightRequest = 0;
+                //StripeScreen.Height = 0;
+                //orangeBox.HeightRequest = 0;
                 if ((string)Xamarin.Forms.Application.Current.Properties["platform"] == "DIRECT")
                 {
-                    PaymentScreen.HeightRequest = this.Height * 1.5;
-                    PayPalScreen.Height = (this.Height - (this.Height / 8)) * 1.5;
-                    spacer6.IsVisible = true;
+                    //PaymentScreen.HeightRequest = this.Height * 1.5;
+                    //PayPalScreen.Height = (this.Height - (this.Height / 8)) * 1.5;
+                    //spacer6.IsVisible = true;
                     passLabel.IsVisible = true;
-                    spacer7.IsVisible = true;
+                    //spacer7.IsVisible = true;
                     password.IsVisible = true;
                     passwordEntry.IsVisible = true;
                     password.WidthRequest = cardAddFrame.Width;
                     //passwordEntry.WidthRequest = purchDescFrame.Width;
-                    spacer8.IsVisible = true;
+                    //spacer8.IsVisible = true;
                     spacer9.IsVisible = true;
                 }
-                await scroller.ScrollToAsync(0, -40, false);
+                //await scroller.ScrollToAsync(0, -40, false);
             }
             else
             {
@@ -1869,25 +1884,114 @@ namespace MTYD.ViewModel
                             mode = "LIVE";
                             SK = Constant.LiveSK;
                         }
-                        //Carlos original code
-                        //if (content.Contains("Test"))
-                        //{
-                        //    mode = "TEST";
-                        //    SK = Constant.TestSK;
-                        //}
-                        //else if (content.Contains("Live"))
-                        //{
-                        //    mode = "LIVE";
-                        //    SK = Constant.LiveSK;
-                        //}
+                    //Carlos original code
+                    //if (content.Contains("Test"))
+                    //{
+                    //    mode = "TEST";
+                    //    SK = Constant.TestSK;
+                    //}
+                    //else if (content.Contains("Live"))
+                    //{
+                    //    mode = "LIVE";
+                    //    SK = Constant.LiveSK;
+                    //}
 
-                        Debug.WriteLine("MODE          : " + mode);
+                    //stripe payment intent url: https://huo8rhh76i.execute-api.us-west-1.amazonaws.com/dev/api/v2/createPaymentIntent
+                    //the endpoint returns the payment intent, doesn't make any charges
+                    //assemble a STPPaymentIntentParams object, put payment details and the PaymentIntent client secret
+                    //complete the payment by calling the STPPaymentHandler confirmPayment function
+                    /*
+                      
+                     {   
+                        "currency": "usd",   
+                        "customer_uid": "100-000142",
+                        "business_code": "M4METEST",
+                        "item_uid": "320-000054",
+                        "num_items": 5,
+                        "num_deliveries": 9,
+                        "delivery_discount": 13,
+                        "payment_summary": {     
+                            "mealSubPrice": "45.00",     
+                            "discountAmount": "5.85",    
+                            "addOns": "0.00",     
+                            "tip": "2.00",     
+                            "serviceFee": "0.00",     
+                            "deliveryFee": "0.00",     
+                            "taxRate": 0,     
+                            "taxAmount": "0.00",
+                            "ambassadorDiscount": "0.00",     
+                            "total": "41.15",     
+                            "subtotal": "41.15"   
+                        } 
+                    }
+                     */
+
+                    //trying to implement stripe with payment intent and payment method
+                    GetPaymentIntent newPaymentIntent = new GetPaymentIntent();
+                    newPaymentIntent.currency = "usd";
+                    newPaymentIntent.customer_uid = (string)Xamarin.Forms.Application.Current.Properties["user_id"];
+                    newPaymentIntent.business_code = DeliveryEntry.Text.Trim();
+                    newPaymentIntent.item_uid = Preferences.Get("item_uid", "");
+                    newPaymentIntent.num_items = Int32.Parse(Preferences.Get("item_name", "").Substring(0, Preferences.Get("item_name", "").IndexOf(" ")));
+                    newPaymentIntent.num_deliveries = Int32.Parse(Preferences.Get("freqSelected", ""));
+                    newPaymentIntent.delivery_discount = Math.Round(Double.Parse(discountPrice.Text.Substring(discountPrice.Text.IndexOf("$") + 1)) / Double.Parse(subtotalPrice.Text.Substring(subtotalPrice.Text.IndexOf("$") + 1)), 0);
+                    PaymentSummary paymentSum = new PaymentSummary();
+                    paymentSum.mealSubPrice = subtotalPrice.Text.Substring(subtotalPrice.Text.IndexOf("$") + 1);
+                    paymentSum.discountAmount = discountPrice.Text.Substring(discountPrice.Text.IndexOf("$") + 1);
+                    paymentSum.addOns = "0.00";
+                    paymentSum.tip = tipPrice.Text.Substring(tipPrice.Text.IndexOf("$") + 1);
+                    paymentSum.serviceFee = serviceFeePrice.Text.Substring(serviceFeePrice.Text.IndexOf("$") + 1);
+                    paymentSum.deliveryFee = deliveryFeePrice.Text.Substring(deliveryFeePrice.Text.IndexOf("$") + 1);
+                    paymentSum.taxRate = tax;
+                    paymentSum.taxAmount = taxPrice.Text.Substring(taxPrice.Text.IndexOf("$") + 1);
+                    paymentSum.ambassadorDiscount = ambassDisc.Text.Substring(ambassDisc.Text.IndexOf("$") + 1);
+                    paymentSum.total = grandTotalPrice.Text.Substring(grandTotalPrice.Text.IndexOf("$") + 1);
+                    paymentSum.subtotal = grandTotalPrice.Text.Substring(grandTotalPrice.Text.IndexOf("$") + 1);
+                    newPaymentIntent.payment_summary = paymentSum;
+
+
+                    var paymentIntentJSONString = JsonConvert.SerializeObject(newPaymentIntent);
+                    Console.WriteLine("paymentIntentJSONString" + paymentIntentJSONString);
+                    var content3 = new StringContent(paymentIntentJSONString, Encoding.UTF8, "application/json");
+                    Console.WriteLine("Content: " + content3);
+                    var client3 = new System.Net.Http.HttpClient();
+                    var response3 = await client3.PostAsync("https://huo8rhh76i.execute-api.us-west-1.amazonaws.com/dev/api/v2/createPaymentIntent", content3);
+                    var message3 = await response3.Content.ReadAsStringAsync();
+                    Debug.WriteLine("create payment intent response: " + message3);
+                    string payIntent = message3.Substring(1, message3.IndexOf("secret") - 2);
+                    Debug.WriteLine("only the payment intent: " + message3.Substring(1, message3.IndexOf("secret") - 2));
+                    string secret = message3.Substring(message3.IndexOf("secret") + 7);
+                    secret = secret.Substring(0, secret.IndexOf("\""));
+                    Debug.WriteLine("only the secret: " + secret);
+                    string clientSec = message3.Substring(1);
+                    clientSec = clientSec.Substring(0, clientSec.IndexOf("\""));
+                    Debug.WriteLine("client secret: " + clientSec);
+
+                    PaymentMethodCard payWithCard = new PaymentMethodCard();
+
+                    Debug.WriteLine("MODE          : " + mode);
                         Debug.WriteLine("STRIPE SECRET : " + SK);
 
                         //Debug.WriteLine("SK" + SK);
                         StripeConfiguration.ApiKey = SK;
 
-                        string CardNo = cardHolderNumber.Text.Trim();
+                    Dictionary<String, Object> card = new Dictionary<string, object>();
+                    card.Add("number", "4242424242424242");
+                    card.Add("exp_month", 4);
+                    card.Add("exp_year", 2022);
+                    card.Add("cvc", "314");
+                    Dictionary<String, Object> param = new Dictionary<string, object>();
+                    param.Add("type", "card");
+                    param.Add("card", card);
+
+                    //Stripe.PaymentMethodCard
+                    Stripe.PaymentMethod paymentMethod = new Stripe.PaymentMethod();
+                    Stripe.PaymentMethodCard paywith = new Stripe.PaymentMethodCard();
+                    //var req = await stripe.createPaymentMethod();
+                    StripeClient stripeClient = new StripeClient();
+                    
+
+                    string CardNo = cardHolderNumber.Text.Trim();
                         string expMonth = cardExpMonth.Text.Trim();
                         string expYear = cardExpYear.Text.Trim();
                         string cardCvv = cardCVV.Text.Trim();
@@ -1899,26 +2003,30 @@ namespace MTYD.ViewModel
                         stripeOption.ExpMonth = Convert.ToInt64(expMonth);
                         stripeOption.ExpYear = Convert.ToInt64(expYear);
                         stripeOption.Cvc = cardCvv;
-
+                        
+                        
                         Debug.WriteLine("step 2 reached");
                         // Step 2: Assign card to token object
                         TokenCreateOptions stripeCard = new TokenCreateOptions();
                         stripeCard.Card = stripeOption;
-
+                    
                         TokenService service = new TokenService();
                         Stripe.Token newToken = service.Create(stripeCard);
-
+                   
                         Debug.WriteLine("step 3 reached");
                         // Step 3: Assign the token to the soruce 
                         var option = new SourceCreateOptions();
                         option.Type = SourceType.Card;
                         option.Currency = "usd";
                         option.Token = newToken.Id;
-
+                    
                         var sourceService = new SourceService();
                         Source source = sourceService.Create(option);
 
-                        Debug.WriteLine("step 4 reached");
+                    source.ClientSecret = clientSec;
+                    //source.Card
+
+                    Debug.WriteLine("step 4 reached");
                         // Step 4: Create customer
                         CustomerCreateOptions customer = new CustomerCreateOptions();
                         customer.Name = cardHolderName.Text.Trim();
@@ -1931,15 +2039,16 @@ namespace MTYD.ViewModel
                             cardHolderUnit.Text = "";
                         }
                         customer.Address = new AddressOptions { City = cardCity.Text.Trim(), Country = Constant.Contry, Line1 = cardHolderAddress.Text.Trim(), Line2 = cardHolderUnit.Text.Trim(), PostalCode = cardZip.Text.Trim(), State = cardState.Text.Trim() };
-
+                        
+                        
                         var customerService = new CustomerService();
                         var cust = customerService.Create(customer);
-
+                   
                         Debug.WriteLine("step 5 reached");
                         // Step 5: Charge option
                         var chargeOption = new ChargeCreateOptions();
                         chargeOption.Amount = (long)RemoveDecimalFromTotalAmount(total);
-
+                   
                         Debug.WriteLine("hopefully correct total: " + total);
                         chargeOption.Currency = "usd";
                         chargeOption.ReceiptEmail = cardHolderEmail.Text.ToLower().Trim();
@@ -1954,7 +2063,9 @@ namespace MTYD.ViewModel
                         Debug.WriteLine("step 6 reached");
                         // Step 6: charge the customer COMMENTED OUT FOR TESTING, backend already charges stripe so we don't have to do it here
                         var chargeService = new ChargeService();
+                    
                         Charge charge = chargeService.Create(chargeOption);
+                        //charge.PaymentIntent = (PaymentIntent)payIntent;
                         Debug.WriteLine("charge: " + charge.ToString());
                         Debug.WriteLine("charge id: " + charge.ToString().Substring(charge.ToString().IndexOf("id") + 3, charge.ToString().IndexOf(">") - charge.ToString().IndexOf("id") - 3));
                         //chargeId = charge.ToString().Substring(charge.ToString().IndexOf("id") + 3, charge.ToString().IndexOf(">") - charge.ToString().IndexOf("id") - 3);
@@ -1983,7 +2094,7 @@ namespace MTYD.ViewModel
                             {
                                 spacer6.IsVisible = true;
                                 passLabel.IsVisible = true;
-                                spacer7.IsVisible = true;
+                                //spacer7.IsVisible = true;
                                 password.IsVisible = true;
                                 passwordEntry.IsVisible = true;
                                 spacer8.IsVisible = true;
@@ -2031,6 +2142,35 @@ namespace MTYD.ViewModel
                 await DisplayAlert("Alert!", ex.Message, "OK");
             }
         }
+
+        //private void pay()
+        //{
+        //    //if (!this.paymentIntentClientSecret)
+        //    //{
+        //    //    NSLog("PaymentIntent hasn\'t been created");
+        //    //    return;
+        //    //}
+        //    STPPaymentMethodCardParams* cardParams = this.cardTextField.cardParams;
+        //    STPPaymentMethodParams* paymentMethodParams = STPPaymentMethodParams.paramsWithCard(cardParams) billingDetails(null) metadata(null);
+        //    STPPaymentIntentParams* paymentIntentParams = STPPaymentIntentParams.alloc().initWithClientSecret(this.paymentIntentClientSecret);
+        //    paymentIntentParams.paymentMethodParams = paymentMethodParams;
+        //    STPPaymentHandler* paymentHandler = STPPaymentHandler.sharedHandler();
+        //    paymentHandler.confirmPayment(paymentIntentParams) withAuthenticationContext(this) completion((status, paymentIntent, error) => {
+        //        dispatch_async(dispatch_get_main_queue(), () => {
+        //            switch (status)
+        //            {
+        //                case STPPaymentHandlerActionStatusFailed:
+        //                    this.displayAlertWithTitle("Payment failed") message((error.localizedDescription ? null : "")) restartDemo(false);
+        //                case STPPaymentHandlerActionStatusCanceled:
+        //                    this.displayAlertWithTitle("Payment canceled") message((error.localizedDescription ? null : "")) restartDemo(false);
+        //                case STPPaymentHandlerActionStatusSucceeded:
+        //                    this.displayAlertWithTitle("Payment succeeded") message((paymentIntent.description ? null : "")) restartDemo(true);
+        //                default:
+        //                    break;
+        //            }
+        //        });
+        //    });
+        //}
 
         // FUNCTION  3:
         public int RemoveDecimalFromTotalAmount(string amount)
@@ -2479,10 +2619,41 @@ namespace MTYD.ViewModel
             }
         }
 
-        private async void OnAddressChanged(object sender, EventArgs eventArgs)
+        private string _addressText2;
+        public string AddressText2
         {
-            if (((Entry)sender).Equals(AddressEntry))
+            get => _addressText2;
+            set
             {
+                if (_addressText2 != value)
+                {
+                    _addressText2 = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        string origAdd = "";
+        string origUnit = "";
+        string origCity = "";
+        string origState = "";
+        string origZip = "";
+
+        //added async
+        private async void OnAddressChanged(object sender, TextChangedEventArgs eventArgs)
+        {
+            Debug.WriteLine("onaddresschanged entered with: " + ((Entry)sender).Placeholder);
+            //if (((Entry)sender).Equals(AddressEntry) && onCardAdd == true)
+            //{
+            //    Debug.WriteLine("first if of onAddressChanged");
+            //    var ent = (Entry)sender;
+            //    ent.Text = eventArgs.OldTextValue;
+            //    return;
+            //}
+
+            if (((Entry)sender).Equals(AddressEntry) && onCardAdd == false)
+            {
+                Debug.WriteLine("second if of onAddressChanged");
                 paymentStack.IsVisible = false;
                 addressList.IsVisible = true;
                 UnitCity.IsVisible = false;
@@ -2492,9 +2663,13 @@ namespace MTYD.ViewModel
             }
             else
             {
+                //jonathan's code
+                // Debug.WriteLine("third if of onAddressChanged");
+                // addr.OnAddressChanged(addressList2, Addresses, _addressText2);
+
                 addressListFrame.IsVisible = true;
                 addressList2.IsVisible = true;
-                CityStateZip.IsVisible = false;
+                cardStateZip.IsVisible = false;
                 addressList2.ItemsSource = await addr.GetPlacesPredictionsAsync(AddressEntry.Text);
                 //addr.OnAddressChanged(addressList2, Addresses, _addressText);
             }
@@ -2508,8 +2683,12 @@ namespace MTYD.ViewModel
             }
             else
             {
-                //addressListFrame.IsVisible = true;
-                //addr.addressEntryFocused(addressList2, new Grid[] { CityStateZip });
+                if (((Entry)sender).Equals(cardHolderAddress))
+                    onCardAdd = true;
+
+                //commented out in ashley's code
+                // addressListFrame.IsVisible = true;
+                // addr.addressEntryFocused(addressList2, new Grid[] { CityStateZip });
             }
         }
 
@@ -2521,8 +2700,10 @@ namespace MTYD.ViewModel
             }
             else
             {
+                if (((Entry)sender).Equals(cardHolderAddress))
+                    onCardAdd = false;
                 addressListFrame.IsVisible = false;
-                addr.addressEntryUnfocused(addressList2, new Grid[] { UnitGrid, CityStateZip });
+                addr.addressEntryUnfocused(addressList2, new Grid[] { cardUnitCity, cardStateZip });
             }
         }
 
@@ -2537,11 +2718,11 @@ namespace MTYD.ViewModel
             }
             else
             {
-                addr.addressSelected(addressList2, new Grid[] { UnitGrid, CityStateZip }, cardHolderAddress, cardCity, cardState, cardZip);
+                addr.addressSelected(addressList2, new Grid[] { cardUnitCity, cardStateZip }, cardHolderAddress, cardCity, cardState, cardZip);
                 addressListFrame.IsVisible = false;
                 addressList2.IsVisible = false;
-                UnitGrid.IsVisible = true;
-                CityStateZip.IsVisible = true;
+                cardUnitCity.IsVisible = true;
+                cardStateZip.IsVisible = true;
             }
         }
     }
