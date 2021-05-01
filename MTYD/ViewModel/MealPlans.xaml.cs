@@ -465,6 +465,10 @@ namespace MTYD.ViewModel
 
 
             string itemsStr = (info_obj["result"])[selectedIndex]["items"].ToString();
+            addressList.IsVisible = false;
+            UnitCityState.IsVisible = true;
+            ZipPhone.IsVisible = true;
+
             Console.WriteLine("items: " + itemsStr);
             Console.WriteLine("name: " + itemsStr.Substring(itemsStr.IndexOf("itm_business_uid") + 20, 10));
             Console.WriteLine("item_uid: " + itemsStr.Substring(itemsStr.IndexOf("item_uid") + 12, 10));
@@ -1132,18 +1136,9 @@ namespace MTYD.ViewModel
 
         private async void OnAddressChanged(object sender, TextChangedEventArgs eventArgs)
         {
-            Debug.WriteLine("onaddresschanged entered with: " + ((Entry)sender).Placeholder);
-            //if (((Entry)sender).Equals(AddressEntry) && onCardAdd == true)
-            //{
-            //    Debug.WriteLine("first if of onAddressChanged");
-            //    var ent = (Entry)sender;
-            //    ent.Text = eventArgs.OldTextValue;
-            //    return;
-            //}
-            Debug.WriteLine("second if of onAddressChanged");
             addressList.IsVisible = true;
-            UnitCity.IsVisible = false;
-            StateZip.IsVisible = false;
+            UnitCityState.IsVisible = false;
+            ZipPhone.IsVisible = false;
             addressList.ItemsSource = await addr.GetPlacesPredictionsAsync(AddressEntry.Text);
             //addr.OnAddressChanged(addressList, Addresses, _addressText);
         }
@@ -1321,5 +1316,7 @@ namespace MTYD.ViewModel
             Application.Current.MainPage = new MainPage();
         }
         //end of menu functions
+        
+
     }
 }

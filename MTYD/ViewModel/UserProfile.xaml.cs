@@ -263,6 +263,9 @@ namespace MTYD.ViewModel
                 ZipEntry.Text = (info_obj["result"])[0]["customer_zip"].ToString();
                 PhoneEntry.Text = (info_obj["result"])[0]["customer_phone_num"].ToString();
 
+                addressList.IsVisible = false;
+                UnitCityState.IsVisible = true;
+                ZipPhone.IsVisible = true;
             }
         }
 
@@ -742,13 +745,16 @@ namespace MTYD.ViewModel
 
         private async void OnAddressChanged(object sender, EventArgs eventArgs)
         {
+            addressList.IsVisible = true;
+            UnitCityState.IsVisible = false;
+            ZipPhone.IsVisible = false;
             addressList.ItemsSource = await addr.GetPlacesPredictionsAsync(AddressEntry.Text);
             //addr.OnAddressChanged(addressList, Addresses, _addressText);
         }
 
         private void addressEntryFocused(object sender, EventArgs eventArgs)
         {
-            addr.addressEntryFocused(addressList, new Grid[] { UnitCityState, ZipPhone });
+            //addr.addressEntryFocused(addressList, new Grid[] { UnitCityState, ZipPhone });
         }
 
         private void addressEntryUnfocused(object sender, EventArgs eventArgs)
@@ -759,7 +765,9 @@ namespace MTYD.ViewModel
         async void addressSelected(System.Object sender, System.EventArgs e)
         {
             addr.addressSelected(addressList, new Grid[] { UnitCityState, ZipPhone }, AddressEntry, CityEntry, StateEntry, ZipEntry);
-
+            addressList.IsVisible = false;
+            UnitCityState.IsVisible = true;
+            ZipPhone.IsVisible = true;
         }
 
         //start of menu functions

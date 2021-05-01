@@ -157,7 +157,7 @@
                         <Entry x:Name="PhoneEntry" MaxLength="10" Keyboard="Numeric" FontSize="17" TextColor="Black" Placeholder="Phone Number*" PlaceholderColor="Black"
                                />
 
-                   </Frame>
+                    </Frame>
 
                 </Grid>
 

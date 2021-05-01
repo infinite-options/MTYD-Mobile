@@ -162,6 +162,9 @@ namespace MTYD.ViewModel
                 clickedDeliv(proceedButton, e);
             }
 
+            addressList.IsVisible = false;
+            UnitCity.IsVisible = true;
+            StateZip.IsVisible = true;
         }
 
         public PaymentPage(string Fname, string Lname, string email)
@@ -1273,6 +1276,10 @@ namespace MTYD.ViewModel
                 //if (Preferences.Get(purchaseDescription, "") != "")
                 //    cardDescription.Text = Preferences.Get(purchaseDescription, "");
             }
+            addressListFrame.IsVisible = false;
+            addressList2.IsVisible = false;
+            cardUnitCity.IsVisible = true;
+            cardStateZip.IsVisible = true;
         }
 
         protected async Task setPaymentInfo()
@@ -2719,7 +2726,7 @@ namespace MTYD.ViewModel
                 if (((Entry)sender).Equals(cardHolderAddress))
                     onCardAdd = false;
                 addressListFrame.IsVisible = false;
-                addr.addressEntryUnfocused(addressList2, new Grid[] { UnitGrid, CityStateZip });
+                addr.addressEntryUnfocused(addressList2, new Grid[] { cardUnitCity, cardStateZip });
             }
         }
 
@@ -2734,11 +2741,11 @@ namespace MTYD.ViewModel
             }
             else
             {
-                addr.addressSelected(addressList2, new Grid[] { UnitGrid, CityStateZip }, cardHolderAddress, cardCity, cardState, cardZip);
+                addr.addressSelected(addressList2, new Grid[] { cardUnitCity, cardStateZip }, cardHolderAddress, cardCity, cardState, cardZip);
                 addressListFrame.IsVisible = false;
                 addressList2.IsVisible = false;
-                UnitGrid.IsVisible = true;
-                CityStateZip.IsVisible = true;
+                cardUnitCity.IsVisible = true;
+                cardStateZip.IsVisible = true;
             }
         }
 
