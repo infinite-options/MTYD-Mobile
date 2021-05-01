@@ -151,7 +151,7 @@ namespace MTYD.ViewModel
 
             if (Device.RuntimePlatform == Device.iOS)
             {
-                heading.WidthRequest = width / 3;
+                //heading.WidthRequest = width / 3;
 
                 //congratsTitle.FontSize = width / 25;
                 //expectTitle.FontSize = width / 30;
@@ -186,7 +186,7 @@ namespace MTYD.ViewModel
             }
             else //Android
             {
-                heading.WidthRequest = width / 3;
+                //heading.WidthRequest = width / 3;
 
                 //congratsTitle.FontSize = width / 35;
                 //expectTitle.FontSize = width / 35;

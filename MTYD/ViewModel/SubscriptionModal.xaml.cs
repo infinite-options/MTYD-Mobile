@@ -297,7 +297,7 @@ namespace MTYD.ViewModel
             meals3.Source = "meal_num_button_yellow.png";
             meals4.Source = "meal_num_button_yellow.png";
             meals5.Source = "meal_num_button_yellow.png";
-            Preferences.Set("mealSelected", "1");
+            Preferences.Set("mealSelected", "2");
             mealSelected = int.Parse(meals1Text.Text.Substring(0, 1));
             if (deliverySelected != 0)
             {
@@ -323,7 +323,7 @@ namespace MTYD.ViewModel
             meals3.Source = "meal_num_button_yellow.png";
             meals4.Source = "meal_num_button_yellow.png";
             meals5.Source = "meal_num_button_yellow.png";
-            Preferences.Set("mealSelected", "2");
+            Preferences.Set("mealSelected", "3");
             mealSelected = int.Parse(meals2Text.Text.Substring(0, 1));
             if (deliverySelected != 0)
             {
@@ -348,7 +348,7 @@ namespace MTYD.ViewModel
             meals3.Source = "meal_num_button_orange.png";
             meals4.Source = "meal_num_button_yellow.png";
             meals5.Source = "meal_num_button_yellow.png";
-            Preferences.Set("mealSelected", "3");
+            Preferences.Set("mealSelected", "4");
             mealSelected = int.Parse(meals3Text.Text.Substring(0, 1));
             if (deliverySelected != 0)
             {
@@ -373,7 +373,7 @@ namespace MTYD.ViewModel
             meals3.Source = "meal_num_button_yellow.png";
             meals4.Source = "meal_num_button_orange.png";
             meals5.Source = "meal_num_button_yellow.png";
-            Preferences.Set("mealSelected", "4");
+            Preferences.Set("mealSelected", "5");
             mealSelected = int.Parse(meals4Text.Text.Substring(0, 1));
             if (deliverySelected != 0)
             {
@@ -398,7 +398,7 @@ namespace MTYD.ViewModel
             meals3.Source = "meal_num_button_yellow.png";
             meals4.Source = "meal_num_button_yellow.png";
             meals5.Source = "meal_num_button_orange.png";
-            Preferences.Set("mealSelected", "5");
+            Preferences.Set("mealSelected", "6");
             mealSelected = int.Parse(meals5Text.Text.Substring(0, 1));
             if (deliverySelected != 0)
             {
@@ -1078,6 +1078,8 @@ namespace MTYD.ViewModel
                     //testing
                     updated.cc_num = cc_num;
                     updated.cc_exp_date = cc_exp_date;
+                    //updated.cc_exp_date = "222";
+
                     //updated.cc_exp_year = cc_exp_year;
                     //updated.cc_exp_month = cc_exp_month;
                     updated.cc_cvv = cc_cvv;
@@ -1086,7 +1088,7 @@ namespace MTYD.ViewModel
                     updated.new_item_id = Preferences.Get("item_uid", "");
                     updated.customer_email = cust_email;
                     updated.cc_zip = cc_zip;
-                    updated.start_delivery_date = "";
+                    updated.start_delivery_date = startDeliv;
 
                     List<Item> list1 = new List<Item>();
                     Item item1 = new Item();
