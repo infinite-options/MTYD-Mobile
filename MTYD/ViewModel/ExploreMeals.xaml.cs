@@ -191,7 +191,8 @@ namespace MTYD.ViewModel
                 orangeBox.Margin = new Thickness(0, -height / 2.2, 0, 0);
                 orangeBox.CornerRadius = height / 40;
                 //heading.FontSize = width / 32;
-                heading.Margin = new Thickness(0, 0, 0, 30);
+                //heading.Margin = new Thickness(0, 0, 0, 30);
+                heading.WidthRequest = width / 5;
 
 
                 popUpFrame.Margin = new Thickness(0, height / 10, 0, 0);
