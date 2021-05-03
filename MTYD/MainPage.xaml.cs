@@ -165,7 +165,7 @@ namespace MTYD
             orangeBox.HeightRequest = height / 2;
             orangeBox.Margin = new Thickness(0, -height / 2.2, 0, 0);
             orangeBox.CornerRadius = height / 40;
-            heading.WidthRequest = width / 3;
+            heading.WidthRequest = width / 5;
             pfp.HeightRequest = width / 20;
             pfp.WidthRequest = width / 20;
             pfp.CornerRadius = (int)(width / 40);

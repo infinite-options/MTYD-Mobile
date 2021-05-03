@@ -281,6 +281,9 @@
     <BundleResource Include="Resources\MPtrash.png" />
     <BundleResource Include="Resources\MPbox.png" />
     <BundleResource Include="Resources\MPplate.png" />
+    <BundleResource Include="Resources\login_apple.png" />
+    <BundleResource Include="Resources\login_facebook.png" />
+    <BundleResource Include="Resources\login_google.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AppleSignIn\" />

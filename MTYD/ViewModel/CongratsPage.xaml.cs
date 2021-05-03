@@ -129,6 +129,8 @@ namespace MTYD.ViewModel
             pfp.CornerRadius = (int)(width / 40);
             innerGrid.Margin = new Thickness(0, 0, 23, 27);
 
+            fade.Margin = new Thickness(0, -height / 3, 0, 0);
+
             if (Preferences.Get("profilePicLink", "") == "")
             {
                 string userInitials = "";
@@ -285,7 +287,7 @@ namespace MTYD.ViewModel
             await Navigation.PushAsync(new Select(passZone, cust_firstName, cust_lastName, cust_email));
         }
 
-        /*
+        
         public async void finishClicked(object sender, EventArgs e)
         {
             if (passwordEntry.Text != null && passwordEntry.Text == confirmPasswordEntry.Text)
@@ -319,6 +321,8 @@ namespace MTYD.ViewModel
                 await DisplayAlert("Error", "Please enter a password or click SKIP.", "OK");
                 return;
             }
+
+            
             //if (passwordEntry.Text != null)
             //{
             //    directSignUp.password = passwordEntry.Text.Trim();
@@ -343,7 +347,7 @@ namespace MTYD.ViewModel
             //    return;
             //}
 
-            //// Setting request for USPS API
+            // Setting request for USPS API
             //XDocument requestDoc = new XDocument(
             //    new XElement("AddressValidateRequest",
             //    new XAttribute("USERID", "400INFIN1745"),
@@ -428,7 +432,7 @@ namespace MTYD.ViewModel
             //    //await tagUser(Preferences.Get(savedEmail, ""), Preferences.Get(savedZip, ""));
             //    //SignUpNewUser(sender, e);
             //}
-        }*/
+        }
 
         public static string GetXMLElement(XElement element, string name)
         {
@@ -611,5 +615,11 @@ namespace MTYD.ViewModel
             Application.Current.MainPage = new MainPage();
         }
         //end of menu functions
+
+        void createAccountClicked(System.Object sender, System.EventArgs e)
+        {
+            fade.IsVisible = true;
+            createAccountGrid.IsVisible = true;
+        }
     }
 }

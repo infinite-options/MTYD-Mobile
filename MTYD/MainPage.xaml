@@ -47,7 +47,7 @@
                             Text="View Meals" TextColor="White" FontSize="20" Clicked="clickedExplore"/>
 
                     <BoxView HeightRequest="20"/>
-
+                    
                 </StackLayout>
 
                 <StackLayout x:Name="MenuBar">
@@ -90,6 +90,27 @@
 
                         </Grid>
                     </Grid>
+
+                    <Grid x:Name="openedMenu" IsVisible="false">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                    
+                            <BoxView x:Name="orangeBox2" Grid.RowSpan="2" BackgroundColor="#F26522" HorizontalOptions="Fill"/>
+                            <Image x:Name="heading2" Source="heading.png" Margin="0,0,0,10" VerticalOptions="End" HorizontalOptions="Center"/>               
+
+                            <ImageButton x:Name="menu2" Source="closeMenu.png" VerticalOptions="End" HorizontalOptions="Start" BackgroundColor="Transparent" Clicked="clickedCloseMenu"/>
+
+                            <StackLayout Grid.Row="1" Margin="0,0,0,25">
+                                <Forms9Patch:Button Text="    Home" FontAttributes="Bold" OutlineColor="Transparent" FontSize="20" HorizontalTextAlignment="Start" HorizontalOptions="Fill" TextColor="White" Clicked="clickedLanding"/>
+                                <Forms9Patch:Button Text="    Change Meal Plans" FontAttributes="Bold" OutlineColor="Transparent" FontSize="20" HorizontalTextAlignment="Start" HorizontalOptions="Fill" TextColor="White" Clicked="clickedMealPlan"/>
+                                <Forms9Patch:Button Text="    Add Subscriptions" FontAttributes="Bold" OutlineColor="Transparent" FontSize="20" HorizontalTextAlignment="Start" HorizontalOptions="Fill" TextColor="White" Clicked="clickedSubscription"/>
+                                <Forms9Patch:Button Text="    Select Meals" FontAttributes="Bold" OutlineColor="Transparent" FontSize="20" HorizontalTextAlignment="Start" HorizontalOptions="Fill" TextColor="White" Clicked="clickedSelect"/>
+                                <Forms9Patch:Button Text="    Log Out" FontAttributes="Bold" OutlineColor="Transparent" FontSize="20" HorizontalTextAlignment="Start" HorizontalOptions="Fill" TextColor="White" Clicked="clickedLogout"/>
+                            </StackLayout>
+
+                        </Grid>
                 </StackLayout>
 
                 <StackLayout x:Name="LoginPage">
@@ -105,29 +126,11 @@
                             <ColumnDefinition Width="1*"/>
                         </Grid.ColumnDefinitions>
 
-                        <Frame x:Name="appleSignupFrame" Grid.Row="0" BackgroundColor="#516de5" HasShadow="False" CornerRadius="15" HorizontalOptions="Center" Padding="10">
-                            <StackLayout Orientation="Horizontal">
-                                <Image Source="appleicon3.png" VerticalOptions="Center" Margin="5, 0, 5, 0"/>
-                                <Label x:Name="appleSignupText" Text="Continue with Apple" TextColor="White" VerticalOptions="Center"/>
-                            </StackLayout>
-                        </Frame>
-                        <Button Grid.Row="0" x:Name="appleSignupButton" BackgroundColor="Transparent" CornerRadius="15" HorizontalOptions="Center" Clicked="appleLoginButtonClicked"/>
+                        <ImageButton Grid.Row="0" x:Name="appleSignupButton" Source="login_apple.png" HorizontalOptions="Center" Clicked="appleLoginButtonClicked"/>
 
-                        <Frame x:Name="fbSignupFrame" Grid.Row="1" BackgroundColor="#4c5a91" HasShadow="False" CornerRadius="15" HorizontalOptions="Center" Padding="10">
-                            <StackLayout Orientation="Horizontal">
-                                <Image Source="facebookicon3.png" VerticalOptions="Center" Margin="5, 0, 5, 0"/>
-                                <Label x:Name="fbSignupText" Text="Continue with Facebook" TextColor="White" VerticalOptions="Center"/>
-                            </StackLayout>
-                        </Frame>
-                        <Button Grid.Row="1" x:Name="fbSignupButton" BackgroundColor="Transparent" CornerRadius="15" HorizontalOptions="Center" Clicked="facebookLoginButtonClicked"/>
+                        <ImageButton Grid.Row="1" x:Name="fbSignupButton" Source="login_facebook.png" HorizontalOptions="Center" Clicked="facebookLoginButtonClicked"/>
 
-                        <Frame x:Name="googleSignupFrame" Grid.Row="2" BackgroundColor="#db4437" HasShadow="False" CornerRadius="15" HorizontalOptions="Center" Padding="10">
-                            <StackLayout Orientation="Horizontal">
-                                <Image Source="googleicon3.png" VerticalOptions="Center" Margin="5, 0, 5, 0"/>
-                                <Label x:Name="googleSignupText" Text="Continue with Google" TextColor="White" VerticalOptions="Center"/>
-                            </StackLayout>
-                        </Frame>
-                        <Button Grid.Row="2" x:Name="googleSignupButton" BackgroundColor="Transparent" CornerRadius="15" HorizontalOptions="Center" Clicked="googleLoginButtonClicked"/>
+                        <ImageButton Grid.Row="2" x:Name="googleSignupButton" Source="login_google.png" HorizontalOptions="Center" Clicked="googleLoginButtonClicked"/>
                     </Grid>
 
                     <Label Text="OR" HorizontalOptions="Center" TextColor="Black" FontAttributes="Bold" FontSize="25" Margin="0, 20"></Label>
@@ -238,7 +241,7 @@
                                 <ColumnDefinition Width="2*"/>
                             </Grid.ColumnDefinitions>
 
-                            <ImageButton Grid.Column="0" Source="button_search.png" Aspect="AspectFit" HorizontalOptions="End" Clicked="clickedExplore"/>
+                            <ImageButton Grid.Column="0" Source="button_search.png" WidthRequest="115" Aspect="AspectFit" HorizontalOptions="End" Clicked="clickedExplore"/>
 
                             <Grid Grid.Column="1" VerticalOptions="Center">
                                 <Grid.RowDefinitions>
@@ -252,7 +255,7 @@
                             </Grid>
                         </Grid>
 
-                        <Image Grid.Row="1" Source="path1.png"/>
+                        <Image Grid.Row="1" Source="path1.png" WidthRequest="215"/>
 
                         <Grid Grid.Row="2" ColumnSpacing="20">
                             <Grid.ColumnDefinitions>
@@ -260,7 +263,7 @@
                                 <ColumnDefinition Width="1*"/>
                             </Grid.ColumnDefinitions>
 
-                            <ImageButton Grid.Column="1" Source="button_card.png" Aspect="AspectFit" HorizontalOptions="Start" Clicked="clickedPurchase"/>
+                            <ImageButton Grid.Column="1" Source="button_card.png" WidthRequest="115" Aspect="AspectFit" HorizontalOptions="Start" Clicked="clickedPurchase"/>
 
                             <Grid Grid.Column="0" VerticalOptions="Center">
                                 <Grid.RowDefinitions>
@@ -274,7 +277,7 @@
                             </Grid>
                         </Grid>
 
-                        <Image Grid.Row="3" Source="path2.png"/>
+                        <Image Grid.Row="3" Source="path2.png" WidthRequest="250"/>
 
                         <Grid Grid.Row="4" ColumnSpacing="20">
                             <Grid.ColumnDefinitions>
@@ -282,7 +285,7 @@
                                 <ColumnDefinition Width="2*"/>
                             </Grid.ColumnDefinitions>
 
-                            <ImageButton Grid.Column="0" Source="button_choose.png" Aspect="AspectFit" HorizontalOptions="End" Clicked="clickedExplore"/>
+                            <ImageButton Grid.Column="0" Source="button_choose.png" WidthRequest="115" Aspect="AspectFit" HorizontalOptions="End" Clicked="clickedExplore"/>
 
                             <Grid Grid.Column="1" VerticalOptions="Center">
                                 <Grid.RowDefinitions>
@@ -296,7 +299,7 @@
                             </Grid>
                         </Grid>
 
-                        <Image Grid.Row="5" Source="path3.png"/>
+                        <Image Grid.Row="5" Source="path3.png" WidthRequest="235"/>
 
                         <Grid Grid.Row="6" ColumnSpacing="20" Margin="0, -35, 0, 0">
                             <Grid.ColumnDefinitions>
@@ -304,7 +307,7 @@
                                 <ColumnDefinition Width="1*"/>
                             </Grid.ColumnDefinitions>
 
-                            <ImageButton Grid.Column="1" Source="button_deliver.png" Aspect="AspectFit" HorizontalOptions="Start"/>
+                            <ImageButton Grid.Column="1" Source="button_deliver.png" WidthRequest="115" Aspect="AspectFit" HorizontalOptions="Start"/>
 
                             <Grid Grid.Column="0" VerticalOptions="Center">
                                 <Grid.RowDefinitions>

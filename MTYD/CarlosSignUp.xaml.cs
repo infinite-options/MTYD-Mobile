@@ -47,62 +47,15 @@ namespace MTYD
             orangeBox.HeightRequest = height / 2;
             orangeBox.Margin = new Thickness(0, -height / 2.2, 0, 0);
             orangeBox.CornerRadius = height / 40;
-            heading.WidthRequest = width / 3;
+            heading.WidthRequest = width / 5;
             fade.Margin = new Thickness(0, -height / 3, 0, 0);
+            addressList.HeightRequest = width / 5;
 
             if (Device.RuntimePlatform == Device.iOS)
             {
-                appleSignupFrame.WidthRequest = width / 3.5;
-                appleSignupFrame.HeightRequest = width / 25;
-                appleSignupButton.WidthRequest = width / 3.5;
-                appleSignupButton.HeightRequest = width / 25;
-                appleSignupText.FontSize = width / 50;
-                fbSignupFrame.WidthRequest = width / 3.5;
-                fbSignupFrame.HeightRequest = width / 25;
-                fbSignupButton.WidthRequest = width / 3.5;
-                fbSignupButton.HeightRequest = width / 25;
-                fbSignupText.FontSize = width / 50;
-                googleSignupFrame.WidthRequest = width / 3.5;
-                googleSignupFrame.HeightRequest = width / 25;
-                googleSignupButton.WidthRequest = width / 3.5;
-                googleSignupButton.HeightRequest = width / 25;
-                googleSignupText.FontSize = width / 50;
-
-                addressList.HeightRequest = width / 5;
-
-                //backButton.WidthRequest = width / 8;
-                //backButton.HeightRequest = width / 17;
-                //backButton.CornerRadius = (int)(width / 34);
-
-                //SignUpButton.WidthRequest = width / 8;
-                //SignUpButton.HeightRequest = width / 17;
-                //SignUpButton.CornerRadius = (int)(width / 34);
             }
             else //Android
             {
-                appleSignupFrame.WidthRequest = width / 5;
-                appleSignupFrame.HeightRequest = width / 35;
-                appleSignupButton.WidthRequest = width / 5;
-                appleSignupButton.HeightRequest = width / 35;
-                appleSignupText.FontSize = width / 65;
-                fbSignupFrame.WidthRequest = width / 5;
-                fbSignupFrame.HeightRequest = width / 35;
-                fbSignupButton.WidthRequest = width / 5;
-                fbSignupButton.HeightRequest = width / 35;
-                fbSignupText.FontSize = width / 65;
-                googleSignupFrame.WidthRequest = width / 5;
-                googleSignupFrame.HeightRequest = width / 35;
-                googleSignupButton.WidthRequest = width / 5;
-                googleSignupButton.HeightRequest = width / 35;
-                googleSignupText.FontSize = width / 65;
-
-                //backButton.WidthRequest = width / 10;
-                //backButton.HeightRequest = width / 25;
-                //backButton.CornerRadius = (int)(width / 50);
-
-                //SignUpButton.WidthRequest = width / 10;
-                //SignUpButton.HeightRequest = width / 25;
-                //SignUpButton.CornerRadius = (int)(width / 50);
             }
         }
 
@@ -434,6 +387,7 @@ namespace MTYD
             else
             {
                 await DisplayAlert("Error", "Please enter your address", "OK");
+                return;
             }
 
             if (AptEntry.Text != null)
@@ -448,6 +402,7 @@ namespace MTYD
             else
             {
                 await DisplayAlert("Error", "Please enter your city", "OK");
+                return;
             }
 
             if (StateEntry.Text != null)
@@ -457,6 +412,7 @@ namespace MTYD
             else
             {
                 await DisplayAlert("Error", "Please enter your state", "OK");
+                return;
             }
 
             if (ZipEntry.Text != null)
@@ -466,6 +422,7 @@ namespace MTYD
             else
             {
                 await DisplayAlert("Error", "Please enter your zipcode", "OK");
+                return;
             }
 
             if (PhoneEntry.Text != null && PhoneEntry.Text.Length == 10)
@@ -475,6 +432,7 @@ namespace MTYD
             else
             {
                 await DisplayAlert("Error", "Please enter your phone number", "OK");
+                return;
             }
 
             // Setting request for USPS API
