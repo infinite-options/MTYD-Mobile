@@ -117,8 +117,8 @@ namespace MTYD.ViewModel
 
         private void checkPlatform(double height, double width)
         {
-            orangeBox.HeightRequest = height / 2;
-            orangeBox.Margin = new Thickness(0, -height / 2.2, 0, 0);
+            orangeBox.HeightRequest = height / 2.3;
+            orangeBox.Margin = new Thickness(0, -height / 2.6, 0, 0);
             orangeBox.CornerRadius = height / 40;
             heading.WidthRequest = width / 5;
 

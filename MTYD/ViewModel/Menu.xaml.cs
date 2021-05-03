@@ -214,7 +214,7 @@ namespace MTYD.ViewModel
 
         async void clickedExplore(System.Object sender, System.EventArgs e)
         {
-            await Navigation.PushAsync(new MealPlanExp(firstName, lastName, email), false);
+            await Navigation.PushAsync(new MealPlansExperiment(firstName, lastName, email), false);
             Navigation.RemovePage(this.Navigation.NavigationStack[this.Navigation.NavigationStack.Count - 2]);
         }
 

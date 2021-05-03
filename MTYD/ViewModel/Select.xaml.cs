@@ -197,10 +197,11 @@ namespace MTYD.ViewModel
                 orangeBox2.HeightRequest = height / 2;
                 orangeBox2.Margin = new Thickness(0, -height / 2.2, 0, 0);
                 orangeBox2.CornerRadius = height / 40;
-                heading2.WidthRequest = width / 5.3;
+                heading2.WidthRequest = width / 5;
                 menu2.HeightRequest = width / 25;
                 menu2.WidthRequest = width / 25;
                 menu2.Margin = new Thickness(25, 0, 0, 30);
+                heading.WidthRequest = width / 5;
                 //open menu adjustments
 
                 orangeBox.HeightRequest = height / 2;
@@ -209,8 +210,8 @@ namespace MTYD.ViewModel
                 //orangeBox2.HeightRequest = height / 2;
                 //orangeBox2.Margin = new Thickness(0, -height / 2.2, 0, 0);
                 //orangeBox2.CornerRadius = height / 40;
-                heading.FontSize = width / 32;
-                heading.Margin = new Thickness(0, 0, 0, 30);
+                //heading.FontSize = width / 32;
+                //heading.Margin = new Thickness(0, 0, 0, 30);
                 //heading2.WidthRequest = width / 5.3;
                 pfp.HeightRequest = width / 20;
                 pfp.WidthRequest = width / 20;

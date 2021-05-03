@@ -12,17 +12,8 @@
                     <BoxView x:Name="orangeBox" BackgroundColor="#F26522" HorizontalOptions="Fill"/>
                     <Image x:Name="heading" Source="heading.png" VerticalOptions="End" HorizontalOptions="Center"/>
 
-                    <!--<Grid x:Name="innerGrid" VerticalOptions="End" HorizontalOptions="End">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <ImageButton x:Name="pfp" BackgroundColor="LightGray" VerticalOptions="End" HorizontalOptions="End" Clicked="clickedPfp"/>
-                        <Label x:Name="initials" TextColor="Black" FontAttributes="Bold" VerticalOptions="Center"  HorizontalOptions="Center"/>
-                    </Grid>-->
-
                     <Button x:Name="backButton" Text="&lt; Back" TextColor="White" FontSize="Medium" FontAttributes="Bold" Margin="25, 10"
                             VerticalOptions="End" HorizontalOptions="Start" Clicked="BackClick"/>
-                        <!--<ImageButton x:Name="menu" Source="new_menu.png" VerticalOptions="End" HorizontalOptions="Start" Clicked="clickedMenu"/>-->
                 </Grid>
 
                 <Label Text="Sign up" HorizontalOptions="Center" FontAttributes="Bold" FontSize="Large" Margin="0, 20"/>
@@ -105,7 +96,13 @@
                             <ColumnDefinition Width="1*"/>
                         </Grid.ColumnDefinitions>
 
-                        <Frame x:Name="appleSignupFrame" Grid.Row="0" BackgroundColor="#516de5" HasShadow="False" CornerRadius="15" HorizontalOptions="Center" Padding="10">
+                        <ImageButton Grid.Row="0" x:Name="appleSignupButton" Source="login_apple.png" HorizontalOptions="Center" Clicked="appleSignupButtonClicked"/>
+
+                        <ImageButton Grid.Row="1" x:Name="fbSignupButton" Source="login_facebook.png" HorizontalOptions="Center" Clicked="fbSignupButtonClicked"/>
+
+                        <ImageButton Grid.Row="2" x:Name="googleSignupButton" Source="login_google.png" HorizontalOptions="Center" Clicked="googleSignupButtonClicked"/>
+
+                        <!--<Frame x:Name="appleSignupFrame" Grid.Row="0" BackgroundColor="#516de5" HasShadow="False" CornerRadius="15" HorizontalOptions="Center" Padding="10">
                             <StackLayout Orientation="Horizontal">
                                 <Image Source="appleicon3.png" VerticalOptions="Center" Margin="5, 0, 5, 0"/>
                                 <Label x:Name="appleSignupText" Text="Continue with Apple" TextColor="White" VerticalOptions="Center"/>
@@ -127,7 +124,7 @@
                                 <Label x:Name="googleSignupText" Text="Continue with Google" TextColor="White" VerticalOptions="Center"/>
                             </StackLayout>
                         </Frame>
-                        <Button Grid.Row="2" x:Name="googleSignupButton" BackgroundColor="Transparent" CornerRadius="15" HorizontalOptions="Center" Clicked="googleSignupButtonClicked"/>
+                        <Button Grid.Row="2" x:Name="googleSignupButton" BackgroundColor="Transparent" CornerRadius="15" HorizontalOptions="Center" Clicked="googleSignupButtonClicked"/>-->
                     </Grid>
 
             

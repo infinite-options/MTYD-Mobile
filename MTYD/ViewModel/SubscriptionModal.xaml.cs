@@ -218,10 +218,22 @@ namespace MTYD.ViewModel
         {
             if (Device.RuntimePlatform == Device.iOS)
             {
+                //open menu adjustments
+                orangeBox2.HeightRequest = height / 2;
+                orangeBox2.Margin = new Thickness(0, -height / 2.2, 0, 0);
+                orangeBox2.CornerRadius = height / 40;
+                heading2.WidthRequest = width / 5;
+                menu2.HeightRequest = width / 25;
+                menu2.WidthRequest = width / 25;
+                menu2.Margin = new Thickness(25, 0, 0, 30);
+                heading.WidthRequest = width / 5;
+                //heading adjustments
+
                 orangeBox.HeightRequest = height / 2;
                 orangeBox.Margin = new Thickness(0, -height / 2.2, 0, 0);
                 orangeBox.CornerRadius = height / 40;
-                heading.WidthRequest = width / 3;
+                //heading.FontSize = width / 32;
+                //heading.Margin = new Thickness(0, 0, 0, 30);
                 pfp.HeightRequest = width / 20;
                 pfp.WidthRequest = width / 20;
                 pfp.CornerRadius = (int)(width / 40);
@@ -250,10 +262,22 @@ namespace MTYD.ViewModel
             }
             else //android
             {
+                //open menu adjustments
+                orangeBox2.HeightRequest = height / 2;
+                orangeBox2.Margin = new Thickness(0, -height / 2.2, 0, 0);
+                orangeBox2.CornerRadius = height / 40;
+                heading2.WidthRequest = width / 5;
+                menu2.HeightRequest = width / 25;
+                menu2.WidthRequest = width / 25;
+                menu2.Margin = new Thickness(25, 0, 0, 30);
+                heading.WidthRequest = width / 5;
+                //heading adjustments
+
                 orangeBox.HeightRequest = height / 2;
                 orangeBox.Margin = new Thickness(0, -height / 2.2, 0, 0);
                 orangeBox.CornerRadius = height / 40;
-                heading.WidthRequest = width / 3;
+                //heading.FontSize = width / 45;
+                //heading.Margin = new Thickness(0, 0, 0, 40);
                 pfp.HeightRequest = width / 25;
                 pfp.WidthRequest = width / 25;
                 pfp.CornerRadius = (int)(width / 50);
@@ -273,7 +297,7 @@ namespace MTYD.ViewModel
             meals3.Source = "meal_num_button_yellow.png";
             meals4.Source = "meal_num_button_yellow.png";
             meals5.Source = "meal_num_button_yellow.png";
-            Preferences.Set("mealSelected", "1");
+            Preferences.Set("mealSelected", "2");
             mealSelected = int.Parse(meals1Text.Text.Substring(0, 1));
             if (deliverySelected != 0)
             {
@@ -299,7 +323,7 @@ namespace MTYD.ViewModel
             meals3.Source = "meal_num_button_yellow.png";
             meals4.Source = "meal_num_button_yellow.png";
             meals5.Source = "meal_num_button_yellow.png";
-            Preferences.Set("mealSelected", "2");
+            Preferences.Set("mealSelected", "3");
             mealSelected = int.Parse(meals2Text.Text.Substring(0, 1));
             if (deliverySelected != 0)
             {
@@ -324,7 +348,7 @@ namespace MTYD.ViewModel
             meals3.Source = "meal_num_button_orange.png";
             meals4.Source = "meal_num_button_yellow.png";
             meals5.Source = "meal_num_button_yellow.png";
-            Preferences.Set("mealSelected", "3");
+            Preferences.Set("mealSelected", "4");
             mealSelected = int.Parse(meals3Text.Text.Substring(0, 1));
             if (deliverySelected != 0)
             {
@@ -349,7 +373,7 @@ namespace MTYD.ViewModel
             meals3.Source = "meal_num_button_yellow.png";
             meals4.Source = "meal_num_button_orange.png";
             meals5.Source = "meal_num_button_yellow.png";
-            Preferences.Set("mealSelected", "4");
+            Preferences.Set("mealSelected", "5");
             mealSelected = int.Parse(meals4Text.Text.Substring(0, 1));
             if (deliverySelected != 0)
             {
@@ -374,7 +398,7 @@ namespace MTYD.ViewModel
             meals3.Source = "meal_num_button_yellow.png";
             meals4.Source = "meal_num_button_yellow.png";
             meals5.Source = "meal_num_button_orange.png";
-            Preferences.Set("mealSelected", "5");
+            Preferences.Set("mealSelected", "6");
             mealSelected = int.Parse(meals5Text.Text.Substring(0, 1));
             if (deliverySelected != 0)
             {
@@ -666,6 +690,8 @@ namespace MTYD.ViewModel
             }
             else
             {
+
+                //old code
                 if (shouldCharge == true)
                 {
                     string price = total.ToString();
@@ -1052,6 +1078,8 @@ namespace MTYD.ViewModel
                     //testing
                     updated.cc_num = cc_num;
                     updated.cc_exp_date = cc_exp_date;
+                    //updated.cc_exp_date = "222";
+
                     //updated.cc_exp_year = cc_exp_year;
                     //updated.cc_exp_month = cc_exp_month;
                     updated.cc_cvv = cc_cvv;
@@ -1060,7 +1088,7 @@ namespace MTYD.ViewModel
                     updated.new_item_id = Preferences.Get("item_uid", "");
                     updated.customer_email = cust_email;
                     updated.cc_zip = cc_zip;
-                    updated.start_delivery_date = "";
+                    updated.start_delivery_date = startDeliv;
 
                     List<Item> list1 = new List<Item>();
                     Item item1 = new Item();
@@ -1149,5 +1177,56 @@ namespace MTYD.ViewModel
             await Navigation.PushAsync(new Menu(cust_firstName, cust_lastName, cust_email));
             //Application.Current.MainPage = new Menu();
         }
+
+        //start of menu functions
+        void clickedOpenMenu(object sender, EventArgs e)
+        {
+            openedMenu.IsVisible = true;
+        }
+
+        void clickedCloseMenu(object sender, EventArgs e)
+        {
+            openedMenu.IsVisible = false;
+        }
+
+        async void clickedLanding(System.Object sender, System.EventArgs e)
+        {
+            await Navigation.PushAsync(new MainPage(cust_firstName, cust_lastName, cust_email), false);
+            //Navigation.RemovePage(this.Navigation.NavigationStack[this.Navigation.NavigationStack.Count - 2]);
+        }
+
+        async void clickedMealPlan(System.Object sender, System.EventArgs e)
+        {
+            await Navigation.PushAsync(new MealPlans(cust_firstName, cust_lastName, cust_email), false);
+            //Navigation.RemovePage(this.Navigation.NavigationStack[this.Navigation.NavigationStack.Count - 2]);
+        }
+
+        async void clickedSelect(System.Object sender, System.EventArgs e)
+        {
+            if (Preferences.Get("canChooseSelect", false) == false)
+                DisplayAlert("Error", "please purchase a meal plan first", "OK");
+            else
+            {
+                Zones[] zones = new Zones[] { };
+                await Navigation.PushAsync(new Select(zones, cust_firstName, cust_lastName, cust_email), false);
+                //Navigation.RemovePage(this.Navigation.NavigationStack[this.Navigation.NavigationStack.Count - 2]);
+            }
+        }
+
+        async void clickedSubscription(System.Object sender, System.EventArgs e)
+        {
+            await Navigation.PushAsync(new SubscriptionPage(cust_firstName, cust_lastName, cust_email), false);
+            //Navigation.RemovePage(this.Navigation.NavigationStack[this.Navigation.NavigationStack.Count - 2]);
+        }
+
+        void clickedLogout(System.Object sender, System.EventArgs e)
+        {
+            Xamarin.Forms.Application.Current.Properties.Remove("user_id");
+            Xamarin.Forms.Application.Current.Properties["platform"] = "GUEST";
+            Xamarin.Forms.Application.Current.Properties.Remove("time_stamp");
+            //Application.Current.Properties.Remove("platform");
+            Xamarin.Forms.Application.Current.MainPage = new MainPage();
+        }
+        //end of menu functions
     }
 }

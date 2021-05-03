@@ -109,6 +109,17 @@ namespace MTYD.ViewModel
                 createAccount.IsVisible = true;
             }
 
+            //open menu adjustments
+            orangeBox2.HeightRequest = height / 2;
+            orangeBox2.Margin = new Thickness(0, -height / 2.2, 0, 0);
+            orangeBox2.CornerRadius = height / 40;
+            heading2.WidthRequest = width / 5;
+            menu2.HeightRequest = width / 25;
+            menu2.WidthRequest = width / 25;
+            menu2.Margin = new Thickness(25, 0, 0, 30);
+            heading.WidthRequest = width / 5;
+            //heading adjustments
+
             Xamarin.Forms.NavigationPage.SetHasNavigationBar(this, false);
             orangeBox.HeightRequest = height / 2;
             orangeBox.Margin = new Thickness(0, -height / 2.2, 0, 0);
@@ -117,6 +128,8 @@ namespace MTYD.ViewModel
             pfp.WidthRequest = width / 20;
             pfp.CornerRadius = (int)(width / 40);
             innerGrid.Margin = new Thickness(0, 0, 23, 27);
+
+            fade.Margin = new Thickness(0, -height / 3, 0, 0);
 
             if (Preferences.Get("profilePicLink", "") == "")
             {
@@ -140,7 +153,7 @@ namespace MTYD.ViewModel
 
             if (Device.RuntimePlatform == Device.iOS)
             {
-                heading.WidthRequest = width / 3;
+                //heading.WidthRequest = width / 3;
 
                 //congratsTitle.FontSize = width / 25;
                 //expectTitle.FontSize = width / 30;
@@ -175,7 +188,7 @@ namespace MTYD.ViewModel
             }
             else //Android
             {
-                heading.WidthRequest = width / 3;
+                //heading.WidthRequest = width / 3;
 
                 //congratsTitle.FontSize = width / 35;
                 //expectTitle.FontSize = width / 35;
@@ -274,7 +287,7 @@ namespace MTYD.ViewModel
             await Navigation.PushAsync(new Select(passZone, cust_firstName, cust_lastName, cust_email));
         }
 
-        /*
+        
         public async void finishClicked(object sender, EventArgs e)
         {
             if (passwordEntry.Text != null && passwordEntry.Text == confirmPasswordEntry.Text)
@@ -308,6 +321,8 @@ namespace MTYD.ViewModel
                 await DisplayAlert("Error", "Please enter a password or click SKIP.", "OK");
                 return;
             }
+
+            
             //if (passwordEntry.Text != null)
             //{
             //    directSignUp.password = passwordEntry.Text.Trim();
@@ -332,7 +347,7 @@ namespace MTYD.ViewModel
             //    return;
             //}
 
-            //// Setting request for USPS API
+            // Setting request for USPS API
             //XDocument requestDoc = new XDocument(
             //    new XElement("AddressValidateRequest",
             //    new XAttribute("USERID", "400INFIN1745"),
@@ -417,7 +432,7 @@ namespace MTYD.ViewModel
             //    //await tagUser(Preferences.Get(savedEmail, ""), Preferences.Get(savedZip, ""));
             //    //SignUpNewUser(sender, e);
             //}
-        }*/
+        }
 
         public static string GetXMLElement(XElement element, string name)
         {
@@ -548,6 +563,62 @@ namespace MTYD.ViewModel
                     Application.Current.MainPage = new NavigationPage(new Select(passingZones, cust_firstName, cust_lastName, cust_email));
                 }
             }
+        }
+
+        //start of menu functions
+        void clickedOpenMenu(object sender, EventArgs e)
+        {
+            openedMenu.IsVisible = true;
+        }
+
+        void clickedCloseMenu(object sender, EventArgs e)
+        {
+            openedMenu.IsVisible = false;
+        }
+
+        async void clickedLanding(System.Object sender, System.EventArgs e)
+        {
+            await Navigation.PushAsync(new MainPage(cust_firstName, cust_lastName, cust_email), false);
+            //Navigation.RemovePage(this.Navigation.NavigationStack[this.Navigation.NavigationStack.Count - 2]);
+        }
+
+        async void clickedMealPlan(System.Object sender, System.EventArgs e)
+        {
+            await Navigation.PushAsync(new MealPlans(cust_firstName, cust_lastName, cust_email), false);
+            //Navigation.RemovePage(this.Navigation.NavigationStack[this.Navigation.NavigationStack.Count - 2]);
+        }
+
+        async void clickedSelect(System.Object sender, System.EventArgs e)
+        {
+            if (Preferences.Get("canChooseSelect", false) == false)
+                DisplayAlert("Error", "please purchase a meal plan first", "OK");
+            else
+            {
+                Zones[] zones = new Zones[] { };
+                await Navigation.PushAsync(new Select(zones, cust_firstName, cust_lastName, cust_email), false);
+                //Navigation.RemovePage(this.Navigation.NavigationStack[this.Navigation.NavigationStack.Count - 2]);
+            }
+        }
+
+        async void clickedSubscription(System.Object sender, System.EventArgs e)
+        {
+            await Navigation.PushAsync(new SubscriptionPage(cust_firstName, cust_lastName, cust_email), false);
+            //Navigation.RemovePage(this.Navigation.NavigationStack[this.Navigation.NavigationStack.Count - 2]);
+        }
+
+        void clickedLogout(System.Object sender, System.EventArgs e)
+        {
+            Application.Current.Properties.Remove("user_id");
+            Application.Current.Properties["platform"] = "GUEST";
+            Application.Current.Properties.Remove("time_stamp");
+            //Application.Current.Properties.Remove("platform");
+            Application.Current.MainPage = new MainPage();
+        }
+
+        void createAccountClicked(System.Object sender, System.EventArgs e)
+        {
+            fade.IsVisible = true;
+            createAccountGrid.IsVisible = true;
         }
     }
 }

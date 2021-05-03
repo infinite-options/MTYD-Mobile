@@ -181,6 +181,7 @@ namespace MTYD.Model
     public class MealPlanItem : INotifyPropertyChanged
     {
         string _planName;
+        public int Index { get; set; }
         Color _background, _fontColor;
         public event PropertyChangedEventHandler PropertyChanged;
 
