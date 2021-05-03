@@ -3,7 +3,7 @@
              x:Class="MTYD.MainPage" NavigationPage.HasNavigationBar="False" BackgroundImageSource="new_background.png" >
 
     <!-- center all of the main page content -->
-    <ScrollView>
+    <ScrollView x:Name="scroll">
         <Grid VerticalOptions="CenterAndExpand">
             <StackLayout>
                 <StackLayout x:Name="HomePage">
@@ -462,7 +462,7 @@
                     </StackLayout>
                 </Grid>
 
-                <Grid x:Name="CheckAddressGrid" VerticalOptions="Start" IsVisible="false" Margin="50, 120">
+                <Grid x:Name="CheckAddressGrid" VerticalOptions="Start" IsVisible="false" Margin="50, 275, 50, 120">
                     <Frame BorderColor="#f26522" CornerRadius="0" HasShadow="False">
                         <StackLayout>
                             <ImageButton Source="xButton.png" Aspect="AspectFit" HorizontalOptions="End" Margin="-10" WidthRequest="30" Clicked="xButtonClicked"/>

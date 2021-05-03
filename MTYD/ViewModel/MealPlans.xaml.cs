@@ -205,7 +205,7 @@ namespace MTYD.ViewModel
                 orangeBox2.CornerRadius = height / 40;
                 heading2.WidthRequest = width / 5;
                 menu2.HeightRequest = width / 25;
-                menu2.WidthRequest = width / 25;
+                menu2.HeightRequest = width / 20;
                 menu2.Margin = new Thickness(25, 0, 0, 30);
                 heading.WidthRequest = width / 5;
                 //heading adjustments
@@ -238,8 +238,8 @@ namespace MTYD.ViewModel
                 }
                 else pfp.Source = Preferences.Get("profilePicLink", "");
 
-                menu.HeightRequest = width / 25;
-                menu.WidthRequest = width / 25;
+                menu.HeightRequest = width / 20;
+                menu.HeightRequest = width / 20;
                 menu.Margin = new Thickness(25, 0, 0, 30);
 
                 //mealPlanGrid.Margin = new Thickness(width / 40, 10, width / 40, 5);
@@ -301,7 +301,7 @@ namespace MTYD.ViewModel
                 orangeBox2.CornerRadius = height / 40;
                 heading2.WidthRequest = width / 5;
                 menu2.HeightRequest = width / 25;
-                menu2.WidthRequest = width / 25;
+                menu2.HeightRequest = width / 20;
                 menu2.Margin = new Thickness(25, 0, 0, 30);
                 heading.WidthRequest = width / 5;
                 //heading adjustments
@@ -443,20 +443,28 @@ namespace MTYD.ViewModel
             PhoneEntry.Text = (info_obj["result"])[selectedIndex]["delivery_phone_num"].ToString();
             //instructionsEntry.Text = (info_obj["result"])[planPicker.SelectedIndex]["delivery_instructions"].ToString();
 
-            WebClient client4 = new WebClient();
-            string url3 = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/predict_autopay_day/" + chosenPurchUid;
-            Debug.WriteLine("next billing date url: " + url3);
-            var content = client4.DownloadString(url3);
-            var obj = JsonConvert.DeserializeObject<nextDelivDate>(content);
+            try
+            {
+                WebClient client4 = new WebClient();
+                string url3 = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/predict_autopay_day/" + chosenPurchUid;
+                Debug.WriteLine("next billing date url: " + url3);
+                var content = client4.DownloadString(url3);
+                var obj = JsonConvert.DeserializeObject<nextDelivDate>(content);
 
-            Debug.WriteLine("next date: " + obj.MenuDate);
-            Debug.WriteLine("year: " + obj.MenuDate.Substring(0, 4));
-            Debug.WriteLine("month: " + obj.MenuDate.Substring(5, 2));
-            Debug.WriteLine("day: " + obj.MenuDate.Substring(8, 2));
-            var date1 = new DateTime(int.Parse(obj.MenuDate.Substring(0, 4)), int.Parse(obj.MenuDate.Substring(5, 2)), int.Parse(obj.MenuDate.Substring(8, 2)));
-            nextDate.Text = date1.ToString("D");
+                Debug.WriteLine("next date: " + obj.MenuDate);
+                Debug.WriteLine("year: " + obj.MenuDate.Substring(0, 4));
+                Debug.WriteLine("month: " + obj.MenuDate.Substring(5, 2));
+                Debug.WriteLine("day: " + obj.MenuDate.Substring(8, 2));
+                var date1 = new DateTime(int.Parse(obj.MenuDate.Substring(0, 4)), int.Parse(obj.MenuDate.Substring(5, 2)), int.Parse(obj.MenuDate.Substring(8, 2)));
+                nextDate.Text = date1.ToString("D");
 
-            nextAmount.Text = "$" + obj.Total;
+                nextAmount.Text = "$" + obj.Total;
+            }
+            catch
+            {
+                nextDate.Text = "TBD";
+                nextAmount.Text = "TBD";
+            }
 
             string creditCardNum = (info_obj["result"])[selectedIndex]["cc_num"].ToString();
             //cardNum.Text = creditCardNum.Substring(creditCardNum.Length - 2);

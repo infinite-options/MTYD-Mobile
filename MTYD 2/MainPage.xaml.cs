@@ -460,8 +460,8 @@ namespace MTYD
             logo.Margin = new Thickness(0, 0, 0, 30);
             innerGrid.Margin = new Thickness(0, 0, 23, 27);
 
-            menu.HeightRequest = width / 25;
-            menu.WidthRequest = width / 25;
+            menu.HeightRequest = width / 20;
+            menu.HeightRequest = width / 20;
             menu.Margin = new Thickness(25, 0, 0, 30);
 
             if (Preferences.Get("profilePicLink", "") == "")

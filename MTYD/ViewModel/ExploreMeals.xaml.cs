@@ -67,7 +67,7 @@ namespace MTYD.ViewModel
         public int weekNumber;
         public Color orange = Color.FromHex("#f59a28");
         public Color green = Color.FromHex("#006633");
-        public Color beige = Color.FromHex("#f3f2dc");
+        //public Color beige = Color.FromHex("#f3f2dc");
         private const string purchaseId = "200-000010";
         private static string jsonMeals;
         public static ObservableCollection<MealInfo> Meals1 = new ObservableCollection<MealInfo>();
@@ -203,8 +203,8 @@ namespace MTYD.ViewModel
                 popButton2.HeightRequest = popUpFrame.HeightRequest / 7;
                 popButton3.HeightRequest = popUpFrame.HeightRequest / 7;
 
-                menu.HeightRequest = width / 25;
-                menu.WidthRequest = width / 25;
+                menu.HeightRequest = width / 20;
+                menu.HeightRequest = width / 20;
                 menu.Margin = new Thickness(25, 0, 0, 30);
                 
 
@@ -245,7 +245,7 @@ namespace MTYD.ViewModel
                 //orangeBox2.CornerRadius = height / 40;
                 //heading2.WidthRequest = width / 5;
                 //menu2.HeightRequest = width / 25;
-                //menu2.WidthRequest = width / 25;
+                //menu2.HeightRequest = width / 20;
                 //menu2.Margin = new Thickness(25, 0, 0, 30);
                 //heading.WidthRequest = width / 5;
                 ////heading adjustments
@@ -1250,6 +1250,5 @@ namespace MTYD.ViewModel
             popUpFrame.IsVisible = false;
         }
 
-        
     }
 }

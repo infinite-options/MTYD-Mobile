@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="MTYD.ViewModel.ExploreMeals" xmlns:Forms9Patch="clr-namespace:Forms9Patch;assembly=Forms9Patch" BackgroundColor ="#f3f2dc">
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="MTYD.ViewModel.ExploreMeals" xmlns:Forms9Patch="clr-namespace:Forms9Patch;assembly=Forms9Patch" BackgroundColor ="White">
     <ContentPage.Content>
         <ScrollView x:Name="scroll">
             <Grid>
@@ -175,15 +175,15 @@
                     <!--<Picker x:Name="datePicker" Grid.ColumnSpan="2" Margin="15,0,0,0" SelectedIndexChanged="dateChange"/>-->
 
 
-                    <Frame x:Name="saveFrame" Padding="0" BackgroundColor="White" Grid.Column="0" CornerRadius="0" HorizontalOptions="Fill" VerticalOptions="Fill" HasShadow="True">
+                    <Frame x:Name="saveFrame" Padding="0" BackgroundColor="White" Grid.Column="0" CornerRadius="0" HorizontalOptions="Fill" Margin="10,0,5,0" VerticalOptions="Fill" HasShadow="True">
                         <Button x:Name="saveBttn" ClassId="save1" Text = "Save Meals" VerticalOptions="Fill" HorizontalOptions="Fill" FontSize="Micro" Grid.Row="0" Grid.Column="3" Clicked="saveUserMeals" BackgroundColor="Transparent" BorderColor="Transparent" TextColor="Black" FontAttributes="Bold"/>
                     </Frame>
 
-                    <Frame x:Name="surpriseFrame" Padding="0" BackgroundColor="White" Grid.Column="1" CornerRadius="0" HorizontalOptions="Fill" VerticalOptions="Fill" HasShadow="True">
+                    <Frame x:Name="surpriseFrame" Padding="0" BackgroundColor="White" Grid.Column="1" CornerRadius="0" HorizontalOptions="Fill" Margin="5,0" VerticalOptions="Fill" HasShadow="True">
                         <Button x:Name="surpriseBttn"  ClassId="surpriseButton" Text = "Surprise Me" VerticalOptions="Fill" HorizontalOptions="Fill" FontSize="Micro" Grid.Row="0" Grid.Column="3" BackgroundColor="Transparent" BorderColor="Transparent" TextColor="Black"  FontAttributes="Bold" Clicked="surpriseMealSelection"/>
                     </Frame>
 
-                    <Frame x:Name="skipFrame" Padding="0" BackgroundColor="White" Grid.Column="2" CornerRadius="0" HorizontalOptions="Fill" VerticalOptions="Fill" HasShadow="True">
+                    <Frame x:Name="skipFrame" Padding="0" BackgroundColor="White" Grid.Column="2" CornerRadius="0" HorizontalOptions="Fill" Margin="5,0,10,0" VerticalOptions="Fill" HasShadow="True">
                         <Button x:Name="skipBttn"  ClassId="skipButton" Text = "Skip This Day" VerticalOptions="Fill" HorizontalOptions="Fill" FontSize="Micro" Grid.Row="2" Grid.Column="3" BackgroundColor="Transparent" BorderColor="Transparent" TextColor="Black"  FontAttributes="Bold" Clicked="skipMealSelection"/>
                     </Frame>
 
@@ -256,7 +256,7 @@
 
                 <Grid x:Name="testGrid"></Grid>
 
-                <CollectionView x:Name="weekOneMenu" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" BackgroundColor="#f3f2dc">
+                <CollectionView x:Name="weekOneMenu" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4">
                     <CollectionView.ItemsLayout>
                         <GridItemsLayout
                         Orientation="Vertical"
@@ -276,7 +276,7 @@
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
 
-                                <Forms9Patch:Frame OutlineColor="#FF6505" BackgroundColor="{Binding Background}" OutlineWidth="3" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="1" Padding="0">
+                                <Forms9Patch:Frame OutlineColor="#FF6505" BackgroundColor="{Binding Background}" OutlineWidth="3" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="1" Padding="3">
                                     <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="42"/>
@@ -345,19 +345,22 @@
                                                        Margin="10,0,0,0"
                                                        VerticalOptions="Start" />
 
-                                        <Grid Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" ColumnSpacing="0">
+                                        <Grid Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" ColumnSpacing="0" Margin="0,0,0,1">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="1*"/>
                                                 <ColumnDefinition Width="50"/>
                                                 <ColumnDefinition Width="1*"/>
                                             </Grid.ColumnDefinitions>
 
-                                            <Button Margin="1.9,0,0,-0.1" FontSize="40" CornerRadius="0" TextColor="Black" HorizontalOptions="Fill" VerticalOptions="Fill" Text="-" Clicked="clickDecrease" BorderColor="#F26522" BorderWidth="1"/>
-                                            <Frame Grid.Column="1" Margin="-0.1, 0, -0.1, -0.1" CornerRadius="0" HasShadow="False" BorderColor="#F26522" HorizontalOptions="Fill" VerticalOptions="Fill" Padding="0" BackgroundColor="Transparent">
+                                            <Frame Margin="-0.25,0,0,0" CornerRadius="0" HasShadow="False" BorderColor="#F26522" HorizontalOptions="Fill" VerticalOptions="Fill" Padding="0" BackgroundColor="Transparent">
+                                            <Button  FontSize="40" CornerRadius="0" TextColor="Black" HorizontalOptions="Fill" VerticalOptions="Fill" Text="-" Clicked="clickDecrease" BorderColor="#F26522" BorderWidth="1"/>
+                                            </Frame>
+                                            <Frame Grid.Column="1"  CornerRadius="0" HasShadow="False" BorderColor="#F26522" HorizontalOptions="Fill" VerticalOptions="Fill" Padding="0" BackgroundColor="Transparent">
                                             <Label Text="{Binding MealQuantity}" HorizontalOptions="Center" VerticalOptions="Center" FontSize="19" FontAttributes="Bold"/>
                                             </Frame>
-                                            <Button Margin="0,0,1.9,-0.1" x:Name="increase" CornerRadius="0" Grid.Column="2" FontSize="30" TextColor="Black" HorizontalOptions="Fill" VerticalOptions="Fill" FontAttributes="Bold" Text="+" Clicked="clickIncrease" BorderColor="#F26522" BorderWidth="1"/>
-
+                                            <Frame Grid.Column="2" Margin="0,0,-0.25,0" CornerRadius="0" HasShadow="False" BorderColor="#F26522" HorizontalOptions="Fill" VerticalOptions="Fill" Padding="0" BackgroundColor="Transparent">
+                                            <Button x:Name="increase" CornerRadius="0" Grid.Column="2" FontSize="30" TextColor="Black" HorizontalOptions="Fill" VerticalOptions="Fill" FontAttributes="Bold" Text="+" Clicked="clickIncrease" BorderColor="#F26522" BorderWidth="1"/>
+                                                </Frame>
                                         </Grid>
 
 
@@ -373,7 +376,7 @@
 
                 <Label Margin="10,10,0,0" x:Name="addOns" Text="ADD-ONS" FontAttributes="Bold"/>
 
-                <CollectionView x:Name="weekOneAddOns" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" BackgroundColor="#f3f2dc">
+                <CollectionView x:Name="weekOneAddOns" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" BackgroundColor="White">
                     <CollectionView.ItemsLayout>
                         <GridItemsLayout
                         Orientation="Vertical"
@@ -393,7 +396,7 @@
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
 
-                                <Forms9Patch:Frame OutlineColor="#FF6505" BackgroundColor="{Binding Background}" OutlineWidth="3" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="1" Padding="0">
+                                <Forms9Patch:Frame OutlineColor="#FF6505" BackgroundColor="{Binding Background}" OutlineWidth="3" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="1" Padding="3">
                                     <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="42"/>
@@ -462,19 +465,22 @@
                                                        Margin="10,0,0,0"
                                                        VerticalOptions="Start" />
 
-                                        <Grid Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" ColumnSpacing="0">
+                                        <Grid Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" ColumnSpacing="0" Margin="0,0,0,1">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="1*"/>
                                                 <ColumnDefinition Width="50"/>
                                                 <ColumnDefinition Width="1*"/>
                                             </Grid.ColumnDefinitions>
 
-                                            <Button Margin="1.9,0,0,-0.1" FontSize="40" CornerRadius="0" TextColor="Black" HorizontalOptions="Fill" VerticalOptions="Fill" Text="-" Clicked="clickDecreaseAddOn" BorderColor="#F26522" BorderWidth="1"/>
-                                            <Frame Grid.Column="1" Margin="-0.1, 0, -0.1, -0.1" CornerRadius="0" HasShadow="False" BorderColor="#F26522" HorizontalOptions="Fill" VerticalOptions="Fill" Padding="0" BackgroundColor="Transparent">
+                                            <Frame Margin="-0.25,0,0,0" CornerRadius="0" HasShadow="False" BorderColor="#F26522" HorizontalOptions="Fill" VerticalOptions="Fill" Padding="0" BackgroundColor="Transparent">
+                                            <Button  FontSize="40" CornerRadius="0" TextColor="Black" HorizontalOptions="Fill" VerticalOptions="Fill" Text="-" Clicked="clickDecreaseAddOn" BorderColor="#F26522" BorderWidth="1"/>
+                                            </Frame>
+                                            <Frame Grid.Column="1"  CornerRadius="0" HasShadow="False" BorderColor="#F26522" HorizontalOptions="Fill" VerticalOptions="Fill" Padding="0" BackgroundColor="Transparent">
                                             <Label Text="{Binding MealQuantity}" HorizontalOptions="Center" VerticalOptions="Center" FontSize="19" FontAttributes="Bold"/>
                                             </Frame>
-                                            <Button Margin="0,0,1.9,-0.1" x:Name="increase_AddOns" CornerRadius="0" Grid.Column="2" FontSize="30" TextColor="Black" HorizontalOptions="Fill" VerticalOptions="Fill" FontAttributes="Bold" Text="+" Clicked="clickIncreaseAddOn" BorderColor="#F26522" BorderWidth="1"/>
-
+                                            <Frame Grid.Column="2" Margin="0,0,-0.25,0" CornerRadius="0" HasShadow="False" BorderColor="#F26522" HorizontalOptions="Fill" VerticalOptions="Fill" Padding="0" BackgroundColor="Transparent">
+                                            <Button x:Name="increase_AddOns" CornerRadius="0" Grid.Column="2" FontSize="30" TextColor="Black" HorizontalOptions="Fill" VerticalOptions="Fill" FontAttributes="Bold" Text="+" Clicked="clickIncreaseAddOn" BorderColor="#F26522" BorderWidth="1"/>
+                                                </Frame>
                                         </Grid>
 
 
@@ -502,7 +508,7 @@
 
         </StackLayout>
 
-        <BoxView x:Name="fade" IsVisible="false" BackgroundColor="White" Opacity="0.7" Margin="0,-100" HorizontalOptions="Fill" VerticalOptions="Fill"/>
+        <BoxView x:Name="fade" IsVisible="false" BackgroundColor="White" Opacity="0.7" Margin="0,-250" HorizontalOptions="Fill" VerticalOptions="Fill"/>
 
         <Forms9Patch:Frame x:Name="popUpFrame" IsVisible="false" BackgroundColor="White" Padding="15" OutlineColor="#F26522" OutlineRadius="0" OutlineWidth="3" HorizontalOptions="Center" VerticalOptions="Start">
         <StackLayout Padding="15, 0">

@@ -34,7 +34,7 @@ namespace MTYD.ViewModel
             Console.WriteLine("Width = " + width.ToString());
             Console.WriteLine("Height = " + height.ToString());
 
-            BackgroundColor = Color.FromHex("#f3f2dc");
+            BackgroundColor = Color.FromHex("White");
 
             //passFrame.HeightRequest = 50;
             //passFrame2.HeightRequest = 50;

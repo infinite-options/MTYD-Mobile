@@ -48,8 +48,8 @@ namespace MTYD.ViewModel
                 pfp.WidthRequest = width / 20;
                 pfp.CornerRadius = (int)(width / 40);
                 pfp.Margin = new Thickness(0, 0, 23, 27);
-                menu.HeightRequest = width / 25;
-                menu.WidthRequest = width / 25;
+                menu.HeightRequest = width / 20;
+                menu.HeightRequest = width / 20;
                 menu.Margin = new Thickness(25, 0, 0, 30);
 
                 mealPlanGrid.Margin = new Thickness(width / 40, 10, width / 40, 5);

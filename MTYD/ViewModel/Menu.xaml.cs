@@ -75,8 +75,8 @@ namespace MTYD.ViewModel
                 mainGrid.Padding = new Thickness(0, 100, 0, 0);
 
                 menu.Margin = new Thickness(25, 15, 0, 40);
-                menu.HeightRequest = width / 25;
-                menu.WidthRequest = width / 25;
+                menu.HeightRequest = width / 20;
+                menu.HeightRequest = width / 20;
 
                 pfp.HeightRequest = width / 15;
                 pfp.WidthRequest = width / 15;

@@ -199,7 +199,7 @@ namespace MTYD.ViewModel
                 orangeBox2.CornerRadius = height / 40;
                 heading2.WidthRequest = width / 5;
                 menu2.HeightRequest = width / 25;
-                menu2.WidthRequest = width / 25;
+                menu2.HeightRequest = width / 20;
                 menu2.Margin = new Thickness(25, 0, 0, 30);
                 heading.WidthRequest = width / 5;
                 //open menu adjustments
@@ -236,12 +236,22 @@ namespace MTYD.ViewModel
                 }
                 else pfp.Source = Preferences.Get("profilePicLink", "");
 
-                menu.HeightRequest = width / 25;
-                menu.WidthRequest = width / 25;
+                //menu.HeightRequest = width / 20;
+                //menu.HeightRequest = width / 20;
                 menu.Margin = new Thickness(25, 0, 0, 30);
+                menu.HeightRequest = width / 20;
+                menu.WidthRequest = width / 20;
+                menu2.HeightRequest = width / 20;
+                menu2.WidthRequest = width / 20;
+                menu2.Margin = new Thickness(25, 0, 0, 30);
                 //menu2.HeightRequest = width / 25;
-                //menu2.WidthRequest = width / 25;
+                //menu2.HeightRequest = width / 20;
                 //menu2.Margin = new Thickness(0, 0, 25, 15);
+
+                popUpFrame.Margin = new Thickness(0, height / 10, 0, 0);
+                popUpFrame.WidthRequest = width / 2.5;
+                //popUpFrame.HeightRequest = popUpFrame.WidthRequest * (5/6);
+                //popButton1.HeightRequest = popUpFrame.HeightRequest / 7;
 
                 //selectPlanFrame.Margin = new Thickness(25, 7);
                 //selectPlanFrame.Padding = new Thickness(15, 5);
@@ -1767,7 +1777,8 @@ namespace MTYD.ViewModel
             }
             else
             {
-                DisplayAlert("Alert", "You have reached the maximum amount of meals that can be selected for this plan.", "OK");
+                showPopUp("Oops", "You have reached the maximum amount of meals that can be selected for this plan.");
+                //DisplayAlert("Alert", "You have reached the maximum amount of meals that can be selected for this plan.", "OK");
             }
         }
 
@@ -1934,6 +1945,7 @@ namespace MTYD.ViewModel
                 namesArray.Add(Preferences.Get("item_name", "").Substring(0, 1) + " Meal Plan");
                 SubscriptionPicker.ItemsSource = namesArray;
                 //mealPlansList.ItemsSource = namesArray;
+                dropDownList.HeightRequest = 100;
                 dropDownList.ItemsSource = namesArray;
                 SubscriptionPicker.SelectedItem = namesArray[0].ToString();
                 dropDownList.SelectedItem = namesArray[0].ToString();
@@ -1972,7 +1984,7 @@ namespace MTYD.ViewModel
                         if (m["purchase_status"].ToString() != "CANCELLED and REFUNDED")
                         {
                             itemsArray.Add((m["items"].ToString()));
-                            purchIdArray.Add((m["purchase_uid"].ToString()));
+                            purchIdArray.Add((m["purchase_id"].ToString()));
                         }
                     }
 
@@ -2014,6 +2026,9 @@ namespace MTYD.ViewModel
                     SubscriptionPicker.ItemsSource = namesArray;
                     //mealPlansList.ItemsSource = namesArray;
                     dropDownList.ItemsSource = namesArray;
+                    if (namesArray.Count < 4)
+                        dropDownList.HeightRequest = 100;
+
                     SubscriptionPicker.SelectedItem = namesArray[0].ToString();
                     dropDownList.SelectedItem = namesArray[0].ToString();
                     Console.WriteLine("namesArray contents:" + namesArray[0].ToString());
@@ -2191,7 +2206,8 @@ namespace MTYD.ViewModel
                     BarParameters[0].mealsLeft = "All Meals Selected";
                     mealsLeftLabel.Text = "All Meals Selected";
                     BarParameters[0].barLabel = "All Meals Selected";
-                    DisplayAlert("Selection Saved", "You will be charged for your add-ons on 1/1/2021.", "OK");
+                    showPopUp("Selection Saved", "You will be charged for your add-ons at a later date");
+                    //DisplayAlert("Selection Saved", "You will be charged for your add-ons on 1/1/2021.", "OK");
                 }
                 else
                 {
@@ -2205,7 +2221,8 @@ namespace MTYD.ViewModel
                     BarParameters[0].mealsLeft = "All Meals Selected";
                     mealsLeftLabel.Text = "All Meals Selected";
                     BarParameters[0].barLabel = "All Meals Selected";
-                    DisplayAlert("Selection Saved", "You've successfully saved your meal selection.", "OK");
+                    showPopUp("Selection Saved", "You've successfully saved your meal selection.");
+                    //DisplayAlert("Selection Saved", "You've successfully saved your meal selection.", "OK");
                 }
                 addOnSelected = false;
                 //DisplayAlert("Selection Saved", "You've successfully saved your meal selection.", "OK");
@@ -2214,7 +2231,8 @@ namespace MTYD.ViewModel
             }
             else
             {
-                DisplayAlert("Incomplete Meal Selection", "Please select additional meals.", "OK");
+                showPopUp("Incomplete Meal Selection", "Please select additional meals.");
+                //DisplayAlert("Incomplete Meal Selection", "Please select additional meals.", "OK");
 
             }
         }
@@ -2277,8 +2295,9 @@ namespace MTYD.ViewModel
             //mealsSaved = new List<MealInformation>();
             selectedDate.fillColor = Color.FromHex("#BBBBBB");
             selectedDate.status = "Skipped";
-            DisplayAlert("Delivery Skipped", "You won't receive any meals for this delivery cycle. We'll extend your subscription accordingly.", "OK");
-            mealsSaved.Clear();
+            //DisplayAlert("Delivery Skipped", "You won't receive any meals for this delivery cycle. We'll extend your subscription accordingly.", "OK");
+            showPopUp("Delivery Skipped", "You won't receive any meals this day. We will extend your subscription accordingly.");
+            mealsSaved.Clear(); 
             int indexOfMealPlanSelected = ((ArrayList)dropDownList.ItemsSource).IndexOf(dropDownText.Text);
             Preferences.Set("purchId", purchIdArray[indexOfMealPlanSelected].ToString());
             Console.WriteLine("Purch Id: " + Preferences.Get("purchId", ""));
@@ -2438,7 +2457,8 @@ namespace MTYD.ViewModel
             postData();
             addOnSelected = false;
 
-            DisplayAlert("SURPRISE", "We'll select a random assortment of nutritious, healthy meals for you!", "OK");
+            //DisplayAlert("SURPRISE", "We'll select a random assortment of nutritious, healthy meals for you!", "OK");
+            showPopUp("Surprise!", "We’ll surprise you with some of our specials on this day!");
             mealsSaved.Clear();
             int indexOfMealPlanSelected = ((ArrayList)dropDownList.ItemsSource).IndexOf(dropDownText.Text);
             Preferences.Set("purchId", purchIdArray[indexOfMealPlanSelected].ToString());
@@ -2776,6 +2796,7 @@ namespace MTYD.ViewModel
                 //}
                 ////end source
 
+
                 for (int i = 0; i < namesArray.Count; i++)
                 {
                     if (namesArray[i].ToString() == "SURPRISE")
@@ -2794,6 +2815,9 @@ namespace MTYD.ViewModel
                         isSurprise = false;
                     }
                 }
+
+
+
                 if (isSkip == true)
                 {
                     selectedDate.fillColor = Color.FromHex("#BBBBBB");
@@ -3122,5 +3146,20 @@ namespace MTYD.ViewModel
             Application.Current.MainPage = new MainPage();
         }
         //end of menu functions
+
+        void clickedClosePopUp(System.Object sender, System.EventArgs e)
+        {
+            fade.IsVisible = false;
+            popUpFrame.IsVisible = false;
+        }
+
+        void showPopUp(string title, string message)
+        {
+            fade.IsVisible = true;
+            scroll.ScrollToAsync(0, -50, true);
+            popUpHeader.Text = title;
+            popUpBody.Text = message;
+            popUpFrame.IsVisible = true;
+        }
     }
 }
