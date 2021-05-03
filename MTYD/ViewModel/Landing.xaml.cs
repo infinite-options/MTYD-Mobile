@@ -55,9 +55,10 @@ namespace MTYD.ViewModel
             logo.Margin = new Thickness(0, 0, 0, 30);
             innerGrid.Margin = new Thickness(0, 0, 23, 27);
 
-            menu.HeightRequest = width / 20;
-            menu.HeightRequest = width / 20;
             menu.Margin = new Thickness(25, 0, 0, 30);
+            menu.HeightRequest = width / 20;
+            menu.HeightRequest = width / 20;
+            //menu.Margin = new Thickness(25, 0, 0, 30);
 
             if (Preferences.Get("profilePicLink", "") == "")
             {

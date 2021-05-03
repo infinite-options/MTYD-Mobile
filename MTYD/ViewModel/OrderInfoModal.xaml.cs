@@ -325,9 +325,10 @@ namespace MTYD.ViewModel
                 }
                 else pfp.Source = Preferences.Get("profilePicLink", "");
 
-                menu.HeightRequest = width / 20;
-                menu.HeightRequest = width / 20;
                 menu.Margin = new Thickness(25, 0, 0, 30);
+                menu.HeightRequest = width / 20;
+                menu.HeightRequest = width / 20;
+                //menu.Margin = new Thickness(25, 0, 0, 30);
 
                 //firstName.CornerRadius = 22;
                 //firstName.HeightRequest = 35;

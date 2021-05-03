@@ -203,9 +203,10 @@ namespace MTYD.ViewModel
                 popButton2.HeightRequest = popUpFrame.HeightRequest / 7;
                 popButton3.HeightRequest = popUpFrame.HeightRequest / 7;
 
-                menu.HeightRequest = width / 20;
-                menu.HeightRequest = width / 20;
                 menu.Margin = new Thickness(25, 0, 0, 30);
+                menu.HeightRequest = width / 20;
+                menu.WidthRequest = width / 20;
+                //menu.Margin = new Thickness(25, 0, 0, 30);
                 
 
                 //selectPlanFrame.Margin = new Thickness(25, 7);

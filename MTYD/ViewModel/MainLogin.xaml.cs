@@ -144,9 +144,9 @@ namespace MTYD.ViewModel
             //}
             //else pfp.Source = Preferences.Get("profilePicLink", "");
 
-            menu.HeightRequest = width / 20;
-            menu.HeightRequest = width / 20;
             menu.Margin = new Thickness(25, 0, 0, 30);
+            menu.HeightRequest = width / 20;
+            menu.WidthRequest = width / 20;
 
             if (width == 1125 && height == 2436) //iPhone X only
             {
@@ -266,9 +266,10 @@ namespace MTYD.ViewModel
             //logo.Margin = new Thickness(0, 0, 0, 30);
             //innerGrid.Margin = new Thickness(0, 0, 23, 27);
 
-            menu.HeightRequest = width / 20;
-            menu.HeightRequest = width / 20;
             menu.Margin = new Thickness(25, 0, 0, 30);
+            menu.HeightRequest = width / 20;
+            menu.WidthRequest = width / 20;
+            //menu.Margin = new Thickness(25, 0, 0, 30);
 
             //if (Preferences.Get("profilePicLink", "") == "")
             //{

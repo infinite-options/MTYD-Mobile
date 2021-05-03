@@ -114,9 +114,10 @@ namespace MTYD.ViewModel
             orangeBox2.Margin = new Thickness(0, -height / 2.2, 0, 0);
             orangeBox2.CornerRadius = height / 40;
             heading2.WidthRequest = width / 5;
-            menu2.HeightRequest = width / 25;
-            menu2.HeightRequest = width / 20;
             menu2.Margin = new Thickness(25, 0, 0, 30);
+            menu2.HeightRequest = width / 20;
+            menu2.WidthRequest = width / 20;
+            //menu2.Margin = new Thickness(25, 0, 0, 30);
             heading.WidthRequest = width / 5;
             //heading adjustments
 
@@ -147,9 +148,10 @@ namespace MTYD.ViewModel
             }
             else pfp.Source = Preferences.Get("profilePicLink", "");
 
-            menu.HeightRequest = width / 20;
-            menu.HeightRequest = width / 20;
             menu.Margin = new Thickness(25, 0, 0, 30);
+            menu.HeightRequest = width / 20;
+            menu.WidthRequest = width / 20;
+            //menu.Margin = new Thickness(25, 0, 0, 30);
 
             if (Device.RuntimePlatform == Device.iOS)
             {
