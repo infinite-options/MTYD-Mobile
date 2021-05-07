@@ -12,7 +12,7 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                     
-                        <BoxView x:Name="orangeBox" BackgroundColor="#FF6505" HorizontalOptions="Fill"/>
+                        <BoxView x:Name="orangeBox" BackgroundColor="#F26522" HorizontalOptions="Fill"/>
                         <Image x:Name="heading" Source="heading.png" Margin="0,0,0,10" VerticalOptions="End" HorizontalOptions="Center"/>
 
                          <Grid x:Name="innerGrid" VerticalOptions="End" HorizontalOptions="End">
@@ -54,7 +54,7 @@
                         <Image Grid.Row="2" Source="congrats_path2.png"/>
                     </Grid>
 
-                    <Button x:Name= "SelectMealButton" BackgroundColor="#F26522" Text="Select your meals" TextColor="White" FontSize="18" Margin="50, 10, 50, 0" Padding="0, 15"
+                    <Button x:Name= "SelectMealButton" BackgroundColor="#F26522" Text="Select your meals" TextColor="White" FontSize="18" Margin="50, -5, 50, -5" Padding="0, 15"
                             CornerRadius="15" Clicked="selectMealClicked"/>
 
                     <Grid RowSpacing="0">
@@ -119,7 +119,7 @@
                 <BoxView x:Name="fade" BackgroundColor="White" Opacity="0.6" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" IsVisible="false"/>
 
                 <Grid x:Name="createAccountGrid" VerticalOptions="Start" IsVisible="false" Margin="50, 180">
-                    <Frame BorderColor="#f26522" CornerRadius="0" HasShadow="False">
+                    <Frame BorderColor="#F26522" CornerRadius="0" HasShadow="False">
                         <StackLayout>
                             <!--<ImageButton Source="xButton.png" Aspect="AspectFit" HorizontalOptions="End" Margin="-10" WidthRequest="30" Clicked="xButtonClicked"/>-->
 
@@ -158,7 +158,7 @@
 
                             </Grid>
 
-                            <Button x:Name="signupButton" Text="Sign up" BackgroundColor="#f26522" TextColor="White" Margin="20" CornerRadius="10" Clicked="finishClicked"/>
+                            <Button x:Name="signupButton" Text="Sign up" BackgroundColor="#F26522" TextColor="White" Margin="20" CornerRadius="10" Clicked="finishClicked"/>
                         </StackLayout>
                     </Frame>
                 </Grid>

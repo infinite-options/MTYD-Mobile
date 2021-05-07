@@ -11,7 +11,7 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     
-                    <BoxView x:Name="orangeBox" BackgroundColor="#FF6505" HorizontalOptions="Fill"/>
+                    <BoxView x:Name="orangeBox" BackgroundColor="#F26522" HorizontalOptions="Fill"/>
                     <!--<Label x:Name="heading" Text="UPCOMING MENUS" FontAttributes="Bold" VerticalOptions="End" HorizontalTextAlignment="Center" TextColor="Black"/>-->
                     <Image x:Name="heading" Source="heading.png" Margin="0,0,0,10" VerticalOptions="End" HorizontalOptions="Center"/>
                     <Grid x:Name="innerGrid" VerticalOptions="End" HorizontalOptions="End">
@@ -76,7 +76,7 @@
                 <!--old pickers-->
                 <Grid x:Name="pickerGrid" HeightRequest="45" Margin="5,-10,5,0" IsVisible="false">
 
-                    <Frame Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" x:Name="selectPlanFrame"  BorderColor="#FF6505" CornerRadius="22" HasShadow="False">
+                    <Frame Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" x:Name="selectPlanFrame"  BorderColor="#F26522" CornerRadius="22" HasShadow="False">
                         <Frame BorderColor="White" BackgroundColor="Transparent" HasShadow="False" Padding="0" Margin="25, -10, -10, -10">
                             <Grid ColumnSpacing="0">
                                 <Grid.RowDefinitions>
@@ -99,7 +99,7 @@
                     <Image Grid.Column="0" Source="lunch.png" HorizontalOptions="Start" VerticalOptions="Center" Aspect="AspectFit" Margin="15, 0, 0, 0" HeightRequest="25"/>
 
 
-                    <Frame Grid.Row="0" Grid.Column="1" IsVisible="false" x:Name="selectDateFrame"   BorderColor="#FF6505" CornerRadius="22" HasShadow="False" >
+                    <Frame Grid.Row="0" Grid.Column="1" IsVisible="false" x:Name="selectDateFrame"   BorderColor="#F26522" CornerRadius="22" HasShadow="False" >
                         <Frame BorderColor="White" BackgroundColor="Transparent" Padding="0" HasShadow="False" Margin="20, -10, -10, -10">
                             <Grid ColumnSpacing="0">
                                 <Grid.RowDefinitions>
@@ -284,7 +284,7 @@
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
 
-                                <Forms9Patch:Frame OutlineColor="#FF6505" BackgroundColor="{Binding Background}" OutlineWidth="3" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="1" Padding="3">
+                                <Forms9Patch:Frame OutlineColor="#F26522" BackgroundColor="{Binding Background}" OutlineWidth="3" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="1" Padding="3">
                                     <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="42"/>
@@ -404,7 +404,7 @@
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
 
-                                <Forms9Patch:Frame OutlineColor="#FF6505" BackgroundColor="{Binding Background}" OutlineWidth="3" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="1" Padding="3">
+                                <Forms9Patch:Frame OutlineColor="#F26522" BackgroundColor="{Binding Background}" OutlineWidth="3" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="1" Padding="3">
                                     <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="42"/>

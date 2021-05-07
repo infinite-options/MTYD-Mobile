@@ -33,12 +33,12 @@ namespace MTYD.ViewModel
                 orangeBox.CornerRadius = height / 40;
                 logo.HeightRequest = width / 15;
                 logo.Margin = new Thickness(0, 0, 0, 30);
-                pfp.HeightRequest = width / 20;
-                pfp.WidthRequest = width / 20;
-                pfp.CornerRadius = (int)(width / 40);
+                pfp.HeightRequest = 40;
+                pfp.WidthRequest = 40;
+                pfp.CornerRadius = 20;
                 //pfp.Margin = new Thickness(0, 0, 23, 27);
                 innerGrid.Margin = new Thickness(0, 0, 23, 27);
-
+                //heading.WidthRequest = 140;
 
                 if (Preferences.Get("profilePicLink", "") == "")
                 {
@@ -57,8 +57,7 @@ namespace MTYD.ViewModel
                 else pfp.Source = Preferences.Get("profilePicLink", "");
 
                 menu.Margin = new Thickness(25, 0, 0, 30);
-                menu.HeightRequest = width / 20;
-                menu.WidthRequest = width / 20;
+                menu.WidthRequest = 40;
                 //menu.Margin = new Thickness(25, 0, 0, 30);
 
                 //topGrid.HeightRequest = height / 1.5;

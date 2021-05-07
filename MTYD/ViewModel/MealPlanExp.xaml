@@ -56,17 +56,17 @@
 
                     <StackLayout Grid.Column="1" HorizontalOptions="Fill" Spacing="10">
 
-                        <!--<Button x:Name="selectMealPlan" BorderColor="#FF6505" Text="SELECT MEAL PLAN" TextColor="Black"
+                        <!--<Button x:Name="selectMealPlan" BorderColor="#F26522" Text="SELECT MEAL PLAN" TextColor="Black"
                                 BorderWidth="1" FontAttributes="Bold"/>-->
 
-                        <Frame x:Name="selectPlanFrame" BorderColor="#FF6505" CornerRadius="21" HasShadow="False">
+                        <Frame x:Name="selectPlanFrame" BorderColor="#F26522" CornerRadius="21" HasShadow="False">
                             <Frame x:Name="coverPickerBorder" BorderColor="White" BackgroundColor="Transparent" Padding="0" HasShadow="False">
                             <Picker x:Name="planPicker" SelectedIndexChanged="planChange" Title="Select Meal Plan" Margin="0"
                               HorizontalOptions="Fill" HorizontalTextAlignment="Center" FontAttributes="Bold" TextColor="Black" TitleColor="Black"></Picker>
                             </Frame>
                         </Frame>
 
-                        <Button x:Name="changeMealPlan" BorderColor="#FF6505" Text="Change Meal Plan" TextColor="Black"
+                        <Button x:Name="changeMealPlan" BorderColor="#F26522" Text="Change Meal Plan" TextColor="Black"
                                 BorderWidth="1" FontAttributes="Bold" Clicked="clickedSub"/>
 
                     </StackLayout>

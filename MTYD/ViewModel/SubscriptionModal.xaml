@@ -250,7 +250,7 @@
                             BackgroundColor="#f5f5f5" HorizontalOptions="Center" Padding="0" Clicked="clickedMeals5"/>
                 </Grid>
                 <Label x:Name="spacer3" HeightRequest="5"/>
-                <BoxView x:Name="divider" HeightRequest="1" BackgroundColor="#FFBA00"
+                <BoxView x:Name="divider" HeightRequest="1" BackgroundColor="#F8BB17"
                          Margin="25,0" HorizontalOptions="Fill" VerticalOptions="Center"/>
                 <Label x:Name="spacer" HeightRequest="5"/>
                 <Label x:Name="prepay" Text="NUMBER OF DELIVERIES" HorizontalOptions="StartAndExpand" FontAttributes="Bold"

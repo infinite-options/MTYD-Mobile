@@ -56,8 +56,7 @@ namespace MTYD.ViewModel
             innerGrid.Margin = new Thickness(0, 0, 23, 27);
 
             menu.Margin = new Thickness(25, 0, 0, 30);
-            menu.HeightRequest = width / 20;
-            menu.HeightRequest = width / 20;
+            menu.WidthRequest = 40;
             //menu.Margin = new Thickness(25, 0, 0, 30);
 
             if (Preferences.Get("profilePicLink", "") == "")
@@ -87,9 +86,9 @@ namespace MTYD.ViewModel
             if (Device.RuntimePlatform == Device.iOS)
             {
                 
-                pfp.HeightRequest = width / 20;
-                pfp.WidthRequest = width / 20;
-                pfp.CornerRadius = (int)(width / 40);
+                pfp.HeightRequest = 40;
+                pfp.WidthRequest = 40;
+                pfp.CornerRadius = 20;
 
                 mainLogo.HeightRequest = height / 18;
                 getStarted.HeightRequest = height / 35;
@@ -163,9 +162,9 @@ namespace MTYD.ViewModel
             }
             else //Android
             {
-                pfp.HeightRequest = width / 25;
-                pfp.WidthRequest = width / 25;
-                pfp.CornerRadius = (int)(width / 50);
+                pfp.HeightRequest = 40;
+                pfp.WidthRequest = 40;
+                pfp.CornerRadius = 20;
 
                 mainLogo.HeightRequest = height / 20;
                 getStarted.HeightRequest = height / 45;

@@ -199,13 +199,12 @@ namespace MTYD.ViewModel
                 orangeBox.CornerRadius = height / 40;
                 heading.FontSize = width / 32;
                 heading.Margin = new Thickness(0, 0, 0, 30);
-                pfp.HeightRequest = width / 20;
-                pfp.WidthRequest = width / 20;
-                pfp.CornerRadius = (int)(width / 40);
+                pfp.HeightRequest = 40;
+                pfp.WidthRequest = 40;
+                pfp.CornerRadius = 20;
                 pfp.Margin = new Thickness(0, 0, 23, 27);
-                menu.HeightRequest = width / 20;
-                menu.HeightRequest = width / 20;
                 menu.Margin = new Thickness(25, 0, 0, 30);
+                menu.WidthRequest = 40;
 
                 takeoutGrid.Margin = new Thickness(20, 10, 20, 10);
                 takeout.HeightRequest = width / 18;
@@ -271,12 +270,12 @@ namespace MTYD.ViewModel
                 heading.FontSize = width / 45;
                 heading.Margin = new Thickness(0, 0, 0, 40);
                 //heading.VerticalOptions = LayoutOptions.Center;
-                pfp.HeightRequest = width / 25;
-                pfp.WidthRequest = width / 25;
-                pfp.CornerRadius = (int)(width / 50);
+                pfp.HeightRequest = 40;
+                pfp.WidthRequest = 40;
+                pfp.CornerRadius = 20;
                 pfp.Margin = new Thickness(0, 0, 23, 35);
-                menu.HeightRequest = width / 30;
-                menu.WidthRequest = width / 30;
+                //menu.HeightRequest = width / 30;
+                menu.WidthRequest = 40;
                 menu.Margin = new Thickness(25, 0, 0, 40);
 
                 takeoutGrid.Margin = new Thickness(20, 10, 20, 10);
@@ -356,7 +355,7 @@ namespace MTYD.ViewModel
         
         private void clickedMeals1(object sender, EventArgs e)
         {
-            meals1.BackgroundColor = Color.FromHex("#FFBA00");
+            meals1.BackgroundColor = Color.FromHex("#F8BB17");
             meals2.BackgroundColor = Color.FromHex("#FFF0C6");
             meals3.BackgroundColor = Color.FromHex("#FFF0C6");
             meals4.BackgroundColor = Color.FromHex("#FFF0C6");
@@ -390,7 +389,7 @@ namespace MTYD.ViewModel
         private void clickedMeals2(object sender, EventArgs e)
         {
             meals1.BackgroundColor = Color.FromHex("#FFF0C6");
-            meals2.BackgroundColor = Color.FromHex("#FFBA00");
+            meals2.BackgroundColor = Color.FromHex("#F8BB17");
             meals3.BackgroundColor = Color.FromHex("#FFF0C6");
             meals4.BackgroundColor = Color.FromHex("#FFF0C6");
             Preferences.Set("mealSelected", "2");
@@ -424,7 +423,7 @@ namespace MTYD.ViewModel
         {
             meals1.BackgroundColor = Color.FromHex("#FFF0C6");
             meals2.BackgroundColor = Color.FromHex("#FFF0C6");
-            meals3.BackgroundColor = Color.FromHex("#FFBA00");
+            meals3.BackgroundColor = Color.FromHex("#F8BB17");
             meals4.BackgroundColor = Color.FromHex("#FFF0C6");
             Preferences.Set("mealSelected", "3");
 
@@ -458,7 +457,7 @@ namespace MTYD.ViewModel
             meals1.BackgroundColor = Color.FromHex("#FFF0C6");
             meals2.BackgroundColor = Color.FromHex("#FFF0C6");
             meals3.BackgroundColor = Color.FromHex("#FFF0C6");
-            meals4.BackgroundColor = Color.FromHex("#FFBA00");
+            meals4.BackgroundColor = Color.FromHex("#F8BB17");
             Preferences.Set("mealSelected", "4");
 
             string freq_select = Preferences.Get("freqSelected", "");

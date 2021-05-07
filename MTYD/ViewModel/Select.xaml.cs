@@ -197,12 +197,12 @@ namespace MTYD.ViewModel
                 orangeBox2.HeightRequest = height / 2;
                 orangeBox2.Margin = new Thickness(0, -height / 2.2, 0, 0);
                 orangeBox2.CornerRadius = height / 40;
-                heading2.WidthRequest = width / 5;
-                menu2.Margin = new Thickness(25, 0, 0, 30);
-                menu2.HeightRequest = width / 20;
-                menu2.WidthRequest = width / 20;
+                heading2.WidthRequest = 140;
+                menu2.Margin = new Thickness(25, 0, 0, 0);
+                //menu.WidthRequest = 40; = width / 20;
+                //menu2.WidthRequest = width / 20;
                 //menu2.Margin = new Thickness(25, 0, 0, 30);
-                heading.WidthRequest = width / 5;
+                heading.WidthRequest = 140;
                 //open menu adjustments
 
                 orangeBox.HeightRequest = height / 2;
@@ -214,9 +214,9 @@ namespace MTYD.ViewModel
                 //heading.FontSize = width / 32;
                 //heading.Margin = new Thickness(0, 0, 0, 30);
                 //heading2.WidthRequest = width / 5.3;
-                pfp.HeightRequest = width / 20;
-                pfp.WidthRequest = width / 20;
-                pfp.CornerRadius = (int)(width / 40);
+                pfp.HeightRequest = 40;
+                pfp.WidthRequest = 40;
+                pfp.CornerRadius = 20;
                 //pfp.Margin = new Thickness(0, 0, 23, 27);
                 innerGrid.Margin = new Thickness(0, 0, 23, 27);
 
@@ -237,17 +237,17 @@ namespace MTYD.ViewModel
                 }
                 else pfp.Source = Preferences.Get("profilePicLink", "");
 
-                //menu.HeightRequest = width / 20;
-                //menu.HeightRequest = width / 20;
+                //#F8BB17
+                //#F8BB17
                 menu.Margin = new Thickness(25, 0, 0, 30);
-                menu.HeightRequest = width / 20;
-                menu.WidthRequest = width / 20;
+                //#F8BB17
+                menu.WidthRequest = 40;
                 menu2.Margin = new Thickness(25, 0, 0, 30);
-                menu2.HeightRequest = width / 20;
-                menu2.WidthRequest = width / 20;
+                //menu.WidthRequest = 40; = width / 20;
+                menu2.WidthRequest = 40;
                 //menu2.Margin = new Thickness(25, 0, 0, 30);
-                //menu2.HeightRequest = width / 25;
-                //menu2.HeightRequest = width / 20;
+                //menu.WidthRequest = 40; = width / 25;
+                //menu.WidthRequest = 40; = width / 20;
                 //menu2.Margin = new Thickness(0, 0, 25, 15);
 
                 popUpFrame.Margin = new Thickness(0, height / 10, 0, 0);
@@ -647,7 +647,7 @@ namespace MTYD.ViewModel
                 datePicker.SelectedIndex = 0;
                 availDateIndex = 0;
                 selectedDate = availableDates[0];
-                selectedDate.outlineColor = Color.Red;
+                selectedDate.outlineColor = Color.FromHex("#F26522");
                 text1 = selectedDate.fullDateTime;
                 //Debug.WriteLine("date picked: " + text1);
                 Preferences.Set("dateSelected", availableDates[0].fullDateTime.Substring(0,10));
@@ -706,9 +706,9 @@ namespace MTYD.ViewModel
                 if (isAlreadySelected == true)
                 {
                     Debug.WriteLine("isalreadyselected=true");
-                    //selectedDate.fillColor = Color.FromHex("#FFBA00");
-                    saveBttn.BackgroundColor = Color.Orange;
-                    saveFrame.BackgroundColor = Color.Orange;
+                    //selectedDate.fillColor = Color.FromHex("#F8BB17");
+                    saveBttn.BackgroundColor = Color.FromHex("#F8BB17");
+                    saveFrame.BackgroundColor = Color.FromHex("#F8BB17");
                     saveBttn.TextColor = Color.White;
                     skipBttn.BackgroundColor = Color.White;
                     skipFrame.BackgroundColor = Color.White;
@@ -788,8 +788,8 @@ namespace MTYD.ViewModel
                     //testing to try and send correct json object
                     //qtyDict.Clear();
 
-                    skipBttn.BackgroundColor = Color.Orange;
-                    skipFrame.BackgroundColor = Color.Orange;
+                    skipBttn.BackgroundColor = Color.FromHex("#F8BB17");
+                    skipFrame.BackgroundColor = Color.FromHex("#F8BB17");
                     skipBttn.TextColor = Color.White;
                     surpriseBttn.BackgroundColor = Color.White;
                     surpriseFrame.BackgroundColor = Color.White;
@@ -831,8 +831,8 @@ namespace MTYD.ViewModel
                     //testing to try and send correct json object
                     //qtyDict.Clear();
 
-                    surpriseBttn.BackgroundColor = Color.Orange;
-                    surpriseFrame.BackgroundColor = Color.Orange;
+                    surpriseBttn.BackgroundColor = Color.FromHex("#F8BB17");
+                    surpriseFrame.BackgroundColor = Color.FromHex("#F8BB17");
                     surpriseBttn.TextColor = Color.White;
                     skipBttn.BackgroundColor = Color.White;
                     skipFrame.BackgroundColor = Color.White;
@@ -920,7 +920,7 @@ namespace MTYD.ViewModel
             Date dateChosen = button1.BindingContext as Date;
             selectedDate.outlineColor = Color.White;
             selectedDate = dateChosen;
-            selectedDate.outlineColor = Color.Red;
+            selectedDate.outlineColor = Color.FromHex("#F26522");
             //dateChosen.fillColor = Color.LightGray;
             selectedDotw = dateChosen.dotw;
             Debug.WriteLine("dayOfWeek: " + selectedDotw);
@@ -980,8 +980,8 @@ namespace MTYD.ViewModel
             //bool isAlreadySelected = Preferences.Get("isAlreadySelected", true);
             if (isAlreadySelected == true)
             {
-                saveBttn.BackgroundColor = Color.Orange;
-                saveFrame.BackgroundColor = Color.Orange;
+                saveBttn.BackgroundColor = Color.FromHex("#F8BB17");
+                saveFrame.BackgroundColor = Color.FromHex("#F8BB17");
                 saveBttn.TextColor = Color.White;
                 skipBttn.BackgroundColor = Color.White;
                 skipFrame.BackgroundColor = Color.White;
@@ -1059,8 +1059,8 @@ namespace MTYD.ViewModel
                 //testing to try and send correct json object
                 //qtyDict.Clear();
 
-                skipBttn.BackgroundColor = Color.Orange;
-                skipFrame.BackgroundColor = Color.Orange;
+                skipBttn.BackgroundColor = Color.FromHex("#F8BB17");
+                skipFrame.BackgroundColor = Color.FromHex("#F8BB17");
                 skipBttn.TextColor = Color.White;
                 surpriseBttn.BackgroundColor = Color.White;
                 surpriseFrame.BackgroundColor = Color.White;
@@ -1101,8 +1101,8 @@ namespace MTYD.ViewModel
                 //testing to try and send correct json object
                 //qtyDict.Clear();
 
-                surpriseBttn.BackgroundColor = Color.Orange;
-                surpriseFrame.BackgroundColor = Color.Orange;
+                surpriseBttn.BackgroundColor = Color.FromHex("#F8BB17");
+                surpriseFrame.BackgroundColor = Color.FromHex("#F8BB17");
                 surpriseBttn.TextColor = Color.White;
                 skipBttn.BackgroundColor = Color.White;
                 skipFrame.BackgroundColor = Color.White;
@@ -1230,8 +1230,8 @@ namespace MTYD.ViewModel
                 //bool isAlreadySelected = Preferences.Get("isAlreadySelected", true);
                 if (isAlreadySelected == true)
                 {
-                    saveBttn.BackgroundColor = Color.Orange;
-                    saveFrame.BackgroundColor = Color.Orange;
+                    saveBttn.BackgroundColor = Color.FromHex("#F8BB17");
+                    saveFrame.BackgroundColor = Color.FromHex("#F8BB17");
                     saveBttn.TextColor = Color.White;
                     skipBttn.BackgroundColor = Color.White;
                     skipFrame.BackgroundColor = Color.White;
@@ -1305,8 +1305,8 @@ namespace MTYD.ViewModel
                     //testing to try and send correct json object
                     //qtyDict.Clear();
 
-                    skipBttn.BackgroundColor = Color.Orange;
-                    skipFrame.BackgroundColor = Color.Orange;
+                    skipBttn.BackgroundColor = Color.FromHex("#F8BB17");
+                    skipFrame.BackgroundColor = Color.FromHex("#F8BB17");
                     skipBttn.TextColor = Color.White;
                     surpriseBttn.BackgroundColor = Color.White;
                     surpriseFrame.BackgroundColor = Color.White;
@@ -1349,8 +1349,8 @@ namespace MTYD.ViewModel
                     //testing to try and send correct json object
                     //qtyDict.Clear();
 
-                    surpriseBttn.BackgroundColor = Color.Orange;
-                    surpriseFrame.BackgroundColor = Color.Orange;
+                    surpriseBttn.BackgroundColor = Color.FromHex("#F8BB17");
+                    surpriseFrame.BackgroundColor = Color.FromHex("#F8BB17");
                     surpriseBttn.TextColor = Color.White;
                     skipBttn.BackgroundColor = Color.White;
                     skipFrame.BackgroundColor = Color.White;
@@ -1430,8 +1430,8 @@ namespace MTYD.ViewModel
             }
             else
             {
-                surpriseBttn.BackgroundColor = Color.Orange;
-                surpriseFrame.BackgroundColor = Color.Orange;
+                surpriseBttn.BackgroundColor = Color.FromHex("#F8BB17");
+                surpriseFrame.BackgroundColor = Color.FromHex("#F8BB17");
                 surpriseBttn.TextColor = Color.White;
                 skipBttn.BackgroundColor = Color.White;
                 skipFrame.BackgroundColor = Color.White;
@@ -2153,10 +2153,10 @@ namespace MTYD.ViewModel
             int count = Preferences.Get("total", 0);
             if (totalCount.Text == "0" || count == 0)
             {
-                saveFrame.BackgroundColor = Color.Orange;
-                saveBttn.BackgroundColor = Color.Orange;
+                saveFrame.BackgroundColor = Color.FromHex("#F8BB17");
+                saveBttn.BackgroundColor = Color.FromHex("#F8BB17");
                 saveBttn.TextColor = Color.White;
-                selectedDate.fillColor = Color.FromHex("#FFBA00");
+                selectedDate.fillColor = Color.FromHex("#F8BB17");
                 selectedDate.status = "Selected";
 
                 for (int i = 0; i < Meals1.Count; i++)
@@ -2250,8 +2250,8 @@ namespace MTYD.ViewModel
             selectedDotw = "SKIP";
             //addOnSelected = false;
             //qtyDict.Clear();
-            skipBttn.BackgroundColor = Color.Orange;
-            skipFrame.BackgroundColor = Color.Orange;
+            skipBttn.BackgroundColor = Color.FromHex("#F8BB17");
+            skipFrame.BackgroundColor = Color.FromHex("#F8BB17");
             skipBttn.TextColor = Color.White;
             surpriseBttn.BackgroundColor = Color.White;
             surpriseFrame.BackgroundColor = Color.White;
@@ -2337,8 +2337,8 @@ namespace MTYD.ViewModel
             selectedDate.fillColor = Color.White;
             selectedDate.status = "Surprise / No Selection";
             //weekOneProgress.Progress = 0;
-            surpriseBttn.BackgroundColor = Color.Orange;
-            surpriseFrame.BackgroundColor = Color.Orange;
+            surpriseBttn.BackgroundColor = Color.FromHex("#F8BB17");
+            surpriseFrame.BackgroundColor = Color.FromHex("#F8BB17");
             surpriseBttn.TextColor = Color.White;
             skipBttn.BackgroundColor = Color.White;
             skipFrame.BackgroundColor = Color.White;
@@ -2412,8 +2412,8 @@ namespace MTYD.ViewModel
 
             //addOnSelected = false;
             //qtyDict.Clear();
-            surpriseBttn.BackgroundColor = Color.Orange;
-            surpriseFrame.BackgroundColor = Color.Orange;
+            surpriseBttn.BackgroundColor = Color.FromHex("#F8BB17");
+            surpriseFrame.BackgroundColor = Color.FromHex("#F8BB17");
             surpriseBttn.TextColor = Color.White;
             skipBttn.BackgroundColor = Color.White;
             skipFrame.BackgroundColor = Color.White;
@@ -2686,7 +2686,7 @@ namespace MTYD.ViewModel
                     }
                     else if (isAlreadySelected2 == true && isSurprise2 == false)
                     {
-                        d.fillColor = Color.FromHex("#FFBA00");
+                        d.fillColor = Color.FromHex("#F8BB17");
                         d.status = "Selected";
                     }
                     else
@@ -2827,7 +2827,7 @@ namespace MTYD.ViewModel
                 }
                 else if (isAlreadySelected == true && isSurprise == false)
                 {
-                    selectedDate.fillColor = Color.FromHex("#FFBA00");
+                    selectedDate.fillColor = Color.FromHex("#F8BB17");
                     selectedDate.status = "Selected";
                 }
                 else

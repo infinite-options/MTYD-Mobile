@@ -99,7 +99,7 @@
 
                 <Label x:Name="spacer3" HeightRequest="5"/>
 
-                <BoxView x:Name="divider" HeightRequest="1" BackgroundColor="#FFBA00"
+                <BoxView x:Name="divider" HeightRequest="1" BackgroundColor="#F8BB17"
                          Margin="25,0" HorizontalOptions="Fill" VerticalOptions="Center"/>
 
                 <Label x:Name="spacer" HeightRequest="5"/>
@@ -125,20 +125,20 @@
                     <StackLayout x:Name="payStack1" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="End">
                         <Label x:Name="payOp1" FontAttributes="Bold" HorizontalTextAlignment="Center" HorizontalOptions="Center" TextColor="Black"/>
 
-                        <ImageButton x:Name="payButton1" BorderColor="#FFBA00" BorderWidth="4" Clicked="clickedPayOp1"
+                        <ImageButton x:Name="payButton1" BorderColor="#F8BB17" BorderWidth="4" Clicked="clickedPayOp1"
                                      Source="noDiscount.png" Aspect="AspectFill" HorizontalOptions="Center"/>
                     </StackLayout>
                     
                     <StackLayout x:Name="payStack2" Grid.Column="1" VerticalOptions="Center">
                     <Label x:Name="payOp2" FontAttributes="Bold" HorizontalTextAlignment="Center" HorizontalOptions="Center" TextColor="Black"/>
 
-                    <ImageButton x:Name="payButton2" BorderColor="#FFBA00" BorderWidth="4" HorizontalOptions="Center" Source="Discount5.png" Aspect="AspectFill"  Clicked="clickedPayOp2"/>
+                    <ImageButton x:Name="payButton2" BorderColor="#F8BB17" BorderWidth="4" HorizontalOptions="Center" Source="Discount5.png" Aspect="AspectFill"  Clicked="clickedPayOp2"/>
                     </StackLayout>
 
                     <StackLayout x:Name="payStack3" Grid.Column="2" VerticalOptions="Center" HorizontalOptions="Start">
                     <Label x:Name="payOp3" FontAttributes="Bold" HorizontalTextAlignment="Center" HorizontalOptions="Center" TextColor="Black"/>
 
-                    <ImageButton x:Name="payButton3" BorderColor="#FFBA00" BorderWidth="4" Source="Discount10.png" HorizontalOptions="Center"  Clicked="clickedPayOp3"/>
+                    <ImageButton x:Name="payButton3" BorderColor="#F8BB17" BorderWidth="4" Source="Discount10.png" HorizontalOptions="Center"  Clicked="clickedPayOp3"/>
                     </StackLayout>
 
                 </Grid>
@@ -296,7 +296,7 @@
 
                 <AbsoluteLayout>
 
-                    <BoxView x:Name="divider" HeightRequest="1" WidthRequest="10" BackgroundColor="#FFBA00"
+                    <BoxView x:Name="divider" HeightRequest="1" WidthRequest="10" BackgroundColor="#F8BB17"
                              AbsoluteLayout.LayoutBounds="0.5,0, 0.9, 1"
                              AbsoluteLayout.LayoutFlags="PositionProportional, WidthProportional"/>
 
@@ -317,7 +317,7 @@
                        AbsoluteLayout.LayoutBounds="0.22, 0.25"
                        AbsoluteLayout.LayoutFlags="PositionProportional"/>
 
-                    <ImageButton x:Name="payButton1" BorderColor="#FFBA00" BorderWidth="4" Clicked="clickedPayOp1"
+                    <ImageButton x:Name="payButton1" BorderColor="#F8BB17" BorderWidth="4" Clicked="clickedPayOp1"
                                  AbsoluteLayout.LayoutBounds="0.2, 0.55" HeightRequest="70" WidthRequest="70"
                                  AbsoluteLayout.LayoutFlags="PositionProportional" Source="noDiscount.png" Aspect="AspectFill"/>
 
@@ -325,7 +325,7 @@
                        AbsoluteLayout.LayoutBounds="0.5, 0.25"
                        AbsoluteLayout.LayoutFlags="PositionProportional"/>
 
-                    <ImageButton x:Name="payButton2" BorderColor="#FFBA00" BorderWidth="4" Clicked="clickedPayOp2"
+                    <ImageButton x:Name="payButton2" BorderColor="#F8BB17" BorderWidth="4" Clicked="clickedPayOp2"
                                  AbsoluteLayout.LayoutBounds="0.5, 0.55" HeightRequest="70" WidthRequest="70"
                                  AbsoluteLayout.LayoutFlags="PositionProportional" Source="Discount5.png" Aspect="AspectFill"/>
 
@@ -333,7 +333,7 @@
                        AbsoluteLayout.LayoutBounds="0.82, 0.25"
                        AbsoluteLayout.LayoutFlags="PositionProportional"/>
 
-                    <ImageButton x:Name="payButton3" BorderColor="#FFBA00" BorderWidth="4" Clicked="clickedPayOp3"
+                    <ImageButton x:Name="payButton3" BorderColor="#F8BB17" BorderWidth="4" Clicked="clickedPayOp3"
                                  AbsoluteLayout.LayoutBounds="0.8, 0.55" HeightRequest="70" WidthRequest="70"
                                  AbsoluteLayout.LayoutFlags="PositionProportional" Source="Discount10.png" />
 

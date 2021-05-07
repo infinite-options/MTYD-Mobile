@@ -284,6 +284,10 @@
     <BundleResource Include="Resources\login_apple.png" />
     <BundleResource Include="Resources\login_facebook.png" />
     <BundleResource Include="Resources\login_google.png" />
+    <BundleResource Include="Resources\aColored.png" />
+    <BundleResource Include="Resources\fbColored.png" />
+    <BundleResource Include="Resources\gColored.png" />
+    <BundleResource Include="Resources\backButton.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AppleSignIn\" />

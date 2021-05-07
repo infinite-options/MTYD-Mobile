@@ -204,9 +204,9 @@ namespace MTYD.ViewModel
                 orangeBox.CornerRadius = height / 40;
                 heading.FontSize = width / 32;
                 heading.Margin = new Thickness(0, 0, 0, 30);
-                pfp.HeightRequest = width / 20;
-                pfp.WidthRequest = width / 20;
-                pfp.CornerRadius = (int)(width / 40);
+                pfp.HeightRequest = 40;
+                pfp.WidthRequest = 40;
+                pfp.CornerRadius = 20;
                 //pfp.Margin = new Thickness(0, 0, 23, 27);
                 innerGrid.Margin = new Thickness(0, 0, 23, 27);
 
@@ -227,8 +227,7 @@ namespace MTYD.ViewModel
                 }
                 else pfp.Source = Preferences.Get("profilePicLink", "");
 
-                menu.HeightRequest = width / 20;
-                menu.HeightRequest = width / 20;
+                menu.WidthRequest = 40;
                 menu.Margin = new Thickness(25, 0, 0, 30);
 
                 //mealPlanGrid.Margin = new Thickness(width / 40, 10, width / 40, 5);
@@ -344,11 +343,11 @@ namespace MTYD.ViewModel
 
             Console.WriteLine("planChange entered");
             planChangeCalled = true;
-            //selectPlanFrame.BackgroundColor = Color.FromHex("#FF6505");
-            //coverPickerBorder.BorderColor = Color.FromHex("#FF6505");
+            //selectPlanFrame.BackgroundColor = Color.FromHex("#F26522");
+            //coverPickerBorder.BorderColor = Color.FromHex("#F26522");
 
             //planPicker.TextColor = Color.White;
-            //planPicker.BackgroundColor = Color.FromHex("#FF6505");
+            //planPicker.BackgroundColor = Color.FromHex("#F26522");
 
             Console.WriteLine("before frequency " + frequency);
             getFrequency();

@@ -47,7 +47,7 @@ namespace MTYD
             orangeBox.HeightRequest = height / 2;
             orangeBox.Margin = new Thickness(0, -height / 2.2, 0, 0);
             orangeBox.CornerRadius = height / 40;
-            heading.WidthRequest = width / 5;
+            heading.WidthRequest = 140;
             fade.Margin = new Thickness(0, -height / 3, 0, 0);
             addressList.HeightRequest = width / 5;
 

@@ -117,14 +117,14 @@ namespace MTYD.ViewModel
 
         private void checkPlatform(double height, double width)
         {
-            orangeBox.HeightRequest = height / 2.3;
-            orangeBox.Margin = new Thickness(0, -height / 2.6, 0, 0);
+            orangeBox.HeightRequest = height / 2;
+            orangeBox.Margin = new Thickness(0, - orangeBox.HeightRequest + (height * 0.075), 0, 0);
             orangeBox.CornerRadius = height / 40;
-            heading.WidthRequest = width / 5;
+            heading.WidthRequest = 140;
 
-            //pfp.HeightRequest = width / 20;
-            //pfp.WidthRequest = width / 20;
-            //pfp.CornerRadius = (int)(width / 40);
+            //pfp.HeightRequest = 40;
+            //pfp.WidthRequest = 40;
+            //pfp.CornerRadius = 20;
             //pfp.Margin = new Thickness(0, 0, 23, 27);
             //innerGrid.Margin = new Thickness(0, 0, 23, 27);
 
@@ -145,8 +145,8 @@ namespace MTYD.ViewModel
             //else pfp.Source = Preferences.Get("profilePicLink", "");
 
             menu.Margin = new Thickness(25, 0, 0, 30);
-            menu.HeightRequest = width / 20;
-            menu.WidthRequest = width / 20;
+            menu.HeightRequest = 25;
+            //menu.WidthRequest = 40;
 
             if (width == 1125 && height == 2436) //iPhone X only
             {
@@ -174,21 +174,21 @@ namespace MTYD.ViewModel
             }
             else if (Device.RuntimePlatform == Device.iOS)
             {
-                appleSignupFrame.WidthRequest = width / 3.5;
-                appleSignupFrame.HeightRequest = width / 25;
-                appleSignupButton.WidthRequest = width / 3.5;
-                appleSignupButton.HeightRequest = width / 25;
-                appleSignupText.FontSize = width / 50;
-                fbSignupFrame.WidthRequest = width / 3.5;
-                fbSignupFrame.HeightRequest = width / 25;
-                fbSignupButton.WidthRequest = width / 3.5;
-                fbSignupButton.HeightRequest = width / 25;
-                fbSignupText.FontSize = width / 50;
-                googleSignupFrame.WidthRequest = width / 3.5;
-                googleSignupFrame.HeightRequest = width / 25;
-                googleSignupButton.WidthRequest = width / 3.5;
-                googleSignupButton.HeightRequest = width / 25;
-                googleSignupText.FontSize = width / 50;
+                //appleSignupFrame.WidthRequest = width / 3.5;
+                //appleSignupFrame.HeightRequest = width / 25;
+                //appleSignupButton.WidthRequest = width / 3.5;
+                //appleSignupButton.HeightRequest = width / 25;
+                //appleSignupText.FontSize = width / 50;
+                //fbSignupFrame.WidthRequest = width / 3.5;
+                //fbSignupFrame.HeightRequest = width / 25;
+                //fbSignupButton.WidthRequest = width / 3.5;
+                //fbSignupButton.HeightRequest = width / 25;
+                //fbSignupText.FontSize = width / 50;
+                //googleSignupFrame.WidthRequest = width / 3.5;
+                //googleSignupFrame.HeightRequest = width / 25;
+                //googleSignupButton.WidthRequest = width / 3.5;
+                //googleSignupButton.HeightRequest = width / 25;
+                //googleSignupText.FontSize = width / 50;
             }
             else //android
             {
@@ -248,7 +248,7 @@ namespace MTYD.ViewModel
             //            HorizontalTextAlignment = TextAlignment.Center,
             //            VerticalTextAlignment = TextAlignment.Center
             //        },
-            //        BorderColor = Color.FromHex("#f26522"),
+            //        BorderColor = Color.FromHex("#F26522"),
             //        HasShadow = false,
             //        Padding = 5,
             //        CornerRadius = 0
@@ -265,10 +265,10 @@ namespace MTYD.ViewModel
             //logo.HeightRequest = width / 15;
             //logo.Margin = new Thickness(0, 0, 0, 30);
             //innerGrid.Margin = new Thickness(0, 0, 23, 27);
+            heading.WidthRequest = 140;
 
             menu.Margin = new Thickness(25, 0, 0, 30);
-            menu.HeightRequest = width / 20;
-            menu.WidthRequest = width / 20;
+            menu.WidthRequest = 25;
             //menu.Margin = new Thickness(25, 0, 0, 30);
 
             //if (Preferences.Get("profilePicLink", "") == "")
@@ -298,9 +298,9 @@ namespace MTYD.ViewModel
             if (Device.RuntimePlatform == Device.iOS)
             {
 
-                //pfp.HeightRequest = width / 20;
-                //pfp.WidthRequest = width / 20;
-                //pfp.CornerRadius = (int)(width / 40);
+                //pfp.HeightRequest = 40;
+                //pfp.WidthRequest = 40;
+                //pfp.CornerRadius = 20;
 
                 //mainLogo.HeightRequest = height / 18;
                 //getStarted.HeightRequest = height / 35;

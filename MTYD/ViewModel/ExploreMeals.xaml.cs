@@ -192,7 +192,7 @@ namespace MTYD.ViewModel
                 orangeBox.CornerRadius = height / 40;
                 //heading.FontSize = width / 32;
                 //heading.Margin = new Thickness(0, 0, 0, 30);
-                heading.WidthRequest = width / 5;
+                heading.WidthRequest = 140;
 
 
                 popUpFrame.Margin = new Thickness(0, height / 10, 0, 0);
@@ -204,10 +204,10 @@ namespace MTYD.ViewModel
                 popButton3.HeightRequest = popUpFrame.HeightRequest / 7;
 
                 menu.Margin = new Thickness(25, 0, 0, 30);
-                menu.HeightRequest = width / 20;
-                menu.WidthRequest = width / 20;
+                menu.HeightRequest = 25;
+                //menu.WidthRequest = width / 25;
                 //menu.Margin = new Thickness(25, 0, 0, 30);
-                
+
 
                 //selectPlanFrame.Margin = new Thickness(25, 7);
                 //selectPlanFrame.Padding = new Thickness(15, 5);
@@ -244,11 +244,11 @@ namespace MTYD.ViewModel
                 //orangeBox2.HeightRequest = height / 2;
                 //orangeBox2.Margin = new Thickness(0, -height / 2.2, 0, 0);
                 //orangeBox2.CornerRadius = height / 40;
-                //heading2.WidthRequest = width / 5;
-                //menu2.HeightRequest = width / 25;
-                //menu2.HeightRequest = width / 20;
+                //heading2.WidthRequest = 140;
+                //menu.WidthRequest = 40; = width / 25;
+                //menu.WidthRequest = 40; = width / 20;
                 //menu2.Margin = new Thickness(25, 0, 0, 30);
-                //heading.WidthRequest = width / 5;
+                //menu.WidthRequest = 40;
                 ////heading adjustments
             }
             Debug.WriteLine("checkPlatform done");
@@ -607,7 +607,7 @@ namespace MTYD.ViewModel
                 datePicker.SelectedIndex = 0;
                 availDateIndex = 0;
                 selectedDate = availableDates[0];
-                selectedDate.outlineColor = Color.Red;
+                selectedDate.outlineColor = Color.FromHex("#F26522");
                 text1 = selectedDate.fullDateTime;
                 //Debug.WriteLine("date picked: " + text1);
                 Preferences.Set("dateSelected", availableDates[0].fullDateTime.Substring(0, 10));
@@ -699,7 +699,7 @@ namespace MTYD.ViewModel
             Date dateChosen = button1.BindingContext as Date;
             selectedDate.outlineColor = Color.White;
             selectedDate = dateChosen;
-            selectedDate.outlineColor = Color.Red;
+            selectedDate.outlineColor = Color.FromHex("#F26522");
             //dateChosen.fillColor = Color.LightGray;
             selectedDotw = dateChosen.dotw;
             Debug.WriteLine("dayOfWeek: " + selectedDotw);
@@ -811,6 +811,7 @@ namespace MTYD.ViewModel
             ImageButton b = (ImageButton)sender;
             MealInfo ms = b.BindingContext as MealInfo;
             //ms.MealQuantity++;
+            popUpHeader.HeightRequest = 70;
             popUpHeader.Text = "Don’t forget your favorite meals! Click the heart to easily find your favorite meals and get reminders.";
 
             fade.IsVisible = true;
@@ -963,6 +964,7 @@ namespace MTYD.ViewModel
 
         private async void clickIncrease(object sender, EventArgs e)
         {
+            popUpHeader.HeightRequest = 100;
             popUpHeader.Text = "Looks like you're enjoying MealsFor.Me! The + and - buttons help you add / remove meals from your meal plan.";
 
             fade.IsVisible = true;
@@ -972,6 +974,7 @@ namespace MTYD.ViewModel
 
         private async void clickIncreaseAddOn(object sender, EventArgs e)
         {
+            popUpHeader.HeightRequest = 100;
             popUpHeader.Text = "Looks like you're enjoying MealsFor.Me! The + and - buttons help you add / remove meals from your meal plan.";
 
             fade.IsVisible = true;
@@ -996,6 +999,7 @@ namespace MTYD.ViewModel
 
         private async void clickDecrease(object sender, EventArgs e)
         {
+            popUpHeader.HeightRequest = 100;
             popUpHeader.Text = "Looks like you're enjoying MealsFor.Me! The + and - buttons help you add / remove meals from your meal plan.";
 
             fade.IsVisible = true;
@@ -1105,6 +1109,7 @@ namespace MTYD.ViewModel
 
         private async void clickDecreaseAddOn(object sender, EventArgs e)
         {
+            popUpHeader.HeightRequest = 100;
             popUpHeader.Text = "Looks like you're enjoying MealsFor.Me! The + and - buttons help you add / remove meals from your meal plan.";
 
             fade.IsVisible = true;
@@ -1136,6 +1141,7 @@ namespace MTYD.ViewModel
         
         private async void saveUserMeals(object sender, EventArgs e)
         {
+            popUpHeader.HeightRequest = 80;
             popUpHeader.Text = "Save allows you to select your meals up to 3 weeks in advance.";
 
             fade.IsVisible = true;
@@ -1145,6 +1151,7 @@ namespace MTYD.ViewModel
 
         private async void skipMealSelection(object sender, EventArgs e)
         {
+            popUpHeader.HeightRequest = 100;
             popUpHeader.Text = "Not at home or have other plans? Its easy to Skip a delivery and we’ll automatically extend your subscription.";
 
             fade.IsVisible = true;
@@ -1160,6 +1167,7 @@ namespace MTYD.ViewModel
 
         private async void surpriseMealSelection(object sender, EventArgs e)
         {
+            popUpHeader.HeightRequest = 90;
             popUpHeader.Text = "Surprise means we'll give you an assortment of meals on the specific delivery day.";
 
             fade.IsVisible = true;

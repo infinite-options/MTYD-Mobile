@@ -14,7 +14,22 @@ namespace MTYD.Model.Login.LoginClasses
     {
         public string message { get; set; }
         public int code { get; set; }
-        public string sql { get; set; }
+        //public string sql { get; set; }
         public Result result { get; set; }
+    }
+
+    public class SignUpExisted
+    {
+        public string message { get; set; }
+        public int code { get; set; }
+        //public string sql { get; set; }
+        public Result2 result { get; set; }
+    }
+
+    public class Result2
+    {
+        public string customer_email { get; set; }
+        public string role { get; set; }
+        public string customer_uid { get; set; }
     }
 }

@@ -26,7 +26,31 @@ using Stripe;
 
 namespace MTYD.ViewModel
 {
-
+    /*
+    Preferences.Set("prevFName", FNameEntry.Text);
+    Preferences.Set("prevLName", LNameEntry.Text);
+    Preferences.Set("prevEmail", emailEntry.Text);
+    Preferences.Set("prevPhone", PhoneEntry.Text);
+    Preferences.Set("prevAdd", AddressEntry.Text);
+    Preferences.Set("prevApt", AptEntry.Text);
+    Preferences.Set("prevCity", CityEntry.Text);
+    Preferences.Set("prevState", StateEntry.Text);
+    Preferences.Set("prevZip", ZipEntry.Text);
+    Preferences.Set("prevInstr", DeliveryEntry.Text);
+    Preferences.Set("prevCardName", cardHolderName.Text);
+    Preferences.Set("prevCardNum", cardHolderNumber.Text);
+    Preferences.Set("prevExpMonth", cardExpMonth.Text);
+    Preferences.Set("prevExpYear", cardExpYear.Text);
+    Preferences.Set("prevCVV", cardCVV.Text);
+    Preferences.Set("prevCardAdd", cardHolderAddress.Text);
+    Preferences.Set("prevCardUnit", cardHolderUnit.Text);
+    Preferences.Set("prevCardCity", cardCity.Text);
+    Preferences.Set("prevCardState", cardState.Text);
+    Preferences.Set("prevCardZip", cardZip.Text);
+    Preferences.Set("prevProceed", prevProceed);
+    Preferences.Set("prevAddFilled", prevAddFilled);
+    Preferences.Set("anyPrev", anyPrev);
+     */
 
 
     [XamlCompilation(XamlCompilationOptions.Compile)]
@@ -102,12 +126,202 @@ namespace MTYD.ViewModel
         //auto-populate the delivery info if the user has already previously entered it
         public async void fillEntriesDeliv()
         {
-            if ((string)Xamarin.Forms.Application.Current.Properties["platform"] == "GUEST")
+            if (Preferences.Get("anyPrev", false) == true)
             {
-                //put placeholders
+
+                FNameEntry.Text = Preferences.Get("prevFName", "");
+                LNameEntry.Text = Preferences.Get("prevLName", "");
+                emailEntry.Text = Preferences.Get("prevEmail", "");
+                PhoneEntry.Text = Preferences.Get("prevPhone", "");
+                AddressEntry.Text = Preferences.Get("prevAdd", "");
+                AptEntry.Text = Preferences.Get("prevApt", "");
+                CityEntry.Text = Preferences.Get("prevCity", "");
+                StateEntry.Text = Preferences.Get("prevState", "");
+                ZipEntry.Text = Preferences.Get("prevZip", "");
+                DeliveryEntry.Text = Preferences.Get("prevInstr", "");
+                cardHolderName.Text = Preferences.Get("prevCardName", "");
+                cardHolderNumber.Text = Preferences.Get("prevCardNum", "");
+                cardExpMonth.Text = Preferences.Get("prevExpMonth", "");
+                cardExpYear.Text = Preferences.Get("prevExpYear", "");
+                cardCVV.Text = Preferences.Get("prevCVV", "");
+                cardHolderAddress.Text = Preferences.Get("prevCardAdd", "");
+                cardHolderUnit.Text = Preferences.Get("prevCardUnit", "");
+                cardCity.Text = Preferences.Get("prevCardCity", "");
+                cardState.Text = Preferences.Get("prevCardState", "");
+                cardZip.Text = Preferences.Get("prevCardZip", "");
+
+                if (Preferences.Get("prevProceeed", false) == true)
+                {
+                    EventArgs e = new EventArgs();
+                    clickedDeliv(proceedButton, e);
+                }
+                else if (Preferences.Get("prevAddFilled", false) == true)
+                {
+                    // Setting request for USPS API
+                    XDocument requestDoc = new XDocument(
+                        new XElement("AddressValidateRequest",
+                        new XAttribute("USERID", "400INFIN1745"),
+                        new XElement("Revision", "1"),
+                        new XElement("Address",
+                        new XAttribute("ID", "0"),
+                        new XElement("Address1", Preferences.Get("prevAdd", "")),
+                        new XElement("Address2", Preferences.Get("prevApt", "")),
+                        new XElement("City", Preferences.Get("prevCity", "")),
+                        new XElement("State", Preferences.Get("prevState", "")),
+                        new XElement("Zip5", Preferences.Get("prevZip", "")),
+                        new XElement("Zip4", "")
+                             )
+                         )
+                     );
+                    var url = "http://production.shippingapis.com/ShippingAPI.dll?API=Verify&XML=" + requestDoc;
+                    Console.WriteLine(url);
+                    var client2 = new WebClient();
+                    var response2 = client2.DownloadString(url);
+
+                    var xdoc = XDocument.Parse(response2.ToString());
+                    Console.WriteLine("xdoc begin");
+                    Console.WriteLine(xdoc);
+
+
+                    string latitude = "0";
+                    string longitude = "0";
+                    foreach (XElement element in xdoc.Descendants("Address"))
+                    {
+                        if (GetXMLElement(element, "Error").Equals(""))
+                        {
+                            //  && GetXMLElement(element, "Zip5").Equals(ZipEntry.Text.Trim()) && GetXMLElement(element, "City").Equals(CityEntry.Text.ToUpper().Trim())
+                            if (GetXMLElement(element, "DPVConfirmation").Equals("Y")) // Best case
+                            {
+                                // Get longitude and latitide because we can make a deliver here. Move on to next page.
+                                // Console.WriteLine("The address you entered is valid and deliverable by USPS. We are going to get its latitude & longitude");
+                                //GetAddressLatitudeLongitude();
+                                Geocoder geoCoder = new Geocoder();
+
+                                Debug.WriteLine("$" + AddressEntry.Text.Trim() + "$");
+                                Debug.WriteLine("$" + CityEntry.Text.Trim() + "$");
+                                Debug.WriteLine("$" + StateEntry.Text.Trim() + "$");
+                                IEnumerable<Position> approximateLocations = await geoCoder.GetPositionsForAddressAsync(AddressEntry.Text.Trim() + "," + CityEntry.Text.Trim() + "," + StateEntry.Text.Trim());
+                                Position position = approximateLocations.FirstOrDefault();
+
+                                latitude = $"{position.Latitude}";
+                                longitude = $"{position.Longitude}";
+
+                                map.MapType = MapType.Street;
+                                var mapSpan = new MapSpan(position, 0.001, 0.001);
+
+                                Pin address = new Pin();
+                                address.Label = "Delivery Address";
+                                address.Type = PinType.SearchResult;
+                                address.Position = position;
+
+                                map.MoveToRegion(mapSpan);
+                                map.Pins.Add(address);
+                            }
+                        }
+                    }
+                    //end address updating
+                }
+
+            }
+
+            if ((string)Xamarin.Forms.Application.Current.Properties["platform"] == "GUEST" && Preferences.Get("mainPageAdd", "") != "")
+            {
+                AddressEntry.Text = Preferences.Get("mainPageAdd", "");
+                CityEntry.Text = Preferences.Get("mainPageCity", "");
+                StateEntry.Text = Preferences.Get("mainPageState", "");
+                ZipEntry.Text = Preferences.Get("mainPageZip", "");
+
+                // Setting request for USPS API
+                XDocument requestDoc = new XDocument(
+                    new XElement("AddressValidateRequest",
+                    new XAttribute("USERID", "400INFIN1745"),
+                    new XElement("Revision", "1"),
+                    new XElement("Address",
+                    new XAttribute("ID", "0"),
+                    new XElement("Address1", Preferences.Get("mainPageAdd", "")),
+                    new XElement("Address2", ""),
+                    new XElement("City", Preferences.Get("mainPageCity", "")),
+                    new XElement("State", Preferences.Get("mainPageState", "")),
+                    new XElement("Zip5", Preferences.Get("mainPageZip", "")),
+                    new XElement("Zip4", "")
+                         )
+                     )
+                 );
+                var url = "http://production.shippingapis.com/ShippingAPI.dll?API=Verify&XML=" + requestDoc;
+                Console.WriteLine(url);
+                var client2 = new WebClient();
+                var response2 = client2.DownloadString(url);
+
+                var xdoc = XDocument.Parse(response2.ToString());
+                Console.WriteLine("xdoc begin");
+                Console.WriteLine(xdoc);
+
+
+                string latitude = "0";
+                string longitude = "0";
+                foreach (XElement element in xdoc.Descendants("Address"))
+                {
+                    if (GetXMLElement(element, "Error").Equals(""))
+                    {
+                        //  && GetXMLElement(element, "Zip5").Equals(ZipEntry.Text.Trim()) && GetXMLElement(element, "City").Equals(CityEntry.Text.ToUpper().Trim())
+                        if (GetXMLElement(element, "DPVConfirmation").Equals("Y")) // Best case
+                        {
+                            // Get longitude and latitide because we can make a deliver here. Move on to next page.
+                            // Console.WriteLine("The address you entered is valid and deliverable by USPS. We are going to get its latitude & longitude");
+                            //GetAddressLatitudeLongitude();
+                            Geocoder geoCoder = new Geocoder();
+
+                            Debug.WriteLine("$" + AddressEntry.Text.Trim() + "$");
+                            Debug.WriteLine("$" + CityEntry.Text.Trim() + "$");
+                            Debug.WriteLine("$" + StateEntry.Text.Trim() + "$");
+                            IEnumerable<Position> approximateLocations = await geoCoder.GetPositionsForAddressAsync(AddressEntry.Text.Trim() + "," + CityEntry.Text.Trim() + "," + StateEntry.Text.Trim());
+                            Position position = approximateLocations.FirstOrDefault();
+
+                            latitude = $"{position.Latitude}";
+                            longitude = $"{position.Longitude}";
+
+                            map.MapType = MapType.Street;
+                            var mapSpan = new MapSpan(position, 0.001, 0.001);
+
+                            Pin address = new Pin();
+                            address.Label = "Delivery Address";
+                            address.Type = PinType.SearchResult;
+                            address.Position = position;
+
+                            map.MoveToRegion(mapSpan);
+                            map.Pins.Add(address);
+                        }
+                    }
+                }
+                //end address updating
+            }
+            else if ((string)Xamarin.Forms.Application.Current.Properties["platform"] == "GUEST")
+            {
+                
+            }
+            else if (Preferences.Get(savedFirstName, "") != "" && (string)Xamarin.Forms.Application.Current.Properties["platform"] != "GUEST")
+            {
+                FNameEntry.Text = Preferences.Get(savedFirstName, "");
+                LNameEntry.Text = Preferences.Get(savedLastName, "");
+                emailEntry.Text = Preferences.Get(savedEmail, "");
+                AddressEntry.Text = Preferences.Get(savedAdd, "");
+                CityEntry.Text = Preferences.Get(savedCity, "");
+                StateEntry.Text = Preferences.Get(savedState, "");
+                ZipEntry.Text = Preferences.Get(savedZip, "");
+                PhoneEntry.Text = Preferences.Get(savedPhone, "");
+
+                if (Preferences.Get(savedApt, "") != "")
+                    AptEntry.Text = Preferences.Get(savedApt, "");
+                else AptEntry.Placeholder = "Unit";
+                if (Preferences.Get(savedInstr, "") != "")
+                    DeliveryEntry.Text = Preferences.Get(savedInstr, "");
+                else DeliveryEntry.Placeholder = "Delivery Instructions (for example:\n gate code, or where to put\nyour meals if you're not home)";
+
+                EventArgs e = new EventArgs();
+                clickedDeliv(proceedButton, e);
             }
             //if there is no saved info
-            else if (Preferences.Get(savedFirstName, "") == "")
+            else if (Preferences.Get(savedFirstName, "") == "" && (string)Xamarin.Forms.Application.Current.Properties["platform"] != "GUEST")
             {
                 Console.WriteLine("no info");
                 string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Xamarin.Forms.Application.Current.Properties["user_id"];
@@ -139,27 +353,6 @@ namespace MTYD.ViewModel
                 DeliveryEntry.Placeholder = "Delivery Instructions (for example:\ngate code, or where to put\nyour meals if you're not home)";
 
                 return;
-            }
-            else
-            {
-                FNameEntry.Text = Preferences.Get(savedFirstName, "");
-                LNameEntry.Text = Preferences.Get(savedLastName, "");
-                emailEntry.Text = Preferences.Get(savedEmail, "");
-                AddressEntry.Text = Preferences.Get(savedAdd, "");
-                CityEntry.Text = Preferences.Get(savedCity, "");
-                StateEntry.Text = Preferences.Get(savedState, "");
-                ZipEntry.Text = Preferences.Get(savedZip, "");
-                PhoneEntry.Text = Preferences.Get(savedPhone, "");
-
-                if (Preferences.Get(savedApt, "") != "")
-                    AptEntry.Text = Preferences.Get(savedApt, "");
-                else AptEntry.Placeholder = "Unit";
-                if (Preferences.Get(savedInstr, "") != "")
-                    DeliveryEntry.Text = Preferences.Get(savedInstr, "");
-                else DeliveryEntry.Placeholder = "Delivery Instructions (for example:\n gate code, or where to put\nyour meals if you're not home)";
-
-                EventArgs e = new EventArgs();
-                clickedDeliv(proceedButton, e);
             }
 
             addressList.IsVisible = false;
@@ -206,6 +399,7 @@ namespace MTYD.ViewModel
             if ((string)Xamarin.Forms.Application.Current.Properties["platform"] == "GUEST")
             {
                 menu.IsVisible = false;
+                back.IsVisible = true;
                 innerGrid.IsVisible = false;
                 //topBackButton.IsVisible = true;
             }
@@ -221,24 +415,45 @@ namespace MTYD.ViewModel
             //if no address is saved, use the lat and long of 1408 Dot Ct, San Jose, CA 95120
             if (Preferences.Get("user_latitude", "").ToString() == "" || Preferences.Get("user_latitude", "").ToString() == "0.0")
             {
-                Preferences.Set("user_latitude", "37.236666");
-                Preferences.Set("user_longitude", "-121.887399");
+                //var zoom = 5; // 1-18
+                //var deg = 360 / (Math.Pow(2, zoom));
+                //map.MoveToRegion(new MapSpan(map.VisibleRegion.Center, deg, deg));
+                Preferences.Set("user_latitude", "37.338207");
+                Preferences.Set("user_longitude", "-121.886330");
+
+                //initializing the maps tool
+                Position position = new Position(Double.Parse(Preferences.Get("user_latitude", "").ToString()), Double.Parse(Preferences.Get("user_longitude", "").ToString()));
+                map.MapType = MapType.Street;
+                //var mapSpan = new MapSpan(position, 0.001, 0.001);
+                var mapSpan = new MapSpan(position, 360 / (Math.Pow(2, 14)), 360 / (Math.Pow(2, 14)));
+                Pin address = new Pin();
+                address.Label = "Delivery Address";
+                address.Type = PinType.SearchResult;
+                address.Position = position;
+                map.MoveToRegion(mapSpan);
+                map.Pins.Add(address);
+            }
+            else
+            {
+                //initializing the maps tool
+                Position position = new Position(Double.Parse(Preferences.Get("user_latitude", "").ToString()), Double.Parse(Preferences.Get("user_longitude", "").ToString()));
+                map.MapType = MapType.Street;
+                var mapSpan = new MapSpan(position, 0.001, 0.001);
+                Pin address = new Pin();
+                address.Label = "Delivery Address";
+                address.Type = PinType.SearchResult;
+                address.Position = position;
+                map.MoveToRegion(mapSpan);
+                map.Pins.Add(address);
             }
 
 
-
-            //initializing the maps tool
-            Position position = new Position(Double.Parse(Preferences.Get("user_latitude", "").ToString()), Double.Parse(Preferences.Get("user_longitude", "").ToString()));
-            map.MapType = MapType.Street;
-            var mapSpan = new MapSpan(position, 0.001, 0.001);
-            Pin address = new Pin();
-            address.Label = "Delivery Address";
-            address.Type = PinType.SearchResult;
-            address.Position = position;
-            map.MoveToRegion(mapSpan);
-            map.Pins.Add(address);
-
-
+            //if (Preferences.Get("user_latitude", "").ToString() == "" || Preferences.Get("user_latitude", "").ToString() == "0.0")
+            //{
+            //    var zoom = 1; // 1-18
+            //    var deg = 360 / (Math.Pow(2, zoom));
+            //    map.MoveToRegion(new MapSpan(map.VisibleRegion.Center, deg, deg));
+            //}
 
             if (Device.RuntimePlatform == Device.iOS)
             {
@@ -246,22 +461,22 @@ namespace MTYD.ViewModel
                 orangeBox2.HeightRequest = height / 2;
                 orangeBox2.Margin = new Thickness(0, -height / 2.2, 0, 0);
                 orangeBox2.CornerRadius = height / 40;
-                heading2.WidthRequest = width / 5;
+                heading2.WidthRequest = 140;
                 menu2.Margin = new Thickness(25, 0, 0, 30);
-                menu2.HeightRequest = width / 20;
-                menu2.WidthRequest = width / 20;
+                menu.WidthRequest = 40;
+                menu2.WidthRequest = 40;
                 //menu2.Margin = new Thickness(25, 0, 0, 30);
-                heading.WidthRequest = width / 5;
+                heading.WidthRequest = 140;
                 //heading adjustments
 
                 orangeBox.HeightRequest = height / 2;
                 orangeBox.Margin = new Thickness(0, -height / 2.2, 0, 0);
                 orangeBox.CornerRadius = height / 40;
                 //heading.WidthRequest = width / 3;
-                //heading.WidthRequest = width / 5;
-                pfp.HeightRequest = width / 20;
-                pfp.WidthRequest = width / 20;
-                pfp.CornerRadius = (int)(width / 40);
+                //menu.WidthRequest = 40;
+                pfp.HeightRequest = 40;
+                pfp.WidthRequest = 40;
+                pfp.CornerRadius = 20;
                 //pfp.Margin = new Thickness(0, 0, 23, 27);
                 innerGrid.Margin = new Thickness(0, 0, 23, 27);
 
@@ -283,10 +498,11 @@ namespace MTYD.ViewModel
                 else pfp.Source = Preferences.Get("profilePicLink", "");
 
                 menu.Margin = new Thickness(25, 0, 0, 30);
-                menu.HeightRequest = width / 20;
-                menu.WidthRequest = width / 20;
+                menu.WidthRequest = 40;
+                back.Margin = new Thickness(25, 0, 0, 30);
+                back.HeightRequest = 25;
                 //menu.Margin = new Thickness(25, 0, 0, 30);
-
+                CheckAddressGrid.Margin = new Thickness(50, 170, 50, 120);
                 //topBackButton.HeightRequest = width / 25;
                 //topBackButton.WidthRequest = width / 25;
                 //topBackButton.Margin = new Thickness(25, 0, 0, 30);
@@ -298,12 +514,12 @@ namespace MTYD.ViewModel
                 orangeBox2.HeightRequest = height / 2;
                 orangeBox2.Margin = new Thickness(0, -height / 2.2, 0, 0);
                 orangeBox2.CornerRadius = height / 40;
-                heading2.WidthRequest = width / 5;
+                heading2.WidthRequest = 140;
                 menu2.Margin = new Thickness(25, 0, 0, 30);
-                menu2.HeightRequest = width / 20;
-                menu2.WidthRequest = width / 20;
+                menu.WidthRequest = 40;
+                menu2.WidthRequest = 40;
                 //menu2.Margin = new Thickness(25, 0, 0, 30);
-                heading.WidthRequest = width / 5;
+                menu.WidthRequest = 40;
                 //heading adjustments
 
                 orangeBox.CornerRadius = 35;
@@ -328,8 +544,10 @@ namespace MTYD.ViewModel
                 checkoutButton.CornerRadius = 24;
 
                 deliveryInstr.CornerRadius = 24;
-
+                back.Margin = new Thickness(25, 0, 0, 30);
+                back.HeightRequest = 25;
                 //mapFrame.Margin = new Thickness(width / 50, 0);
+                CheckAddressGrid.Margin = new Thickness(50, 170, 50, 120);
                 mapFrame.Margin = new Thickness(20, 0);
                 //SignUpButton.CornerRadius = 25;
             }
@@ -378,6 +596,30 @@ namespace MTYD.ViewModel
             if (ZipEntry.Text == null)
             {
                 await DisplayAlert("Error", "Please enter your zipcode", "OK");
+                return;
+            }
+
+            if (FNameEntry.Text == null || FNameEntry.Text == "")
+            {
+                await DisplayAlert("Error", "first name required", "okay");
+                return;
+            }
+
+            if (LNameEntry.Text == null || LNameEntry.ToString() == "")
+            {
+                await DisplayAlert("Error", "last name required", "okay");
+                return;
+            }
+
+            if (emailEntry.Text == null || emailEntry.Text == "")
+            {
+                await DisplayAlert("Error", "email required", "okay");
+                return;
+            }
+
+            if (PhoneEntry.Text == null || PhoneEntry.Text == "")
+            {
+                await DisplayAlert("Error", "phone number required", "okay");
                 return;
             }
 
@@ -533,7 +775,15 @@ namespace MTYD.ViewModel
             }
             else if (withinZones == false)
             {
-                await DisplayAlert("Invalid Address", "Address is not within any of our delivery zones.", "OK");
+                CheckAddressHeading.Text = "Still Growing…";
+                CheckAddressBody.Text = "Sorry, it looks like we don’t deliver to your neighborhood yet. Enter your email address and we will let you know as soon as we come to your neighborhood.";
+                EmailFrame.IsVisible = true;
+                OkayButton.Text = "Okay";
+                loginButton2.IsVisible = false;
+                //await DisplayAlert("Invalid Address", "Address is not within any of our delivery zones.", "OK");
+                fade.IsVisible = true;
+                CheckAddressGrid.IsVisible = true;
+                return;
             }
             else
             {
@@ -577,7 +827,7 @@ namespace MTYD.ViewModel
                 {
                     CheckouWithStripe(receiving, e);
 
-                    clickedSaveContact(receiving, e);
+                    //clickedSaveContact(receiving, e);
                     if ((string)Xamarin.Forms.Application.Current.Properties["platform"] == "GUEST")
                     {
                         Debug.WriteLine("entered guest in clickedproceed");
@@ -618,18 +868,13 @@ namespace MTYD.ViewModel
                         // if Sign up is has successfully ie 200 response code
                         if (RDSResponse.IsSuccessStatusCode)
                         {
-                            var RDSData = JsonConvert.DeserializeObject<SignUpResponse>(RDSMessage);
-                            Debug.WriteLine("RDSData: " + RDSData.ToString());
-
-                            if (RDSData.message.Contains("taken"))
+                            
+                            try
                             {
-                                await DisplayAlert("Email Address Already In Use", "Please log in with the account that uses this email. If you previously used this email for guest checkout, your password is {first name}{house #}.", "OK");
+                                var RDSData = JsonConvert.DeserializeObject<SignUpResponse>(RDSMessage);
 
-                                Xamarin.Forms.Application.Current.MainPage = new MainPage();
-                                return;
-                            }
-                            else
-                            {
+                                Debug.WriteLine("RDSData: " + RDSData.ToString());
+
                                 // Local Variables in Xamarin that can be used throughout the App
                                 Xamarin.Forms.Application.Current.Properties["user_id"] = RDSData.result.customer_uid;
 
@@ -663,6 +908,34 @@ namespace MTYD.ViewModel
                                 saveInfoDeliv();
                                 clickedSaveContact(proceedButton, e2);
                             }
+                            catch
+                            {
+                                CheckAddressHeading.Text = "Hmm...";
+                                CheckAddressBody.Text = "Looks like the email address is already in use by another account. Please login to continue with that user account.";
+                                EmailFrame.IsVisible = false;
+                                OkayButton.Text = "Go Back";
+                                loginButton2.IsVisible = true;
+                                fade.IsVisible = true;
+                                CheckAddressGrid.IsVisible = true;
+                                //await DisplayAlert("Email Address Already In Use", "Please log in with the account that uses this email. If you previously used this email for guest checkout, your password is {first name}{house #}.", "OK");
+
+                                //Xamarin.Forms.Application.Current.MainPage = new MainPage();
+                                //Xamarin.Forms.Application.Current.MainPage = new MainLogin();
+                                return;
+                            }
+                            //Debug.WriteLine("RDSData: " + RDSData.ToString());
+
+                            //if (RDSData.message.Contains("taken"))
+                            //{
+                            //    await DisplayAlert("Email Address Already In Use", "Please log in with the account that uses this email. If you previously used this email for guest checkout, your password is {first name}{house #}.", "OK");
+
+                            //    Xamarin.Forms.Application.Current.MainPage = new MainPage();
+                            //    return;
+                            //}
+                            //else
+                            //{
+                                
+                            //}
                         }
 
                         var client3 = new System.Net.Http.HttpClient();
@@ -796,6 +1069,9 @@ namespace MTYD.ViewModel
                     SetPayPalCredentials();
                     //grandTotalPrice.Text = "$" + total.ToString();
                     paymentStack.IsVisible = true;
+
+                    await scroller.ScrollToAsync(0, mainStack.Height + 80, true);
+
                     Debug.WriteLine("clientId after setpaypalcredentials: " + clientId.ToString());
                     Debug.WriteLine("secret after setpaypalcredentials: " + secret.ToString());
                 }
@@ -849,9 +1125,10 @@ namespace MTYD.ViewModel
             await Navigation.PushAsync(new Menu(cust_firstName, cust_lastName, cust_email));
         }
 
-        private void DeliveryAdd_TextChanged(object sender, TextChangedEventArgs e)
+        private async void DeliveryAdd_TextChanged(object sender, TextChangedEventArgs e)
         {
             paymentStack.IsVisible = false;
+            await scroller.ScrollToAsync(0, -50, true);
             //saveDeliv.IsVisible = true;
         }
 
@@ -1018,6 +1295,131 @@ namespace MTYD.ViewModel
 
         async void clickedBack(System.Object sender, System.EventArgs e)
         {
+            //save previously entered data when navigating
+
+            bool prevProceed = true;
+            bool prevAddFilled = true;
+            bool anyPrev = false;
+
+            if (FNameEntry.Text != "" && FNameEntry.Text != null)
+            {
+                Preferences.Set("prevFName", FNameEntry.Text);
+                anyPrev = true;
+            }
+            else prevProceed = false;
+
+            if (LNameEntry.Text != "" && LNameEntry.Text != null)
+            {
+                Preferences.Set("prevLName", LNameEntry.Text);
+                anyPrev = true;
+            }
+            else prevProceed = false;
+
+            if (emailEntry.Text != "" && emailEntry.Text != null)
+            {
+                Preferences.Set("prevEmail", emailEntry.Text);
+                anyPrev = true;
+            }
+            else prevProceed = false;
+
+            if (PhoneEntry.Text != "" && PhoneEntry.Text != null)
+            {
+                Preferences.Set("prevPhone", PhoneEntry.Text);
+                anyPrev = true;
+            }
+            else prevProceed = false;
+
+            if (AddressEntry.Text != "" && AddressEntry.Text != null)
+            {
+                Preferences.Set("prevAdd", AddressEntry.Text);
+                anyPrev = true;
+            }
+            else
+            {
+                prevProceed = false;
+                prevAddFilled = false;
+            }
+
+            if (AptEntry.Text != "" && AptEntry.Text != null)
+            {
+                Preferences.Set("prevApt", AptEntry.Text);
+                anyPrev = true;
+            }
+
+            if (CityEntry.Text != "" && CityEntry.Text != null)
+            {
+                Preferences.Set("prevCity", CityEntry.Text);
+                anyPrev = true;
+            }
+            else
+            {
+                prevProceed = false;
+                prevAddFilled = false;
+            }
+
+            if (StateEntry.Text != "" && StateEntry.Text != null)
+            {
+                Preferences.Set("prevState", StateEntry.Text);
+                anyPrev = true;
+            }
+            else
+            {
+                prevProceed = false;
+                prevAddFilled = false;
+            }
+
+            if (ZipEntry.Text != "" && ZipEntry.Text != null)
+            {
+                Preferences.Set("prevZip", ZipEntry.Text);
+                anyPrev = true;
+            }
+            else
+            {
+                prevProceed = false;
+                prevAddFilled = false;
+            }
+
+            if (DeliveryEntry.Text != "" && DeliveryEntry.Text != null)
+            {
+                Preferences.Set("prevInstr", DeliveryEntry.Text);
+                anyPrev = true;
+            }
+
+            if (cardHolderName.Text != "" && cardHolderName.Text != null)
+                Preferences.Set("prevCardName", cardHolderName.Text);
+
+            if (cardHolderNumber.Text != "" && cardHolderNumber.Text != null)
+                Preferences.Set("prevCardNum", cardHolderNumber.Text);
+
+            if (cardExpMonth.Text != "" && cardExpMonth.Text != null)
+                Preferences.Set("prevExpMonth", cardExpMonth.Text);
+
+            if (cardExpYear.Text != "" && cardExpYear.Text != null)
+                Preferences.Set("prevExpYear", cardExpYear.Text);
+
+            if (cardCVV.Text != "" && cardCVV.Text != null)
+                Preferences.Set("prevCVV", cardCVV.Text);
+
+            if (cardHolderAddress.Text != "" && cardHolderAddress.Text != null)
+                Preferences.Set("prevCardAdd", cardHolderAddress.Text);
+
+            if (cardHolderUnit.Text != "" && cardHolderUnit.Text != null)
+                Preferences.Set("prevCardUnit", cardHolderUnit.Text);
+
+            if (cardCity.Text != "" && cardCity.Text != null)
+                Preferences.Set("prevCardCity", cardCity.Text);
+
+            if (cardState.Text != "" && cardState.Text != null)
+                Preferences.Set("prevCardState", cardState.Text);
+
+            if (cardZip.Text != "" && cardZip.Text != null)
+                Preferences.Set("prevCardZip", cardZip.Text);
+
+            Preferences.Set("prevProceed", prevProceed);
+            Preferences.Set("prevAddFilled", prevAddFilled);
+            Debug.WriteLine("anyPrev value: " + anyPrev.ToString());
+            Preferences.Set("anyPrev", anyPrev);
+
             await Navigation.PopAsync(false);
         }
 
@@ -1461,6 +1863,7 @@ namespace MTYD.ViewModel
             // HttpResponseMessage response = await client.SendAsync(request);
             if (response.IsSuccessStatusCode)
             {
+                Preferences.Set("anyPrev", false);
                 Preferences.Set("canChooseSelect", true);
                 Debug.WriteLine("RESPONSE TO CHECKOUT           : " + response.IsSuccessStatusCode);
                 Debug.WriteLine("CHECKOUT JSON OBJECT BEING SENT: " + newPaymentJSONString);
@@ -1476,7 +1879,7 @@ namespace MTYD.ViewModel
                     backButton.IsVisible = true;
                     mainStack.IsVisible = true;
                     paymentStack.IsVisible = true;
-
+                    await scroller.ScrollToAsync(0, mainStack.Height + 80, true);
                     PaymentScreen.HeightRequest = 0;
                     PaymentScreen.Margin = new Thickness(0, 0, 0, 0);
                     StripeScreen.Height = 0;
@@ -2215,7 +2618,7 @@ namespace MTYD.ViewModel
         }
 
         // FUNCTION  4:
-        public void CancelViaStripe(System.Object sender, System.EventArgs e)
+        public async void CancelViaStripe(System.Object sender, System.EventArgs e)
         {
             onStripeScreen = false;
 
@@ -2224,7 +2627,7 @@ namespace MTYD.ViewModel
             backButton.IsVisible = true;
             mainStack.IsVisible = true;
             paymentStack.IsVisible = true;
-
+            await scroller.ScrollToAsync(0, mainStack.Height + 80, true);
             PaymentScreen.HeightRequest = 0;
             PaymentScreen.Margin = new Thickness(0, 0, 0, 0);
             StripeScreen.Height = 0;
@@ -2263,6 +2666,7 @@ namespace MTYD.ViewModel
                 headingGrid.IsVisible = false;
                 mainStack.IsVisible = false;
                 paymentStack.IsVisible = false;
+                await scroller.ScrollToAsync(0, mainStack.Height + 150, true);
                 checkoutButton.IsVisible = false;
                 backButton.IsVisible = false;
                 PaymentScreen.HeightRequest = this.Height;
@@ -2681,6 +3085,7 @@ namespace MTYD.ViewModel
             {
                 Debug.WriteLine("second if of onAddressChanged");
                 paymentStack.IsVisible = false;
+                await scroller.ScrollToAsync(0, -50, true);
                 addressList.IsVisible = true;
                 UnitCity.IsVisible = false;
                 StateZip.IsVisible = false;
@@ -2733,7 +3138,7 @@ namespace MTYD.ViewModel
             }
         }
 
-        private void addressSelected(System.Object sender, System.EventArgs e)
+        private async void addressSelected(System.Object sender, System.EventArgs e)
         {
             if (((ListView)sender).Equals(addressList))
             {
@@ -2741,6 +3146,100 @@ namespace MTYD.ViewModel
                 addressList.IsVisible = false;
                 UnitCity.IsVisible = true;
                 StateZip.IsVisible = true;
+
+                string unit = "";
+                if (AptEntry.Text != "")
+                    unit = AptEntry.Text;
+
+                // Setting request for USPS API
+                XDocument requestDoc = new XDocument(
+                    new XElement("AddressValidateRequest",
+                    new XAttribute("USERID", "400INFIN1745"),
+                    new XElement("Revision", "1"),
+                    new XElement("Address",
+                    new XAttribute("ID", "0"),
+                    new XElement("Address1", AddressEntry.Text),
+                    new XElement("Address2", unit),
+                    new XElement("City", CityEntry.Text),
+                    new XElement("State", StateEntry.Text),
+                    new XElement("Zip5", ZipEntry.Text),
+                    new XElement("Zip4", "")
+                         )
+                     )
+                 );
+                var url = "http://production.shippingapis.com/ShippingAPI.dll?API=Verify&XML=" + requestDoc;
+                Console.WriteLine(url);
+                var client2 = new WebClient();
+                var response2 = client2.DownloadString(url);
+
+                var xdoc = XDocument.Parse(response2.ToString());
+                Console.WriteLine("xdoc begin");
+                Console.WriteLine(xdoc);
+
+
+                string latitude = "0";
+                string longitude = "0";
+                foreach (XElement element in xdoc.Descendants("Address"))
+                {
+                    if (GetXMLElement(element, "Error").Equals(""))
+                    {
+                        //  && GetXMLElement(element, "Zip5").Equals(ZipEntry.Text.Trim()) && GetXMLElement(element, "City").Equals(CityEntry.Text.ToUpper().Trim())
+                        if (GetXMLElement(element, "DPVConfirmation").Equals("Y")) // Best case
+                        {
+                            // Get longitude and latitide because we can make a deliver here. Move on to next page.
+                            // Console.WriteLine("The address you entered is valid and deliverable by USPS. We are going to get its latitude & longitude");
+                            //GetAddressLatitudeLongitude();
+                            Geocoder geoCoder = new Geocoder();
+
+                            Debug.WriteLine("$" + AddressEntry.Text.Trim() + "$");
+                            Debug.WriteLine("$" + CityEntry.Text.Trim() + "$");
+                            Debug.WriteLine("$" + StateEntry.Text.Trim() + "$");
+                            IEnumerable<Position> approximateLocations = await geoCoder.GetPositionsForAddressAsync(AddressEntry.Text.Trim() + "," + CityEntry.Text.Trim() + "," + StateEntry.Text.Trim());
+                            Position position = approximateLocations.FirstOrDefault();
+
+                            latitude = $"{position.Latitude}";
+                            longitude = $"{position.Longitude}";
+
+                            map.MapType = MapType.Street;
+                            var mapSpan = new MapSpan(position, 0.001, 0.001);
+
+                            Pin address = new Pin();
+                            address.Label = "Delivery Address";
+                            address.Type = PinType.SearchResult;
+                            address.Position = position;
+
+                            map.MoveToRegion(mapSpan);
+                            map.Pins.Add(address);
+
+                            string url3 = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/categoricalOptions/" + longitude + "," + latitude;
+                            //request3.RequestUri = new Uri(url3);
+                            //request3.Method = HttpMethod.Get;
+                            //var client3 = new HttpClient();
+                            //HttpResponseMessage response3 = await client3.SendAsync(request3);
+                            Debug.WriteLine("categorical options url: " + url3);
+
+                            var content = client4.DownloadString(url3);
+                            var obj = JsonConvert.DeserializeObject<ZonesDto>(content);
+
+                            //HttpContent content3 = response3.Content;
+                            //Console.WriteLine("content: " + content3);
+                            //var userString3 = await content3.ReadAsStringAsync();
+                            //Debug.WriteLine("userString3: " + userString3);
+                            //JObject info_obj3 = JObject.Parse(userString3);
+                            if (obj.Result.Length == 0)
+                            {
+                                CheckAddressHeading.Text = "Still Growing…";
+                                CheckAddressBody.Text = "Sorry, it looks like we don’t deliver to your neighborhood yet. Enter your email address and we will let you know as soon as we come to your neighborhood.";
+                                EmailFrame.IsVisible = true;
+                                OkayButton.Text = "Okay";
+                                loginButton2.IsVisible = false;
+                                fade.IsVisible = true;
+                                CheckAddressGrid.IsVisible = true;
+                            }
+                        }
+                    }
+                }
+                //end address updating
             }
             else
             {
@@ -2802,5 +3301,27 @@ namespace MTYD.ViewModel
             Xamarin.Forms.Application.Current.MainPage = new MainPage();
         }
         //end of menu functions
+
+        async void OkayClicked(System.Object sender, System.EventArgs e)
+        {
+            if (EmailFrame.IsVisible && EmailEntry.Text != null && EmailEntry.Text.Length != 0)
+            {
+                // add email to new neighborhood notification list
+            }
+            fade.IsVisible = false;
+            CheckAddressGrid.IsVisible = false;
+            //Application.Current.MainPage = new NavigationPage(new ExploreMeals());
+        }
+
+        void xButtonClicked(System.Object sender, System.EventArgs e)
+        {
+            fade.IsVisible = false;
+            CheckAddressGrid.IsVisible = false;
+        }
+
+        void loginButtonClicked(System.Object sender, System.EventArgs e)
+        {
+            Xamarin.Forms.Application.Current.MainPage = new MainLogin();
+        }
     }
 }

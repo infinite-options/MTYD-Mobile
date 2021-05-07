@@ -72,7 +72,7 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <Button x:Name="first" HorizontalOptions="End" VerticalOptions="Start" BackgroundColor="#FFBA00" TextColor="Black" Text="1" FontAttributes="Bold"/>
+                    <Button x:Name="first" HorizontalOptions="End" VerticalOptions="Start" BackgroundColor="#F8BB17" TextColor="Black" Text="1" FontAttributes="Bold"/>
 
                     <Label x:Name="step1" Grid.Column="1" Text="EXPLORE" TextColor="Black" FontAttributes="Bold" HorizontalOptions="Start" VerticalOptions="Center"/>
 
@@ -94,7 +94,7 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <Button x:Name="second" HorizontalOptions="End" VerticalOptions="Start" BackgroundColor="#FFBA00" TextColor="Black" Text="2" FontAttributes="Bold"/>
+                    <Button x:Name="second" HorizontalOptions="End" VerticalOptions="Start" BackgroundColor="#F8BB17" TextColor="Black" Text="2" FontAttributes="Bold"/>
 
                     <Label x:Name="step2" Grid.Column="1" Text="PURCHASE" TextColor="Black" FontAttributes="Bold" HorizontalTextAlignment="Start" VerticalOptions="Center"/>
 
@@ -116,7 +116,7 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <Button x:Name="third" HorizontalOptions="End" VerticalOptions="Start" BackgroundColor="#FFBA00" TextColor="Black" Text="3" FontAttributes="Bold"/>
+                    <Button x:Name="third" HorizontalOptions="End" VerticalOptions="Start" BackgroundColor="#F8BB17" TextColor="Black" Text="3" FontAttributes="Bold"/>
 
                     <Label x:Name="step3" Grid.Column="1" Text="CHOOSE" TextColor="Black" FontAttributes="Bold" HorizontalTextAlignment="Start" VerticalOptions="Center"/>
 
@@ -138,7 +138,7 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <Button x:Name="fourth" HorizontalOptions="End" VerticalOptions="Start" BackgroundColor="#FFBA00" TextColor="Black" Text="4" FontAttributes="Bold"/>
+                    <Button x:Name="fourth" HorizontalOptions="End" VerticalOptions="Start" BackgroundColor="#F8BB17" TextColor="Black" Text="4" FontAttributes="Bold"/>
 
                     <Label x:Name="step4" Grid.Column="1" Text="ENJOY" TextColor="Black" FontAttributes="Bold" HorizontalTextAlignment="Start" VerticalOptions="Center"/>
 
@@ -150,7 +150,7 @@
 
                 <BoxView HeightRequest="50"/>
 
-                <!--<Button x:Name="browseMenu" HorizontalOptions="Center" Text="Browse our menu for this week" TextColor="#FFBA00" FontAttributes="Bold" Clicked="clickedWeeksMeals"/>-->
+                <!--<Button x:Name="browseMenu" HorizontalOptions="Center" Text="Browse our menu for this week" TextColor="#F8BB17" FontAttributes="Bold" Clicked="clickedWeeksMeals"/>-->
 
                 <!--<BoxView HeightRequest="20"/>-->
                 </StackLayout>
@@ -158,7 +158,7 @@
             </StackLayout>
 
                <Grid VerticalOptions="Start">
-               <BoxView HeightRequest="350" WidthRequest="250" Color="#FFBA00" CornerRadius="25" HorizontalOptions="Center"/>
+               <BoxView HeightRequest="350" WidthRequest="250" Color="#F8BB17" CornerRadius="25" HorizontalOptions="Center"/>
                <BoxView HeightRequest="340" WidthRequest="240" Color="White" CornerRadius="24" HorizontalOptions="Center"/>
                 </Grid>
 

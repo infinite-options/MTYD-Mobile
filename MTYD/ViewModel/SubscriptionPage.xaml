@@ -11,7 +11,7 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     
-                    <BoxView x:Name="orangeBox" BackgroundColor="#FF6505" HorizontalOptions="Fill"/>
+                    <BoxView x:Name="orangeBox" BackgroundColor="#F26522" HorizontalOptions="Fill"/>
                     <Image x:Name="heading" Source="heading.png" Margin="0,0,0,10" VerticalOptions="End" HorizontalOptions="Center"/>
 
                     <Grid x:Name="innerGrid" VerticalOptions="End" HorizontalOptions="End">
@@ -22,6 +22,8 @@
                         <Label x:Name="initials" TextColor="Black" FontAttributes="Bold" VerticalOptions="Center"  HorizontalOptions="Center"/>
 
                     </Grid>
+
+                    <ImageButton x:Name="back" IsVisible="false" Source="backButton.png" VerticalOptions="End" HorizontalOptions="Start" Clicked="clickedBack"/>
                     <ImageButton x:Name="menu" Source="new_menu.png" VerticalOptions="End" HorizontalOptions="Start" Clicked="clickedOpenMenu"/>
                 </Grid>
 
@@ -69,7 +71,7 @@
                 <Label x:Name="prepay" Text="TOTAL NUMBER OF DELIVERIES" HorizontalOptions="Start"
                        HorizontalTextAlignment="Start" TextColor="Black" Margin="30, 0"/>
 
-                <Grid HorizontalOptions="CenterAndExpand" Margin="30, 10, 30, 10" RowSpacing="5" ColumnSpacing="5" Padding="0">
+                <Grid HorizontalOptions="CenterAndExpand" Margin="15, 10, 15, 10" RowSpacing="5" ColumnSpacing="5" Padding="0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="65"/>
                         <RowDefinition Height="65"/>
@@ -185,7 +187,7 @@
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="4*"/>
-                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="6*"/>
                         <ColumnDefinition Width="10*"/>
                     </Grid.ColumnDefinitions>
 
@@ -205,7 +207,7 @@
                 <Button x:Name= "SignUpButton" BackgroundColor="#F26522" Clicked="clickedDone" Text="Proceed" TextColor="White" Margin="50, 10"
                         FontAttributes="Bold" CornerRadius="15"/>
 
-                <Button x:Name="backButton" BackgroundColor="#F26522" Clicked="clickedBack" Text="Return to Home Page" TextColor="White" Margin="50, 10"
+                <Button x:Name="backButton" BackgroundColor="#F26522" Clicked="clickedExplore" Text="Or Continue Exploring" TextColor="White" Margin="50, 10"
                         FontAttributes="Bold" CornerRadius="15"/>
 
             </StackLayout>

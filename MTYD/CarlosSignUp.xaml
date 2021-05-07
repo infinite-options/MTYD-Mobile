@@ -178,7 +178,7 @@
                 <BoxView x:Name="fade" BackgroundColor="White" Opacity="0.6" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" IsVisible="false"/>
 
                 <Grid x:Name="CheckAddressGrid" VerticalOptions="Start" IsVisible="false" Margin="50, 120">
-                    <Frame BorderColor="#f26522" CornerRadius="0" HasShadow="False">
+                    <Frame BorderColor="#F26522" CornerRadius="0" HasShadow="False">
                         <StackLayout>
                             <ImageButton Source="xButton.png" Aspect="AspectFit" HorizontalOptions="End" Margin="-10" WidthRequest="30" Clicked="xButtonClicked"/>
 
@@ -187,11 +187,11 @@
                             <Label x:Name="CheckAddressBody" Text="We are so glad that we deliver to your neighborhood. Please click Continue to complete the Sign Up process."
                                     HorizontalOptions="Center" HorizontalTextAlignment="Center" HeightRequest="150" FontSize="16" Margin="15, 0"/>
 
-                            <Frame x:Name="EmailFrame" BorderColor="#f26522" CornerRadius="10" HasShadow="false" Padding="15, 5" IsVisible="false">
+                            <Frame x:Name="EmailFrame" BorderColor="#F26522" CornerRadius="10" HasShadow="false" Padding="15, 5" IsVisible="false">
                                 <Entry x:Name="EmailEntry" Placeholder="Email" TextColor="Black"/>
                             </Frame>
 
-                            <Button x:Name="OkayButton" Text="Explore Meals" BackgroundColor="#f26522" TextColor="White" Margin="50, 20, 50, 10" CornerRadius="10" Clicked="OkayClicked"/>
+                            <Button x:Name="OkayButton" Text="Explore Meals" BackgroundColor="#F26522" TextColor="White" Margin="50, 20, 50, 10" CornerRadius="10" Clicked="OkayClicked"/>
                         </StackLayout>
                     </Frame>
                 </Grid>

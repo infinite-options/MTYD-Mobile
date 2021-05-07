@@ -55,9 +55,9 @@ namespace MTYD.ViewModel
             orangeBox.CornerRadius = deviceHeight / 40;
             heading.FontSize = deviceWidth / 32;
             heading.Margin = new Thickness(0, 0, 0, 30);
-            pfp.HeightRequest = deviceWidth / 20;
-            pfp.WidthRequest = deviceWidth / 20;
-            pfp.CornerRadius = (int)(deviceWidth / 40);
+            pfp.HeightRequest = 40;
+            pfp.WidthRequest = 40;
+            pfp.CornerRadius = 20;
             //pfp.Margin = new Thickness(0, 0, 23, 27);
             innerGrid.Margin = new Thickness(0, 0, 23, 27);
 
@@ -78,8 +78,8 @@ namespace MTYD.ViewModel
             }
             else pfp.Source = Preferences.Get("profilePicLink", "");
 
-            menu.HeightRequest = deviceWidth / 25;
-            menu.WidthRequest = deviceWidth / 25;
+            //menu.HeightRequest = deviceWidth / 25;
+            menu.WidthRequest = 40;
             menu.Margin = new Thickness(25, 0, 0, 30);
 
             OurStoryGrid.HeightRequest = ourStoryFrame.Height + 500;

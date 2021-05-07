@@ -222,12 +222,12 @@ namespace MTYD.ViewModel
                 orangeBox2.HeightRequest = height / 2;
                 orangeBox2.Margin = new Thickness(0, -height / 2.2, 0, 0);
                 orangeBox2.CornerRadius = height / 40;
-                heading2.WidthRequest = width / 5;
+                heading2.WidthRequest = 140;
                 menu2.Margin = new Thickness(25, 0, 0, 30);
-                menu2.HeightRequest = width / 20;
-                menu2.WidthRequest = width / 20;
+                menu.WidthRequest = 40;
+                menu2.WidthRequest = 40;
                 //menu2.Margin = new Thickness(25, 0, 0, 30);
-                heading.WidthRequest = width / 5;
+                heading.WidthRequest = 140;
                 //heading adjustments
 
                 orangeBox.HeightRequest = height / 2;
@@ -235,9 +235,9 @@ namespace MTYD.ViewModel
                 orangeBox.CornerRadius = height / 40;
                 //heading.FontSize = width / 32;
                 //heading.Margin = new Thickness(0, 0, 0, 30);
-                pfp.HeightRequest = width / 20;
-                pfp.WidthRequest = width / 20;
-                pfp.CornerRadius = (int)(width / 40);
+                pfp.HeightRequest = 40;
+                pfp.WidthRequest = 40;
+                pfp.CornerRadius = 20;
                 //pfp.Margin = new Thickness(0, 0, 23, 27);
                 innerGrid.Margin = new Thickness(0, 0, 23, 27);
 
@@ -258,8 +258,7 @@ namespace MTYD.ViewModel
                 else pfp.Source = Preferences.Get("profilePicLink", "");
 
                 menu.Margin = new Thickness(25, 0, 0, 30);
-                menu.HeightRequest = width / 20;
-                menu.WidthRequest = width / 20;
+                menu.WidthRequest = 40;
                 //menu.Margin = new Thickness(25, 0, 0, 30);
             }
             else //android
@@ -268,12 +267,12 @@ namespace MTYD.ViewModel
                 orangeBox2.HeightRequest = height / 2;
                 orangeBox2.Margin = new Thickness(0, -height / 2.2, 0, 0);
                 orangeBox2.CornerRadius = height / 40;
-                heading2.WidthRequest = width / 5;
+                heading2.WidthRequest = 140;
                 menu2.Margin = new Thickness(25, 0, 0, 30);
-                menu2.HeightRequest = width / 20;
-                menu2.WidthRequest = width / 20;
+                menu.WidthRequest = 40;
+                menu2.WidthRequest = 40;
                 //menu2.Margin = new Thickness(25, 0, 0, 30);
-                heading.WidthRequest = width / 5;
+                heading.WidthRequest = 140;
                 //heading adjustments
 
                 orangeBox.HeightRequest = height / 2;
@@ -281,13 +280,12 @@ namespace MTYD.ViewModel
                 orangeBox.CornerRadius = height / 40;
                 //heading.FontSize = width / 45;
                 //heading.Margin = new Thickness(0, 0, 0, 40);
-                pfp.HeightRequest = width / 25;
-                pfp.WidthRequest = width / 25;
-                pfp.CornerRadius = (int)(width / 50);
+                pfp.HeightRequest = 40;
+                pfp.WidthRequest = 40;
+                pfp.CornerRadius = 20;
                 pfp.Margin = new Thickness(0, 0, 23, 35);
                 menu.Margin = new Thickness(25, 0, 0, 30);
-                menu.HeightRequest = width / 20;
-                menu.WidthRequest = width / 20;
+                menu.WidthRequest = 40;
                 //menu.Margin = new Thickness(25, 0, 0, 40);
             }
 

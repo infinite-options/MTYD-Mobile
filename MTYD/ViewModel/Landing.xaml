@@ -14,7 +14,7 @@
 
                     <Image Grid.Row="1" x:Name="landingPic" Source="landing_pic.png" Aspect="AspectFit" HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand"/>
 
-                    <BoxView x:Name="orangeBox" BackgroundColor="#FF6505" HorizontalOptions="Fill"/>
+                    <BoxView x:Name="orangeBox" BackgroundColor="#F26522" HorizontalOptions="Fill"/>
                     <Image x:Name="logo" Source="logo.png" VerticalOptions="End" HorizontalOptions="Center"/>
                     <!--<Label x:Name="heading" Text="MENU THIS WEEK" FontAttributes="Bold" VerticalOptions="End" HorizontalTextAlignment="Center" TextColor="Black"/>-->
                     <Grid x:Name="innerGrid" VerticalOptions="End" HorizontalOptions="End">
@@ -75,7 +75,7 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
 
-                        <Button x:Name="first" HorizontalOptions="End" VerticalOptions="Start" BackgroundColor="#FFBA00" TextColor="Black" Text="1" FontAttributes="Bold" Margin="0,0,10,0"/>
+                        <Button x:Name="first" HorizontalOptions="End" VerticalOptions="Start" BackgroundColor="#F8BB17" TextColor="Black" Text="1" FontAttributes="Bold" Margin="0,0,10,0"/>
 
                         <Label x:Name="step1" Grid.Column="1" Text="EXPLORE" TextColor="Black" FontAttributes="Bold" HorizontalOptions="Start" VerticalOptions="Center"/>
 
@@ -101,7 +101,7 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
 
-                        <Button x:Name="second" HorizontalOptions="End" VerticalOptions="Center" BackgroundColor="#FFBA00" TextColor="Black" Text="2" FontAttributes="Bold"/>
+                        <Button x:Name="second" HorizontalOptions="End" VerticalOptions="Center" BackgroundColor="#F8BB17" TextColor="Black" Text="2" FontAttributes="Bold"/>
 
                         <Label x:Name="step2" Grid.Column="1" Text="PURCHASE" TextColor="Black" FontAttributes="Bold" HorizontalTextAlignment="Start" VerticalOptions="Center"/>
 
@@ -127,7 +127,7 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
 
-                        <Button x:Name="third" HorizontalOptions="End" VerticalOptions="Center" BackgroundColor="#FFBA00" TextColor="Black" Text="3" FontAttributes="Bold"/>
+                        <Button x:Name="third" HorizontalOptions="End" VerticalOptions="Center" BackgroundColor="#F8BB17" TextColor="Black" Text="3" FontAttributes="Bold"/>
 
                         <Label x:Name="step3" Grid.Column="1" Text="CHOOSE" TextColor="Black" FontAttributes="Bold" HorizontalTextAlignment="Start" VerticalOptions="Center"/>
 
@@ -153,7 +153,7 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
 
-                        <Button x:Name="fourth" HorizontalOptions="End" VerticalOptions="Center" BackgroundColor="#FFBA00" TextColor="Black" Text="4" FontAttributes="Bold"/>
+                        <Button x:Name="fourth" HorizontalOptions="End" VerticalOptions="Center" BackgroundColor="#F8BB17" TextColor="Black" Text="4" FontAttributes="Bold"/>
 
                         <Label x:Name="step4" Grid.Column="1" Text="ENJOY" TextColor="Black" FontAttributes="Bold" HorizontalTextAlignment="Start" VerticalOptions="Center"/>
 
@@ -261,16 +261,16 @@
         <BoxView x:Name="fade" BackgroundColor="White" Opacity="0.6" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" IsVisible="false"/>
 
             <Grid x:Name="DiscountGrid" VerticalOptions="Start" IsVisible="false">
-               <BoxView x:Name="outerFrame" Color="#FFBA00" CornerRadius="25" />
+               <BoxView x:Name="outerFrame" Color="#F8BB17" CornerRadius="25" />
                <BoxView x:Name="innerFrame" Color="White" CornerRadius="24" Margin="5"/>
 
                <StackLayout>
 
-                   <Button x:Name="xButton" Text="x" FontAttributes="Bold" TextColor="#FFBA00" BackgroundColor="Transparent" HorizontalOptions="End" Padding="0" Margin="0,5,15,0" Clicked="clickedX"/>
+                   <Button x:Name="xButton" Text="x" FontAttributes="Bold" TextColor="#F8BB17" BackgroundColor="Transparent" HorizontalOptions="End" Padding="0" Margin="0,5,15,0" Clicked="clickedX"/>
 
                    <Label x:Name="discHeader" Text="Our Special Discounts" TextColor="Black" FontAttributes="Bold" Margin="15,0,0,0" BackgroundColor="Transparent"/>
                    <BoxView HeightRequest="5"/>
-                   <BoxView HeightRequest="2" HorizontalOptions="FillAndExpand" Margin="15,0" Color="#FFBA00"/>
+                   <BoxView HeightRequest="2" HorizontalOptions="FillAndExpand" Margin="15,0" Color="#F8BB17"/>
                    <BoxView HeightRequest="5"/>
 
                    <Grid x:Name="couponGrid" ColumnSpacing="4">

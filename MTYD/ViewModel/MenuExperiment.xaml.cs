@@ -24,12 +24,10 @@ namespace MTYD.ViewModel
                 mainGrid.Padding = new Thickness(0, 100, 0, 0);
 
                 menu.Margin = new Thickness(25, 15, 0, 40);
-                menu.HeightRequest = width / 20;
-                menu.HeightRequest = width / 20;
 
-                pfp.HeightRequest = width / 15;
-                pfp.WidthRequest = width / 15;
-                pfp.CornerRadius = (int)(width / 30);
+                pfp.HeightRequest = 40;
+                pfp.WidthRequest = 40;
+                pfp.CornerRadius = 20;
                 pfp.Margin = new Thickness(25, 0, 0, 0);
                 //profileInfoStack.Margin = new Thickness(10, 0, 0, 0);
 

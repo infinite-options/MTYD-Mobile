@@ -7,7 +7,7 @@
         <Grid VerticalOptions="CenterAndExpand">
             <StackLayout>
                 <StackLayout x:Name="HomePage">
-                    <Grid HorizontalOptions="End" Margin="0,0,15,0" RowSpacing="8">
+                    <Grid HorizontalOptions="End" Margin="0,0,15,0" RowSpacing="10">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="1*" />
                             <RowDefinition Height="1*" />
@@ -29,7 +29,7 @@
                         <Image Source="MealsForMeMainPage.png" HeightRequest="100"></Image>
                     </StackLayout>
 
-                    <Frame BackgroundColor="White" Margin="50, 0, 50, 10" HeightRequest="20" CornerRadius="15" BorderColor="#f26522" HasShadow="false">
+                    <Frame BackgroundColor="White" Margin="50, 0, 50, 10" HeightRequest="20" CornerRadius="15" BorderColor="#F26522" HasShadow="false">
                         <Entry x:Name="AddressEntry" Text="{Binding AddressText}" TextChanged="OnAddressChanged" TextColor="Black" PlaceholderColor="#B4B4B4" Placeholder="Search Your Address"
                               HorizontalTextAlignment="Center" Focused="addressEntryFocused" Unfocused="addressEntryUnfocused"/>
                     </Frame>
@@ -43,14 +43,14 @@
                         </ListView.ItemTemplate>
                    </ListView>
 
-                    <Button x:Name="button_ViewMeals" BackgroundColor="#f26522" Margin="50, 0, 50, 0" HeightRequest="55" CornerRadius="15"
+                    <Button x:Name="button_ViewMeals" BackgroundColor="#F26522" Margin="50, 0, 50, 0" HeightRequest="55" CornerRadius="15"
                             Text="View Meals" TextColor="White" FontSize="20" Clicked="clickedExplore"/>
 
                     <BoxView HeightRequest="20"/>
                     
                 </StackLayout>
 
-                <StackLayout x:Name="MenuBar">
+                <!--<StackLayout x:Name="MenuBar">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
@@ -68,6 +68,7 @@
 
                         </Grid>
                         <ImageButton x:Name="menu" Source="new_menu.png" VerticalOptions="End" HorizontalOptions="Start" Clicked="clickedOpenMenu"/>
+
 
                     </Grid>
 
@@ -91,7 +92,7 @@
                             </StackLayout>
 
                         </Grid>
-                </StackLayout>
+                </StackLayout>-->
 
                 <StackLayout x:Name="LoginPage">
                     <Label Text="Login" HorizontalOptions="Center" FontAttributes="Bold" FontSize="25" Margin="0, 20"></Label>
@@ -158,7 +159,39 @@
                         FontAttributes="Bold" CornerRadius="15" BorderColor="#F26522" BorderWidth="2"/>
                 </StackLayout>
 
+                <!--put everything in a grid for the popup menu-->
+              <Grid>
+                  <Grid.RowDefinitions>
+                      <RowDefinition Height="Auto"/>
+                      <RowDefinition Height="Auto"/>
+                  </Grid.RowDefinitions>
+
+                <StackLayout x:Name="MenuBar">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                    
+                        <BoxView x:Name="orangeBox" BackgroundColor="#F26522" HorizontalOptions="Fill"/>
+                        <Image x:Name="heading" Source="heading.png" Margin="0,0,0,10" VerticalOptions="End" HorizontalOptions="Center"/>
+
+                        <Grid x:Name="innerGrid" VerticalOptions="End" HorizontalOptions="End">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <ImageButton x:Name="pfp" BackgroundColor="LightGray" VerticalOptions="End" HorizontalOptions="End" Clicked="clickedPfp"/>
+                            <Label x:Name="initials" TextColor="Black" FontAttributes="Bold" VerticalOptions="Center"  HorizontalOptions="Center"/>
+
+                        </Grid>
+                        <ImageButton x:Name="menu" Source="new_menu.png" VerticalOptions="End" HorizontalOptions="Start" Clicked="clickedOpenMenu"/>
+
+
+                    </Grid>
+                </StackLayout>
+
                 <StackLayout x:Name="LandingPage" Grid.Row="1">
+
+
                     <!--<Image Grid.Row="1" x:Name="landingPic" Source="landing_pic.png" Aspect="AspectFit" HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand"/>-->
 
                     <Button x:Name="discounts" Text="Our Special Discounts" FontSize="17" HorizontalOptions="End" TextColor="White" BackgroundColor="Transparent" Margin="0,0,10,0" Clicked="clickedDiscounts"/>
@@ -176,7 +209,31 @@
                     <BoxView HeightRequest="40"/>
 
                     <Button x:Name="getStarted" Text="GET STARTED" TextColor="White" BackgroundColor="#FF9E19" HorizontalOptions="Fill" FontAttributes="Bold" Clicked="clickedStarted"/>
+                    
                 </StackLayout>
+
+                <Grid x:Name="openedMenu" IsVisible="false" Grid.RowSpan="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                    
+                            <BoxView x:Name="orangeBox2" Grid.RowSpan="2" BackgroundColor="#F26522" HorizontalOptions="Fill"/>
+                            <Image x:Name="heading2" Source="heading.png" Margin="0,0,0,10" VerticalOptions="End" HorizontalOptions="Center"/>               
+
+                            <ImageButton x:Name="menu2" Source="closeMenu.png" VerticalOptions="End" HorizontalOptions="Start" BackgroundColor="Transparent" Clicked="clickedCloseMenu"/>
+
+                            <StackLayout Grid.Row="1" Margin="0,0,0,25">
+                                <Forms9Patch:Button Text="    Home" FontAttributes="Bold" OutlineColor="Transparent" FontSize="20" HorizontalTextAlignment="Start" HorizontalOptions="Fill" TextColor="White" Clicked="clickedLanding"/>
+                                <Forms9Patch:Button Text="    Change Meal Plans" FontAttributes="Bold" OutlineColor="Transparent" FontSize="20" HorizontalTextAlignment="Start" HorizontalOptions="Fill" TextColor="White" Clicked="clickedMealPlan"/>
+                                <Forms9Patch:Button Text="    Add Subscriptions" FontAttributes="Bold" OutlineColor="Transparent" FontSize="20" HorizontalTextAlignment="Start" HorizontalOptions="Fill" TextColor="White" Clicked="clickedSubscription"/>
+                                <Forms9Patch:Button Text="    Select Meals" FontAttributes="Bold" OutlineColor="Transparent" FontSize="20" HorizontalTextAlignment="Start" HorizontalOptions="Fill" TextColor="White" Clicked="clickedSelect"/>
+                                <Forms9Patch:Button Text="    Log Out" FontAttributes="Bold" OutlineColor="Transparent" FontSize="20" HorizontalTextAlignment="Start" HorizontalOptions="Fill" TextColor="White" Clicked="clickedLogout"/>
+                            </StackLayout>
+
+                </Grid>
+
+              </Grid>
 
                 <StackLayout x:Name="intro" BackgroundColor="White">
                     <Label Text="Explore meals" TextColor="Black" FontAttributes="Bold" FontSize="20" Margin="20, 20, 20, 20"/>
@@ -373,8 +430,8 @@
                             </Grid>
                         </Grid>
 
-                        <Button Grid.Row="0" Grid.Column="1" x:Name="ambassadorBtn" BackgroundColor="#f26522" HorizontalOptions="Center" VerticalOptions="Center" CornerRadius="15"
-                                HeightRequest="50" Text="Become an Ambassador" TextColor="White" Padding="15" FontAttributes="Bold"/>
+                        <Button Grid.Row="0" Grid.Column="1" x:Name="ambassadorBtn" BackgroundColor="#F26522" HorizontalOptions="Center" VerticalOptions="End" CornerRadius="15"
+                                HeightRequest="50" Text="Become an Ambassador" TextColor="White" Padding="15" Margin="0,0,0,20" FontAttributes="Bold"/>
 
                         <Label Grid.Row="1" Grid.ColumnSpan="2" x:Name="appVersion" VerticalOptions="Center" HorizontalOptions="Center" Margin="0,0,0,20" HeightRequest="20"
                                TextColor="White" FontAttributes="Bold"/>
@@ -387,16 +444,16 @@
             <BoxView x:Name="fade" BackgroundColor="White" Opacity="0.6" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" IsVisible="false"/>
 
                 <Grid x:Name="DiscountGrid" VerticalOptions="Start" IsVisible="false">
-                    <BoxView x:Name="outerFrame" Color="#FFBA00" CornerRadius="25" />
+                    <BoxView x:Name="outerFrame" Color="#F8BB17" CornerRadius="25" />
                     <BoxView x:Name="innerFrame" Color="White" CornerRadius="24" Margin="5"/>
 
                     <StackLayout>
 
-                        <Button x:Name="xButton" Text="x" FontAttributes="Bold" TextColor="#FFBA00" BackgroundColor="Transparent" HorizontalOptions="End" Padding="0" Margin="0,5,15,0" Clicked="clickedX"/>
+                        <Button x:Name="xButton" Text="x" FontAttributes="Bold" TextColor="#F8BB17" BackgroundColor="Transparent" HorizontalOptions="End" Padding="0" Margin="0,5,15,0" Clicked="clickedX"/>
 
                         <Label x:Name="discHeader" Text="Our Special Discounts" TextColor="Black" FontAttributes="Bold" Margin="15,0,0,0" BackgroundColor="Transparent"/>
                         <BoxView HeightRequest="5"/>
-                        <BoxView HeightRequest="2" HorizontalOptions="FillAndExpand" Margin="15,0" Color="#FFBA00"/>
+                        <BoxView HeightRequest="2" HorizontalOptions="FillAndExpand" Margin="15,0" Color="#F8BB17"/>
                         <BoxView HeightRequest="5"/>
 
                         <Grid x:Name="couponGrid" ColumnSpacing="4">
@@ -445,21 +502,22 @@
                     </StackLayout>
                 </Grid>
 
-                <Grid x:Name="CheckAddressGrid" VerticalOptions="Start" IsVisible="false" Margin="50, 275, 50, 120">
-                    <Frame BorderColor="#f26522" CornerRadius="0" HasShadow="False">
+                <Grid x:Name="CheckAddressGrid" VerticalOptions="Start" IsVisible="false">
+                    <Frame BorderColor="#F26522" CornerRadius="0" HasShadow="False">
                         <StackLayout>
                             <ImageButton Source="xButton.png" Aspect="AspectFit" HorizontalOptions="End" Margin="-10" WidthRequest="30" Clicked="xButtonClicked"/>
 
                             <Label x:Name="CheckAddressHeading" Text="Hooray!" FontAttributes="Bold" FontSize="25" HorizontalOptions="Center" Margin="0, 0, 0, 20"/>
 
-                            <Label x:Name="CheckAddressBody" Text="We are so glad that we deliver to your neighborhood. Please click Okay to continue enjoying MealsFor.Me"
-                                   HorizontalOptions="Center" HorizontalTextAlignment="Center" HeightRequest="150" FontSize="16" Margin="15, 0"/>
+                            <Label x:Name="CheckAddressBody" Text="Looks like we deliver to your address. Click the button below to see the variety of meals we offer."
+                                   HorizontalOptions="Center" HorizontalTextAlignment="Center" HeightRequest="120" FontSize="16" Margin="15, 0"/>
 
-                            <Frame x:Name="EmailFrame" BorderColor="#f26522" CornerRadius="10" HasShadow="false" Padding="15, 5" IsVisible="false">
+                            <Frame x:Name="EmailFrame" BorderColor="#F26522" CornerRadius="10" HasShadow="false" Padding="15, 5" IsVisible="false">
                                 <Entry x:Name="EmailEntry" Placeholder="Email" TextColor="Black"/>
                             </Frame>
 
-                            <Button x:Name="OkayButton" Text="Explore Meals" BackgroundColor="#f26522" TextColor="White" Margin="50, 20, 50, 10" CornerRadius="10" Clicked="OkayClicked"/>
+                            <Button x:Name="OkayButton" Text="Explore Meals" BackgroundColor="#F26522" TextColor="White" Margin="40, 20, 40, 10" CornerRadius="10" Clicked="OkayClicked"/>
+                            <Button x:Name="signUpButton2" Text="Sign Up" BackgroundColor="#F26522" TextColor="White" Margin="40, 0, 40, 10" CornerRadius="10" Clicked="clickedSignUp"/>
                         </StackLayout>
                     </Frame>
                 </Grid>

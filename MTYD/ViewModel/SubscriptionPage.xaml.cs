@@ -91,21 +91,20 @@ namespace MTYD.ViewModel
                 orangeBox2.HeightRequest = height / 2;
                 orangeBox2.Margin = new Thickness(0, -height / 2.2, 0, 0);
                 orangeBox2.CornerRadius = height / 40;
-                heading2.WidthRequest = width / 5;
-                menu2.HeightRequest = width / 25;
-                menu2.HeightRequest = width / 20;
+                heading2.WidthRequest = 140;
+                menu.WidthRequest = 40;
                 menu2.Margin = new Thickness(25, 0, 0, 30);
-                heading.WidthRequest = width / 5;
+                heading.WidthRequest = 140;
                 //heading adjustments
 
                 orangeBox.HeightRequest = height / 2.3;
                 orangeBox.Margin = new Thickness(0, -height / 2.2, 0, 0);
                 orangeBox.CornerRadius = height / 40;
                 //heading.WidthRequest = width / 3;
-                heading.WidthRequest = width / 5;
-                pfp.HeightRequest = width / 20;
-                pfp.WidthRequest = width / 20;
-                pfp.CornerRadius = (int)(width / 40);
+                heading.WidthRequest = 140;
+                pfp.HeightRequest = 40;
+                pfp.WidthRequest = 40;
+                pfp.CornerRadius = 20;
                 //pfp.Margin = new Thickness(0, 0, 23, 27);
                 innerGrid.Margin = new Thickness(0, 0, 23, 27);
 
@@ -126,14 +125,16 @@ namespace MTYD.ViewModel
                 }
                 else pfp.Source = Preferences.Get("profilePicLink", "");
 
-                //menu.HeightRequest = width / 20;
-                //menu.HeightRequest = width / 20;
+                //#F8BB17
+                //#F8BB17
                 //menu.Margin = new Thickness(25, 0, 0, 30);
                 menu.Margin = new Thickness(25, 0, 0, 30);
-                menu.HeightRequest = width / 18;
-                menu.WidthRequest = width / 18;
-                menu2.HeightRequest = width / 18;
-                menu2.WidthRequest = width / 18;
+                //menu.HeightRequest = width / 18;
+                menu.WidthRequest = 40;
+                back.Margin = new Thickness(25, 0, 0, 30);
+                back.HeightRequest = 25;
+                //back.WidthRequest = width / 18;
+                menu2.WidthRequest = 40;
                 menu2.Margin = new Thickness(25, 0, 0, 30);
             }
             else //android
@@ -143,8 +144,7 @@ namespace MTYD.ViewModel
                 orangeBox2.Margin = new Thickness(0, -height / 2.2, 0, 0);
                 orangeBox2.CornerRadius = height / 40;
                 heading2.WidthRequest = width / 5.3;
-                menu2.HeightRequest = width / 25;
-                menu2.HeightRequest = width / 20;
+                menu.WidthRequest = 40;
                 menu2.Margin = new Thickness(25, 0, 0, 30);
                 //open menu adjustments
 
@@ -152,14 +152,17 @@ namespace MTYD.ViewModel
                 orangeBox.Margin = new Thickness(0, -height / 2.2, 0, 0);
                 orangeBox.CornerRadius = height / 40;
                 
-                pfp.HeightRequest = width / 25;
-                pfp.WidthRequest = width / 25;
-                pfp.CornerRadius = (int)(width / 50);
+                pfp.HeightRequest = 40;
+                pfp.WidthRequest = 40;
+                pfp.CornerRadius = 20;
                 pfp.Margin = new Thickness(0, 0, 23, 35);
 
-                menu.HeightRequest = width / 30;
-                menu.WidthRequest = width / 30;
+                //menu.HeightRequest = width / 30;
+                menu.WidthRequest = 40;
                 menu.Margin = new Thickness(25, 0, 0, 40);
+                back.HeightRequest = 25;
+                //back.WidthRequest = width / 30;
+                back.Margin = new Thickness(25, 0, 0, 40);
             }
 
             //common adjustments regardless of platform
@@ -217,6 +220,7 @@ namespace MTYD.ViewModel
             {
                 menu.IsVisible = false;
                 backButton.IsVisible = true;
+                back.IsVisible = true;
                 innerGrid.IsVisible = false;
             }
 
@@ -261,7 +265,17 @@ namespace MTYD.ViewModel
                 Preferences.Set("basePrice", basePrice_dub);
                 Preferences.Set("discountAmt", discountAmt_dub);
                 Preferences.Set("itemPrice", itemPrice);
-                TotalPrice.Text = "$" + total.ToString();
+
+                var totalString = total.ToString();
+
+                if (totalString.Contains(".") == false)
+                    totalString = totalString + ".00";
+                else if (totalString.Substring(totalString.IndexOf(".") + 1).Length == 1)
+                    totalString = totalString + "0";
+                else if (totalString.Substring(totalString.IndexOf(".") + 1).Length == 0)
+                    totalString = totalString + "00";
+
+                TotalPrice.Text = "$" + totalString;
                 pricePerMeal.Text = "That's only $" + total / mealSelected / deliverySelected + " per freshly cooked meal";
             }
         }
@@ -291,7 +305,16 @@ namespace MTYD.ViewModel
                 Preferences.Set("basePrice", basePrice);
                 Preferences.Set("discountAmt", discountAmt);
                 Preferences.Set("itemPrice", itemPrice);
-                TotalPrice.Text = "$" + total.ToString();
+                var totalString = total.ToString();
+
+                if (totalString.Contains(".") == false)
+                    totalString = totalString + ".00";
+                else if (totalString.Substring(totalString.IndexOf(".") + 1).Length == 1)
+                    totalString = totalString + "0";
+                else if (totalString.Substring(totalString.IndexOf(".") + 1).Length == 0)
+                    totalString = totalString + "00";
+
+                TotalPrice.Text = "$" + totalString;
                 pricePerMeal.Text = "That's only $" + total / mealSelected / deliverySelected + " per freshly cooked meal";
             }
         }
@@ -321,7 +344,17 @@ namespace MTYD.ViewModel
                 Preferences.Set("basePrice", basePrice);
                 Preferences.Set("discountAmt", discountAmt);
                 Preferences.Set("itemPrice", itemPrice);
-                TotalPrice.Text = "$" + total.ToString();
+                var totalString = total.ToString();
+
+                if (totalString.Contains(".") == false)
+                    totalString = totalString + ".00";
+                else if (totalString.Substring(totalString.IndexOf(".") + 1).Length == 1)
+                    totalString = totalString + "0";
+                else if (totalString.Substring(totalString.IndexOf(".") + 1).Length == 0)
+                    totalString = totalString + "00";
+
+                TotalPrice.Text = "$" + totalString;
+
                 pricePerMeal.Text = "That's only $" + total / mealSelected / deliverySelected + " per freshly cooked meal";
             }
         }
@@ -351,7 +384,17 @@ namespace MTYD.ViewModel
                 Preferences.Set("basePrice", basePrice);
                 Preferences.Set("discountAmt", discountAmt);
                 Preferences.Set("itemPrice", itemPrice);
-                TotalPrice.Text = "$" + total.ToString();
+
+                var totalString = total.ToString();
+
+                if (totalString.Contains(".") == false)
+                    totalString = totalString + ".00";
+                else if (totalString.Substring(totalString.IndexOf(".") + 1).Length == 1)
+                    totalString = totalString + "0";
+                else if (totalString.Substring(totalString.IndexOf(".") + 1).Length == 0)
+                    totalString = totalString + "00";
+
+                TotalPrice.Text = "$" + totalString;
                 pricePerMeal.Text = "That's only $" + total / mealSelected / deliverySelected + " per freshly cooked meal";
             }
         }
@@ -381,7 +424,16 @@ namespace MTYD.ViewModel
                 Preferences.Set("basePrice", basePrice);
                 Preferences.Set("discountAmt", discountAmt);
                 Preferences.Set("itemPrice", itemPrice);
-                TotalPrice.Text = "$" + total.ToString();
+                var totalString = total.ToString();
+
+                if (totalString.Contains(".") == false)
+                    totalString = totalString + ".00";
+                else if (totalString.Substring(totalString.IndexOf(".") + 1).Length == 1)
+                    totalString = totalString + "0";
+                else if (totalString.Substring(totalString.IndexOf(".") + 1).Length == 0)
+                    totalString = totalString + "00";
+
+                TotalPrice.Text = "$" + totalString;
                 pricePerMeal.Text = "That's only $" + total / mealSelected / deliverySelected + " per freshly cooked meal";
             }
         }
@@ -482,7 +534,16 @@ namespace MTYD.ViewModel
                 Preferences.Set("basePrice", basePrice);
                 Preferences.Set("discountAmt", discountAmt);
                 Preferences.Set("itemPrice", itemPrice);
-                TotalPrice.Text = "$" + total.ToString();
+                var totalString = total.ToString();
+
+                if (totalString.Contains(".") == false)
+                    totalString = totalString + ".00";
+                else if (totalString.Substring(totalString.IndexOf(".") + 1).Length == 1)
+                    totalString = totalString + "0";
+                else if (totalString.Substring(totalString.IndexOf(".") + 1).Length == 0)
+                    totalString = totalString + "00";
+
+                TotalPrice.Text = "$" + totalString;
                 pricePerMeal.Text = "That's only $" + total / mealSelected / deliverySelected + " per freshly cooked meal";
             }
         }
@@ -593,5 +654,10 @@ namespace MTYD.ViewModel
             Application.Current.MainPage = new MainPage();
         }
         //end of menu functions
+
+        void clickedExplore(System.Object sender, System.EventArgs e)
+        {
+            Application.Current.MainPage = new NavigationPage(new ExploreMeals());
+        }
     }
 }

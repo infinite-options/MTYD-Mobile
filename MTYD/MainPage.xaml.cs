@@ -39,7 +39,10 @@ namespace MTYD
 {
     //keys in Preferences
     //canChooseSelect - boolean - used to know if the user can navigate to the select page from the menu
-
+    //mainPageAdd - string - used to autofill the address section on paymentpage if going through as guest
+    //mainPageCity - string - used to autofill the address section on paymentpage if going through as guest
+    //mainPageState - string - used to autofill the address section on paymentpage if going through as guest
+    //mainPageZip - string - used to autofill the address section on paymentpage if going through as guest
 
 
     public partial class MainPage : ContentPage
@@ -65,6 +68,11 @@ namespace MTYD
 
         public MainPage()
         {
+            Preferences.Set("mainPageAdd", "");
+            Preferences.Set("mainPageCity", "");
+            Preferences.Set("mainPageState", "");
+            Preferences.Set("mainPageZip", "");
+
             var width = DeviceDisplay.MainDisplayInfo.Width;
             var height = DeviceDisplay.MainDisplayInfo.Height;
             Console.WriteLine("Width = " + width.ToString());
@@ -115,6 +123,10 @@ namespace MTYD
             //Preferences.Set("user_latitude", "0.0");
             //Preferences.Set("user_longitude", "0.0");
             //Application.Current.SavePropertiesAsync();
+            //double marg = HomePage.Height - 100;
+            //Debug.WriteLine("marg: " + marg.ToString());
+            //CheckAddressGrid.Margin = new Thickness(50, marg, 50, 120);
+
         }
 
         public MainPage(string firstName, string lastName, string email)
@@ -165,10 +177,10 @@ namespace MTYD
             orangeBox.HeightRequest = height / 2;
             orangeBox.Margin = new Thickness(0, -height / 2.2, 0, 0);
             orangeBox.CornerRadius = height / 40;
-            heading.WidthRequest = width / 5;
-            pfp.HeightRequest = width / 20;
-            pfp.WidthRequest = width / 20;
-            pfp.CornerRadius = (int)(width / 40);
+            heading.WidthRequest = 140;
+            pfp.HeightRequest = 40;
+            pfp.WidthRequest = 40;
+            pfp.CornerRadius = 20;
             //pfp.Margin = new Thickness(0, 0, 23, 27);
             innerGrid.Margin = new Thickness(0, 0, 23, 27);
             fade.Margin = new Thickness(0, -height / 3, 0, 0);
@@ -189,10 +201,10 @@ namespace MTYD
             }
             else pfp.Source = Preferences.Get("profilePicLink", "");
 
-            menu.HeightRequest = width / 23;
-            menu.WidthRequest = width / 23;
-            menu2.HeightRequest = width / 23;
-            menu2.WidthRequest = width / 23;
+            //menu.HeightRequest = width / 23;
+            menu.WidthRequest = 40;
+            //menu.WidthRequest = 40; = width / 23;
+            menu2.WidthRequest = 40;
             menu.Margin = new Thickness(25, 0, 0, 30);
 
             if (width == 1125 && height == 2436) //iPhone X only
@@ -200,60 +212,66 @@ namespace MTYD
                 Console.WriteLine("entered for iPhone X");
 
                 //social media buttons
-                googleLoginButton.HeightRequest = width / 17;
-                googleLoginButton.WidthRequest = width / 17;
-                googleLoginButton.CornerRadius = (int)(width / 34);
-                facebookLoginButton.HeightRequest = width / 17;
-                facebookLoginButton.WidthRequest = width / 17;
-                facebookLoginButton.CornerRadius = (int)(width / 34);
-                appleLoginButton.HeightRequest = width / 17;
-                appleLoginButton.WidthRequest = width / 17;
-                appleLoginButton.CornerRadius = (int)(width / 34);
+                //googleLoginButton.HeightRequest = width / 17;
+                //googleLoginButton.WidthRequest = width / 17;
+                //googleLoginButton.CornerRadius = (int)(width / 34);
+                //facebookLoginButton.HeightRequest = width / 17;
+                //facebookLoginButton.WidthRequest = width / 17;
+                //facebookLoginButton.CornerRadius = (int)(width / 34);
+                //appleLoginButton.HeightRequest = width / 17;
+                //appleLoginButton.WidthRequest = width / 17;
+                //appleLoginButton.CornerRadius = (int)(width / 34);
+                googleLoginButton.HeightRequest = 42;
+                googleLoginButton.WidthRequest = 42;
+                googleLoginButton.CornerRadius = 21;
+                facebookLoginButton.HeightRequest = 42;
+                facebookLoginButton.WidthRequest = 42;
+                facebookLoginButton.CornerRadius = 21;
+                appleLoginButton.HeightRequest = 42;
+                appleLoginButton.WidthRequest = 42;
+                appleLoginButton.CornerRadius = 21;
+                directLoginButton.HeightRequest = 42;
+                directLoginButton.WidthRequest = 42;
+                directLoginButton.CornerRadius = 21;
             }
             else if (Device.RuntimePlatform == Device.iOS)
             {
-                //appleSignupFrame.WidthRequest = width / 3.5;
-                //appleSignupFrame.HeightRequest = width / 25;
-                //appleSignupButton.WidthRequest = width / 3.5;
-                //appleSignupButton.HeightRequest = width / 25;
-                //appleSignupText.FontSize = width / 50;
-                //fbSignupFrame.WidthRequest = width / 3.5;
-                //fbSignupFrame.HeightRequest = width / 25;
-                //fbSignupButton.WidthRequest = width / 3.5;
-                //fbSignupButton.HeightRequest = width / 25;
-                //fbSignupText.FontSize = width / 50;
-                //googleSignupFrame.WidthRequest = width / 3.5;
-                //googleSignupFrame.HeightRequest = width / 25;
-                //googleSignupButton.WidthRequest = width / 3.5;
-                //googleSignupButton.HeightRequest = width / 25;
-                //googleSignupText.FontSize = width / 50;
-                appleLoginButton.HeightRequest = width / 17;
-                appleLoginButton.WidthRequest = width / 17;
-                appleLoginButton.CornerRadius = (int)(width / 34);
-                googleLoginButton.HeightRequest = width / 17;
-                googleLoginButton.WidthRequest = width / 17;
-                googleLoginButton.CornerRadius = (int)(width / 34);
-                facebookLoginButton.HeightRequest = width / 17;
-                facebookLoginButton.WidthRequest = width / 17;
-                facebookLoginButton.CornerRadius = (int)(width / 34);
-                directLoginButton.HeightRequest = width / 17;
-                directLoginButton.WidthRequest = width / 17;
-                directLoginButton.CornerRadius = (int)(width / 34);
+                //googleLoginButton.HeightRequest = width / 17;
+                //googleLoginButton.WidthRequest = width / 17;
+                //googleLoginButton.CornerRadius = (int)(width / 34);
+                //facebookLoginButton.HeightRequest = width / 17;
+                //facebookLoginButton.WidthRequest = width / 17;
+                //facebookLoginButton.CornerRadius = (int)(width / 34);
+                //directLoginButton.HeightRequest = width / 17;
+                //directLoginButton.WidthRequest = width / 17;
+                //directLoginButton.CornerRadius = (int)(width / 34);
+                googleLoginButton.HeightRequest = 42;
+                googleLoginButton.WidthRequest = 42;
+                googleLoginButton.CornerRadius = 21;
+                facebookLoginButton.HeightRequest = 42;
+                facebookLoginButton.WidthRequest = 42;
+                facebookLoginButton.CornerRadius = 21;
+                appleLoginButton.HeightRequest = 42;
+                appleLoginButton.WidthRequest = 42;
+                appleLoginButton.CornerRadius = 21;
+                directLoginButton.HeightRequest = 42;
+                directLoginButton.WidthRequest = 42;
+                directLoginButton.CornerRadius = 21;
             }
             else //android
             {
-                appleLoginButton.HeightRequest = width / 10;
-                appleLoginButton.WidthRequest = width / 10;
-                appleLoginButton.CornerRadius = (int)(width / 20);
-                googleLoginButton.HeightRequest = width / 10;
-                googleLoginButton.WidthRequest = width / 10;
-                googleLoginButton.CornerRadius = (int)(width / 20);
-                facebookLoginButton.HeightRequest = width / 10;
-                facebookLoginButton.WidthRequest = width / 10;
-                facebookLoginButton.CornerRadius = (int)(width / 20);
-                directLoginButton.HeightRequest = width / 10;
-                directLoginButton.WidthRequest = width / 10;
-                directLoginButton.CornerRadius = (int)(width / 20);
+                googleLoginButton.HeightRequest = 42;
+                googleLoginButton.WidthRequest = 42;
+                googleLoginButton.CornerRadius = 21;
+                facebookLoginButton.HeightRequest = 42;
+                facebookLoginButton.WidthRequest = 42;
+                facebookLoginButton.CornerRadius = 21;
+                appleLoginButton.HeightRequest = 42;
+                appleLoginButton.WidthRequest = 42;
+                appleLoginButton.CornerRadius = 21;
+                directLoginButton.HeightRequest = 42;
+                directLoginButton.WidthRequest = 42;
+                directLoginButton.CornerRadius = 21;
             }
         }
 
@@ -310,7 +328,7 @@ namespace MTYD
                         HorizontalTextAlignment = TextAlignment.Center,
                         VerticalTextAlignment = TextAlignment.Center
                     },
-                    BorderColor = Color.FromHex("#f26522"),
+                    BorderColor = Color.FromHex("#F26522"),
                     HasShadow = false,
                     Padding = 5,
                     CornerRadius = 0
@@ -325,11 +343,10 @@ namespace MTYD
             orangeBox.Margin = new Thickness(0, -height / 2.2, 0, 0);
             orangeBox.CornerRadius = height / 40;
             innerGrid.Margin = new Thickness(0, 0, 23, 27);
-            heading.WidthRequest = width / 3;
+            heading.WidthRequest = 140;
 
             menu.Margin = new Thickness(25, 0, 0, 30);
-            menu.HeightRequest = width / 20;
-            menu.WidthRequest = width / 20;
+            menu.WidthRequest = 40;
             //menu.Margin = new Thickness(25, 0, 0, 30);
 
             if (Preferences.Get("profilePicLink", "") == "")
@@ -356,17 +373,17 @@ namespace MTYD
                 orangeBox2.HeightRequest = height / 2;
                 orangeBox2.Margin = new Thickness(0, -height / 2.2, 0, 0);
                 orangeBox2.CornerRadius = height / 40;
-                heading2.WidthRequest = width / 5;
+                heading2.WidthRequest = 140;
                 menu2.Margin = new Thickness(25, 0, 0, 30);
-                menu2.HeightRequest = width / 20;
-                menu2.WidthRequest = width / 20;
+                menu.WidthRequest = 40;
+                menu2.WidthRequest = 40;
                 //menu2.Margin = new Thickness(25, 0, 0, 30);
-                heading.WidthRequest = width / 5;
+                menu.WidthRequest = 40;
                 //heading adjustments
 
-                pfp.HeightRequest = width / 20;
-                pfp.WidthRequest = width / 20;
-                pfp.CornerRadius = (int)(width / 40);
+                pfp.HeightRequest = 40;
+                pfp.WidthRequest = 40;
+                pfp.CornerRadius = 20;
 
                 mainLogo.HeightRequest = height / 18;
                 getStarted.HeightRequest = height / 35;
@@ -407,17 +424,17 @@ namespace MTYD
                 orangeBox2.HeightRequest = height / 2;
                 orangeBox2.Margin = new Thickness(0, -height / 2.2, 0, 0);
                 orangeBox2.CornerRadius = height / 40;
-                heading2.WidthRequest = width / 5;
+                heading2.WidthRequest = 140;
                 menu2.Margin = new Thickness(25, 0, 0, 30);
-                menu2.HeightRequest = width / 20;
-                menu2.WidthRequest = width / 20;
+                menu.WidthRequest = 40;
+                menu2.WidthRequest = 40;
                 //menu2.Margin = new Thickness(25, 0, 0, 30);
-                heading.WidthRequest = width / 5;
+                menu.WidthRequest = 40;
                 //heading adjustments
 
-                pfp.HeightRequest = width / 25;
-                pfp.WidthRequest = width / 25;
-                pfp.CornerRadius = (int)(width / 50);
+                pfp.HeightRequest = 40;
+                pfp.WidthRequest = 40;
+                pfp.CornerRadius = 20;
 
                 mainLogo.HeightRequest = height / 20;
                 getStarted.HeightRequest = height / 45;
@@ -1915,6 +1932,8 @@ namespace MTYD
 
         private void addressEntryFocused(object sender, EventArgs eventArgs)
         {
+            CheckAddressGrid.Margin = new Thickness(50, HomePage.Height - 75, 50, 120);
+            scroll.ScrollToAsync(0, HomePage.Height - 250, true);
             addr.addressEntryFocused(addressList);
         }
 
@@ -1933,6 +1952,8 @@ namespace MTYD
             string addr1 = addressSplit[0].Trim();
             string city = addressSplit[1].Trim();
             string state = addressSplit[2].Trim();
+            string zip = addressSplit[3].Trim();
+
             //string zip = addressSplit[2].Trim().Substring(3);
 
             // Setting request for USPS API
@@ -2041,9 +2062,10 @@ namespace MTYD
             else if (withinZones == false)
             {
                 fade.IsVisible = true;
+                signUpButton2.IsVisible = false;
                 CheckAddressGrid.IsVisible = true;
-                CheckAddressHeading.Text = "Oops!";
-                CheckAddressBody.Text = "Sorry, it looks like we don’t deliver to your Zip Code yet. Please feel free to leave us your email address and we will let you know as soon as we come to your neighborhood.";
+                CheckAddressHeading.Text = "Still Growing…";
+                CheckAddressBody.Text = "Sorry, it looks like we don’t deliver to your neighborhood yet. Enter your email address and we will let you know as soon as we come to your neighborhood.";
                 EmailFrame.IsVisible = true;
                 OkayButton.Text = "Okay";
                 //await scroll.ScrollToAsync(0, 0, true);
@@ -2052,11 +2074,19 @@ namespace MTYD
             else
             {
                 fade.IsVisible = true;
+                signUpButton2.IsVisible = true;
                 CheckAddressGrid.IsVisible = true;
                 CheckAddressHeading.Text = "Hooray!";
                 CheckAddressBody.Text = "We are so glad that we deliver to your neighborhood. Please click Okay to continue enjoying MealsFor.Me";
                 EmailFrame.IsVisible = false;
                 OkayButton.Text = "Explore Meals";
+
+                Preferences.Set("mainPageAdd", addr1);
+                Preferences.Set("mainPageCity", city);
+                if (state.IndexOf(" ") != -1)
+                    state = state.Substring(0, state.IndexOf(" "));
+                Preferences.Set("mainPageState", state);
+                Preferences.Set("mainPageZip", zip);
                 //await scroll.ScrollToAsync(0, 0, true);
                 AddressEntry.Unfocus();
             }
