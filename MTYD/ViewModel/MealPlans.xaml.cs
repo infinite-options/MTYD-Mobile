@@ -28,6 +28,7 @@ namespace MTYD.ViewModel
         public static ObservableCollection<MealPlanItem> mealPlanColl = new ObservableCollection<MealPlanItem>();
         PaymentInfo orderInfo;
         ArrayList itemsArray = new ArrayList();
+        ArrayList purchUidArray = new ArrayList();
         ArrayList purchIdArray = new ArrayList();
         ArrayList namesArray = new ArrayList();
         ArrayList itemUidArray = new ArrayList();
@@ -38,6 +39,7 @@ namespace MTYD.ViewModel
         bool planChangeCalled = false;
         public bool isAddessValidated = false;
         string chosenPurchUid;
+        string chosenPurchId;
         int currentIndex = -1;
         string currentPlan;
         List<JToken> activePlans = new List<JToken>();
@@ -58,6 +60,7 @@ namespace MTYD.ViewModel
                 info_obj = null;
                 activePlans.Clear();
                 itemsArray.Clear();
+                purchUidArray.Clear();
                 purchIdArray.Clear();
                 namesArray.Clear();
                 itemUidArray.Clear();
@@ -446,9 +449,10 @@ namespace MTYD.ViewModel
                 //prevPlan = item;
 
                 //chosenPurchUid = (info_obj["result"])[planPicker.SelectedIndex]["purchase_uid"].ToString();
-                //chosenPurchUid = purchIdArray[planPicker.SelectedIndex].ToString();
-                chosenPurchUid = purchIdArray[selectedIndex].ToString();
-                //chosenPurchUid = purchIdArray[PlanCollectionView.].ToString();
+                //chosenPurchUid = purchUidArray[planPicker.SelectedIndex].ToString();
+                chosenPurchUid = purchUidArray[selectedIndex].ToString();
+                chosenPurchId = purchIdArray[selectedIndex].ToString();
+                //chosenPurchUid = purchUidArray[PlanCollectionView.].ToString();
                 Debug.WriteLine("selected chosen purch id in plan change: " + chosenPurchUid.ToString());
 
                 //currentIndex = planPicker.SelectedIndex;
@@ -482,7 +486,7 @@ namespace MTYD.ViewModel
                 try
                 {
                     WebClient client4 = new WebClient();
-                    string url3 = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/predict_autopay_day/" + chosenPurchUid;
+                    string url3 = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/predict_autopay_day/" + chosenPurchId;
                     Debug.WriteLine("next billing date url: " + url3);
                     var content = client4.DownloadString(url3);
                     var obj = JsonConvert.DeserializeObject<nextDelivDate>(content);
@@ -572,23 +576,24 @@ namespace MTYD.ViewModel
                         if (m["purchase_status"].ToString() == "ACTIVE")
                         {
                             itemsArray.Add((m["items"].ToString()));
-                            purchIdArray.Add((m["purchase_uid"].ToString()));
+                            purchUidArray.Add((m["purchase_uid"].ToString()));
+                            purchIdArray.Add((m["purchase_id"].ToString()));
                             activePlans.Add(m);
                         }
                         else Debug.WriteLine(m["purchase_uid"].ToString() + " was skipped");
                     }
 
-                    if (purchIdArray.Count == 0 || activePlans.Count == 0)
+                    if (purchUidArray.Count == 0 || activePlans.Count == 0)
                     {
                         Preferences.Set("canChooseSelect", false);
                     }
 
-                    lastPickerIndex = purchIdArray.Count - 1;
+                    lastPickerIndex = purchUidArray.Count - 1;
 
-                    Console.WriteLine("size of purchIdArray: " + purchIdArray.Count.ToString());
-                    for (int i = 0; i < purchIdArray.Count; i++)
+                    Console.WriteLine("size of purchUidArray: " + purchUidArray.Count.ToString());
+                    for (int i = 0; i < purchUidArray.Count; i++)
                     {
-                        Console.WriteLine("purchId " + i + ": " + purchIdArray[i]);
+                        Console.WriteLine("purchId " + i + ": " + purchUidArray[i]);
                     }
 
                     // Console.WriteLine("itemsArray contents:" + itemsArray[0]);
@@ -612,7 +617,7 @@ namespace MTYD.ViewModel
                             qty = qty + " Deliveries";
                             //string price = (string)config["price"];
                             //string mealid = (string)config["item_uid"];
-                            string purchIdCurrent = purchIdArray[i].ToString().Substring(4);
+                            string purchIdCurrent = purchUidArray[i].ToString().Substring(4);
                             //while (purchIdCurrent.Substring(0, 1) == "0")
                             //    purchIdCurrent = purchIdCurrent.Substring(1);
 
@@ -620,7 +625,7 @@ namespace MTYD.ViewModel
                             //namesArray.Add(name);
 
                             //adds purchase uid to front of meal plan name
-                            //namesArray.Add(purchIdArray[i].ToString().Substring(4) + " : " + name);
+                            //namesArray.Add(purchUidArray[i].ToString().Substring(4) + " : " + name);
                             namesArray.Add(name + qty + " : " + purchIdCurrent);
                             //only includes meal plan name
                             //namesArray.Add(name);
@@ -635,8 +640,8 @@ namespace MTYD.ViewModel
                             );
                             index++;
                             //adds purchase uid to front of meal plan name
-                            //namesArray.Add(purchIdArray[i].ToString().Substring(4) + " : " + name);
-                            namesArray.Add(name + " : " + purchIdArray[i].ToString().Substring(4));
+                            //namesArray.Add(purchUidArray[i].ToString().Substring(4) + " : " + name);
+                            namesArray.Add(name + " : " + purchUidArray[i].ToString().Substring(4));
 
                             string mealid = (string)config["item_uid"];
                             itemUidArray.Add(mealid);
