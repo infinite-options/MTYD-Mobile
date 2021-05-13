@@ -200,7 +200,10 @@
 
                     <Label x:Name="header" Text="WELCOME TO" FontSize="20" HorizontalOptions="Center" TextColor="White" FontAttributes="Bold"/>
 
-                    <Image x:Name="mainLogo" Source="m4me_logo.png" Aspect="AspectFit"/>
+                    <StackLayout HeightRequest="100" BackgroundColor="White" Padding="15" Margin="0, 40, 0, 50">
+                        <Image Source="MealsForMeMainPage.png" HeightRequest="100"></Image>
+                    </StackLayout>
+                    <!--<Image x:Name="mainLogo" Source="m4me_logo.png" Aspect="AspectFit"/>-->
 
                     <BoxView HeightRequest="40"/>
 
@@ -431,7 +434,7 @@
                         </Grid>
 
                         <Button Grid.Row="0" Grid.Column="1" x:Name="ambassadorBtn" BackgroundColor="#F26522" HorizontalOptions="Center" VerticalOptions="End" CornerRadius="15"
-                                HeightRequest="50" Text="Become an Ambassador" TextColor="White" Padding="15" Margin="0,0,0,20" FontAttributes="Bold"/>
+                                HeightRequest="50" Text="Become an Ambassador" TextColor="White" Padding="15" Margin="0,0,0,20" FontAttributes="Bold" Clicked="clickedBecomeAmb"/>
 
                         <Label Grid.Row="1" Grid.ColumnSpan="2" x:Name="appVersion" VerticalOptions="Center" HorizontalOptions="Center" Margin="0,0,0,20" HeightRequest="20"
                                TextColor="White" FontAttributes="Bold"/>
@@ -443,7 +446,7 @@
 
             <BoxView x:Name="fade" BackgroundColor="White" Opacity="0.6" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" IsVisible="false"/>
 
-                <Grid x:Name="DiscountGrid" VerticalOptions="Start" IsVisible="false">
+                <!--<Grid x:Name="DiscountGrid" VerticalOptions="Start" IsVisible="false">
                     <BoxView x:Name="outerFrame" Color="#F8BB17" CornerRadius="25" />
                     <BoxView x:Name="innerFrame" Color="White" CornerRadius="24" Margin="5"/>
 
@@ -463,9 +466,9 @@
                             </Grid.ColumnDefinitions>
 
                             <Image x:Name="couponImg" Source="coupon.png" Aspect="AspectFit" Margin="15,0,0,0"/>
-                            <Label x:Name="couponAmt" Text="5%&#x0a;Off" TextColor="Black" FontAttributes="Bold" Margin="35,0,0,0" VerticalOptions="Center"/>
+                            <Label x:Name="couponAmt" Text="" TextColor="Black" FontAttributes="Bold" Margin="35,0,0,0" VerticalOptions="Center"/>
 
-                            <Label Grid.Column="1" x:Name="couponDesc" Text="Select 4 Deliveries Pre-Pay&#x0a;Option and Get 5% off" FontAttributes="Bold" TextColor="DarkGray" VerticalOptions="Center" HorizontalTextAlignment="Start"/>
+                            <Label Grid.Column="1" x:Name="couponDesc" Text="" FontAttributes="Bold" TextColor="DarkGray" VerticalOptions="Center" HorizontalTextAlignment="Start"/>
 
                         </Grid>
 
@@ -478,9 +481,9 @@
                             </Grid.ColumnDefinitions>
 
                             <Image x:Name="couponImg2" Source="coupon.png" Aspect="AspectFit" Margin="15,0,0,0"/>
-                            <Label x:Name="couponAmt2" Text="12%&#x0a;Off" TextColor="Black" FontAttributes="Bold" Margin="35,0,0,0" VerticalOptions="Center"/>
+                            <Label x:Name="couponAmt2" Text="" TextColor="Black" FontAttributes="Bold" Margin="35,0,0,0" VerticalOptions="Center"/>
 
-                            <Label Grid.Column="1" x:Name="couponDesc2" Text="Select 8 Deliveries Pre-Pay&#x0a;Option and Get 12% off" FontAttributes="Bold" TextColor="DarkGray" VerticalOptions="Center" HorizontalTextAlignment="Start"/>
+                            <Label Grid.Column="1" x:Name="couponDesc2" Text="" FontAttributes="Bold" TextColor="DarkGray" VerticalOptions="Center" HorizontalTextAlignment="Start"/>
 
                         </Grid>
 
@@ -493,13 +496,92 @@
                             </Grid.ColumnDefinitions>
 
                             <Image x:Name="couponImg3" Source="coupon.png" Aspect="AspectFit" Margin="15,0,0,0"/>
-                            <Label x:Name="couponAmt3" Text="15%&#x0a;Off" TextColor="Black" FontAttributes="Bold" Margin="35,0,0,0" VerticalOptions="Center"/>
+                            <Label x:Name="couponAmt3" Text="" TextColor="Black" FontAttributes="Bold" Margin="35,0,0,0" VerticalOptions="Center"/>
 
-                            <Label Grid.Column="1" x:Name="couponDesc3" Text="Select 10 Deliveries Pre-Pay&#x0a;Option and Get 15% off" FontAttributes="Bold" TextColor="DarkGray" VerticalOptions="Center" HorizontalTextAlignment="Start"/>
+                            <Label Grid.Column="1" x:Name="couponDesc3" Text="" FontAttributes="Bold" TextColor="DarkGray" VerticalOptions="Center" HorizontalTextAlignment="Start"/>
 
                         </Grid>
 
                     </StackLayout>
+                </Grid>-->
+
+                <Grid x:Name="DiscountGrid" VerticalOptions="Start" HorizontalOptions="Fill"  Margin="40,100,40,120" IsVisible="false">
+                    <Frame BorderColor="#F26522" CornerRadius="0" HasShadow="False" BackgroundColor="#F8BB17">
+                        <StackLayout>
+                            <ImageButton Source="xButton.png" Aspect="AspectFit" HorizontalOptions="End" Margin="-10" WidthRequest="30" Clicked="xButtonClicked"/>
+
+                            <Label Text="Our Special Discounts" FontAttributes="Bold" FontSize="25" Margin="5, 10, 5, 15" HorizontalTextAlignment="Center" TextColor="White"/>
+
+                            <Grid Margin="10,3" HeightRequest="70">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <Grid>
+                                    <Image x:Name="couponImg" HeightRequest="65" Source="discTicket.png" HorizontalOptions="Fill" VerticalOptions="Center" Aspect="AspectFill"/>
+                                    <Label x:Name="couponAmt" Text="" FontSize="23" HorizontalTextAlignment="Center" VerticalOptions="Center" TextColor="White" FontAttributes="Bold"/>
+                                </Grid>
+
+                                <Label Grid.Column="1" x:Name="couponDesc" HeightRequest="70" TextColor="Black" VerticalTextAlignment="Center" VerticalOptions="Center" FontSize="14" HorizontalTextAlignment="Start"/>
+
+                            </Grid>
+
+                            <Grid Margin="10,3">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <Grid>
+                                    <Image x:Name="couponImg2" HeightRequest="65" Source="discTicket.png" HorizontalOptions="Fill" VerticalOptions="Center" Aspect="AspectFill"/>
+                                    <Label x:Name="couponAmt2" Text="" FontSize="23" HorizontalTextAlignment="Center" VerticalOptions="Center" TextColor="White" FontAttributes="Bold"/>
+                                </Grid>
+
+                                <Label Grid.Column="1" x:Name="couponDesc2" HeightRequest="70" TextColor="Black" VerticalTextAlignment="Center" VerticalOptions="Center" FontSize="14" HorizontalTextAlignment="Start"/>
+
+                            </Grid>
+
+                            <Grid Margin="10,3,10,15">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <Grid>
+                                    <Image x:Name="couponImg3" HeightRequest="65" Source="discTicket.png" HorizontalOptions="Fill" VerticalOptions="Center" Aspect="AspectFill"/>
+                                    <Label x:Name="couponAmt3" Text="" FontSize="23" HorizontalTextAlignment="Center" VerticalOptions="Center" TextColor="White" FontAttributes="Bold"/>
+                                </Grid>
+
+                                <Label Grid.Column="1" x:Name="couponDesc3" HeightRequest="70" TextColor="Black" VerticalTextAlignment="Center" FontSize="14" VerticalOptions="Center" HorizontalTextAlignment="Start"/>
+
+                            </Grid>
+
+                            <!--<Label Text="Love MealsFor.Me?" FontAttributes="Bold" FontSize="25" HorizontalOptions="Center" Margin="0, 0, 0, 5"/>
+                            <Label Text="Become an Ambassador" FontAttributes="Bold" FontSize="13" HorizontalOptions="Center" Margin="0, 0, 0, 15"/>
+
+                            <Label Text="Your friend(s) saves 20% on their first order and you save 20% on your next renewal&#10;+&#10;Each time your friend renews, you get an additional 5% renewal bonus. Sign up 20 friends and eat for free!"
+                                   HorizontalOptions="Center" HorizontalTextAlignment="Center" HeightRequest="170" FontSize="16" Margin="15, 0"/>
+
+                            <Frame x:Name="AmbEmailFrame" BorderColor="#F26522" CornerRadius="10" HasShadow="false" Padding="15, 5">
+                                <Entry x:Name="AmbEmailEntry" Placeholder="Email" TextColor="Black"/>
+                            </Frame>
+
+                            <Button Text="Sign Up" BackgroundColor="#F26522" TextColor="White" Margin="0, 10, 0, 10" CornerRadius="10" Clicked="clickedCreateAmb"/>
+
+                            <Label Text="Your friends can use this email address as the Ambassador code when they sign up" FontAttributes="Bold" FontSize="16" HorizontalTextAlignment="Center" TextColor="#F26522" HorizontalOptions="Center" HeightRequest="65" Margin="0, 0, 0, 15"/>-->
+
+                        </StackLayout>
+                    </Frame>
                 </Grid>
 
                 <Grid x:Name="CheckAddressGrid" VerticalOptions="Start" IsVisible="false">
@@ -518,6 +600,31 @@
 
                             <Button x:Name="OkayButton" Text="Explore Meals" BackgroundColor="#F26522" TextColor="White" Margin="40, 20, 40, 10" CornerRadius="10" Clicked="OkayClicked"/>
                             <Button x:Name="signUpButton2" Text="Sign Up" BackgroundColor="#F26522" TextColor="White" Margin="40, 0, 40, 10" CornerRadius="10" Clicked="clickedSignUp"/>
+                        </StackLayout>
+                    </Frame>
+                </Grid>
+
+                <Grid x:Name="baaPopUpGrid" VerticalOptions="End" Margin="40,0,40,120" IsVisible="false">
+                    <Frame BorderColor="#F26522" CornerRadius="0" HasShadow="False">
+                        <StackLayout>
+                            <ImageButton Source="xButton.png" Aspect="AspectFit" HorizontalOptions="End" Margin="-10" WidthRequest="30" Clicked="xButtonClicked"/>
+
+                            <Label Text="Love MealsFor.Me?" FontAttributes="Bold" FontSize="25" HorizontalOptions="Center" Margin="0, 0, 0, 5"/>
+                            <Label Text="Become an Ambassador" FontAttributes="Bold" FontSize="13" HorizontalOptions="Center" Margin="0, 0, 0, 15"/>
+
+                            <Label Text="Your friend(s) saves 20% on their first order and you save 20% on your next renewal&#10;+&#10;Each time your friend renews, you get an additional 5% renewal bonus. Sign up 20 friends and eat for free!"
+                                   HorizontalOptions="Center" HorizontalTextAlignment="Center" HeightRequest="170" FontSize="16" Margin="15, 0"/>
+
+                            <Frame x:Name="AmbEmailFrame" BorderColor="#F26522" CornerRadius="10" HasShadow="false" Padding="15, 5">
+                                <Entry x:Name="AmbEmailEntry" Placeholder="Email" TextColor="Black"/>
+                            </Frame>
+
+                            <Button Text="Sign Up" BackgroundColor="#F26522" TextColor="White" Margin="0, 10, 0, 10" CornerRadius="10" Clicked="clickedCreateAmb"/>
+
+                            <Label Text="Your friends can use this email address as the Ambassador code when they sign up" FontAttributes="Bold" FontSize="16" HorizontalTextAlignment="Center" TextColor="#F26522" HorizontalOptions="Center" HeightRequest="65" Margin="0, 0, 0, 15"/>
+
+                            <!--<Button x:Name="OkayButton" Text="Sign Up" BackgroundColor="#F26522" TextColor="White" Margin="40, 20, 40, 10" CornerRadius="10" Clicked="OkayClicked"/>-->
+                            <!--<Button x:Name="signUpButton2" Text="Sign Up" BackgroundColor="#F26522" TextColor="White" Margin="40, 0, 40, 10" CornerRadius="10" Clicked="clickedSignUp"/>-->
                         </StackLayout>
                     </Frame>
                 </Grid>

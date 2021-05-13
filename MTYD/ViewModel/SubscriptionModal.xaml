@@ -70,25 +70,30 @@
 
                     <ImageButton x:Name="meals1" Grid.Column="0" Source="meal_num_button_yellow.png" WidthRequest="50" HorizontalOptions="Center" Clicked="clickedMeals1"/>
                     <Label x:Name="meals1Text" Grid.Column="0" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center"/>
+                    <Button HorizontalOptions="Fill" VerticalOptions="Fill" Clicked="clickedMeals1"/>
 
                     <ImageButton x:Name="meals2" Grid.Column="1" Source="meal_num_button_yellow.png" WidthRequest="50" HorizontalOptions="Center" Clicked="clickedMeals2"/>
                     <Label x:Name="meals2Text" Grid.Column="1" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center"/>
+                    <Button Grid.Column="1" HorizontalOptions="Fill" VerticalOptions="Fill" Clicked="clickedMeals2"/>
 
                     <ImageButton x:Name="meals3" Grid.Column="2" Source="meal_num_button_yellow.png" WidthRequest="50" HorizontalOptions="Center" Clicked="clickedMeals3"/>
                     <Label x:Name="meals3Text" Grid.Column="2" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center"/>
+                    <Button Grid.Column="2" HorizontalOptions="Fill" VerticalOptions="Fill" Clicked="clickedMeals3"/>
 
                     <ImageButton x:Name="meals4" Grid.Column="3" Source="meal_num_button_yellow.png" WidthRequest="50" HorizontalOptions="Center" Clicked="clickedMeals4"/>
                     <Label x:Name="meals4Text" Grid.Column="3" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center"/>
+                    <Button Grid.Column="3" HorizontalOptions="Fill" VerticalOptions="Fill" Clicked="clickedMeals4"/>
 
                     <ImageButton x:Name="meals5" Grid.Column="4" Source="meal_num_button_yellow.png" WidthRequest="50" HorizontalOptions="Center" Clicked="clickedMeals5"/>
                     <Label x:Name="meals5Text" Grid.Column="4" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center"/>
+                    <Button Grid.Column="4" HorizontalOptions="Fill" VerticalOptions="Fill" Clicked="clickedMeals5"/>
 
                 </Grid>
 
                 <Label Text="TOTAL NUMBER OF DELIVERIES" HorizontalOptions="Start"
                        HorizontalTextAlignment="Start" TextColor="Black" Margin="30, 0"/>
 
-                <Grid HorizontalOptions="CenterAndExpand" Margin="30, 10, 30, 20" RowSpacing="5" ColumnSpacing="5" Padding="0">
+                <Grid HorizontalOptions="CenterAndExpand" Margin="15, 10" RowSpacing="5" ColumnSpacing="5" Padding="0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="65"/>
                         <RowDefinition Height="65"/>

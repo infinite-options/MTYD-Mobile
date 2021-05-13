@@ -108,86 +108,95 @@ namespace MTYD.ViewModel
 
         public ExploreMeals()
         {
-            //public ObservableCollection<AddressAutocomplete> Add;
+            try
+            {
+                //public ObservableCollection<AddressAutocomplete> Add;
+                NavigationPage.SetHasBackButton(this, false);
+                NavigationPage.SetHasNavigationBar(this, false);
+
+                availableDates = new List<Date>();
+                dateDict = new Dictionary<string, Date>();
+                favDict = new Dictionary<string, bool>();
+                //passedZones = zones;
+                InitializeComponent();
 
 
-            availableDates = new List<Date>();
-            dateDict = new Dictionary<string, Date>();
-            favDict = new Dictionary<string, bool>();
-            //passedZones = zones;
-            InitializeComponent();
-
-
-            //move bar initialization testing
-            //==========================================
-            // CARLOS PROGRESS BAR INITIALIZATION
-            var m = new Origin();
-            m.margin = new Thickness(0, 0, 0, 0);
-            m.mealsLeft = "";
-
-            
-
-            BarParameters.Add(m);
-            MyCollectionView.ItemsSource = BarParameters;
-            //===========================================
-            Debug.WriteLine("bar initialization done");
-
-            Preferences.Set("origMax", 0);
-            //getFavorites();
-            //GetMealPlans();
-            //Task.Delay(1000).Wait();
-            setDates();
-            //getUserMeals();
-            setMenu();
-
-            var width = DeviceDisplay.MainDisplayInfo.Width;
-            var height = DeviceDisplay.MainDisplayInfo.Height;
-            NavigationPage.SetHasBackButton(this, false);
-            NavigationPage.SetHasNavigationBar(this, false);
-
-            //dateCarousel.PeekAreaInsets = new Thickness((width / 2) - 250, 0);
+                //move bar initialization testing
+                //==========================================
+                // CARLOS PROGRESS BAR INITIALIZATION
+                var m = new Origin();
+                m.margin = new Thickness(0, 0, 0, 0);
+                m.mealsLeft = "";
 
 
 
-            //first = firstName;
-            //last = lastName;
-            //email = userEmail;
-            checkPlatform(height, width);
-            Preferences.Set("canChooseSelect", true);
+                BarParameters.Add(m);
+                MyCollectionView.ItemsSource = BarParameters;
+                //===========================================
+                Debug.WriteLine("bar initialization done");
 
-            ////==========================================
-            //// CARLOS PROGRESS BAR INITIALIZATION
-            //var m = new Origin();
-            //    m.margin = new Thickness(0, 0, 0, 0);
-            //    m.mealsLeft = "";
+                Preferences.Set("origMax", 0);
+                //getFavorites();
+                //GetMealPlans();
+                //Task.Delay(1000).Wait();
+                setDates();
+                //getUserMeals();
+                setMenu();
 
-            //BarParameters.Add(m);
-            //MyCollectionView.ItemsSource = BarParameters;
-            ////===========================================
-            //mealsSaved.Clear();
-            //resetAll();
-            //GetRecentSelection();
+                var width = DeviceDisplay.MainDisplayInfo.Width;
+                var height = DeviceDisplay.MainDisplayInfo.Height;
+                NavigationPage.SetHasBackButton(this, false);
+                NavigationPage.SetHasNavigationBar(this, false);
 
-            //firstTotalCount = Int32.Parse(totalCount.Text.ToString().Substring(0,2));
-            //SubscriptionPicker.SelectedIndex = 0;
-            // SubscriptionPicker.SelectedIndex = 0;
-            //SubscriptionPicker.Title = firstIndex;
-
-            //weekOneMenu.HeightRequest = 2500;
-            //weekOneMenu.HeightRequest = 175 * ((mealCount / 2) - 1);
-            //Debug.WriteLine("mealCount:" + mealCount.ToString());
-            //Debug.WriteLine("height:" + weekOneMenu.Height.ToString());
-            //fillGrid();
+                //dateCarousel.PeekAreaInsets = new Thickness((width / 2) - 250, 0);
 
 
-            Debug.WriteLine("finished with constructor");
+
+                //first = firstName;
+                //last = lastName;
+                //email = userEmail;
+                checkPlatform(height, width);
+                Preferences.Set("canChooseSelect", true);
+
+                ////==========================================
+                //// CARLOS PROGRESS BAR INITIALIZATION
+                //var m = new Origin();
+                //    m.margin = new Thickness(0, 0, 0, 0);
+                //    m.mealsLeft = "";
+
+                //BarParameters.Add(m);
+                //MyCollectionView.ItemsSource = BarParameters;
+                ////===========================================
+                //mealsSaved.Clear();
+                //resetAll();
+                //GetRecentSelection();
+
+                //firstTotalCount = Int32.Parse(totalCount.Text.ToString().Substring(0,2));
+                //SubscriptionPicker.SelectedIndex = 0;
+                // SubscriptionPicker.SelectedIndex = 0;
+                //SubscriptionPicker.Title = firstIndex;
+
+                //weekOneMenu.HeightRequest = 2500;
+                //weekOneMenu.HeightRequest = 175 * ((mealCount / 2) - 1);
+                //Debug.WriteLine("mealCount:" + mealCount.ToString());
+                //Debug.WriteLine("height:" + weekOneMenu.Height.ToString());
+                //fillGrid();
+
+
+                Debug.WriteLine("finished with constructor");
+            }
+            catch (Exception ex)
+            {
+                Generic gen = new Generic();
+                gen.parseException(ex.ToString());
+            }
         }
 
         public void checkPlatform(double height, double width)
         {
             if (Device.RuntimePlatform == Device.iOS)
             {
-                orangeBox.HeightRequest = height / 2;
+                orangeBox.HeightRequest = height / 2.3;
                 orangeBox.Margin = new Thickness(0, -height / 2.2, 0, 0);
                 orangeBox.CornerRadius = height / 40;
                 //heading.FontSize = width / 32;
@@ -538,9 +547,10 @@ namespace MTYD.ViewModel
                     BarParameters[0].update = new Thickness(this.Width, 0, 0, 0);
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                Console.WriteLine("SET MENU IS CRASHING!");
+                Generic gen = new Generic();
+                gen.parseException(ex.ToString());
             }
         }
 
@@ -665,9 +675,10 @@ namespace MTYD.ViewModel
                 //bool isAlreadySelected = Preferences.Get("isAlreadySelected", true);
                 
             }
-            catch
+            catch (Exception ex)
             {
-                Console.WriteLine("SET DATA IS CRASHING");
+                Generic gen = new Generic();
+                gen.parseException(ex.ToString());
             }
 
         }
@@ -676,91 +687,99 @@ namespace MTYD.ViewModel
         /////////date change for carousel view
         async private void dateChangeCar(object sender, EventArgs e)
         {
-            dateCarousel.ItemsSource = availableDates;
-            qtyDict.Clear();
-            qtyDict_addon.Clear();
-
-            //testing setMenu() earlier didnt work
-            //setMenu();
-
-            //getUserMeals();
-            Console.WriteLine("Setting now");
-            text1 = selectedDate.fullDateTime;
-            string tempHolder = text1;
-            Debug.WriteLine("year:" + tempHolder.Substring(0, 4));
-            //tempHolder = tempHolder.Substring(tempHolder.IndexOf("-") + 1);
-            Debug.WriteLine("month:" + text1.Substring(5, 2));
-            //tempHolder = tempHolder.Substring(tempHolder.IndexOf("-") + 1);
-            Debug.WriteLine("day:" + text1.Substring(8, 2));
-            //getDayOfTheWeek();
-            DateTime selected = new DateTime(Int32.Parse(text1.Substring(0, 4)), Int32.Parse(text1.Substring(5, 2)), Int32.Parse(text1.Substring(8, 2)));
-            Debug.WriteLine(sender.GetType().ToString());
-            Button button1 = (Button)sender;
-            Date dateChosen = button1.BindingContext as Date;
-            selectedDate.outlineColor = Color.White;
-            selectedDate = dateChosen;
-            selectedDate.outlineColor = Color.FromHex("#F26522");
-            //dateChosen.fillColor = Color.LightGray;
-            selectedDotw = dateChosen.dotw;
-            Debug.WriteLine("dayOfWeek: " + selectedDotw);
-
-
-
-
-            //testing no setMenu();
-            //setMenu();
-
-            //weekOneProgress.Progress = 0;
-
-
-            int orig = Preferences.Get("origMax", 0);
-            if (orig != 0)
+            try
             {
-                totalCount.Text = orig.ToString();
+                dateCarousel.ItemsSource = availableDates;
+                qtyDict.Clear();
+                qtyDict_addon.Clear();
 
-            }
-            else
-            {
-                totalCount.Text = "Count";
-            }
-            Preferences.Set("total", orig);
-            Console.WriteLine("here before");
-            //BarParameters[0].mealsLeft = "Please Select " + Preferences.Get("total", "").ToString() + " Meals";
-            //BarParameters[0].barLabel = "Please Select " + Preferences.Get("total", "").ToString() + " Meals";
-            Preferences.Set("dateSelected", dateChosen.fullDateTime.Substring(0, 10));
-            Console.WriteLine("dateSelected: " + Preferences.Get("dateSelected", ""));
+                //testing setMenu() earlier didnt work
+                //setMenu();
 
-            //testing here
-            //getUserMeals();
+                //getUserMeals();
+                Console.WriteLine("Setting now");
+                text1 = selectedDate.fullDateTime;
+                string tempHolder = text1;
+                Debug.WriteLine("year:" + tempHolder.Substring(0, 4));
+                //tempHolder = tempHolder.Substring(tempHolder.IndexOf("-") + 1);
+                Debug.WriteLine("month:" + text1.Substring(5, 2));
+                //tempHolder = tempHolder.Substring(tempHolder.IndexOf("-") + 1);
+                Debug.WriteLine("day:" + text1.Substring(8, 2));
+                //getDayOfTheWeek();
+                DateTime selected = new DateTime(Int32.Parse(text1.Substring(0, 4)), Int32.Parse(text1.Substring(5, 2)), Int32.Parse(text1.Substring(8, 2)));
+                Debug.WriteLine(sender.GetType().ToString());
+                Button button1 = (Button)sender;
+                Date dateChosen = button1.BindingContext as Date;
+                selectedDate.outlineColor = Color.White;
+                selectedDate = dateChosen;
+                selectedDate.outlineColor = Color.FromHex("#F26522");
+                //dateChosen.fillColor = Color.LightGray;
+                selectedDotw = dateChosen.dotw;
+                Debug.WriteLine("dayOfWeek: " + selectedDotw);
 
-            mealsSaved.Clear();   //New Addition SV
-            resetAll(); //New Addition SV
 
-            isSkip = false;
-            isSurprise = false;
 
-            if ((string)Application.Current.Properties["platform"] != "GUEST")
-            {
-                //await GetRecentSelection();
-                //GetRecentSelection2();
-            }
-            else
-            {
-                isSurprise = true;
+
+                //testing no setMenu();
+                //setMenu();
+
+                //weekOneProgress.Progress = 0;
+
+
+                int orig = Preferences.Get("origMax", 0);
+                if (orig != 0)
+                {
+                    totalCount.Text = orig.ToString();
+
+                }
+                else
+                {
+                    totalCount.Text = "Count";
+                }
+                Preferences.Set("total", orig);
+                Console.WriteLine("here before");
+                //BarParameters[0].mealsLeft = "Please Select " + Preferences.Get("total", "").ToString() + " Meals";
+                //BarParameters[0].barLabel = "Please Select " + Preferences.Get("total", "").ToString() + " Meals";
+                Preferences.Set("dateSelected", dateChosen.fullDateTime.Substring(0, 10));
+                Console.WriteLine("dateSelected: " + Preferences.Get("dateSelected", ""));
+
+                //testing here
+                //getUserMeals();
+
+                mealsSaved.Clear();   //New Addition SV
+                resetAll(); //New Addition SV
+
                 isSkip = false;
-                isAlreadySelected = false;
+                isSurprise = false;
+
+                if ((string)Application.Current.Properties["platform"] != "GUEST")
+                {
+                    //await GetRecentSelection();
+                    //GetRecentSelection2();
+                }
+                else
+                {
+                    isSurprise = true;
+                    isSkip = false;
+                    isAlreadySelected = false;
+                }
+
+                //testing setMenu here
+                setMenu();
+
+
+                Console.WriteLine("isAlreadySeleced in planchange" + isAlreadySelected);
+                //bool isAlreadySelected = Preferences.Get("isAlreadySelected", true);
+
+
+                //reset the buttons
+                //default to surprise if null
             }
-
-            //testing setMenu here
-            setMenu();
-
-
-            Console.WriteLine("isAlreadySeleced in planchange" + isAlreadySelected);
-            //bool isAlreadySelected = Preferences.Get("isAlreadySelected", true);
-           
-
-            //reset the buttons
-            //default to surprise if null
+            catch (Exception ex)
+            {
+                Generic gen = new Generic();
+                gen.parseException(ex.ToString());
+            }
         }
         //////////
 

@@ -307,34 +307,10 @@
                                                        IsVisible="{Binding SeeImage}"
                                                        />
 
-                                        <!--<Frame Grid.Row="0" Grid.Column="0" ScaleY="0.5" ScaleX="0.5" VerticalOptions="Start" HorizontalOptions="Start">
-                                                <ImageButton x:Name="heart1" Source="heartoutline.png" Clicked="clickedFavorite" />
-                                            </Frame>-->
 
                                         <ImageButton x:Name="heart1" CornerRadius="0" HorizontalOptions="Start" VerticalOptions="Start" Aspect="AspectFit" HeightRequest="35" WidthRequest="35" Source="{Binding HeartSource}" Clicked="clickedFavorite"/>
                                         <ImageButton Grid.Column="1" CornerRadius="0"  x:Name="info1" Margin="0,0,-1,0" HorizontalOptions="End" VerticalOptions="Start"  Aspect="AspectFit" HeightRequest="35" WidthRequest="35" Source="rightInfo.png"  Clicked="clickedInfo"/>
 
-                                        <!--<Grid Margin="-29,-27,-29,-27" Grid.Row="0" Grid.ColumnSpan="2" >
-                                            <Frame Grid.Row="0" Grid.Column="0" ScaleY="0.4" ScaleX="0.4" CornerRadius="40">
-                                                <ImageButton x:Name="heart1" Source="heartoutline.png" Clicked="clickedFavorite" />
-                                            </Frame>
-                                            <Frame Grid.Row="0" Grid.Column="1" ScaleY="0.36" ScaleX="0.36" CornerRadius="40">
-                                                <Label Text="{Binding MealQuantity}" FontSize="50" HorizontalOptions="Center" VerticalOptions="Center" />
-                                            </Frame>
-                                            <Frame x:Name="week1Dec" Grid.Row="1" Grid.Column="0" ScaleY="0.35" ScaleX="0.35" CornerRadius="40">
-                                                <Button FontSize="100" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center" Text="-" Clicked="clickDecrease" />
-                                            </Frame>
-                                            <Frame x:Name="week1Inc" Grid.Row="1" Grid.Column="1" ScaleY="0.35" ScaleX="0.35" CornerRadius="40">
-                                                <Button x:Name="increase" FontSize="70" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center" FontAttributes="Bold" Text="+" Clicked="clickIncrease"/>
-                                            </Frame>
-                                        </Grid>-->
-                                        <!--<Label  Grid.Column="0"
-                                                        Grid.Row="1"
-                                                        Grid.ColumnSpan="2"
-                                                        FontSize="14"
-                                                        VerticalTextAlignment="Center"
-                                                       Text="{Binding MealName}"
-                                                       FontAttributes="Bold" LineBreakMode="WordWrap" />-->
                                         <Forms9Patch:Label x:Name="mealName" Grid.Column="0"
                                                         Grid.Row="2"
                                                         Grid.ColumnSpan="2"
@@ -372,11 +348,13 @@
                                         </Grid>
 
 
-                                        <Forms9Patch:Label x:Name="mealDesc" Margin="3,0" Text="{Binding MealDesc}" HorizontalTextAlignment="Center" IsVisible="{Binding SeeDesc}" Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="White" TextColor="Black"/>
+                                        <Forms9Patch:Label x:Name="mealDesc" Margin="3,0" Text="{Binding MealDesc}" HorizontalTextAlignment="Center" IsVisible="{Binding SeeDesc}" Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="Transparent" TextColor="Black"/>
 
 
                                     </Grid>
                                 </Forms9Patch:Frame>
+
+                                <BoxView IsVisible="{Binding extraBlockVisible}" Grid.RowSpan="2" Grid.ColumnSpan="1" HorizontalOptions="Fill" VerticalOptions="Fill" BackgroundColor="White"/>
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
@@ -384,6 +362,9 @@
 
                 <Label Margin="10,10,0,0" x:Name="addOns" Text="ADD-ONS" FontAttributes="Bold"/>
 
+                <Grid></Grid>
+
+                <StackLayout>
                 <CollectionView x:Name="weekOneAddOns" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" BackgroundColor="White">
                     <CollectionView.ItemsLayout>
                         <GridItemsLayout
@@ -394,16 +375,15 @@
                         <DataTemplate>
                             <Grid Padding="10">
                                 <Grid.RowDefinitions>
-                                    <!--<RowDefinition Height="175" />-->
                                     <RowDefinition Height="235"/>
                                     <RowDefinition Height="0" />
-                                    <!--<RowDefinition Height="20" />-->
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="150*" />
-                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="150*"/>
+                                    <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
 
+                                
                                 <Forms9Patch:Frame OutlineColor="#F26522" BackgroundColor="{Binding Background}" OutlineWidth="3" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="1" Padding="3">
                                     <Grid>
                                         <Grid.RowDefinitions>
@@ -427,34 +407,9 @@
                                                        IsVisible="{Binding SeeImage}"
                                                        />
 
-                                        <!--<Frame Grid.Row="0" Grid.Column="0" ScaleY="0.5" ScaleX="0.5" VerticalOptions="Start" HorizontalOptions="Start">
-                                                <ImageButton x:Name="heart1" Source="heartoutline.png" Clicked="clickedFavorite" />
-                                            </Frame>-->
-
                                         <ImageButton x:Name="heart1_AddOns" CornerRadius="0" HorizontalOptions="Start" VerticalOptions="Start" Aspect="AspectFit" HeightRequest="35" WidthRequest="35" Source="{Binding HeartSource}" Clicked="clickedFavorite"/>
                                         <ImageButton Grid.Column="1" CornerRadius="0"  x:Name="info1" Margin="0,0,-1,0" HorizontalOptions="End" VerticalOptions="Start"  Aspect="AspectFit" HeightRequest="35" WidthRequest="35" Source="rightInfo.png"  Clicked="clickedInfo"/>
 
-                                        <!--<Grid Margin="-29,-27,-29,-27" Grid.Row="0" Grid.ColumnSpan="2" >
-                                            <Frame Grid.Row="0" Grid.Column="0" ScaleY="0.4" ScaleX="0.4" CornerRadius="40">
-                                                <ImageButton x:Name="heart1" Source="heartoutline.png" Clicked="clickedFavorite" />
-                                            </Frame>
-                                            <Frame Grid.Row="0" Grid.Column="1" ScaleY="0.36" ScaleX="0.36" CornerRadius="40">
-                                                <Label Text="{Binding MealQuantity}" FontSize="50" HorizontalOptions="Center" VerticalOptions="Center" />
-                                            </Frame>
-                                            <Frame x:Name="week1Dec" Grid.Row="1" Grid.Column="0" ScaleY="0.35" ScaleX="0.35" CornerRadius="40">
-                                                <Button FontSize="100" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center" Text="-" Clicked="clickDecrease" />
-                                            </Frame>
-                                            <Frame x:Name="week1Inc" Grid.Row="1" Grid.Column="1" ScaleY="0.35" ScaleX="0.35" CornerRadius="40">
-                                                <Button x:Name="increase" FontSize="70" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center" FontAttributes="Bold" Text="+" Clicked="clickIncrease"/>
-                                            </Frame>
-                                        </Grid>-->
-                                        <!--<Label  Grid.Column="0"
-                                                        Grid.Row="1"
-                                                        Grid.ColumnSpan="2"
-                                                        FontSize="14"
-                                                        VerticalTextAlignment="Center"
-                                                       Text="{Binding MealName}"
-                                                       FontAttributes="Bold" LineBreakMode="WordWrap" />-->
                                         <Forms9Patch:Label x:Name="mealName" Grid.Column="0"
                                                         Grid.Row="2"
                                                         Grid.ColumnSpan="2"
@@ -491,16 +446,19 @@
                                                 </Frame>
                                         </Grid>
 
-                                        <Forms9Patch:Label x:Name="mealDesc" Margin="3,0" Text="{Binding MealDesc}" HorizontalTextAlignment="Center" IsVisible="{Binding SeeDesc}" Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="White" TextColor="Black"/>
+                                        <Forms9Patch:Label x:Name="mealDesc" Margin="3,0" Text="{Binding MealDesc}" HorizontalTextAlignment="Center" IsVisible="{Binding SeeDesc}" Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="Transparent" TextColor="Black"/>
 
 
                                     </Grid>
                                 </Forms9Patch:Frame>
+                               
+
+                                <!--<BoxView IsVisible="{Binding extraBlockVisible}" Grid.RowSpan="2" Grid.ColumnSpan="1" HorizontalOptions="Fill" VerticalOptions="Fill" BackgroundColor="White"/>-->
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
-
+                </StackLayout>
                 <!--new add-ons ui start-->
                 
                 <!--new add-ons ui end-->
@@ -568,6 +526,7 @@
                     <Forms9Patch:Button Text="    Change Meal Plans" FontAttributes="Bold" OutlineColor="Transparent" FontSize="20" HorizontalTextAlignment="Start" HorizontalOptions="Fill" TextColor="White" Clicked="clickedMealPlan"/>
                     <Forms9Patch:Button Text="    Add Subscriptions" FontAttributes="Bold" OutlineColor="Transparent" FontSize="20" HorizontalTextAlignment="Start" HorizontalOptions="Fill" TextColor="White" Clicked="clickedSubscription"/>
                     <Forms9Patch:Button Text="    Select Meals" FontAttributes="Bold" OutlineColor="Transparent" FontSize="20" HorizontalTextAlignment="Start" HorizontalOptions="Fill" TextColor="White" Clicked="clickedSelect"/>
+                    <Forms9Patch:Button Text="    Subscription History" FontAttributes="Bold" OutlineColor="Transparent" FontSize="20" HorizontalTextAlignment="Start" HorizontalOptions="Fill" TextColor="White" Clicked="clickedSubHistory"/>
                     <Forms9Patch:Button Text="    Log Out" FontAttributes="Bold" OutlineColor="Transparent" FontSize="20" HorizontalTextAlignment="Start" HorizontalOptions="Fill" TextColor="White" Clicked="clickedLogout"/>
                 </StackLayout>
 
@@ -576,15 +535,15 @@
 
             <BoxView x:Name="fade" IsVisible="false" BackgroundColor="White" Opacity="0.7" Margin="0,-250" HorizontalOptions="Fill" VerticalOptions="Fill"/>
 
-            <Forms9Patch:Frame x:Name="popUpFrame" IsVisible="false" BackgroundColor="White" Padding="15" OutlineColor="#F26522" OutlineRadius="0" OutlineWidth="3" HorizontalOptions="Center" VerticalOptions="Start" HeightRequest="250">
+            <Forms9Patch:Frame x:Name="popUpFrame" IsVisible="false" BackgroundColor="White" Padding="15" OutlineColor="#F26522" OutlineRadius="0" OutlineWidth="3" HorizontalOptions="Center" VerticalOptions="Start" HeightRequest="270">
             <StackLayout Padding="15, 0">
                 <ImageButton HeightRequest="30" WidthRequest="30" Source="circleX.png" Aspect="AspectFit" VerticalOptions="Start" HorizontalOptions="End" Margin="0,0,-6,5"  Clicked="clickedClosePopUp"/>
 
-                <Forms9Patch:Label HorizontalOptions="Center" HeightRequest="40" x:Name="popUpHeader" FontAttributes="Bold" VerticalOptions="Start" Text=""/>
-                <Forms9Patch:Label HorizontalOptions="Center" Margin="0,10,0,5" HeightRequest="120"  x:Name="popUpBody" VerticalOptions="Start" Text=""/>
+                <Forms9Patch:Label HorizontalOptions="Center" HeightRequest="40" x:Name="popUpHeader" FontSize="20" FontAttributes="Bold" VerticalOptions="Start" Text=""/>
+                <Forms9Patch:Label HorizontalOptions="Center" Margin="0,10,0,5" HeightRequest="120" FontSize="15" x:Name="popUpBody" VerticalOptions="Start" Text=""/>
 
                 <Button x:Name="popButton1" TextColor="White" HeightRequest="40" HorizontalOptions="Fill" Margin="0,15,0,10" Text="Okay" BackgroundColor="#F26522" CornerRadius="13" Clicked="clickedClosePopUp"/>
-
+                <Button x:Name="popButton2" IsVisible="false" TextColor="White" HeightRequest="40" HorizontalOptions="Fill" Margin="0,0,0,10" Text="Continue" BackgroundColor="#F26522" CornerRadius="13" Clicked="clickedContinue"/>
                 <!--<Label Margin="0,4,0,2" Text="Already a Customer?" FontSize="Small" HorizontalTextAlignment="Start"/>
                 <Button x:Name="popButton2" TextColor="White" HorizontalOptions="Fill" Margin="0,0,0,4" Text="Login" BackgroundColor="#F26522" CornerRadius="13" Clicked="directLoginButtonClicked"/>
 

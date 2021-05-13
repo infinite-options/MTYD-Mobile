@@ -75,40 +75,50 @@ namespace MTYD.Model
                 }
                 return list;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Debug.WriteLine(e.Message);
+                Generic gen = new Generic();
+                gen.parseException(ex.ToString());
                 return null;
             }
         }
 
         private async Task<string> getZipcode(string placeId)
         {
-            Console.WriteLine("0");
-            CancellationToken cancellationToken = new CancellationTokenSource(TimeSpan.FromMinutes(2)).Token;
-            Console.WriteLine("1");
-            string s = string.Format(GooglePlacesApiDetailsPath, Constant.GooglePlacesApiKey, WebUtility.UrlEncode(placeId));
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, s);
-            Console.WriteLine("2");
-            HttpResponseMessage message = await HttpClientInstance.SendAsync(request, HttpCompletionOption.ResponseContentRead, cancellationToken).ConfigureAwait(false);
-            Console.WriteLine("3");
-            if (message.IsSuccessStatusCode)
+            try
             {
-                string json = await message.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-                Console.WriteLine(json);
-
-                PlacesDetailsResult placesDetailsResult = await Task.Run(() => JsonConvert.DeserializeObject<PlacesDetailsResult>(json)).ConfigureAwait(false);
-
-                foreach (var components in placesDetailsResult.Result.AddressComponents)
+                Console.WriteLine("0");
+                CancellationToken cancellationToken = new CancellationTokenSource(TimeSpan.FromMinutes(2)).Token;
+                Console.WriteLine("1");
+                string s = string.Format(GooglePlacesApiDetailsPath, Constant.GooglePlacesApiKey, WebUtility.UrlEncode(placeId));
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, s);
+                Console.WriteLine("2");
+                HttpResponseMessage message = await HttpClientInstance.SendAsync(request, HttpCompletionOption.ResponseContentRead, cancellationToken).ConfigureAwait(false);
+                Console.WriteLine("3");
+                if (message.IsSuccessStatusCode)
                 {
-                    if (components.Types.Count != 0 && components.Types[0] == "postal_code")
+                    string json = await message.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+                    Console.WriteLine(json);
+
+                    PlacesDetailsResult placesDetailsResult = await Task.Run(() => JsonConvert.DeserializeObject<PlacesDetailsResult>(json)).ConfigureAwait(false);
+
+                    foreach (var components in placesDetailsResult.Result.AddressComponents)
                     {
-                        return components.LongName;
+                        if (components.Types.Count != 0 && components.Types[0] == "postal_code")
+                        {
+                            return components.LongName;
+                        }
                     }
                 }
+                return "";
             }
-            return "";
+            catch (Exception ex)
+            {
+                Generic gen = new Generic();
+                gen.parseException(ex.ToString());
+                return null;
+            }
         }
 
         //public void OnAddressChanged(ListView addressList, ObservableCollection<AddressAutocomplete> Addresses, string _addressText)
@@ -155,22 +165,38 @@ namespace MTYD.Model
 
         public void addressSelected(ListView addressList, Grid[] grids, Entry AddressEntry, Entry CityEntry, Entry StateEntry, Entry ZipEntry)
         {
-            foreach (Grid g in grids)
+            try
             {
-                g.IsVisible = true;
-            }
+                foreach (Grid g in grids)
+                {
+                    g.IsVisible = true;
+                }
 
-            AddressEntry.Text = ((AddressAutocomplete)addressList.SelectedItem).Street;
-            CityEntry.Text = ((AddressAutocomplete)addressList.SelectedItem).City;
-            StateEntry.Text = ((AddressAutocomplete)addressList.SelectedItem).State;
-            //ZipEntry.Text = ((AddressAutocomplete)addressList.SelectedItem).ZipCode;
-            ZipEntry.Text = getZipcode(((AddressAutocomplete)addressList.SelectedItem).PredictionID).Result;
+                AddressEntry.Text = ((AddressAutocomplete)addressList.SelectedItem).Street;
+                CityEntry.Text = ((AddressAutocomplete)addressList.SelectedItem).City;
+                StateEntry.Text = ((AddressAutocomplete)addressList.SelectedItem).State;
+                //ZipEntry.Text = ((AddressAutocomplete)addressList.SelectedItem).ZipCode;
+                ZipEntry.Text = getZipcode(((AddressAutocomplete)addressList.SelectedItem).PredictionID).Result;
+            }
+            catch (Exception ex)
+            {
+                Generic gen = new Generic();
+                gen.parseException(ex.ToString());
+            }
         }
 
         public void addressSelected(ListView addressList, Entry AddressEntry)
         {
-            AddressEntry.Text = ((AddressAutocomplete)addressList.SelectedItem).Street + ", " + ((AddressAutocomplete)addressList.SelectedItem).City
-                + ", " + ((AddressAutocomplete)addressList.SelectedItem).State + ", " + getZipcode(((AddressAutocomplete)addressList.SelectedItem).PredictionID).Result;
+            try
+            {
+                AddressEntry.Text = ((AddressAutocomplete)addressList.SelectedItem).Street + ", " + ((AddressAutocomplete)addressList.SelectedItem).City
+                    + ", " + ((AddressAutocomplete)addressList.SelectedItem).State + ", " + getZipcode(((AddressAutocomplete)addressList.SelectedItem).PredictionID).Result;
+            }
+            catch (Exception ex)
+            {
+                Generic gen = new Generic();
+                gen.parseException(ex.ToString());
+            }
         }
 
         protected void OnPropertyChanged(string propertyName)

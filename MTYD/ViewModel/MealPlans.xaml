@@ -254,6 +254,10 @@
 
                 <ImageButton Source="saveButton.png" Margin="20,3" HeightRequest="50" HorizontalOptions="Fill" Clicked="clickedSave"/>
 
+                <Grid HorizontalOptions="Fill" ColumnSpacing="5" BackgroundColor="#f8bb16" Padding="20, 10" Margin="0, 10, 0, 4">
+                    <Label Text="Edit Options" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Start" BackgroundColor="Transparent" FontSize="18"/>
+                </Grid>
+
                 <Grid Margin="0,15,0,10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*"/>
@@ -271,7 +275,7 @@
                     <StackLayout Grid.Column="1">
                         <Label HorizontalTextAlignment="Center" FontSize="17" Text="Meals" FontAttributes="Bold" TextColor="Black" Margin="0,0,0,5"/>
                         <Grid>
-                        <ImageButton HorizontalOptions="Center" Source="MPplate.png" HeightRequest="65" WidthRequest="65" Aspect="AspectFit" VerticalOptions="Center"/>
+                        <ImageButton HorizontalOptions="Center" Source="meal_num_button_orange.png" HeightRequest="65" WidthRequest="65" Aspect="AspectFit" VerticalOptions="Center"/>
                         <Label x:Name="mealNum1" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center" FontAttributes="Bold" FontSize="17"/>
                         <Button BackgroundColor="Transparent" HorizontalOptions="Fill" VerticalOptions="Fill" Clicked="clickedSub"/>
                         </Grid>

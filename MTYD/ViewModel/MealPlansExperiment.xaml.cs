@@ -1148,8 +1148,8 @@ namespace MTYD.ViewModel
         private async void clickedVerifyCode(object sender, EventArgs e)
         {
             AmbassCodePost AmbCode = new AmbassCodePost();
-            AmbCode.amb_email = ambassTitle.Text.Trim();
-            AmbCode.cust_email = emailEntry.Text.Trim();
+            //AmbCode.amb_email = ambassTitle.Text.Trim();
+            //AmbCode.cust_email = emailEntry.Text.Trim();
             var AmbSerializedObj = JsonConvert.SerializeObject(AmbCode);
             var content4 = new StringContent(AmbSerializedObj, Encoding.UTF8, "application/json");
             var client3 = new System.Net.Http.HttpClient();
@@ -1166,13 +1166,13 @@ namespace MTYD.ViewModel
 
 
                 Debug.WriteLine("RESPONSE TO verifyCode   " + response3.ToString());
-                Debug.WriteLine("valid: " + data.result[0].valid);
+                //Debug.WriteLine("valid: " + data.result[0].valid);
 
                 //AmbassadorCoupon am = response3.Result;
 
-                string isValid = data.result[0].valid;
+                //string isValid = data.result[0].valid;
 
-                //string isValid = "yes";
+                string isValid = "yes";
 
                 if (isValid == "TRUE")
                 {
@@ -1191,8 +1191,8 @@ namespace MTYD.ViewModel
                     }
 
                     //totalDiscount += Math.Round(grandTotalValue * data.result[0].discount_percent, 2);
-                    totalDiscount += data.result[0].discount_amount;
-                    totalDiscount += data.result[0].discount_shipping;
+                    //totalDiscount += data.result[0].discount_amount;
+                    //totalDiscount += data.result[0].discount_shipping;
 
                     ambassDisc.Text = "- $" + totalDiscount.ToString();
                     //grandTotalValue -= totalDiscount;

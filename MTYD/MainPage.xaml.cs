@@ -33,6 +33,8 @@ using System.Collections.ObjectModel;
 using MTYD.Interfaces;
 using System.Xml.Linq;
 using Xamarin.Forms.Maps;
+using Plugin.LatestVersion;
+using Xamarin.Forms.PlatformConfiguration;
 
 //testing
 namespace MTYD
@@ -68,93 +70,134 @@ namespace MTYD
 
         public MainPage()
         {
-            Preferences.Set("mainPageAdd", "");
-            Preferences.Set("mainPageCity", "");
-            Preferences.Set("mainPageState", "");
-            Preferences.Set("mainPageZip", "");
+            try
+            {
 
-            var width = DeviceDisplay.MainDisplayInfo.Width;
-            var height = DeviceDisplay.MainDisplayInfo.Height;
-            Console.WriteLine("Width = " + width.ToString());
-            Console.WriteLine("Height = " + height.ToString());
-            //DisplayAlert("Hello", "main page constructor called", "OK");
-            addr = new Address();
-            InitializeComponent();
-            BindingContext = this;
+                //_ = CheckVersion();
 
-            string version = "";
-            string build = "";
-            version = DependencyService.Get<IAppVersionAndBuild>().GetVersionNumber();
-            build = DependencyService.Get<IAppVersionAndBuild>().GetBuildNumber();
+                Preferences.Set("mainPageAdd", "");
+                Preferences.Set("mainPageCity", "");
+                Preferences.Set("mainPageState", "");
+                Preferences.Set("mainPageZip", "");
 
-            appVersion.Text = "App version: " + version + ", App build: " + build;
+                var width = DeviceDisplay.MainDisplayInfo.Width;
+                var height = DeviceDisplay.MainDisplayInfo.Height;
+                Console.WriteLine("Width = " + width.ToString());
+                Console.WriteLine("Height = " + height.ToString());
+                //DisplayAlert("Hello", "main page constructor called", "OK");
+                addr = new Address();
+                InitializeComponent();
+                BindingContext = this;
 
-            var cvItems = new List<string>
+                string version = "";
+                string build = "";
+                version = DependencyService.Get<IAppVersionAndBuild>().GetVersionNumber();
+                build = DependencyService.Get<IAppVersionAndBuild>().GetBuildNumber();
+
+                appVersion.Text = "App version: " + version + ", App build: " + build;
+
+                var cvItems = new List<string>
             {
                 "Who has time?\n\nSave time and money! Ready to heat meals come to your door and you can order up to 10 deliveries in advance so you know what's coming!",
                 "Food when you're hungry\n\nIf you order food when you're hungry, you're starving by the time it arrives! With MealsFor.Me there is always something in the fridge and your next meals are in route!",
                 "Better Value\n\nYou get restaurant quality food at a fraction of the cost plus it is made from the highest quality ingredients by exceptional Chefs."
             };
-            TheCarousel.ItemsSource = cvItems;
+                TheCarousel.ItemsSource = cvItems;
 
-            store = AccountStore.Create();
-            
-            HomePage.IsVisible = true;
-            MenuBar.IsVisible = false;
-            LoginPage.IsVisible = false;
-            LandingPage.IsVisible = false;
-            checkPlatform(height, width);
-            setGrid();
-            // BackgroundImageSource = "new_background.png";
+                store = AccountStore.Create();
 
-            // APPLE
-            //var vm = new LoginViewModel();
-            vm.AppleError += AppleError;
-            //vm.PlatformError += PlatformError;
-            //BindingContext = vm;
+                HomePage.IsVisible = true;
+                MenuBar.IsVisible = false;
+                LoginPage.IsVisible = false;
+                LandingPage.IsVisible = false;
+                checkPlatform(height, width);
+                //_ = CheckVersion();
 
-            if (Device.RuntimePlatform == Device.Android)
-            {
-                appleLoginButton.IsEnabled = false;
+                //in check version
+                setGrid();
+                // BackgroundImageSource = "new_background.png";
+
+                // APPLE
+                //var vm = new LoginViewModel();
+                vm.AppleError += AppleError;
+                //vm.PlatformError += PlatformError;
+                //BindingContext = vm;
+
+                if (Device.RuntimePlatform == Device.Android)
+                {
+                    appleLoginButton.IsEnabled = false;
+                }
+                //in check version
+
+                //    setGrid();
+                //    // BackgroundImageSource = "new_background.png";
+
+                //    // APPLE
+                //    //var vm = new LoginViewModel();
+                //    vm.AppleError += AppleError;
+                //    //vm.PlatformError += PlatformError;
+                //    //BindingContext = vm;
+
+                //    if (Device.RuntimePlatform == Device.Android)
+                //    {
+                //        appleLoginButton.IsEnabled = false;
+                //    }
+
+                //Application.Current.Properties["user_id"] = "000-00000";
+                //Application.Current.Properties["platform"] = "GUEST";
+                //Preferences.Set("user_latitude", "0.0");
+                //Preferences.Set("user_longitude", "0.0");
+                //Application.Current.SavePropertiesAsync();
+                //double marg = HomePage.Height - 100;
+                //Debug.WriteLine("marg: " + marg.ToString());
+                //CheckAddressGrid.Margin = new Thickness(50, marg, 50, 120);
             }
-
-            //Application.Current.Properties["user_id"] = "000-00000";
-            //Application.Current.Properties["platform"] = "GUEST";
-            //Preferences.Set("user_latitude", "0.0");
-            //Preferences.Set("user_longitude", "0.0");
-            //Application.Current.SavePropertiesAsync();
-            //double marg = HomePage.Height - 100;
-            //Debug.WriteLine("marg: " + marg.ToString());
-            //CheckAddressGrid.Margin = new Thickness(50, marg, 50, 120);
-
+            catch (Exception ex)
+            {
+                Generic gen = new Generic();
+                gen.parseException(ex.ToString());
+            }
         }
 
         public MainPage(string firstName, string lastName, string email)
         {
-            var width = DeviceDisplay.MainDisplayInfo.Width;
-            var height = DeviceDisplay.MainDisplayInfo.Height;
-            Console.WriteLine("Width = " + width.ToString());
-            Console.WriteLine("Height = " + height.ToString());
-            cust_firstName = firstName;
-            cust_lastName = lastName;
-            cust_email = email;
-            InitializeComponent();
+            try
+            {
+
+                //On<Xamarin.Forms.PlatformConfiguration.iOS>().SetUseSafeArea(true);
 
 
-            var cvItems = new List<string>
+                var width = DeviceDisplay.MainDisplayInfo.Width;
+                var height = DeviceDisplay.MainDisplayInfo.Height;
+                Console.WriteLine("Width = " + width.ToString());
+                Console.WriteLine("Height = " + height.ToString());
+                cust_firstName = firstName;
+                cust_lastName = lastName;
+                cust_email = email;
+                InitializeComponent();
+
+                getDiscounts();
+                var cvItems = new List<string>
             {
                 "Who has time?\n\nSave time and money! Ready to heat meals come to your door and you can order up to 10 deliveries in advance so you know what's coming!",
                 "Food when you're hungry\n\nIf you order food when you're hungry, you're starving by the time it arrives! With MealsFor.Me there is always something in the fridge and your next meals are in route!",
                 "Better Value\n\nYou get restaurant quality food at a fraction of the cost plus it is made from the highest quality ingredients by exceptional Chefs."
             };
-            TheCarousel.ItemsSource = cvItems;
+                TheCarousel.ItemsSource = cvItems;
 
-            HomePage.IsVisible = false;
-            MenuBar.IsVisible = true;
-            LoginPage.IsVisible = false;
-            LandingPage.IsVisible = true;
-            checkLandingPlatform(height, width);
-            setGrid();
+                HomePage.IsVisible = false;
+                MenuBar.IsVisible = true;
+                LoginPage.IsVisible = false;
+                LandingPage.IsVisible = true;
+                checkLandingPlatform(height, width);
+                setGrid();
+
+            }
+            catch (Exception ex)
+            {
+                Generic gen = new Generic();
+                gen.parseException(ex.ToString());
+            }
         }
 
         private async void PlatformError(object sender, EventArgs e)
@@ -277,62 +320,70 @@ namespace MTYD
 
         protected async Task setGrid()
         {
-            var request = new HttpRequestMessage();
-            request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/upcoming_menu");
-            request.Method = HttpMethod.Get;
-            var client = new HttpClient();
-            HttpResponseMessage response = await client.SendAsync(request);
-
-            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            try
             {
-                HttpContent content = response.Content;
-                var userString = await content.ReadAsStringAsync();
-                JObject plan_obj = JObject.Parse(userString);
+                var request = new HttpRequestMessage();
+                request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/upcoming_menu");
+                request.Method = HttpMethod.Get;
+                var client = new HttpClient();
+                HttpResponseMessage response = await client.SendAsync(request);
 
-                menuNames = new List<string>();
-                menuImages = new List<string>();
-                HashSet<string> dates = new HashSet<string>();
-                foreach (var m in plan_obj["result"])
+                if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
-                    dates.Add(m["menu_date"].ToString());
-                    Debug.WriteLine("dates menu_date: " + m["menu_date"].ToString());
-                    if (dates.Count > 2) break;
-                    if (m["meal_cat"].ToString() == "Add-On")
-                        continue;
-                    menuNames.Add(m["meal_name"].ToString());
-                    menuImages.Add(m["meal_photo_URL"].ToString());
+                    HttpContent content = response.Content;
+                    var userString = await content.ReadAsStringAsync();
+                    JObject plan_obj = JObject.Parse(userString);
+
+                    menuNames = new List<string>();
+                    menuImages = new List<string>();
+                    HashSet<string> dates = new HashSet<string>();
+                    foreach (var m in plan_obj["result"])
+                    {
+                        dates.Add(m["menu_date"].ToString());
+                        Debug.WriteLine("dates menu_date: " + m["menu_date"].ToString());
+                        if (dates.Count > 2) break;
+                        if (m["meal_cat"].ToString() == "Add-On")
+                            continue;
+                        menuNames.Add(m["meal_name"].ToString());
+                        menuImages.Add(m["meal_photo_URL"].ToString());
+                    }
+                }
+
+                upcomingMenuGrid.ColumnDefinitions = new ColumnDefinitionCollection();
+                for (int i = 0; i < menuNames.Count; i++)
+                {
+                    upcomingMenuGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(140, GridUnitType.Absolute) });
+                }
+                for (int i = 0; i < menuNames.Count; i++)
+                {
+                    upcomingMenuGrid.Children.Add(new ImageButton
+                    {
+                        Source = menuImages[i],
+                        IsEnabled = false,
+                        Aspect = Aspect.AspectFill,
+                        CornerRadius = 0
+                    }, i, 0);
+                    upcomingMenuGrid.Children.Add(new Frame
+                    {
+                        Content = new Label
+                        {
+                            Text = menuNames[i],
+                            TextColor = Color.Black,
+                            FontSize = 12,
+                            HorizontalTextAlignment = TextAlignment.Center,
+                            VerticalTextAlignment = TextAlignment.Center
+                        },
+                        BorderColor = Color.FromHex("#F26522"),
+                        HasShadow = false,
+                        Padding = 5,
+                        CornerRadius = 0
+                    }, i, 1);
                 }
             }
-
-            upcomingMenuGrid.ColumnDefinitions = new ColumnDefinitionCollection();
-            for (int i = 0; i < menuNames.Count; i++)
+            catch (Exception ex)
             {
-                upcomingMenuGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(140, GridUnitType.Absolute) });
-            }
-            for (int i = 0; i < menuNames.Count; i++)
-            {
-                upcomingMenuGrid.Children.Add(new ImageButton
-                {
-                    Source = menuImages[i],
-                    IsEnabled = false,
-                    Aspect = Aspect.AspectFill,
-                    CornerRadius = 0
-                }, i, 0);
-                upcomingMenuGrid.Children.Add(new Frame
-                {
-                    Content = new Label
-                    {
-                        Text = menuNames[i],
-                        TextColor = Color.Black,
-                        FontSize = 12,
-                        HorizontalTextAlignment = TextAlignment.Center,
-                        VerticalTextAlignment = TextAlignment.Center
-                    },
-                    BorderColor = Color.FromHex("#F26522"),
-                    HasShadow = false,
-                    Padding = 5,
-                    CornerRadius = 0
-                }, i, 1);
+                Generic gen = new Generic();
+                gen.parseException(ex.ToString());
             }
         }
 
@@ -385,38 +436,42 @@ namespace MTYD
                 pfp.WidthRequest = 40;
                 pfp.CornerRadius = 20;
 
-                mainLogo.HeightRequest = height / 18;
-                getStarted.HeightRequest = height / 35;
-                getStarted.CornerRadius = (int)(height / 70);
-                getStarted.Margin = new Thickness(width / 7, 0);
+                //mainLogo.HeightRequest = height / 18;
+                //mainLogo.WidthRequest = 250;
+                //getStarted.HeightRequest = height / 35;
+                //getStarted.WidthRequest = 200;
+                //getStarted.CornerRadius = (int)(height / 70);
+                getStarted.HeightRequest = 50;
+                getStarted.CornerRadius = 25;
+                getStarted.Margin = new Thickness(80, 0);
 
                 fade.Margin = new Thickness(0, -height / 3, 0, 0);
 
-                xButton.FontSize = width / 37;
-                DiscountGrid.Margin = new Thickness(width / 30, height / 9, width / 30, 0);
-                DiscountGrid.HeightRequest = height / 4.5;
-                DiscountGrid.WidthRequest = width / 2.3;
-                couponGrid.HeightRequest = height / 4.5;
-                couponGrid.WidthRequest = width / 2.3;
+                //xButton.FontSize = width / 37;
+                //DiscountGrid.Margin = new Thickness(width / 30, height / 9, width / 30, 0);
+                //DiscountGrid.HeightRequest = height / 4.5;
+                //DiscountGrid.WidthRequest = width / 2.3;
+                //couponGrid.HeightRequest = height / 4.5;
+                //couponGrid.WidthRequest = width / 2.3;
 
-                outerFrame.HeightRequest = height / 4.5;
+                //outerFrame.HeightRequest = height / 4.5;
 
-                discHeader.FontSize = width / 35;
+                //discHeader.FontSize = width / 35;
 
-                couponGrid.HeightRequest = height / 30;
-                couponImg.HeightRequest = height / 30;
-                couponAmt.FontSize = width / 50;
-                couponDesc.FontSize = width / 50;
+                //couponGrid.HeightRequest = height / 30;
+                //couponImg.HeightRequest = height / 30;
+                //couponAmt.FontSize = width / 50;
+                //couponDesc.FontSize = width / 50;
 
-                couponGrid2.HeightRequest = height / 30;
-                couponImg2.HeightRequest = height / 30;
-                couponAmt2.FontSize = width / 50;
-                couponDesc2.FontSize = width / 50;
+                //couponGrid2.HeightRequest = height / 30;
+                //couponImg2.HeightRequest = height / 30;
+                //couponAmt2.FontSize = width / 50;
+                //couponDesc2.FontSize = width / 50;
 
-                couponGrid3.HeightRequest = height / 30;
-                couponImg3.HeightRequest = height / 30;
-                couponAmt3.FontSize = width / 50;
-                couponDesc3.FontSize = width / 50;
+                //couponGrid3.HeightRequest = height / 30;
+                //couponImg3.HeightRequest = height / 30;
+                //couponAmt3.FontSize = width / 50;
+                //couponDesc3.FontSize = width / 50;
             }
             else //Android
             {
@@ -436,37 +491,37 @@ namespace MTYD
                 pfp.WidthRequest = 40;
                 pfp.CornerRadius = 20;
 
-                mainLogo.HeightRequest = height / 20;
+                //mainLogo.HeightRequest = height / 20;
                 getStarted.HeightRequest = height / 45;
                 getStarted.CornerRadius = (int)(height / 90);
                 getStarted.Margin = new Thickness(width / 10, 0);
 
                 fade.Margin = new Thickness(0, -height / 3, 0, 0);
 
-                xButton.WidthRequest = width / 40;
-                xButton.FontSize = width / 50;
-                DiscountGrid.Margin = new Thickness(width / 30, height / 9, width / 30, 0);
-                DiscountGrid.HeightRequest = height / 6.5;
-                DiscountGrid.WidthRequest = width / 2.3;
+                //xButton.WidthRequest = width / 40;
+                //xButton.FontSize = width / 50;
+                //DiscountGrid.Margin = new Thickness(width / 30, height / 9, width / 30, 0);
+                //DiscountGrid.HeightRequest = height / 6.5;
+                //DiscountGrid.WidthRequest = width / 2.3;
 
-                outerFrame.HeightRequest = height / 6.5;
+                //outerFrame.HeightRequest = height / 6.5;
 
-                discHeader.FontSize = width / 50;
+                //discHeader.FontSize = width / 50;
 
-                couponGrid.HeightRequest = height / 30;
-                couponImg.HeightRequest = height / 40;
-                couponAmt.FontSize = width / 60;
-                couponDesc.FontSize = width / 60;
+                //couponGrid.HeightRequest = height / 30;
+                //couponImg.HeightRequest = height / 40;
+                //couponAmt.FontSize = width / 60;
+                //couponDesc.FontSize = width / 60;
 
-                couponGrid2.HeightRequest = height / 30;
-                couponImg2.HeightRequest = height / 40;
-                couponAmt2.FontSize = width / 60;
-                couponDesc2.FontSize = width / 60;
+                //couponGrid2.HeightRequest = height / 30;
+                //couponImg2.HeightRequest = height / 40;
+                //couponAmt2.FontSize = width / 60;
+                //couponDesc2.FontSize = width / 60;
 
-                couponGrid3.HeightRequest = height / 30;
-                couponImg3.HeightRequest = height / 40;
-                couponAmt3.FontSize = width / 60;
-                couponDesc3.FontSize = width / 60;
+                //couponGrid3.HeightRequest = height / 30;
+                //couponImg3.HeightRequest = height / 40;
+                //couponAmt3.FontSize = width / 60;
+                //couponDesc3.FontSize = width / 60;
             }
         }
 
@@ -478,252 +533,258 @@ namespace MTYD
         // DIRECT LOGIN CLICK
         private async void clickedLogin(object sender, EventArgs e)
         {
-
-            loginButton.IsEnabled = false;
-            if (String.IsNullOrEmpty(loginUsername.Text) || String.IsNullOrEmpty(loginPassword.Text))
-            { // check if all fields are filled out
-                await DisplayAlert("Error", "Please fill in all fields", "OK");
-                loginButton.IsEnabled = true;
-            }
-            else
+            try
             {
-                var accountSalt = await retrieveAccountSalt(loginUsername.Text.ToLower().Trim());
-
-                if (accountSalt != null)
+                loginButton.IsEnabled = false;
+                if (String.IsNullOrEmpty(loginUsername.Text) || String.IsNullOrEmpty(loginPassword.Text))
+                { // check if all fields are filled out
+                    await DisplayAlert("Error", "Please fill in all fields", "OK");
+                    loginButton.IsEnabled = true;
+                }
+                else
                 {
-                    var loginAttempt = await LogInUser(loginUsername.Text.ToLower(), loginPassword.Text, accountSalt);
+                    var accountSalt = await retrieveAccountSalt(loginUsername.Text.ToLower().Trim());
 
-                    if (directEmailVerified == 0)
+                    if (accountSalt != null)
                     {
-                        DisplayAlert("Please Verify Email", "Please click the link in the email sent to " + loginUsername.Text + ". Check inbox and spam folders.", "OK");
+                        var loginAttempt = await LogInUser(loginUsername.Text.ToLower(), loginPassword.Text, accountSalt);
 
-                        //send email to verify email
-                        emailVerifyPost emailVer = new emailVerifyPost();
-                        emailVer.email = loginUsername.Text.Trim();
-                        var emailVerSerializedObj = JsonConvert.SerializeObject(emailVer);
-                        var content4 = new StringContent(emailVerSerializedObj, Encoding.UTF8, "application/json");
-                        var client3 = new HttpClient();
-                        var response3 = client3.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/email_verification", content4);
-                        Console.WriteLine("RESPONSE TO CHECKOUT   " + response3.Result);
-                        Console.WriteLine("CHECKOUT JSON OBJECT BEING SENT: " + emailVerSerializedObj);
-
-                        loginButton.IsEnabled = true;
-                    }
-                    else if (loginAttempt != null && loginAttempt.message != "Request failed, wrong password.")
-                    {
-                        System.Diagnostics.Debug.WriteLine("USER'S DATA");
-                        System.Diagnostics.Debug.WriteLine("USER CUSTOMER_UID: " + loginAttempt.result[0].customer_uid);
-                        System.Diagnostics.Debug.WriteLine("USER FIRST NAME: " + loginAttempt.result[0].customer_first_name);
-                        System.Diagnostics.Debug.WriteLine("USER LAST NAME: " + loginAttempt.result[0].customer_last_name);
-                        System.Diagnostics.Debug.WriteLine("USER EMAIL: " + loginAttempt.result[0].customer_email);
-
-                        DateTime today = DateTime.Now;
-                        DateTime expDate = today.AddDays(Constant.days);
-
-                        Application.Current.Properties["user_id"] = loginAttempt.result[0].customer_uid;
-                        Application.Current.Properties["time_stamp"] = expDate;
-                        Application.Current.Properties["platform"] = "DIRECT";
-
-                        // Application.Current.MainPage = new CarlosHomePage();
-                        // This statement initializes the stack to Subscription Page
-                        //check to see if user has already selected a meal plan before
-                        var request = new HttpRequestMessage();
-                        Console.WriteLine("user_id: " + (string)Application.Current.Properties["user_id"]);
-                        string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/customer_lplp?customer_uid=" + (string)Application.Current.Properties["user_id"];
-                        //old db
-                        //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/customer_lplp?customer_uid=" + (string)Application.Current.Properties["user_id"];
-                        //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + (string)Application.Current.Properties["user_id"];
-                        //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + "100-000256";
-                        Console.WriteLine("url: " + url);
-                        request.RequestUri = new Uri(url);
-                        //request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/get_delivery_info/400-000453");
-                        request.Method = HttpMethod.Get;
-                        var client = new HttpClient();
-                        HttpResponseMessage response = await client.SendAsync(request);
-
-                        if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                        if (directEmailVerified == 0)
                         {
-                            HttpContent content = response.Content;
-                            Console.WriteLine("content: " + content);
-                            var userString = await content.ReadAsStringAsync();
-                            Console.WriteLine(userString);
+                            DisplayAlert("Please Verify Email", "Please click the link in the email sent to " + loginUsername.Text + ". Check inbox and spam folders.", "OK");
 
-                            //writing guid to db
-                            if (Preferences.Get("setGuid" + (string)Application.Current.Properties["user_id"], false) == false)
+                            //send email to verify email
+                            emailVerifyPost emailVer = new emailVerifyPost();
+                            emailVer.email = loginUsername.Text.Trim();
+                            var emailVerSerializedObj = JsonConvert.SerializeObject(emailVer);
+                            var content4 = new StringContent(emailVerSerializedObj, Encoding.UTF8, "application/json");
+                            var client3 = new HttpClient();
+                            var response3 = client3.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/email_verification", content4);
+                            Console.WriteLine("RESPONSE TO CHECKOUT   " + response3.Result);
+                            Console.WriteLine("CHECKOUT JSON OBJECT BEING SENT: " + emailVerSerializedObj);
+
+                            loginButton.IsEnabled = true;
+                        }
+                        else if (loginAttempt != null && loginAttempt.message != "Request failed, wrong password.")
+                        {
+                            System.Diagnostics.Debug.WriteLine("USER'S DATA");
+                            System.Diagnostics.Debug.WriteLine("USER CUSTOMER_UID: " + loginAttempt.result[0].customer_uid);
+                            System.Diagnostics.Debug.WriteLine("USER FIRST NAME: " + loginAttempt.result[0].customer_first_name);
+                            System.Diagnostics.Debug.WriteLine("USER LAST NAME: " + loginAttempt.result[0].customer_last_name);
+                            System.Diagnostics.Debug.WriteLine("USER EMAIL: " + loginAttempt.result[0].customer_email);
+
+                            DateTime today = DateTime.Now;
+                            DateTime expDate = today.AddDays(Constant.days);
+
+                            Application.Current.Properties["user_id"] = loginAttempt.result[0].customer_uid;
+                            Application.Current.Properties["time_stamp"] = expDate;
+                            Application.Current.Properties["platform"] = "DIRECT";
+
+                            // Application.Current.MainPage = new CarlosHomePage();
+                            // This statement initializes the stack to Subscription Page
+                            //check to see if user has already selected a meal plan before
+                            var request = new HttpRequestMessage();
+                            Console.WriteLine("user_id: " + (string)Application.Current.Properties["user_id"]);
+                            string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/customer_lplp?customer_uid=" + (string)Application.Current.Properties["user_id"];
+                            //old db
+                            //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/customer_lplp?customer_uid=" + (string)Application.Current.Properties["user_id"];
+                            //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + (string)Application.Current.Properties["user_id"];
+                            //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + "100-000256";
+                            Console.WriteLine("url: " + url);
+                            request.RequestUri = new Uri(url);
+                            //request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/get_delivery_info/400-000453");
+                            request.Method = HttpMethod.Get;
+                            var client = new HttpClient();
+                            HttpResponseMessage response = await client.SendAsync(request);
+
+                            if (response.StatusCode == System.Net.HttpStatusCode.OK)
                             {
-                                if (Device.RuntimePlatform == Device.iOS)
+                                HttpContent content = response.Content;
+                                Console.WriteLine("content: " + content);
+                                var userString = await content.ReadAsStringAsync();
+                                Console.WriteLine(userString);
+
+                                //writing guid to db
+                                if (Preferences.Get("setGuid" + (string)Application.Current.Properties["user_id"], false) == false)
                                 {
-                                    deviceId = Preferences.Get("guid", null);
-                                    if (deviceId != null) { Debug.WriteLine("This is the iOS GUID from Log in: " + deviceId); }
-                                }
-                                else
-                                {
-                                    deviceId = Preferences.Get("guid", null);
-                                    if (deviceId != null) { Debug.WriteLine("This is the Android GUID from Log in " + deviceId); }
-                                }
-
-                                if (deviceId != null)
-                                {
-                                    GuidPost notificationPost = new GuidPost();
-
-                                    notificationPost.uid = (string)Application.Current.Properties["user_id"];
-                                    notificationPost.guid = deviceId.Substring(5);
-                                    Application.Current.Properties["guid"] = deviceId.Substring(5);
-                                    notificationPost.notification = "TRUE";
-
-                                    var notificationSerializedObject = JsonConvert.SerializeObject(notificationPost);
-                                    Debug.WriteLine("Notification JSON Object to send: " + notificationSerializedObject);
-
-                                    var notificationContent = new StringContent(notificationSerializedObject, Encoding.UTF8, "application/json");
-
-                                    var clientResponse = await client.PostAsync(Constant.GuidUrl, notificationContent);
-
-                                    Debug.WriteLine("Status code: " + clientResponse.IsSuccessStatusCode);
-
-                                    if (clientResponse.IsSuccessStatusCode)
+                                    if (Device.RuntimePlatform == Device.iOS)
                                     {
-                                        System.Diagnostics.Debug.WriteLine("We have post the guid to the database");
-                                        Preferences.Set("setGuid" + (string)Application.Current.Properties["user_id"], true);
+                                        deviceId = Preferences.Get("guid", null);
+                                        if (deviceId != null) { Debug.WriteLine("This is the iOS GUID from Log in: " + deviceId); }
                                     }
                                     else
                                     {
-                                        await DisplayAlert("Ooops!", "Something went wrong. We are not able to send you notification at this moment", "OK");
+                                        deviceId = Preferences.Get("guid", null);
+                                        if (deviceId != null) { Debug.WriteLine("This is the Android GUID from Log in " + deviceId); }
+                                    }
+
+                                    if (deviceId != null)
+                                    {
+                                        GuidPost notificationPost = new GuidPost();
+
+                                        notificationPost.uid = (string)Application.Current.Properties["user_id"];
+                                        notificationPost.guid = deviceId.Substring(5);
+                                        Application.Current.Properties["guid"] = deviceId.Substring(5);
+                                        notificationPost.notification = "TRUE";
+
+                                        var notificationSerializedObject = JsonConvert.SerializeObject(notificationPost);
+                                        Debug.WriteLine("Notification JSON Object to send: " + notificationSerializedObject);
+
+                                        var notificationContent = new StringContent(notificationSerializedObject, Encoding.UTF8, "application/json");
+
+                                        var clientResponse = await client.PostAsync(Constant.GuidUrl, notificationContent);
+
+                                        Debug.WriteLine("Status code: " + clientResponse.IsSuccessStatusCode);
+
+                                        if (clientResponse.IsSuccessStatusCode)
+                                        {
+                                            System.Diagnostics.Debug.WriteLine("We have post the guid to the database");
+                                            Preferences.Set("setGuid" + (string)Application.Current.Properties["user_id"], true);
+                                        }
+                                        else
+                                        {
+                                            await DisplayAlert("Ooops!", "Something went wrong. We are not able to send you notification at this moment", "OK");
+                                        }
                                     }
                                 }
-                            }
-                            //written
+                                //written
 
-                            if (userString.ToString()[0] != '{')
-                            {
-                                url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
-                                //old db
-                                //url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
-                                var request3 = new HttpRequestMessage();
-                                request3.RequestUri = new Uri(url);
-                                request3.Method = HttpMethod.Get;
-                                response = await client.SendAsync(request3);
-                                content = response.Content;
-                                Console.WriteLine("content: " + content);
-                                userString = await content.ReadAsStringAsync();
-                                JObject info_obj3 = JObject.Parse(userString);
+                                if (userString.ToString()[0] != '{')
+                                {
+                                    url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
+                                    //old db
+                                    //url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
+                                    var request3 = new HttpRequestMessage();
+                                    request3.RequestUri = new Uri(url);
+                                    request3.Method = HttpMethod.Get;
+                                    response = await client.SendAsync(request3);
+                                    content = response.Content;
+                                    Console.WriteLine("content: " + content);
+                                    userString = await content.ReadAsStringAsync();
+                                    JObject info_obj3 = JObject.Parse(userString);
+                                    this.NewMainPage.Clear();
+                                    Preferences.Set("password_salt", (info_obj3["result"])[0]["password_salt"].ToString());
+                                    Preferences.Set("password_hashed", (info_obj3["result"])[0]["password_hashed"].ToString());
+
+                                    Preferences.Set("user_latitude", (info_obj3["result"])[0]["customer_lat"].ToString());
+                                    Debug.WriteLine("user latitude" + Preferences.Get("user_latitude", ""));
+                                    Preferences.Set("user_longitude", (info_obj3["result"])[0]["customer_long"].ToString());
+                                    Debug.WriteLine("user longitude" + Preferences.Get("user_longitude", ""));
+
+                                    Preferences.Set("profilePicLink", "");
+
+                                    Console.WriteLine("go to SubscriptionPage");
+                                    Preferences.Set("canChooseSelect", false);
+
+                                    Debug.WriteLine("email verified:" + (info_obj3["result"])[0]["email_verified"].ToString());
+                                    await Application.Current.SavePropertiesAsync();
+                                    Application.Current.MainPage = new NavigationPage(new SubscriptionPage(loginAttempt.result[0].customer_first_name, loginAttempt.result[0].customer_last_name, loginAttempt.result[0].customer_email));
+                                    directEmailVerified = 0;
+                                    return;
+                                }
+
+                                JObject info_obj2 = JObject.Parse(userString);
                                 this.NewMainPage.Clear();
-                                Preferences.Set("password_salt", (info_obj3["result"])[0]["password_salt"].ToString());
-                                Preferences.Set("password_hashed", (info_obj3["result"])[0]["password_hashed"].ToString());
 
-                                Preferences.Set("user_latitude", (info_obj3["result"])[0]["customer_lat"].ToString());
-                                Debug.WriteLine("user latitude" + Preferences.Get("user_latitude", ""));
-                                Preferences.Set("user_longitude", (info_obj3["result"])[0]["customer_long"].ToString());
-                                Debug.WriteLine("user longitude" + Preferences.Get("user_longitude", ""));
+                                //ArrayList item_price = new ArrayList();
+                                //ArrayList num_items = new ArrayList();
+                                //ArrayList payment_frequency = new ArrayList();
+                                //ArrayList groupArray = new ArrayList();
 
-                                Preferences.Set("profilePicLink", "");
+                                //int counter = 0;
+                                //while (((info_obj2["result"])[0]).ToString() != "{}")
+                                //{
+                                //    Console.WriteLine("worked" + counter);
+                                //    counter++;
+                                //}
 
-                                Console.WriteLine("go to SubscriptionPage");
-                                Preferences.Set("canChooseSelect", false);
+                                Console.WriteLine("string: " + (info_obj2["result"]).ToString());
+                                //check if the user hasn't entered any info before, if so put in the placeholders
+                                if ((info_obj2["result"]).ToString() == "[]" || (info_obj2["result"]).ToString() == "204" || (info_obj2["result"]).ToString().Contains("ACTIVE") == false)
+                                {
 
-                                Debug.WriteLine("email verified:" + (info_obj3["result"])[0]["email_verified"].ToString());
-                                await Application.Current.SavePropertiesAsync();
-                                Application.Current.MainPage = new NavigationPage(new SubscriptionPage(loginAttempt.result[0].customer_first_name, loginAttempt.result[0].customer_last_name, loginAttempt.result[0].customer_email));
-                                directEmailVerified = 0;
-                                return;
-                            }
+                                    url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
 
-                            JObject info_obj2 = JObject.Parse(userString);
-                            this.NewMainPage.Clear();
+                                    //old db
+                                    //url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
+                                    var request3 = new HttpRequestMessage();
+                                    request3.RequestUri = new Uri(url);
+                                    request3.Method = HttpMethod.Get;
+                                    response = await client.SendAsync(request3);
+                                    content = response.Content;
+                                    Console.WriteLine("content: " + content);
+                                    userString = await content.ReadAsStringAsync();
+                                    JObject info_obj3 = JObject.Parse(userString);
+                                    this.NewMainPage.Clear();
+                                    Preferences.Set("password_salt", (info_obj3["result"])[0]["password_salt"].ToString());
+                                    Preferences.Set("password_hashed", (info_obj3["result"])[0]["password_hashed"].ToString());
 
-                            //ArrayList item_price = new ArrayList();
-                            //ArrayList num_items = new ArrayList();
-                            //ArrayList payment_frequency = new ArrayList();
-                            //ArrayList groupArray = new ArrayList();
+                                    Preferences.Set("user_latitude", (info_obj3["result"])[0]["customer_lat"].ToString());
+                                    Debug.WriteLine("user latitude" + Preferences.Get("user_latitude", ""));
+                                    Preferences.Set("user_longitude", (info_obj3["result"])[0]["customer_long"].ToString());
+                                    Debug.WriteLine("user longitude" + Preferences.Get("user_longitude", ""));
 
-                            //int counter = 0;
-                            //while (((info_obj2["result"])[0]).ToString() != "{}")
-                            //{
-                            //    Console.WriteLine("worked" + counter);
-                            //    counter++;
-                            //}
+                                    Preferences.Set("profilePicLink", "");
 
-                            Console.WriteLine("string: " + (info_obj2["result"]).ToString());
-                            //check if the user hasn't entered any info before, if so put in the placeholders
-                            if ((info_obj2["result"]).ToString() == "[]" || (info_obj2["result"]).ToString() == "204" || (info_obj2["result"]).ToString().Contains("ACTIVE") == false)
-                            {
+                                    Console.WriteLine("go to SubscriptionPage");
+                                    Preferences.Set("canChooseSelect", false);
+                                    await Application.Current.SavePropertiesAsync();
+                                    Application.Current.MainPage = new NavigationPage(new SubscriptionPage(loginAttempt.result[0].customer_first_name, loginAttempt.result[0].customer_last_name, loginAttempt.result[0].customer_email));
+                                    directEmailVerified = 0;
+                                }
+                                else
+                                {
+                                    url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
 
-                                url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
+                                    //old db
+                                    //url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
+                                    var request3 = new HttpRequestMessage();
+                                    request3.RequestUri = new Uri(url);
+                                    request3.Method = HttpMethod.Get;
+                                    response = await client.SendAsync(request3);
+                                    content = response.Content;
+                                    Console.WriteLine("content: " + content);
+                                    userString = await content.ReadAsStringAsync();
+                                    JObject info_obj3 = JObject.Parse(userString);
+                                    this.NewMainPage.Clear();
+                                    Preferences.Set("password_salt", (info_obj3["result"])[0]["password_salt"].ToString());
+                                    Preferences.Set("password_hashed", (info_obj3["result"])[0]["password_hashed"].ToString());
 
-                                //old db
-                                //url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
-                                var request3 = new HttpRequestMessage();
-                                request3.RequestUri = new Uri(url);
-                                request3.Method = HttpMethod.Get;
-                                response = await client.SendAsync(request3);
-                                content = response.Content;
-                                Console.WriteLine("content: " + content);
-                                userString = await content.ReadAsStringAsync();
-                                JObject info_obj3 = JObject.Parse(userString);
-                                this.NewMainPage.Clear();
-                                Preferences.Set("password_salt", (info_obj3["result"])[0]["password_salt"].ToString());
-                                Preferences.Set("password_hashed", (info_obj3["result"])[0]["password_hashed"].ToString());
+                                    Preferences.Set("user_latitude", (info_obj3["result"])[0]["customer_lat"].ToString());
+                                    Debug.WriteLine("user latitude" + Preferences.Get("user_latitude", ""));
+                                    Preferences.Set("user_longitude", (info_obj3["result"])[0]["customer_long"].ToString());
+                                    Debug.WriteLine("user longitude" + Preferences.Get("user_longitude", ""));
 
-                                Preferences.Set("user_latitude", (info_obj3["result"])[0]["customer_lat"].ToString());
-                                Debug.WriteLine("user latitude" + Preferences.Get("user_latitude", ""));
-                                Preferences.Set("user_longitude", (info_obj3["result"])[0]["customer_long"].ToString());
-                                Debug.WriteLine("user longitude" + Preferences.Get("user_longitude", ""));
-
-                                Preferences.Set("profilePicLink", "");
-
-                                Console.WriteLine("go to SubscriptionPage");
-                                Preferences.Set("canChooseSelect", false);
-                                await Application.Current.SavePropertiesAsync();
-                                Application.Current.MainPage = new NavigationPage(new SubscriptionPage(loginAttempt.result[0].customer_first_name, loginAttempt.result[0].customer_last_name, loginAttempt.result[0].customer_email));
-                                directEmailVerified = 0;
-                            }
-                            else
-                            {
-                                url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
-
-                                //old db
-                                //url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
-                                var request3 = new HttpRequestMessage();
-                                request3.RequestUri = new Uri(url);
-                                request3.Method = HttpMethod.Get;
-                                response = await client.SendAsync(request3);
-                                content = response.Content;
-                                Console.WriteLine("content: " + content);
-                                userString = await content.ReadAsStringAsync();
-                                JObject info_obj3 = JObject.Parse(userString);
-                                this.NewMainPage.Clear();
-                                Preferences.Set("password_salt", (info_obj3["result"])[0]["password_salt"].ToString());
-                                Preferences.Set("password_hashed", (info_obj3["result"])[0]["password_hashed"].ToString());
-
-                                Preferences.Set("user_latitude", (info_obj3["result"])[0]["customer_lat"].ToString());
-                                Debug.WriteLine("user latitude" + Preferences.Get("user_latitude", ""));
-                                Preferences.Set("user_longitude", (info_obj3["result"])[0]["customer_long"].ToString());
-                                Debug.WriteLine("user longitude" + Preferences.Get("user_longitude", ""));
-
-                                Preferences.Set("profilePicLink", "");
-                                //Application.Current.MainPage = new NavigationPage(new SubscriptionPage(loginAttempt.result[0].customer_first_name, loginAttempt.result[0].customer_last_name, loginAttempt.result[0].customer_email));
-                                //TEMPORARY
-                                Preferences.Set("canChooseSelect", true);
-                                Zones[] zones = new Zones[] { };
-                                await Application.Current.SavePropertiesAsync();
-                                Application.Current.MainPage = new NavigationPage(new Select(zones, loginAttempt.result[0].customer_first_name, loginAttempt.result[0].customer_last_name, loginAttempt.result[0].customer_email));
-                                directEmailVerified = 0;
+                                    Preferences.Set("profilePicLink", "");
+                                    //Application.Current.MainPage = new NavigationPage(new SubscriptionPage(loginAttempt.result[0].customer_first_name, loginAttempt.result[0].customer_last_name, loginAttempt.result[0].customer_email));
+                                    //TEMPORARY
+                                    Preferences.Set("canChooseSelect", true);
+                                    Zones[] zones = new Zones[] { };
+                                    await Application.Current.SavePropertiesAsync();
+                                    Application.Current.MainPage = new NavigationPage(new Select(zones, loginAttempt.result[0].customer_first_name, loginAttempt.result[0].customer_last_name, loginAttempt.result[0].customer_email));
+                                    directEmailVerified = 0;
+                                }
                             }
                         }
+                        else
+                        {
+                            await DisplayAlert("Error", "Wrong password was entered", "OK");
+                            loginButton.IsEnabled = true;
+                        }
                     }
-                    else
-                    {
-                        await DisplayAlert("Error", "Wrong password was entered", "OK");
-                        loginButton.IsEnabled = true;
-                    }
+                    loginButton.IsEnabled = true;
                 }
-                loginButton.IsEnabled = true;
+            }
+            catch (Exception ex)
+            {
+                Generic gen = new Generic();
+                gen.parseException(ex.ToString());
             }
         }
 
         private async Task<AccountSalt> retrieveAccountSalt(string userEmail)
         {
-            try
-            {
+            try {
                 System.Diagnostics.Debug.WriteLine(userEmail);
 
                 SaltPost saltPost = new SaltPost();
@@ -773,7 +834,8 @@ namespace MTYD
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine(ex.Message);
+                Generic gen = new Generic();
+                gen.parseException(ex.ToString());
                 return null;
             }
         }
@@ -823,9 +885,10 @@ namespace MTYD
                     return null;
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine("Exception message: " + e.Message);
+                Generic gen = new Generic();
+                gen.parseException(ex.ToString());
                 return null;
             }
         }
@@ -834,36 +897,43 @@ namespace MTYD
         // FACEBOOK LOGIN CLICK
         public async void facebookLoginButtonClicked(object sender, EventArgs e)
         {
-
-            // Initialize variables
-            string clientID = string.Empty;
-            string redirectURL = string.Empty;
-
-            switch (Device.RuntimePlatform)
+            try
             {
-                // depending on the device, get constants from Login>Constants>Constants.cs file
-                case Device.iOS:
-                    clientID = Constant.FacebookiOSClientID;
-                    redirectURL = Constant.FacebookiOSRedirectUrl;
-                    break;
-                case Device.Android:
-                    clientID = Constant.FacebookAndroidClientID;
-                    redirectURL = Constant.FacebookAndroidRedirectUrl;
-                    break;
+                // Initialize variables
+                string clientID = string.Empty;
+                string redirectURL = string.Empty;
+
+                switch (Device.RuntimePlatform)
+                {
+                    // depending on the device, get constants from Login>Constants>Constants.cs file
+                    case Device.iOS:
+                        clientID = Constant.FacebookiOSClientID;
+                        redirectURL = Constant.FacebookiOSRedirectUrl;
+                        break;
+                    case Device.Android:
+                        clientID = Constant.FacebookAndroidClientID;
+                        redirectURL = Constant.FacebookAndroidRedirectUrl;
+                        break;
+                }
+
+                // Store all the information in a variable called authenticator (for client) and presenter for http client (who is going to present the credentials)
+                var authenticator = new OAuth2Authenticator(clientID, Constant.FacebookScope, new Uri(Constant.FacebookAuthorizeUrl), new Uri(redirectURL), null, false);
+                var presenter = new Xamarin.Auth.Presenters.OAuthLoginPresenter();
+
+                // Creates Completed and Error Event Handler functions;  "+=" means create
+                authenticator.Completed += FacebookAuthenticatorCompleted;
+                authenticator.Error += FacebookAutheticatorError;
+
+
+                // This is the actual call to Facebook
+                presenter.Login(authenticator);
+                // Facebooks sends back an authenticator that goes directly into the Event Handlers created above as "sender".  Data is stored in arguement "e" (account, user name, access token, etc).
             }
-
-            // Store all the information in a variable called authenticator (for client) and presenter for http client (who is going to present the credentials)
-            var authenticator = new OAuth2Authenticator(clientID, Constant.FacebookScope, new Uri(Constant.FacebookAuthorizeUrl), new Uri(redirectURL), null, false);
-            var presenter = new Xamarin.Auth.Presenters.OAuthLoginPresenter();
-
-            // Creates Completed and Error Event Handler functions;  "+=" means create
-            authenticator.Completed += FacebookAuthenticatorCompleted;
-            authenticator.Error += FacebookAutheticatorError;
-
-
-            // This is the actual call to Facebook
-            presenter.Login(authenticator);
-            // Facebooks sends back an authenticator that goes directly into the Event Handlers created above as "sender".  Data is stored in arguement "e" (account, user name, access token, etc).
+            catch (Exception ex)
+            {
+                Generic gen = new Generic();
+                gen.parseException(ex.ToString());
+            }
         }
 
 
@@ -872,319 +942,335 @@ namespace MTYD
         // sender contains nothing then there is an error.  sender contains an authenticator from Facebook
         public async void FacebookAuthenticatorCompleted(object sender, AuthenticatorCompletedEventArgs e)
         {
-            var authenticator = sender as OAuth2Authenticator;
-            Console.WriteLine("authenticator" + authenticator.ToString());
-            if (authenticator != null)
+            try
             {
-                // Removes Event Handler functions;  "-=" means delete
-                authenticator.Completed -= FacebookAuthenticatorCompleted;
-                authenticator.Error -= FacebookAutheticatorError;
-            }
+                var authenticator = sender as OAuth2Authenticator;
+                Console.WriteLine("authenticator" + authenticator.ToString());
+                if (authenticator != null)
+                {
+                    // Removes Event Handler functions;  "-=" means delete
+                    authenticator.Completed -= FacebookAuthenticatorCompleted;
+                    authenticator.Error -= FacebookAutheticatorError;
+                }
 
-            if (e.IsAuthenticated)
+                if (e.IsAuthenticated)
+                {
+                    // Uses access token from Facebook as an input to FacebookUserProfileAsync
+                    FacebookUserProfileAsync(e.Account.Properties["access_token"]);
+                }
+            }
+            catch (Exception ex)
             {
-                // Uses access token from Facebook as an input to FacebookUserProfileAsync
-                FacebookUserProfileAsync(e.Account.Properties["access_token"]);
+                Generic gen = new Generic();
+                gen.parseException(ex.ToString());
             }
         }
 
         public async void FacebookUserProfileAsync(string accessToken)
         {
-            //email might not be found so loading page can't be here forever
-            //testing with loading page FB
-            Application.Current.MainPage = new Loading();
-            var client = new HttpClient();
-
-            var socialLogInPost = new SocialLogInPost();
-
-            // Actual call to Facebooks end point now that we have the token (appending accessToken to URL in constants file)
-            var facebookResponse = client.GetStringAsync(Constant.FacebookUserInfoUrl + accessToken);  // makes the call to Facebook and returns True/False
-            var userData = facebookResponse.Result;  // returns Facebook email and social ID
-
-            System.Diagnostics.Debug.WriteLine(facebookResponse);
-            System.Diagnostics.Debug.WriteLine(userData);
-
-
-            // Deserializes JSON object from info provided by Facebook
-            FacebookResponse facebookData = JsonConvert.DeserializeObject<FacebookResponse>(userData);
-            socialLogInPost.email = facebookData.email;
-            socialLogInPost.password = "";
-            socialLogInPost.social_id = facebookData.id;
-            socialLogInPost.signup_platform = "FACEBOOK";
-
-            // Create JSON object for Login Endpoint
-            var socialLogInPostSerialized = JsonConvert.SerializeObject(socialLogInPost);
-            var postContent = new StringContent(socialLogInPostSerialized, Encoding.UTF8, "application/json");
-
-            System.Diagnostics.Debug.WriteLine(socialLogInPostSerialized);
-
-            // Call to RDS database with endpoint and JSON data
-            var RDSResponse = await client.PostAsync(Constant.LogInUrl, postContent);  //  True or False if Parva's endpoint ran preperly.
-            var responseContent = await RDSResponse.Content.ReadAsStringAsync();  // Contains Parva's code containing all the user data including userid
-
-            System.Diagnostics.Debug.WriteLine(RDSResponse.IsSuccessStatusCode);  // Response code is Yes/True if successful from httpclient system.net package
-            System.Diagnostics.Debug.WriteLine(responseContent);  // Response JSON that RDS returns
-
-            if (RDSResponse.IsSuccessStatusCode)
+            try
             {
-                if (responseContent != null)
+                //email might not be found so loading page can't be here forever
+                //testing with loading page FB
+                Application.Current.MainPage = new Loading();
+                var client = new HttpClient();
+
+                var socialLogInPost = new SocialLogInPost();
+
+                // Actual call to Facebooks end point now that we have the token (appending accessToken to URL in constants file)
+                var facebookResponse = client.GetStringAsync(Constant.FacebookUserInfoUrl + accessToken);  // makes the call to Facebook and returns True/False
+                var userData = facebookResponse.Result;  // returns Facebook email and social ID
+
+                System.Diagnostics.Debug.WriteLine(facebookResponse);
+                System.Diagnostics.Debug.WriteLine(userData);
+
+
+                // Deserializes JSON object from info provided by Facebook
+                FacebookResponse facebookData = JsonConvert.DeserializeObject<FacebookResponse>(userData);
+                socialLogInPost.email = facebookData.email;
+                socialLogInPost.password = "";
+                socialLogInPost.social_id = facebookData.id;
+                socialLogInPost.signup_platform = "FACEBOOK";
+
+                // Create JSON object for Login Endpoint
+                var socialLogInPostSerialized = JsonConvert.SerializeObject(socialLogInPost);
+                var postContent = new StringContent(socialLogInPostSerialized, Encoding.UTF8, "application/json");
+
+                System.Diagnostics.Debug.WriteLine(socialLogInPostSerialized);
+
+                // Call to RDS database with endpoint and JSON data
+                var RDSResponse = await client.PostAsync(Constant.LogInUrl, postContent);  //  True or False if Parva's endpoint ran preperly.
+                var responseContent = await RDSResponse.Content.ReadAsStringAsync();  // Contains Parva's code containing all the user data including userid
+
+                System.Diagnostics.Debug.WriteLine(RDSResponse.IsSuccessStatusCode);  // Response code is Yes/True if successful from httpclient system.net package
+                System.Diagnostics.Debug.WriteLine(responseContent);  // Response JSON that RDS returns
+
+                if (RDSResponse.IsSuccessStatusCode)
                 {
-                    var data5 = JsonConvert.DeserializeObject<SuccessfulSocialLogIn>(responseContent);
-                    // Do I don't have the email in RDS
-                    if (data5.code.ToString() == Constant.EmailNotFound)
+                    if (responseContent != null)
                     {
-                        //testing with loading page
-                        Application.Current.MainPage = new MainPage();
-
-
-                        var signUp = await Application.Current.MainPage.DisplayAlert("Message", "It looks like you don't have a MTYD account. Please sign up!", "OK", "Cancel");
-                        if (signUp)
-                        {
-                            // HERE YOU NEED TO SUBSTITUTE MY SOCIAL SIGN UP PAGE WITH MTYD SOCIAL SIGN UP
-                            // NOTE THAT THIS SOCIAL SIGN UP PAGE NEEDS A CONSTRUCTOR LIKE THE FOLLOWING ONE
-                            // SocialSignUp(string socialId, string firstName, string lastName, string emailAddress, string accessToken, string refreshToken, string platform)
-                            Preferences.Set("canChooseSelect", false);
-                            Preferences.Set("profilePicLink", facebookData.picture.data.url);
-                            Debug.WriteLine("fb profile pic:" + facebookData.picture.data.url);
-
-                            Application.Current.MainPage = new CarlosSocialSignUp(facebookData.id, facebookData.name, "", facebookData.email, accessToken, accessToken, "FACEBOOK");
-                            // need to write new statment here ...
-                        }
-                    }
-
-
-                    // if Response content contains 200
-                    else if (data5.code.ToString() == Constant.AutheticatedSuccesful)
-                    {
-                        var data = JsonConvert.DeserializeObject<SuccessfulSocialLogIn>(responseContent);
-                        Application.Current.Properties["user_id"] = data.result[0].customer_uid;  // converts RDS data into appication data.
-
-                        UpdateTokensPost updateTokensPost = new UpdateTokensPost();
-                        updateTokensPost.uid = data.result[0].customer_uid;
-                        updateTokensPost.mobile_access_token = accessToken;
-                        updateTokensPost.mobile_refresh_token = accessToken;  // only get access token from Facebook so we store the data again
-
-                        var updateTokensPostSerializedObject = JsonConvert.SerializeObject(updateTokensPost);
-                        var updateTokensContent = new StringContent(updateTokensPostSerializedObject, Encoding.UTF8, "application/json");
-                        var updateTokensResponse = await client.PostAsync(Constant.UpdateTokensUrl, updateTokensContent);  // This calls the database and returns True or False
-                        var updateTokenResponseContent = await updateTokensResponse.Content.ReadAsStringAsync();
-                        System.Diagnostics.Debug.WriteLine(updateTokenResponseContent);
-
-                        if (updateTokensResponse.IsSuccessStatusCode)
-                        {
-                            DateTime today = DateTime.Now;
-                            DateTime expDate = today.AddDays(Constant.days);  // Internal assignment - not from the database
-
-                            Application.Current.Properties["time_stamp"] = expDate;
-                            Application.Current.Properties["platform"] = "FACEBOOK";
-                            // Application.Current.MainPage = new SubscriptionPage();
-
-
-                            //check to see if user has already selected a meal plan before
-                            var request2 = new HttpRequestMessage();
-                            Console.WriteLine("user_id: " + (string)Application.Current.Properties["user_id"]);
-                            string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/customer_lplp?customer_uid=" + (string)Application.Current.Properties["user_id"];
-
-                            //old db
-                            //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/customer_lplp?customer_uid=" + (string)Application.Current.Properties["user_id"]; 
-                            //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + (string)Application.Current.Properties["user_id"];
-                            //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + "100-000256";
-                            request2.RequestUri = new Uri(url);
-                            //request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/get_delivery_info/400-000453");
-                            request2.Method = HttpMethod.Get;
-                            var client2 = new HttpClient();
-                            HttpResponseMessage response = await client.SendAsync(request2);
-
-
-                            if (response.StatusCode == System.Net.HttpStatusCode.OK)
-                            {
-
-                                HttpContent content = response.Content;
-                                Console.WriteLine("content: " + content);
-                                var userString = await content.ReadAsStringAsync();
-                                //Console.WriteLine(userString);
-
-
-                                //writing guid to db
-                                if (Preferences.Get("setGuid" + (string)Application.Current.Properties["user_id"], false) == false)
-                                {
-                                    if (Device.RuntimePlatform == Device.iOS)
-                                    {
-                                        deviceId = Preferences.Get("guid", null);
-                                        if (deviceId != null) { Debug.WriteLine("This is the iOS GUID from Log in: " + deviceId); }
-                                    }
-                                    else
-                                    {
-                                        deviceId = Preferences.Get("guid", null);
-                                        if (deviceId != null) { Debug.WriteLine("This is the Android GUID from Log in " + deviceId); }
-                                    }
-
-                                    if (deviceId != null)
-                                    {
-                                        GuidPost notificationPost = new GuidPost();
-
-                                        notificationPost.uid = (string)Application.Current.Properties["user_id"];
-                                        notificationPost.guid = deviceId.Substring(5);
-                                        Application.Current.Properties["guid"] = deviceId.Substring(5);
-                                        notificationPost.notification = "TRUE";
-
-                                        var notificationSerializedObject = JsonConvert.SerializeObject(notificationPost);
-                                        Debug.WriteLine("Notification JSON Object to send: " + notificationSerializedObject);
-
-                                        var notificationContent = new StringContent(notificationSerializedObject, Encoding.UTF8, "application/json");
-
-                                        var clientResponse = await client.PostAsync(Constant.GuidUrl, notificationContent);
-
-                                        Debug.WriteLine("Status code: " + clientResponse.IsSuccessStatusCode);
-
-                                        if (clientResponse.IsSuccessStatusCode)
-                                        {
-                                            System.Diagnostics.Debug.WriteLine("We have post the guid to the database");
-                                            Preferences.Set("setGuid" + (string)Application.Current.Properties["user_id"], true);
-                                        }
-                                        else
-                                        {
-                                            await DisplayAlert("Ooops!", "Something went wrong. We are not able to send you notification at this moment", "OK");
-                                        }
-                                    }
-                                }
-                                //written
-
-
-
-                                if (userString.ToString()[0] != '{')
-                                {
-                                    url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
-
-                                    //old db
-                                    //url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
-                                    var request3 = new HttpRequestMessage();
-                                    request3.RequestUri = new Uri(url);
-                                    request3.Method = HttpMethod.Get;
-                                    response = await client.SendAsync(request3);
-                                    content = response.Content;
-                                    Console.WriteLine("content: " + content);
-                                    userString = await content.ReadAsStringAsync();
-                                    JObject info_obj2 = JObject.Parse(userString);
-                                    this.NewMainPage.Clear();
-                                    Preferences.Set("user_latitude", (info_obj2["result"])[0]["customer_lat"].ToString());
-                                    Debug.WriteLine("user latitude" + Preferences.Get("user_latitude", ""));
-                                    Preferences.Set("user_longitude", (info_obj2["result"])[0]["customer_long"].ToString());
-                                    Debug.WriteLine("user longitude" + Preferences.Get("user_longitude", ""));
-
-                                    Preferences.Set("profilePicLink", facebookData.picture.data.url);
-                                    Debug.WriteLine("fb profile pic:" + facebookData.picture.data.url);
-
-                                    Console.WriteLine("go to SubscriptionPage");
-                                    Preferences.Set("canChooseSelect", false);
-                                    await Application.Current.SavePropertiesAsync();
-                                    Application.Current.MainPage = new NavigationPage(new SubscriptionPage((info_obj2["result"])[0]["customer_first_name"].ToString(), (info_obj2["result"])[0]["customer_last_name"].ToString(), (info_obj2["result"])[0]["customer_email"].ToString()));
-                                    return;
-                                }
-
-                                JObject info_obj = JObject.Parse(userString);
-                                this.NewMainPage.Clear();
-
-                                //ArrayList item_price = new ArrayList();
-                                //ArrayList num_items = new ArrayList();
-                                //ArrayList payment_frequency = new ArrayList();
-                                //ArrayList groupArray = new ArrayList();
-
-                                Console.WriteLine("string: " + (info_obj["result"]).ToString());
-                                Debug.WriteLine("what is canChooseSelect set to?: " + Preferences.Get("canChooseSelect", false).ToString());
-                                //check if the user hasn't entered any info before, if so put in the placeholders
-                                if ((info_obj["result"]).ToString() == "[]" || (info_obj["result"]).ToString().Contains("ACTIVE") == false)
-                                {
-                                    url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
-
-                                    //old db
-                                    //url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
-                                    var request3 = new HttpRequestMessage();
-                                    request3.RequestUri = new Uri(url);
-                                    request3.Method = HttpMethod.Get;
-                                    response = await client.SendAsync(request3);
-                                    content = response.Content;
-                                    Console.WriteLine("content: " + content);
-                                    userString = await content.ReadAsStringAsync();
-                                    JObject info_obj2 = JObject.Parse(userString);
-                                    this.NewMainPage.Clear();
-                                    Preferences.Set("user_latitude", (info_obj2["result"])[0]["customer_lat"].ToString());
-                                    Debug.WriteLine("user latitude" + Preferences.Get("user_latitude", ""));
-                                    Preferences.Set("user_longitude", (info_obj2["result"])[0]["customer_long"].ToString());
-                                    Debug.WriteLine("user longitude" + Preferences.Get("user_longitude", ""));
-
-                                    Preferences.Set("profilePicLink", facebookData.picture.data.url);
-                                    Debug.WriteLine("fb profile pic:" + facebookData.picture.data.url);
-
-                                    Console.WriteLine("go to SubscriptionPage");
-                                    Preferences.Set("canChooseSelect", false);
-                                    await Application.Current.SavePropertiesAsync();
-                                    Application.Current.MainPage = new NavigationPage(new SubscriptionPage((info_obj2["result"])[0]["customer_first_name"].ToString(), (info_obj2["result"])[0]["customer_last_name"].ToString(), (info_obj2["result"])[0]["customer_email"].ToString()));
-                                }
-                                else
-                                {
-                                    url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
-
-                                    //old db
-                                    //url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
-                                    var request3 = new HttpRequestMessage();
-                                    request3.RequestUri = new Uri(url);
-                                    request3.Method = HttpMethod.Get;
-                                    response = await client.SendAsync(request3);
-                                    content = response.Content;
-                                    Console.WriteLine("content: " + content);
-                                    userString = await content.ReadAsStringAsync();
-                                    JObject info_obj2 = JObject.Parse(userString);
-                                    this.NewMainPage.Clear();
-                                    Preferences.Set("user_latitude", (info_obj2["result"])[0]["customer_lat"].ToString());
-                                    Debug.WriteLine("user latitude" + Preferences.Get("user_latitude", ""));
-                                    Preferences.Set("user_longitude", (info_obj2["result"])[0]["customer_long"].ToString());
-                                    Debug.WriteLine("user longitude" + Preferences.Get("user_longitude", ""));
-
-                                    Preferences.Set("profilePicLink", facebookData.picture.data.url);
-                                    Debug.WriteLine("fb profile pic:" + facebookData.picture.data.url);
-
-                                    Preferences.Set("canChooseSelect", true);
-                                    Zones[] zones = new Zones[] { };
-                                    await Application.Current.SavePropertiesAsync();
-                                    Application.Current.MainPage = new NavigationPage(new Select(zones, (info_obj2["result"])[0]["customer_first_name"].ToString(), (info_obj2["result"])[0]["customer_last_name"].ToString(), (info_obj2["result"])[0]["customer_email"].ToString()));
-                                }
-                            }
-
-                            // THIS IS HOW YOU CAN ACCESS YOUR USER ID FROM THE APP
-                            //string userID = (string)Application.Current.Properties["user_id"];
-                            //printing id for testing
-                            //System.Diagnostics.Debug.WriteLine("user ID after success: " + userID);
-                        }
-                        else
+                        var data5 = JsonConvert.DeserializeObject<SuccessfulSocialLogIn>(responseContent);
+                        // Do I don't have the email in RDS
+                        if (data5.code.ToString() == Constant.EmailNotFound)
                         {
                             //testing with loading page
                             Application.Current.MainPage = new MainPage();
 
-                            await Application.Current.MainPage.DisplayAlert("Oops", "We are facing some problems with our internal system. We weren't able to update your credentials", "OK");
+
+                            var signUp = await Application.Current.MainPage.DisplayAlert("Message", "It looks like you don't have a MTYD account. Please sign up!", "OK", "Cancel");
+                            if (signUp)
+                            {
+                                // HERE YOU NEED TO SUBSTITUTE MY SOCIAL SIGN UP PAGE WITH MTYD SOCIAL SIGN UP
+                                // NOTE THAT THIS SOCIAL SIGN UP PAGE NEEDS A CONSTRUCTOR LIKE THE FOLLOWING ONE
+                                // SocialSignUp(string socialId, string firstName, string lastName, string emailAddress, string accessToken, string refreshToken, string platform)
+                                Preferences.Set("canChooseSelect", false);
+                                Preferences.Set("profilePicLink", facebookData.picture.data.url);
+                                Debug.WriteLine("fb profile pic:" + facebookData.picture.data.url);
+
+                                Application.Current.MainPage = new CarlosSocialSignUp(facebookData.id, facebookData.name, "", facebookData.email, accessToken, accessToken, "FACEBOOK");
+                                // need to write new statment here ...
+                            }
+                        }
+
+
+                        // if Response content contains 200
+                        else if (data5.code.ToString() == Constant.AutheticatedSuccesful)
+                        {
+                            var data = JsonConvert.DeserializeObject<SuccessfulSocialLogIn>(responseContent);
+                            Application.Current.Properties["user_id"] = data.result[0].customer_uid;  // converts RDS data into appication data.
+
+                            UpdateTokensPost updateTokensPost = new UpdateTokensPost();
+                            updateTokensPost.uid = data.result[0].customer_uid;
+                            updateTokensPost.mobile_access_token = accessToken;
+                            updateTokensPost.mobile_refresh_token = accessToken;  // only get access token from Facebook so we store the data again
+
+                            var updateTokensPostSerializedObject = JsonConvert.SerializeObject(updateTokensPost);
+                            var updateTokensContent = new StringContent(updateTokensPostSerializedObject, Encoding.UTF8, "application/json");
+                            var updateTokensResponse = await client.PostAsync(Constant.UpdateTokensUrl, updateTokensContent);  // This calls the database and returns True or False
+                            var updateTokenResponseContent = await updateTokensResponse.Content.ReadAsStringAsync();
+                            System.Diagnostics.Debug.WriteLine(updateTokenResponseContent);
+
+                            if (updateTokensResponse.IsSuccessStatusCode)
+                            {
+                                DateTime today = DateTime.Now;
+                                DateTime expDate = today.AddDays(Constant.days);  // Internal assignment - not from the database
+
+                                Application.Current.Properties["time_stamp"] = expDate;
+                                Application.Current.Properties["platform"] = "FACEBOOK";
+                                // Application.Current.MainPage = new SubscriptionPage();
+
+
+                                //check to see if user has already selected a meal plan before
+                                var request2 = new HttpRequestMessage();
+                                Console.WriteLine("user_id: " + (string)Application.Current.Properties["user_id"]);
+                                string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/customer_lplp?customer_uid=" + (string)Application.Current.Properties["user_id"];
+
+                                //old db
+                                //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/customer_lplp?customer_uid=" + (string)Application.Current.Properties["user_id"]; 
+                                //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + (string)Application.Current.Properties["user_id"];
+                                //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + "100-000256";
+                                request2.RequestUri = new Uri(url);
+                                //request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/get_delivery_info/400-000453");
+                                request2.Method = HttpMethod.Get;
+                                var client2 = new HttpClient();
+                                HttpResponseMessage response = await client.SendAsync(request2);
+
+
+                                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                                {
+
+                                    HttpContent content = response.Content;
+                                    Console.WriteLine("content: " + content);
+                                    var userString = await content.ReadAsStringAsync();
+                                    //Console.WriteLine(userString);
+
+
+                                    //writing guid to db
+                                    if (Preferences.Get("setGuid" + (string)Application.Current.Properties["user_id"], false) == false)
+                                    {
+                                        if (Device.RuntimePlatform == Device.iOS)
+                                        {
+                                            deviceId = Preferences.Get("guid", null);
+                                            if (deviceId != null) { Debug.WriteLine("This is the iOS GUID from Log in: " + deviceId); }
+                                        }
+                                        else
+                                        {
+                                            deviceId = Preferences.Get("guid", null);
+                                            if (deviceId != null) { Debug.WriteLine("This is the Android GUID from Log in " + deviceId); }
+                                        }
+
+                                        if (deviceId != null)
+                                        {
+                                            GuidPost notificationPost = new GuidPost();
+
+                                            notificationPost.uid = (string)Application.Current.Properties["user_id"];
+                                            notificationPost.guid = deviceId.Substring(5);
+                                            Application.Current.Properties["guid"] = deviceId.Substring(5);
+                                            notificationPost.notification = "TRUE";
+
+                                            var notificationSerializedObject = JsonConvert.SerializeObject(notificationPost);
+                                            Debug.WriteLine("Notification JSON Object to send: " + notificationSerializedObject);
+
+                                            var notificationContent = new StringContent(notificationSerializedObject, Encoding.UTF8, "application/json");
+
+                                            var clientResponse = await client.PostAsync(Constant.GuidUrl, notificationContent);
+
+                                            Debug.WriteLine("Status code: " + clientResponse.IsSuccessStatusCode);
+
+                                            if (clientResponse.IsSuccessStatusCode)
+                                            {
+                                                System.Diagnostics.Debug.WriteLine("We have post the guid to the database");
+                                                Preferences.Set("setGuid" + (string)Application.Current.Properties["user_id"], true);
+                                            }
+                                            else
+                                            {
+                                                await DisplayAlert("Ooops!", "Something went wrong. We are not able to send you notification at this moment", "OK");
+                                            }
+                                        }
+                                    }
+                                    //written
+
+
+
+                                    if (userString.ToString()[0] != '{')
+                                    {
+                                        url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
+
+                                        //old db
+                                        //url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
+                                        var request3 = new HttpRequestMessage();
+                                        request3.RequestUri = new Uri(url);
+                                        request3.Method = HttpMethod.Get;
+                                        response = await client.SendAsync(request3);
+                                        content = response.Content;
+                                        Console.WriteLine("content: " + content);
+                                        userString = await content.ReadAsStringAsync();
+                                        JObject info_obj2 = JObject.Parse(userString);
+                                        this.NewMainPage.Clear();
+                                        Preferences.Set("user_latitude", (info_obj2["result"])[0]["customer_lat"].ToString());
+                                        Debug.WriteLine("user latitude" + Preferences.Get("user_latitude", ""));
+                                        Preferences.Set("user_longitude", (info_obj2["result"])[0]["customer_long"].ToString());
+                                        Debug.WriteLine("user longitude" + Preferences.Get("user_longitude", ""));
+
+                                        Preferences.Set("profilePicLink", facebookData.picture.data.url);
+                                        Debug.WriteLine("fb profile pic:" + facebookData.picture.data.url);
+
+                                        Console.WriteLine("go to SubscriptionPage");
+                                        Preferences.Set("canChooseSelect", false);
+                                        await Application.Current.SavePropertiesAsync();
+                                        Application.Current.MainPage = new NavigationPage(new SubscriptionPage((info_obj2["result"])[0]["customer_first_name"].ToString(), (info_obj2["result"])[0]["customer_last_name"].ToString(), (info_obj2["result"])[0]["customer_email"].ToString()));
+                                        return;
+                                    }
+
+                                    JObject info_obj = JObject.Parse(userString);
+                                    this.NewMainPage.Clear();
+
+                                    //ArrayList item_price = new ArrayList();
+                                    //ArrayList num_items = new ArrayList();
+                                    //ArrayList payment_frequency = new ArrayList();
+                                    //ArrayList groupArray = new ArrayList();
+
+                                    Console.WriteLine("string: " + (info_obj["result"]).ToString());
+                                    Debug.WriteLine("what is canChooseSelect set to?: " + Preferences.Get("canChooseSelect", false).ToString());
+                                    //check if the user hasn't entered any info before, if so put in the placeholders
+                                    if ((info_obj["result"]).ToString() == "[]" || (info_obj["result"]).ToString().Contains("ACTIVE") == false)
+                                    {
+                                        url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
+
+                                        //old db
+                                        //url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
+                                        var request3 = new HttpRequestMessage();
+                                        request3.RequestUri = new Uri(url);
+                                        request3.Method = HttpMethod.Get;
+                                        response = await client.SendAsync(request3);
+                                        content = response.Content;
+                                        Console.WriteLine("content: " + content);
+                                        userString = await content.ReadAsStringAsync();
+                                        JObject info_obj2 = JObject.Parse(userString);
+                                        this.NewMainPage.Clear();
+                                        Preferences.Set("user_latitude", (info_obj2["result"])[0]["customer_lat"].ToString());
+                                        Debug.WriteLine("user latitude" + Preferences.Get("user_latitude", ""));
+                                        Preferences.Set("user_longitude", (info_obj2["result"])[0]["customer_long"].ToString());
+                                        Debug.WriteLine("user longitude" + Preferences.Get("user_longitude", ""));
+
+                                        Preferences.Set("profilePicLink", facebookData.picture.data.url);
+                                        Debug.WriteLine("fb profile pic:" + facebookData.picture.data.url);
+
+                                        Console.WriteLine("go to SubscriptionPage");
+                                        Preferences.Set("canChooseSelect", false);
+                                        await Application.Current.SavePropertiesAsync();
+                                        Application.Current.MainPage = new NavigationPage(new SubscriptionPage((info_obj2["result"])[0]["customer_first_name"].ToString(), (info_obj2["result"])[0]["customer_last_name"].ToString(), (info_obj2["result"])[0]["customer_email"].ToString()));
+                                    }
+                                    else
+                                    {
+                                        url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
+
+                                        //old db
+                                        //url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
+                                        var request3 = new HttpRequestMessage();
+                                        request3.RequestUri = new Uri(url);
+                                        request3.Method = HttpMethod.Get;
+                                        response = await client.SendAsync(request3);
+                                        content = response.Content;
+                                        Console.WriteLine("content: " + content);
+                                        userString = await content.ReadAsStringAsync();
+                                        JObject info_obj2 = JObject.Parse(userString);
+                                        this.NewMainPage.Clear();
+                                        Preferences.Set("user_latitude", (info_obj2["result"])[0]["customer_lat"].ToString());
+                                        Debug.WriteLine("user latitude" + Preferences.Get("user_latitude", ""));
+                                        Preferences.Set("user_longitude", (info_obj2["result"])[0]["customer_long"].ToString());
+                                        Debug.WriteLine("user longitude" + Preferences.Get("user_longitude", ""));
+
+                                        Preferences.Set("profilePicLink", facebookData.picture.data.url);
+                                        Debug.WriteLine("fb profile pic:" + facebookData.picture.data.url);
+
+                                        Preferences.Set("canChooseSelect", true);
+                                        Zones[] zones = new Zones[] { };
+                                        await Application.Current.SavePropertiesAsync();
+                                        Application.Current.MainPage = new NavigationPage(new Select(zones, (info_obj2["result"])[0]["customer_first_name"].ToString(), (info_obj2["result"])[0]["customer_last_name"].ToString(), (info_obj2["result"])[0]["customer_email"].ToString()));
+                                    }
+                                }
+
+                                // THIS IS HOW YOU CAN ACCESS YOUR USER ID FROM THE APP
+                                //string userID = (string)Application.Current.Properties["user_id"];
+                                //printing id for testing
+                                //System.Diagnostics.Debug.WriteLine("user ID after success: " + userID);
+                            }
+                            else
+                            {
+                                //testing with loading page
+                                Application.Current.MainPage = new MainPage();
+
+                                await Application.Current.MainPage.DisplayAlert("Oops", "We are facing some problems with our internal system. We weren't able to update your credentials", "OK");
+                            }
+                        }
+
+                        // Wrong Platform message
+                        else if (data5.code.ToString() == Constant.ErrorPlatform)
+                        {
+                            //testing with loading page
+                            Application.Current.MainPage = new MainPage();
+
+                            var RDSCode = JsonConvert.DeserializeObject<RDSLogInMessage>(responseContent);
+                            await Application.Current.MainPage.DisplayAlert("Message", RDSCode.message, "OK");
+                        }
+
+
+                        // Wrong LOGIN method message
+                        else if (data5.code.ToString() == Constant.ErrorUserDirectLogIn)
+                        {
+                            //testing with loading page
+                            Application.Current.MainPage = new MainPage();
+
+                            await Application.Current.MainPage.DisplayAlert("Oops!", "You have an existing MTYD account. Please use direct login", "OK");
                         }
                     }
-
-                    // Wrong Platform message
-                    else if (data5.code.ToString() == Constant.ErrorPlatform)
-                    {
-                        //testing with loading page
-                        Application.Current.MainPage = new MainPage();
-
-                        var RDSCode = JsonConvert.DeserializeObject<RDSLogInMessage>(responseContent);
-                        await Application.Current.MainPage.DisplayAlert("Message", RDSCode.message, "OK");
-                    }
-
-
-                    // Wrong LOGIN method message
-                    else if (data5.code.ToString() == Constant.ErrorUserDirectLogIn)
-                    {
-                        //testing with loading page
-                        Application.Current.MainPage = new MainPage();
-
-                        await Application.Current.MainPage.DisplayAlert("Oops!", "You have an existing MTYD account. Please use direct login", "OK");
-                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                Generic gen = new Generic();
+                gen.parseException(ex.ToString());
             }
         }
 
@@ -1192,14 +1278,22 @@ namespace MTYD
 
         private async void FacebookAutheticatorError(object sender, AuthenticatorErrorEventArgs e)
         {
-            var authenticator = sender as OAuth2Authenticator;
-            if (authenticator != null)
+            try
             {
-                authenticator.Completed -= FacebookAuthenticatorCompleted;
-                authenticator.Error -= FacebookAutheticatorError;
-            }
+                var authenticator = sender as OAuth2Authenticator;
+                if (authenticator != null)
+                {
+                    authenticator.Completed -= FacebookAuthenticatorCompleted;
+                    authenticator.Error -= FacebookAutheticatorError;
+                }
 
-            await DisplayAlert("Authentication error: ", e.Message, "OK");
+                await DisplayAlert("Authentication error: ", e.Message, "OK");
+            }
+            catch (Exception ex)
+            {
+                Generic gen = new Generic();
+                gen.parseException(ex.ToString());
+            }
         }
 
 
@@ -1207,467 +1301,507 @@ namespace MTYD
         // GOOGLE LOGIN CLICK
         public async void googleLoginButtonClicked(object sender, EventArgs e)
         {
-            Console.WriteLine("googleLoginButtonClicked entered");
-
-            string clientId = string.Empty;
-            string redirectUri = string.Empty;
-
-            switch (Device.RuntimePlatform)
+            try
             {
-                case Device.iOS:
-                    clientId = Constant.GoogleiOSClientID;
-                    redirectUri = Constant.GoogleRedirectUrliOS;
-                    break;
+                Console.WriteLine("googleLoginButtonClicked entered");
 
-                case Device.Android:
-                    clientId = Constant.GoogleAndroidClientID;
-                    redirectUri = Constant.GoogleRedirectUrlAndroid;
-                    break;
+                string clientId = string.Empty;
+                string redirectUri = string.Empty;
+
+                switch (Device.RuntimePlatform)
+                {
+                    case Device.iOS:
+                        clientId = Constant.GoogleiOSClientID;
+                        redirectUri = Constant.GoogleRedirectUrliOS;
+                        break;
+
+                    case Device.Android:
+                        clientId = Constant.GoogleAndroidClientID;
+                        redirectUri = Constant.GoogleRedirectUrlAndroid;
+                        break;
+                }
+
+                Console.WriteLine("after switch entered");
+
+                var authenticator = new OAuth2Authenticator(clientId, string.Empty, Constant.GoogleScope, new Uri(Constant.GoogleAuthorizeUrl), new Uri(redirectUri), new Uri(Constant.GoogleAccessTokenUrl), null, true);
+                var presenter = new Xamarin.Auth.Presenters.OAuthLoginPresenter();
+
+                Console.WriteLine("after vars entered");
+
+                authenticator.Completed += GoogleAuthenticatorCompleted;
+                authenticator.Error += GoogleAuthenticatorError;
+
+                Console.WriteLine("after completed/error entered");
+
+                AuthenticationState.Authenticator = authenticator;
+
+                Console.WriteLine("before Login entered");
+                presenter.Login(authenticator);
+                Console.WriteLine("after Login entered");
             }
-
-            Console.WriteLine("after switch entered");
-
-            var authenticator = new OAuth2Authenticator(clientId, string.Empty, Constant.GoogleScope, new Uri(Constant.GoogleAuthorizeUrl), new Uri(redirectUri), new Uri(Constant.GoogleAccessTokenUrl), null, true);
-            var presenter = new Xamarin.Auth.Presenters.OAuthLoginPresenter();
-
-            Console.WriteLine("after vars entered");
-
-            authenticator.Completed += GoogleAuthenticatorCompleted;
-            authenticator.Error += GoogleAuthenticatorError;
-
-            Console.WriteLine("after completed/error entered");
-
-            AuthenticationState.Authenticator = authenticator;
-
-            Console.WriteLine("before Login entered");
-            presenter.Login(authenticator);
-            Console.WriteLine("after Login entered");
+            catch (Exception ex)
+            {
+                Generic gen = new Generic();
+                gen.parseException(ex.ToString());
+            }
         }
 
         private async void GoogleAuthenticatorCompleted(object sender, AuthenticatorCompletedEventArgs e)
         {
-            Console.WriteLine("googleAuthenticatorCompleted entered");
-            //Application.Current.MainPage = new Landing("", "", "");
-
-            var authenticator = sender as OAuth2Authenticator;
-
-            if (authenticator != null)
+            try
             {
-                authenticator.Completed -= GoogleAuthenticatorCompleted;
-                authenticator.Error -= GoogleAuthenticatorError;
+                Console.WriteLine("googleAuthenticatorCompleted entered");
+                //Application.Current.MainPage = new Landing("", "", "");
+
+                var authenticator = sender as OAuth2Authenticator;
+
+                if (authenticator != null)
+                {
+                    authenticator.Completed -= GoogleAuthenticatorCompleted;
+                    authenticator.Error -= GoogleAuthenticatorError;
+                }
+
+                Console.WriteLine("Authenticator authenticated:" + e.IsAuthenticated);
+
+                if (e.IsAuthenticated)
+                {
+                    GoogleUserProfileAsync(e.Account.Properties["access_token"], e.Account.Properties["refresh_token"], e);
+                }
+                else
+                {
+                    await DisplayAlert("Error", "Google was not able to autheticate your account", "OK");
+                }
             }
-
-            Console.WriteLine("Authenticator authenticated:" + e.IsAuthenticated);
-
-            if (e.IsAuthenticated)
+            catch (Exception ex)
             {
-                GoogleUserProfileAsync(e.Account.Properties["access_token"], e.Account.Properties["refresh_token"], e);
-            }
-            else
-            {
-                await DisplayAlert("Error", "Google was not able to autheticate your account", "OK");
+                Generic gen = new Generic();
+                gen.parseException(ex.ToString());
             }
         }
 
         public async void GoogleUserProfileAsync(string accessToken, string refreshToken, AuthenticatorCompletedEventArgs e)
         {
-            Console.WriteLine("googleUserProfileAsync entered");
-
-            //testing with loading page
-            Application.Current.MainPage = new Loading();
-
-            var client = new HttpClient();
-            var socialLogInPost = new SocialLogInPost();
-
-            var request = new OAuth2Request("GET", new Uri(Constant.GoogleUserInfoUrl), null, e.Account);
-            var GoogleResponse = await request.GetResponseAsync();
-            Debug.WriteLine("google response: " + GoogleResponse);
-            var userData = GoogleResponse.GetResponseText();
-            Debug.WriteLine("user Data: " + userData);
-            //Application.Current.MainPage = new NavigationPage(new Loading());
-
-            System.Diagnostics.Debug.WriteLine(userData);
-            GoogleResponse googleData = JsonConvert.DeserializeObject<GoogleResponse>(userData);
-            Debug.WriteLine("googleData: " + googleData);
-            socialLogInPost.email = googleData.email;
-            socialLogInPost.password = "";
-            socialLogInPost.social_id = googleData.id;
-            socialLogInPost.signup_platform = "GOOGLE";
-
-            var socialLogInPostSerialized = JsonConvert.SerializeObject(socialLogInPost);
-            var postContent = new StringContent(socialLogInPostSerialized, Encoding.UTF8, "application/json");
-
-            System.Diagnostics.Debug.WriteLine(socialLogInPostSerialized);
-
-            var RDSResponse = await client.PostAsync(Constant.LogInUrl, postContent);
-            var responseContent = await RDSResponse.Content.ReadAsStringAsync();
-
-            System.Diagnostics.Debug.WriteLine(responseContent);
-            System.Diagnostics.Debug.WriteLine(RDSResponse.IsSuccessStatusCode);
-
-            if (RDSResponse.IsSuccessStatusCode)
+            try
             {
-                if (responseContent != null)
+                Console.WriteLine("googleUserProfileAsync entered");
+
+                //testing with loading page
+                Application.Current.MainPage = new Loading();
+
+                var client = new HttpClient();
+                var socialLogInPost = new SocialLogInPost();
+
+                var request = new OAuth2Request("GET", new Uri(Constant.GoogleUserInfoUrl), null, e.Account);
+                var GoogleResponse = await request.GetResponseAsync();
+                Debug.WriteLine("google response: " + GoogleResponse);
+                var userData = GoogleResponse.GetResponseText();
+                Debug.WriteLine("user Data: " + userData);
+                //Application.Current.MainPage = new NavigationPage(new Loading());
+
+                System.Diagnostics.Debug.WriteLine(userData);
+                GoogleResponse googleData = JsonConvert.DeserializeObject<GoogleResponse>(userData);
+                Debug.WriteLine("googleData: " + googleData);
+                socialLogInPost.email = googleData.email;
+                socialLogInPost.password = "";
+                socialLogInPost.social_id = googleData.id;
+                socialLogInPost.signup_platform = "GOOGLE";
+
+                var socialLogInPostSerialized = JsonConvert.SerializeObject(socialLogInPost);
+                var postContent = new StringContent(socialLogInPostSerialized, Encoding.UTF8, "application/json");
+
+                System.Diagnostics.Debug.WriteLine(socialLogInPostSerialized);
+
+                var RDSResponse = await client.PostAsync(Constant.LogInUrl, postContent);
+                var responseContent = await RDSResponse.Content.ReadAsStringAsync();
+
+                System.Diagnostics.Debug.WriteLine(responseContent);
+                System.Diagnostics.Debug.WriteLine(RDSResponse.IsSuccessStatusCode);
+
+                if (RDSResponse.IsSuccessStatusCode)
                 {
-                    var data5 = JsonConvert.DeserializeObject<SuccessfulSocialLogIn>(responseContent);
-                    //if (responseContent.Contains(Constant.EmailNotFound))
-                    if (data5.code.ToString() == Constant.EmailNotFound)
+                    if (responseContent != null)
                     {
-                        //testing with loading page
-                        Application.Current.MainPage = new MainPage();
-
-                        var signUp = await Application.Current.MainPage.DisplayAlert("Message", "It looks like you don't have a MTYD account. Please sign up!", "OK", "Cancel");
-                        if (signUp)
-                        {
-                            // HERE YOU NEED TO SUBSTITUTE MY SOCIAL SIGN UP PAGE WITH MTYD SOCIAL SIGN UP
-                            // NOTE THAT THIS SOCIAL SIGN UP PAGE NEEDS A CONSTRUCTOR LIKE THE FOLLOWING ONE
-                            // SocialSignUp(string socialId, string firstName, string lastName, string emailAddress, string accessToken, string refreshToken, string platform)
-                            Preferences.Set("canChooseSelect", false);
-                            Application.Current.MainPage = new CarlosSocialSignUp(googleData.id, googleData.given_name, googleData.family_name, googleData.email, accessToken, refreshToken, "GOOGLE");
-                        }
-                    }
-                    //else if (responseContent.Contains(Constant.AutheticatedSuccesful))
-                    else if (data5.code.ToString() == Constant.AutheticatedSuccesful)
-                    {
-                        //testing with loading page
-                        //Application.Current.MainPage = new Loading();
-
-                        var data = JsonConvert.DeserializeObject<SuccessfulSocialLogIn>(responseContent);
-                        Debug.WriteLine("responseContent: " + responseContent.ToString());
-                        Debug.WriteLine("data: " + data.ToString());
-                        Application.Current.Properties["user_id"] = data.result[0].customer_uid;
-
-                        UpdateTokensPost updateTokesPost = new UpdateTokensPost();
-                        updateTokesPost.uid = data.result[0].customer_uid;
-                        updateTokesPost.mobile_access_token = accessToken;
-                        updateTokesPost.mobile_refresh_token = refreshToken;
-
-                        var updateTokesPostSerializedObject = JsonConvert.SerializeObject(updateTokesPost);
-                        var updateTokesContent = new StringContent(updateTokesPostSerializedObject, Encoding.UTF8, "application/json");
-                        var updateTokesResponse = await client.PostAsync(Constant.UpdateTokensUrl, updateTokesContent);
-                        var updateTokenResponseContent = await updateTokesResponse.Content.ReadAsStringAsync();
-                        System.Diagnostics.Debug.WriteLine(updateTokenResponseContent);
-
-                        if (updateTokesResponse.IsSuccessStatusCode)
-                        {
-                            DateTime today = DateTime.Now;
-                            DateTime expDate = today.AddDays(Constant.days);
-
-                            Application.Current.Properties["time_stamp"] = expDate;
-                            Application.Current.Properties["platform"] = "GOOGLE";
-                            // Application.Current.MainPage = new SubscriptionPage();
-
-
-                            //check to see if user has already selected a meal plan before
-                            var request2 = new HttpRequestMessage();
-                            Console.WriteLine("user_id: " + (string)Application.Current.Properties["user_id"]);
-                            string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/customer_lplp?customer_uid=" + (string)Application.Current.Properties["user_id"];
-                            //old db
-                            //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/customer_lplp?customer_uid=" + (string)Application.Current.Properties["user_id"];
-                            //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + (string)Application.Current.Properties["user_id"];
-                            //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + "100-000256";
-                            request2.RequestUri = new Uri(url);
-                            //request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/get_delivery_info/400-000453");
-                            request2.Method = HttpMethod.Get;
-                            var client2 = new HttpClient();
-                            HttpResponseMessage response = await client.SendAsync(request2);
-
-                            if (response.StatusCode == System.Net.HttpStatusCode.OK)
-                            {
-
-                                HttpContent content = response.Content;
-                                Console.WriteLine("content: " + content);
-                                var userString = await content.ReadAsStringAsync();
-                                Console.WriteLine(userString.ToString());
-
-                                //writing guid to db
-                                if (Preferences.Get("setGuid" + (string)Application.Current.Properties["user_id"], false) == false)
-                                {
-
-                                    if (Device.RuntimePlatform == Device.iOS)
-                                    {
-                                        deviceId = Preferences.Get("guid", null);
-                                        if (deviceId != null) { Debug.WriteLine("This is the iOS GUID from Log in: " + deviceId); }
-                                    }
-                                    else
-                                    {
-                                        deviceId = Preferences.Get("guid", null);
-                                        if (deviceId != null) { Debug.WriteLine("This is the Android GUID from Log in " + deviceId); }
-                                    }
-
-                                    if (deviceId != null)
-                                    {
-                                        Debug.WriteLine("entered inside setting guid");
-                                        GuidPost notificationPost = new GuidPost();
-
-                                        notificationPost.uid = (string)Application.Current.Properties["user_id"];
-                                        notificationPost.guid = deviceId.Substring(5);
-                                        Application.Current.Properties["guid"] = deviceId.Substring(5);
-                                        notificationPost.notification = "TRUE";
-
-                                        var notificationSerializedObject = JsonConvert.SerializeObject(notificationPost);
-                                        Debug.WriteLine("Notification JSON Object to send: " + notificationSerializedObject);
-
-                                        var notificationContent = new StringContent(notificationSerializedObject, Encoding.UTF8, "application/json");
-
-                                        var clientResponse = await client.PostAsync(Constant.GuidUrl, notificationContent);
-
-                                        Debug.WriteLine("Status code: " + clientResponse.IsSuccessStatusCode);
-
-                                        if (clientResponse.IsSuccessStatusCode)
-                                        {
-                                            System.Diagnostics.Debug.WriteLine("We have post the guid to the database");
-                                            Preferences.Set("setGuid" + (string)Application.Current.Properties["user_id"], true);
-                                        }
-                                        else
-                                        {
-                                            await DisplayAlert("Ooops!", "Something went wrong. We are not able to send you notification at this moment", "OK");
-                                        }
-                                    }
-                                }
-                                //written
-
-
-                                //testing for if the user only has serving fresh stuff
-                                if (userString.ToString()[0] != '{')
-                                {
-                                    url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
-                                    //old db
-                                    //url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
-                                    var request3 = new HttpRequestMessage();
-                                    request3.RequestUri = new Uri(url);
-                                    request3.Method = HttpMethod.Get;
-                                    response = await client.SendAsync(request3);
-                                    content = response.Content;
-                                    Console.WriteLine("content: " + content);
-                                    userString = await content.ReadAsStringAsync();
-                                    JObject info_obj2 = JObject.Parse(userString);
-                                    this.NewMainPage.Clear();
-                                    Console.WriteLine("google first: " + (info_obj2["result"])[0]["customer_first_name"].ToString());
-                                    Console.WriteLine("google last: " + (info_obj2["result"])[0]["customer_last_name"].ToString());
-                                    Console.WriteLine("google email: " + (info_obj2["result"])[0]["customer_email"].ToString());
-                                    Preferences.Set("user_latitude", (info_obj2["result"])[0]["customer_lat"].ToString());
-                                    Debug.WriteLine("user latitude" + Preferences.Get("user_latitude", ""));
-                                    Preferences.Set("user_longitude", (info_obj2["result"])[0]["customer_long"].ToString());
-                                    Debug.WriteLine("user longitude" + Preferences.Get("user_longitude", ""));
-
-                                    //var accessToken = loginInfo.ExternalIdentity.Claims.Where(c => c.Type.Equals("urn:google:accesstoken")).Select(c => c.Value).FirstOrDefault();
-                                    Uri apiRequestUri = new Uri("https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + (info_obj2["result"])[0]["mobile_access_token"].ToString());
-                                    //request profile image
-                                    using (var webClient = new System.Net.WebClient())
-                                    {
-                                        var json = webClient.DownloadString(apiRequestUri);
-                                        var data2 = JsonConvert.DeserializeObject<profilePicLogIn>(json);
-                                        Debug.WriteLine(data2.ToString());
-                                        var userPicture = data2.picture;
-                                        //var holder = userPicture[0];
-                                        Debug.WriteLine(userPicture);
-                                        Preferences.Set("profilePicLink", userPicture);
-
-                                        //var data = JsonConvert.DeserializeObject<SuccessfulSocialLogIn>(responseContent);
-                                        //Application.Current.Properties["user_id"] = data.result[0].customer_uid;
-                                    }
-
-                                    //Debug.WriteLine("picture link: " + userPicture);
-
-                                    Console.WriteLine("go to SubscriptionPage");
-                                    Preferences.Set("canChooseSelect", false);
-                                    await Application.Current.SavePropertiesAsync();
-                                    Application.Current.MainPage = new NavigationPage(new SubscriptionPage((info_obj2["result"])[0]["customer_first_name"].ToString(), (info_obj2["result"])[0]["customer_last_name"].ToString(), (info_obj2["result"])[0]["customer_email"].ToString()));
-                                    return;
-                                }
-                                //testing
-
-                                JObject info_obj = JObject.Parse(userString);
-                                this.NewMainPage.Clear();
-
-                                //ArrayList item_price = new ArrayList();
-                                //ArrayList num_items = new ArrayList();
-                                //ArrayList payment_frequency = new ArrayList();
-                                //ArrayList groupArray = new ArrayList();
-
-                                //int counter = 0;
-                                //Console.WriteLine("testing: " + ((info_obj["result"]).Count().ToString()));
-                                //Console.WriteLine("testing: " + ((info_obj["result"]).Last().ToString()));
-                                //while (((info_obj["result"])[counter]) != null)
-                                //{
-                                //    Console.WriteLine("worked" + counter);
-                                //    counter++;
-                                //}
-
-                                //check if the user hasn't entered any info before, if so put in the placeholders
-
-                                Console.WriteLine("string: " + (info_obj["result"]).ToString());
-                                //check if the user hasn't entered any info before, if so put in the placeholders
-                                if ((info_obj["result"]).ToString() == "[]" || (info_obj["result"]).ToString() == "204" || (info_obj["result"]).ToString().Contains("ACTIVE") == false)
-                                {
-                                    url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
-
-                                    //old db
-                                    //url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
-                                    var request3 = new HttpRequestMessage();
-                                    request3.RequestUri = new Uri(url);
-                                    request3.Method = HttpMethod.Get;
-                                    response = await client.SendAsync(request3);
-                                    content = response.Content;
-                                    Console.WriteLine("content: " + content);
-                                    userString = await content.ReadAsStringAsync();
-                                    JObject info_obj2 = JObject.Parse(userString);
-                                    this.NewMainPage.Clear();
-                                    Console.WriteLine("google first: " + (info_obj2["result"])[0]["customer_first_name"].ToString());
-                                    Console.WriteLine("google last: " + (info_obj2["result"])[0]["customer_last_name"].ToString());
-                                    Console.WriteLine("google email: " + (info_obj2["result"])[0]["customer_email"].ToString());
-                                    Preferences.Set("user_latitude", (info_obj2["result"])[0]["customer_lat"].ToString());
-                                    Debug.WriteLine("user latitude" + Preferences.Get("user_latitude", ""));
-                                    Preferences.Set("user_longitude", (info_obj2["result"])[0]["customer_long"].ToString());
-                                    Debug.WriteLine("user longitude" + Preferences.Get("user_longitude", ""));
-
-                                    Uri apiRequestUri = new Uri("https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + (info_obj2["result"])[0]["mobile_access_token"].ToString());
-                                    //request profile image
-                                    using (var webClient = new System.Net.WebClient())
-                                    {
-                                        var json = webClient.DownloadString(apiRequestUri);
-                                        var data2 = JsonConvert.DeserializeObject<profilePicLogIn>(json);
-                                        Debug.WriteLine(data2.ToString());
-                                        var userPicture = data2.picture;
-                                        //var holder = userPicture[0];
-                                        Debug.WriteLine(userPicture);
-                                        Preferences.Set("profilePicLink", userPicture);
-
-                                        //var data = JsonConvert.DeserializeObject<SuccessfulSocialLogIn>(responseContent);
-                                        //Application.Current.Properties["user_id"] = data.result[0].customer_uid;
-                                    }
-
-                                    Console.WriteLine("go to SubscriptionPage");
-                                    DisplayAlert("navigation", "sending to subscription", "close");
-                                    Preferences.Set("canChooseSelect", false);
-                                    await Application.Current.SavePropertiesAsync();
-                                    Application.Current.MainPage = new NavigationPage(new SubscriptionPage((info_obj2["result"])[0]["customer_first_name"].ToString(), (info_obj2["result"])[0]["customer_last_name"].ToString(), (info_obj2["result"])[0]["customer_email"].ToString()));
-                                }
-                                else
-                                {
-                                    url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
-
-                                    //old db
-                                    //url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
-                                    var request3 = new HttpRequestMessage();
-                                    request3.RequestUri = new Uri(url);
-                                    request3.Method = HttpMethod.Get;
-                                    response = await client.SendAsync(request3);
-                                    content = response.Content;
-                                    Console.WriteLine("content: " + content);
-                                    userString = await content.ReadAsStringAsync();
-                                    JObject info_obj2 = JObject.Parse(userString);
-                                    this.NewMainPage.Clear();
-                                    Preferences.Set("user_latitude", (info_obj2["result"])[0]["customer_lat"].ToString());
-                                    Debug.WriteLine("user latitude" + Preferences.Get("user_latitude", ""));
-                                    Preferences.Set("user_longitude", (info_obj2["result"])[0]["customer_long"].ToString());
-                                    Debug.WriteLine("user longitude" + Preferences.Get("user_longitude", ""));
-                                    Console.WriteLine("google first: " + (info_obj2["result"])[0]["customer_first_name"].ToString());
-                                    Console.WriteLine("google last: " + (info_obj2["result"])[0]["customer_last_name"].ToString());
-                                    Console.WriteLine("google email: " + (info_obj2["result"])[0]["customer_email"].ToString());
-                                    Debug.WriteLine("user access token: " + (info_obj2["result"])[0]["user_access_token"].ToString());
-                                    Debug.WriteLine("mobile access token: " + (info_obj2["result"])[0]["mobile_access_token"].ToString());
-                                    Uri apiRequestUri = new Uri("https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + (info_obj2["result"])[0]["mobile_access_token"].ToString());
-                                    //request profile image
-                                    using (var webClient = new System.Net.WebClient())
-                                    {
-                                        var json = webClient.DownloadString(apiRequestUri);
-                                        var data2 = JsonConvert.DeserializeObject<profilePicLogIn>(json);
-                                        Debug.WriteLine(data2.ToString());
-                                        var userPicture = data2.picture;
-                                        //var holder = userPicture[0];
-                                        Debug.WriteLine(userPicture);
-                                        Preferences.Set("profilePicLink", userPicture);
-
-                                        //var data = JsonConvert.DeserializeObject<SuccessfulSocialLogIn>(responseContent);
-                                        //Application.Current.Properties["user_id"] = data.result[0].customer_uid;
-                                    }
-
-                                    DisplayAlert("navigation", "sending to select", "close");
-                                    Console.WriteLine("delivery first name: " + (info_obj["result"])[0]["delivery_first_name"].ToString());
-                                    Console.WriteLine("delivery last name: " + (info_obj["result"])[0]["delivery_last_name"].ToString());
-                                    Console.WriteLine("delivery email: " + (info_obj["result"])[0]["delivery_email"].ToString());
-                                    Preferences.Set("canChooseSelect", true);
-                                    //await Debug.WriteLine("a");
-                                    //navToSelect((info_obj2["result"])[0]["customer_first_name"].ToString(), (info_obj2["result"])[0]["customer_last_name"].ToString(), (info_obj2["result"])[0]["customer_email"].ToString());
-                                    Zones[] zones = new Zones[] { };
-                                    await Application.Current.SavePropertiesAsync();
-                                    Application.Current.MainPage = new NavigationPage(new Select(zones, (info_obj2["result"])[0]["customer_first_name"].ToString(), (info_obj2["result"])[0]["customer_last_name"].ToString(), (info_obj2["result"])[0]["customer_email"].ToString()));
-                                    //Application.Current.MainPage = new NavigationPage(new CongratsPage());
-                                    //Application.Current.MainPage = new NavigationPage(new SubscriptionPage((info_obj2["result"])[0]["customer_first_name"].ToString(), (info_obj2["result"])[0]["customer_last_name"].ToString(), (info_obj2["result"])[0]["customer_email"].ToString()));
-                                    //Application.Current.MainPage = new NavigationPage(new SubscriptionPage((info_obj2["result"])[0]["customer_first_name"].ToString(), (info_obj2["result"])[0]["customer_last_name"].ToString(), (info_obj2["result"])[0]["customer_email"].ToString()));
-                                }
-
-                            }
-
-                            // THIS IS HOW YOU CAN ACCESS YOUR USER ID FROM THE APP
-                            // string userID = (string)Application.Current.Properties["user_id"];
-                        }
-                        else
+                        var data5 = JsonConvert.DeserializeObject<SuccessfulSocialLogIn>(responseContent);
+                        //if (responseContent.Contains(Constant.EmailNotFound))
+                        if (data5.code.ToString() == Constant.EmailNotFound)
                         {
                             //testing with loading page
                             Application.Current.MainPage = new MainPage();
 
-                            await Application.Current.MainPage.DisplayAlert("Oops", "We are facing some problems with our internal system. We weren't able to update your credentials", "OK");
+                            var signUp = await Application.Current.MainPage.DisplayAlert("Message", "It looks like you don't have a MTYD account. Please sign up!", "OK", "Cancel");
+                            if (signUp)
+                            {
+                                // HERE YOU NEED TO SUBSTITUTE MY SOCIAL SIGN UP PAGE WITH MTYD SOCIAL SIGN UP
+                                // NOTE THAT THIS SOCIAL SIGN UP PAGE NEEDS A CONSTRUCTOR LIKE THE FOLLOWING ONE
+                                // SocialSignUp(string socialId, string firstName, string lastName, string emailAddress, string accessToken, string refreshToken, string platform)
+                                Preferences.Set("canChooseSelect", false);
+                                Application.Current.MainPage = new CarlosSocialSignUp(googleData.id, googleData.given_name, googleData.family_name, googleData.email, accessToken, refreshToken, "GOOGLE");
+                            }
+                        }
+                        //else if (responseContent.Contains(Constant.AutheticatedSuccesful))
+                        else if (data5.code.ToString() == Constant.AutheticatedSuccesful)
+                        {
+                            //testing with loading page
+                            //Application.Current.MainPage = new Loading();
+
+                            var data = JsonConvert.DeserializeObject<SuccessfulSocialLogIn>(responseContent);
+                            Debug.WriteLine("responseContent: " + responseContent.ToString());
+                            Debug.WriteLine("data: " + data.ToString());
+                            Application.Current.Properties["user_id"] = data.result[0].customer_uid;
+
+                            UpdateTokensPost updateTokesPost = new UpdateTokensPost();
+                            updateTokesPost.uid = data.result[0].customer_uid;
+                            updateTokesPost.mobile_access_token = accessToken;
+                            updateTokesPost.mobile_refresh_token = refreshToken;
+
+                            var updateTokesPostSerializedObject = JsonConvert.SerializeObject(updateTokesPost);
+                            var updateTokesContent = new StringContent(updateTokesPostSerializedObject, Encoding.UTF8, "application/json");
+                            var updateTokesResponse = await client.PostAsync(Constant.UpdateTokensUrl, updateTokesContent);
+                            var updateTokenResponseContent = await updateTokesResponse.Content.ReadAsStringAsync();
+                            System.Diagnostics.Debug.WriteLine(updateTokenResponseContent);
+
+                            if (updateTokesResponse.IsSuccessStatusCode)
+                            {
+                                DateTime today = DateTime.Now;
+                                DateTime expDate = today.AddDays(Constant.days);
+
+                                Application.Current.Properties["time_stamp"] = expDate;
+                                Application.Current.Properties["platform"] = "GOOGLE";
+                                // Application.Current.MainPage = new SubscriptionPage();
+
+
+                                //check to see if user has already selected a meal plan before
+                                var request2 = new HttpRequestMessage();
+                                Console.WriteLine("user_id: " + (string)Application.Current.Properties["user_id"]);
+                                string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/customer_lplp?customer_uid=" + (string)Application.Current.Properties["user_id"];
+                                //old db
+                                //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/customer_lplp?customer_uid=" + (string)Application.Current.Properties["user_id"];
+                                //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + (string)Application.Current.Properties["user_id"];
+                                //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + "100-000256";
+                                request2.RequestUri = new Uri(url);
+                                //request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/get_delivery_info/400-000453");
+                                request2.Method = HttpMethod.Get;
+                                var client2 = new HttpClient();
+                                HttpResponseMessage response = await client.SendAsync(request2);
+
+                                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                                {
+
+                                    HttpContent content = response.Content;
+                                    Console.WriteLine("content: " + content);
+                                    var userString = await content.ReadAsStringAsync();
+                                    Console.WriteLine(userString.ToString());
+
+                                    //writing guid to db
+                                    if (Preferences.Get("setGuid" + (string)Application.Current.Properties["user_id"], false) == false)
+                                    {
+
+                                        if (Device.RuntimePlatform == Device.iOS)
+                                        {
+                                            deviceId = Preferences.Get("guid", null);
+                                            if (deviceId != null) { Debug.WriteLine("This is the iOS GUID from Log in: " + deviceId); }
+                                        }
+                                        else
+                                        {
+                                            deviceId = Preferences.Get("guid", null);
+                                            if (deviceId != null) { Debug.WriteLine("This is the Android GUID from Log in " + deviceId); }
+                                        }
+
+                                        if (deviceId != null)
+                                        {
+                                            Debug.WriteLine("entered inside setting guid");
+                                            GuidPost notificationPost = new GuidPost();
+
+                                            notificationPost.uid = (string)Application.Current.Properties["user_id"];
+                                            notificationPost.guid = deviceId.Substring(5);
+                                            Application.Current.Properties["guid"] = deviceId.Substring(5);
+                                            notificationPost.notification = "TRUE";
+
+                                            var notificationSerializedObject = JsonConvert.SerializeObject(notificationPost);
+                                            Debug.WriteLine("Notification JSON Object to send: " + notificationSerializedObject);
+
+                                            var notificationContent = new StringContent(notificationSerializedObject, Encoding.UTF8, "application/json");
+
+                                            var clientResponse = await client.PostAsync(Constant.GuidUrl, notificationContent);
+
+                                            Debug.WriteLine("Status code: " + clientResponse.IsSuccessStatusCode);
+
+                                            if (clientResponse.IsSuccessStatusCode)
+                                            {
+                                                System.Diagnostics.Debug.WriteLine("We have post the guid to the database");
+                                                Preferences.Set("setGuid" + (string)Application.Current.Properties["user_id"], true);
+                                            }
+                                            else
+                                            {
+                                                await DisplayAlert("Ooops!", "Something went wrong. We are not able to send you notification at this moment", "OK");
+                                            }
+                                        }
+                                    }
+                                    //written
+
+
+                                    //testing for if the user only has serving fresh stuff
+                                    if (userString.ToString()[0] != '{')
+                                    {
+                                        url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
+                                        //old db
+                                        //url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
+                                        var request3 = new HttpRequestMessage();
+                                        request3.RequestUri = new Uri(url);
+                                        request3.Method = HttpMethod.Get;
+                                        response = await client.SendAsync(request3);
+                                        content = response.Content;
+                                        Console.WriteLine("content: " + content);
+                                        userString = await content.ReadAsStringAsync();
+                                        JObject info_obj2 = JObject.Parse(userString);
+                                        this.NewMainPage.Clear();
+                                        Console.WriteLine("google first: " + (info_obj2["result"])[0]["customer_first_name"].ToString());
+                                        Console.WriteLine("google last: " + (info_obj2["result"])[0]["customer_last_name"].ToString());
+                                        Console.WriteLine("google email: " + (info_obj2["result"])[0]["customer_email"].ToString());
+                                        Preferences.Set("user_latitude", (info_obj2["result"])[0]["customer_lat"].ToString());
+                                        Debug.WriteLine("user latitude" + Preferences.Get("user_latitude", ""));
+                                        Preferences.Set("user_longitude", (info_obj2["result"])[0]["customer_long"].ToString());
+                                        Debug.WriteLine("user longitude" + Preferences.Get("user_longitude", ""));
+
+                                        //var accessToken = loginInfo.ExternalIdentity.Claims.Where(c => c.Type.Equals("urn:google:accesstoken")).Select(c => c.Value).FirstOrDefault();
+                                        Uri apiRequestUri = new Uri("https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + (info_obj2["result"])[0]["mobile_access_token"].ToString());
+                                        //request profile image
+                                        using (var webClient = new System.Net.WebClient())
+                                        {
+                                            var json = webClient.DownloadString(apiRequestUri);
+                                            var data2 = JsonConvert.DeserializeObject<profilePicLogIn>(json);
+                                            Debug.WriteLine(data2.ToString());
+                                            var userPicture = data2.picture;
+                                            //var holder = userPicture[0];
+                                            Debug.WriteLine(userPicture);
+                                            Preferences.Set("profilePicLink", userPicture);
+
+                                            //var data = JsonConvert.DeserializeObject<SuccessfulSocialLogIn>(responseContent);
+                                            //Application.Current.Properties["user_id"] = data.result[0].customer_uid;
+                                        }
+
+                                        //Debug.WriteLine("picture link: " + userPicture);
+
+                                        Console.WriteLine("go to SubscriptionPage");
+                                        Preferences.Set("canChooseSelect", false);
+                                        await Application.Current.SavePropertiesAsync();
+                                        Application.Current.MainPage = new NavigationPage(new SubscriptionPage((info_obj2["result"])[0]["customer_first_name"].ToString(), (info_obj2["result"])[0]["customer_last_name"].ToString(), (info_obj2["result"])[0]["customer_email"].ToString()));
+                                        return;
+                                    }
+                                    //testing
+
+                                    JObject info_obj = JObject.Parse(userString);
+                                    this.NewMainPage.Clear();
+
+                                    //ArrayList item_price = new ArrayList();
+                                    //ArrayList num_items = new ArrayList();
+                                    //ArrayList payment_frequency = new ArrayList();
+                                    //ArrayList groupArray = new ArrayList();
+
+                                    //int counter = 0;
+                                    //Console.WriteLine("testing: " + ((info_obj["result"]).Count().ToString()));
+                                    //Console.WriteLine("testing: " + ((info_obj["result"]).Last().ToString()));
+                                    //while (((info_obj["result"])[counter]) != null)
+                                    //{
+                                    //    Console.WriteLine("worked" + counter);
+                                    //    counter++;
+                                    //}
+
+                                    //check if the user hasn't entered any info before, if so put in the placeholders
+
+                                    Console.WriteLine("string: " + (info_obj["result"]).ToString());
+                                    //check if the user hasn't entered any info before, if so put in the placeholders
+                                    if ((info_obj["result"]).ToString() == "[]" || (info_obj["result"]).ToString() == "204" || (info_obj["result"]).ToString().Contains("ACTIVE") == false)
+                                    {
+                                        url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
+
+                                        //old db
+                                        //url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
+                                        var request3 = new HttpRequestMessage();
+                                        request3.RequestUri = new Uri(url);
+                                        request3.Method = HttpMethod.Get;
+                                        response = await client.SendAsync(request3);
+                                        content = response.Content;
+                                        Console.WriteLine("content: " + content);
+                                        userString = await content.ReadAsStringAsync();
+                                        JObject info_obj2 = JObject.Parse(userString);
+                                        this.NewMainPage.Clear();
+                                        Console.WriteLine("google first: " + (info_obj2["result"])[0]["customer_first_name"].ToString());
+                                        Console.WriteLine("google last: " + (info_obj2["result"])[0]["customer_last_name"].ToString());
+                                        Console.WriteLine("google email: " + (info_obj2["result"])[0]["customer_email"].ToString());
+                                        Preferences.Set("user_latitude", (info_obj2["result"])[0]["customer_lat"].ToString());
+                                        Debug.WriteLine("user latitude" + Preferences.Get("user_latitude", ""));
+                                        Preferences.Set("user_longitude", (info_obj2["result"])[0]["customer_long"].ToString());
+                                        Debug.WriteLine("user longitude" + Preferences.Get("user_longitude", ""));
+
+                                        Uri apiRequestUri = new Uri("https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + (info_obj2["result"])[0]["mobile_access_token"].ToString());
+                                        //request profile image
+                                        using (var webClient = new System.Net.WebClient())
+                                        {
+                                            var json = webClient.DownloadString(apiRequestUri);
+                                            var data2 = JsonConvert.DeserializeObject<profilePicLogIn>(json);
+                                            Debug.WriteLine(data2.ToString());
+                                            var userPicture = data2.picture;
+                                            //var holder = userPicture[0];
+                                            Debug.WriteLine(userPicture);
+                                            Preferences.Set("profilePicLink", userPicture);
+
+                                            //var data = JsonConvert.DeserializeObject<SuccessfulSocialLogIn>(responseContent);
+                                            //Application.Current.Properties["user_id"] = data.result[0].customer_uid;
+                                        }
+
+                                        Console.WriteLine("go to SubscriptionPage");
+                                        DisplayAlert("navigation", "sending to subscription", "close");
+                                        Preferences.Set("canChooseSelect", false);
+                                        await Application.Current.SavePropertiesAsync();
+                                        Application.Current.MainPage = new NavigationPage(new SubscriptionPage((info_obj2["result"])[0]["customer_first_name"].ToString(), (info_obj2["result"])[0]["customer_last_name"].ToString(), (info_obj2["result"])[0]["customer_email"].ToString()));
+                                    }
+                                    else
+                                    {
+                                        url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
+
+                                        //old db
+                                        //url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Application.Current.Properties["user_id"];
+                                        var request3 = new HttpRequestMessage();
+                                        request3.RequestUri = new Uri(url);
+                                        request3.Method = HttpMethod.Get;
+                                        response = await client.SendAsync(request3);
+                                        content = response.Content;
+                                        Console.WriteLine("content: " + content);
+                                        userString = await content.ReadAsStringAsync();
+                                        JObject info_obj2 = JObject.Parse(userString);
+                                        this.NewMainPage.Clear();
+                                        Preferences.Set("user_latitude", (info_obj2["result"])[0]["customer_lat"].ToString());
+                                        Debug.WriteLine("user latitude" + Preferences.Get("user_latitude", ""));
+                                        Preferences.Set("user_longitude", (info_obj2["result"])[0]["customer_long"].ToString());
+                                        Debug.WriteLine("user longitude" + Preferences.Get("user_longitude", ""));
+                                        Console.WriteLine("google first: " + (info_obj2["result"])[0]["customer_first_name"].ToString());
+                                        Console.WriteLine("google last: " + (info_obj2["result"])[0]["customer_last_name"].ToString());
+                                        Console.WriteLine("google email: " + (info_obj2["result"])[0]["customer_email"].ToString());
+                                        Debug.WriteLine("user access token: " + (info_obj2["result"])[0]["user_access_token"].ToString());
+                                        Debug.WriteLine("mobile access token: " + (info_obj2["result"])[0]["mobile_access_token"].ToString());
+                                        Uri apiRequestUri = new Uri("https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + (info_obj2["result"])[0]["mobile_access_token"].ToString());
+                                        //request profile image
+                                        using (var webClient = new System.Net.WebClient())
+                                        {
+                                            var json = webClient.DownloadString(apiRequestUri);
+                                            var data2 = JsonConvert.DeserializeObject<profilePicLogIn>(json);
+                                            Debug.WriteLine(data2.ToString());
+                                            var userPicture = data2.picture;
+                                            //var holder = userPicture[0];
+                                            Debug.WriteLine(userPicture);
+                                            Preferences.Set("profilePicLink", userPicture);
+
+                                            //var data = JsonConvert.DeserializeObject<SuccessfulSocialLogIn>(responseContent);
+                                            //Application.Current.Properties["user_id"] = data.result[0].customer_uid;
+                                        }
+
+                                        DisplayAlert("navigation", "sending to select", "close");
+                                        Console.WriteLine("delivery first name: " + (info_obj["result"])[0]["delivery_first_name"].ToString());
+                                        Console.WriteLine("delivery last name: " + (info_obj["result"])[0]["delivery_last_name"].ToString());
+                                        Console.WriteLine("delivery email: " + (info_obj["result"])[0]["delivery_email"].ToString());
+                                        Preferences.Set("canChooseSelect", true);
+                                        //await Debug.WriteLine("a");
+                                        //navToSelect((info_obj2["result"])[0]["customer_first_name"].ToString(), (info_obj2["result"])[0]["customer_last_name"].ToString(), (info_obj2["result"])[0]["customer_email"].ToString());
+                                        Zones[] zones = new Zones[] { };
+                                        await Application.Current.SavePropertiesAsync();
+                                        Application.Current.MainPage = new NavigationPage(new Select(zones, (info_obj2["result"])[0]["customer_first_name"].ToString(), (info_obj2["result"])[0]["customer_last_name"].ToString(), (info_obj2["result"])[0]["customer_email"].ToString()));
+                                        //Application.Current.MainPage = new NavigationPage(new CongratsPage());
+                                        //Application.Current.MainPage = new NavigationPage(new SubscriptionPage((info_obj2["result"])[0]["customer_first_name"].ToString(), (info_obj2["result"])[0]["customer_last_name"].ToString(), (info_obj2["result"])[0]["customer_email"].ToString()));
+                                        //Application.Current.MainPage = new NavigationPage(new SubscriptionPage((info_obj2["result"])[0]["customer_first_name"].ToString(), (info_obj2["result"])[0]["customer_last_name"].ToString(), (info_obj2["result"])[0]["customer_email"].ToString()));
+                                    }
+
+                                }
+
+                                // THIS IS HOW YOU CAN ACCESS YOUR USER ID FROM THE APP
+                                // string userID = (string)Application.Current.Properties["user_id"];
+                            }
+                            else
+                            {
+                                //testing with loading page
+                                Application.Current.MainPage = new MainPage();
+
+                                await Application.Current.MainPage.DisplayAlert("Oops", "We are facing some problems with our internal system. We weren't able to update your credentials", "OK");
+                            }
+                        }
+                        //else if (responseContent.Contains(Constant.ErrorPlatform))
+                        else if (data5.code.ToString() == Constant.ErrorPlatform)
+                        {
+                            Debug.WriteLine("google login: check if the user's email is already used elsewhere");
+                            //testing with loading page
+                            Application.Current.MainPage = new MainPage();
+
+                            var RDSCode = JsonConvert.DeserializeObject<RDSLogInMessage>(responseContent);
+                            await Application.Current.MainPage.DisplayAlert("Message", RDSCode.message, "OK");
+                        }
+                        //else if (responseContent.Contains(Constant.ErrorUserDirectLogIn))
+                        else if (data5.code.ToString() == Constant.ErrorUserDirectLogIn)
+                        {
+
+                            var data = JsonConvert.DeserializeObject<SuccessfulSocialLogIn>(responseContent);
+                            Debug.WriteLine("responseContent direct login: " + responseContent.ToString());
+                            //testing with loading page
+                            //await Navigation.PopAsync();
+                            Application.Current.MainPage = new MainPage();
+                            //Navigation.RemovePage(this.Navigation.NavigationStack[0]);
+
+                            await Application.Current.MainPage.DisplayAlert("Oops!", "You have an existing MTYD account. Please use direct login", "OK");
                         }
                     }
-                    //else if (responseContent.Contains(Constant.ErrorPlatform))
-                    else if (data5.code.ToString() == Constant.ErrorPlatform)
-                    {
-                        Debug.WriteLine("google login: check if the user's email is already used elsewhere");
-                        //testing with loading page
-                        Application.Current.MainPage = new MainPage();
-
-                        var RDSCode = JsonConvert.DeserializeObject<RDSLogInMessage>(responseContent);
-                        await Application.Current.MainPage.DisplayAlert("Message", RDSCode.message, "OK");
-                    }
-                    //else if (responseContent.Contains(Constant.ErrorUserDirectLogIn))
-                    else if (data5.code.ToString() == Constant.ErrorUserDirectLogIn)
-                    {
-
-                        var data = JsonConvert.DeserializeObject<SuccessfulSocialLogIn>(responseContent);
-                        Debug.WriteLine("responseContent direct login: " + responseContent.ToString());
-                        //testing with loading page
-                        //await Navigation.PopAsync();
-                        Application.Current.MainPage = new MainPage();
-                        //Navigation.RemovePage(this.Navigation.NavigationStack[0]);
-
-                        await Application.Current.MainPage.DisplayAlert("Oops!", "You have an existing MTYD account. Please use direct login", "OK");
-                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                Generic gen = new Generic();
+                gen.parseException(ex.ToString());
             }
         }
 
         private async void GoogleAuthenticatorError(object sender, AuthenticatorErrorEventArgs e)
         {
-            Console.WriteLine("googleAuthenticatorError entered");
-
-            var authenticator = sender as OAuth2Authenticator;
-
-            if (authenticator != null)
+            try
             {
-                authenticator.Completed -= GoogleAuthenticatorCompleted;
-                authenticator.Error -= GoogleAuthenticatorError;
-            }
+                Console.WriteLine("googleAuthenticatorError entered");
 
-            await DisplayAlert("Authentication error: ", e.Message, "OK");
+                var authenticator = sender as OAuth2Authenticator;
+
+                if (authenticator != null)
+                {
+                    authenticator.Completed -= GoogleAuthenticatorCompleted;
+                    authenticator.Error -= GoogleAuthenticatorError;
+                }
+
+                await DisplayAlert("Authentication error: ", e.Message, "OK");
+            }
+            catch (Exception ex)
+            {
+                Generic gen = new Generic();
+                gen.parseException(ex.ToString());
+            }
         }
 
         // APPLE LOGIN CLICK
         public async void appleLoginButtonClicked(object sender, EventArgs e)
         {
-            Console.WriteLine("appleLogin clicked");
+            try
+            {
+                Console.WriteLine("appleLogin clicked");
 
-            SignIn?.Invoke(sender, e);
-            var c = (ImageButton)sender;
-            Console.WriteLine("appleLogin c: " + c.ToString());
-            c.Command?.Execute(c.CommandParameter);
+                SignIn?.Invoke(sender, e);
+                var c = (ImageButton)sender;
+                Console.WriteLine("appleLogin c: " + c.ToString());
+                c.Command?.Execute(c.CommandParameter);
 
-            //testing
-            var testingVar = new LoginViewModel();
-            //testingVar.OnAppleSignInRequest();
-            vm.OnAppleSignInRequest();
+                //testing
+                var testingVar = new LoginViewModel();
+                //testingVar.OnAppleSignInRequest();
+                vm.OnAppleSignInRequest();
+            }
+            catch (Exception ex)
+            {
+                Generic gen = new Generic();
+                gen.parseException(ex.ToString());
+            }
         }
 
         public void InvokeSignInEvent(object sender, EventArgs e)
@@ -1675,7 +1809,7 @@ namespace MTYD
 
         public async void directLoginButtonClicked(object sender, EventArgs e)
         {
-            Application.Current.MainPage = new MainLogin();
+            Application.Current.MainPage = new NavigationPage(new MainLogin());
 
             HomePage.IsVisible = false;
             BackgroundImageSource = null;
@@ -1722,9 +1856,10 @@ namespace MTYD
                 //for testing 
                 Application.Current.MainPage = new changePassword(loginUsername.Text);
             }
-            catch
+            catch (Exception ex)
             {
-                await DisplayAlert("Error", "Email not found in our database.", "OK");
+                Generic gen = new Generic();
+                gen.parseException(ex.ToString());
             }
         }
 
@@ -1785,11 +1920,11 @@ namespace MTYD
                 }
                 return;
             }
-            catch
+            catch (Exception ex)
             {
                 Application.Current.MainPage = new MainPage();
-                await DisplayAlert("Error", "something went wrong when trying to log you in automatically", "OK");
-                //Application.Current.MainPage = new MainPage();
+                Generic gen = new Generic();
+                gen.parseException(ex.ToString());
             }
         }
 
@@ -1869,6 +2004,88 @@ namespace MTYD
             DiscountGrid.IsVisible = true;
         }
 
+        async void getDiscounts()
+        {
+            try
+            {
+                var request = new HttpRequestMessage();
+                request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/plans?business_uid=200-000002");
+                request.Method = HttpMethod.Get;
+                var client = new HttpClient();
+                HttpResponseMessage response = await client.SendAsync(request);
+
+                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    HttpContent content = response.Content;
+                    var userString = await content.ReadAsStringAsync();
+                    JObject plan_obj = JObject.Parse(userString);
+
+                    foreach (var m in plan_obj["result"])
+                    {
+                        if (m["num_deliveries"].ToString() == "4")
+                        {
+                            string disc = "";
+                            if (m["delivery_discount"].ToString().IndexOf(".") != -1 && m["delivery_discount"].ToString().Substring(m["delivery_discount"].ToString().IndexOf(".") + 1, 1) == "0")
+                                disc = m["delivery_discount"].ToString().Substring(0, m["delivery_discount"].ToString().IndexOf("."));
+                            else disc = m["delivery_discount"].ToString().Trim();
+
+                            couponAmt.Text = disc + "% off";
+
+                            couponDesc.Text = "Select 4 deliveries pre-pay option and Get " + disc + "% off";
+                        }
+
+                        if (m["num_deliveries"].ToString() == "8")
+                        {
+                            string disc = "";
+                            if (m["delivery_discount"].ToString().IndexOf(".") != -1 && m["delivery_discount"].ToString().Substring(m["delivery_discount"].ToString().IndexOf(".") + 1, 1) == "0")
+                                disc = m["delivery_discount"].ToString().Substring(0, m["delivery_discount"].ToString().IndexOf("."));
+                            else disc = m["delivery_discount"].ToString().Trim();
+
+                            couponAmt2.Text = disc + "% off";
+
+                            couponDesc2.Text = "Select 8 deliveries pre-pay option and Get " + disc + "% off";
+                        }
+
+                        if (m["num_deliveries"].ToString() == "10")
+                        {
+                            string disc = "";
+                            if (m["delivery_discount"].ToString().IndexOf(".") != -1 && m["delivery_discount"].ToString().Substring(m["delivery_discount"].ToString().IndexOf(".") + 1, 1) == "0")
+                                disc = m["delivery_discount"].ToString().Substring(0, m["delivery_discount"].ToString().IndexOf("."));
+                            else disc = m["delivery_discount"].ToString().Trim();
+
+                            couponAmt3.Text = disc + "% off";
+
+                            couponDesc3.Text = "Select 10 deliveries pre-pay option and Get " + disc + "% off";
+                        }
+                        //int num_meals = int.Parse(m["num_items"].ToString());
+                        //if (!numMealsList.Contains(num_meals))
+                        //{
+                        //    numMealsList.Add(num_meals);
+                        //}
+                        //discounts[i, j] = double.Parse(m["delivery_discount"].ToString());
+                        //itemPrices[i, j] = double.Parse(m["item_price"].ToString());
+                        //itemNames[i, j] = m["item_name"].ToString();
+                        //itemUids[i, j] = m["item_uid"].ToString();
+                        //if (j == 4)
+                        //{
+                        //    i++;
+                        //    j = 0;
+                        //}
+                        //else
+                        //{
+                        //    j++;
+                        //}
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Generic gen = new Generic();
+                gen.parseException(ex.ToString());
+            }
+        }
+
         async void clickedPfp(System.Object sender, System.EventArgs e)
         {
             await Navigation.PushAsync(new UserProfile(cust_firstName, cust_lastName, cust_email), false);
@@ -1933,7 +2150,7 @@ namespace MTYD
         private void addressEntryFocused(object sender, EventArgs eventArgs)
         {
             CheckAddressGrid.Margin = new Thickness(50, HomePage.Height - 75, 50, 120);
-            scroll.ScrollToAsync(0, HomePage.Height - 250, true);
+            scroll.ScrollToAsync(0, 400, true);
             addr.addressEntryFocused(addressList);
         }
 
@@ -1944,151 +2161,159 @@ namespace MTYD
 
         async void addressSelected(System.Object sender, System.EventArgs e)
         {
-            addr.addressSelected(addressList, AddressEntry);
-            addressList.IsVisible = false;
-            string inputAddress = AddressEntry.Text;
-
-            string[] addressSplit = inputAddress.Split(',');
-            string addr1 = addressSplit[0].Trim();
-            string city = addressSplit[1].Trim();
-            string state = addressSplit[2].Trim();
-            string zip = addressSplit[3].Trim();
-
-            //string zip = addressSplit[2].Trim().Substring(3);
-
-            // Setting request for USPS API
-            XDocument requestDoc = new XDocument(
-                new XElement("AddressValidateRequest",
-                new XAttribute("USERID", "400INFIN1745"),
-                new XElement("Revision", "1"),
-                new XElement("Address",
-                new XAttribute("ID", "0"),
-                new XElement("Address1", addr1),
-                new XElement("Address2", ""),
-                new XElement("City", city),
-                new XElement("State", state),
-                new XElement("Zip5", ""),
-                new XElement("Zip4", "")
-                     )
-                 )
-             );
-            var url = "http://production.shippingapis.com/ShippingAPI.dll?API=Verify&XML=" + requestDoc;
-            Console.WriteLine(url);
-            var client2 = new WebClient();
-            var response2 = client2.DownloadString(url);
-
-            var xdoc = XDocument.Parse(response2.ToString());
-            Console.WriteLine("xdoc begin");
-            Console.WriteLine(xdoc);
-
-
-            string latitude = "0";
-            string longitude = "0";
-            foreach (XElement element in xdoc.Descendants("Address"))
+            try
             {
-                if (GetXMLElement(element, "Error").Equals(""))
+                addr.addressSelected(addressList, AddressEntry);
+                addressList.IsVisible = false;
+                string inputAddress = AddressEntry.Text;
+
+                string[] addressSplit = inputAddress.Split(',');
+                string addr1 = addressSplit[0].Trim();
+                string city = addressSplit[1].Trim();
+                string state = addressSplit[2].Trim();
+                string zip = addressSplit[3].Trim();
+
+                //string zip = addressSplit[2].Trim().Substring(3);
+
+                // Setting request for USPS API
+                XDocument requestDoc = new XDocument(
+                    new XElement("AddressValidateRequest",
+                    new XAttribute("USERID", "400INFIN1745"),
+                    new XElement("Revision", "1"),
+                    new XElement("Address",
+                    new XAttribute("ID", "0"),
+                    new XElement("Address1", addr1),
+                    new XElement("Address2", ""),
+                    new XElement("City", city),
+                    new XElement("State", state),
+                    new XElement("Zip5", ""),
+                    new XElement("Zip4", "")
+                         )
+                     )
+                 );
+                var url = "http://production.shippingapis.com/ShippingAPI.dll?API=Verify&XML=" + requestDoc;
+                Console.WriteLine(url);
+                var client2 = new WebClient();
+                var response2 = client2.DownloadString(url);
+
+                var xdoc = XDocument.Parse(response2.ToString());
+                Console.WriteLine("xdoc begin");
+                Console.WriteLine(xdoc);
+
+
+                string latitude = "0";
+                string longitude = "0";
+                foreach (XElement element in xdoc.Descendants("Address"))
                 {
-                    if (GetXMLElement(element, "DPVConfirmation").Equals("Y") || GetXMLElement(element, "DPVConfirmation").Equals("D") || GetXMLElement(element, "DPVConfirmation").Equals("S"))
+                    if (GetXMLElement(element, "Error").Equals(""))
                     {
-                        Geocoder geoCoder = new Geocoder();
-
-                        Debug.WriteLine("$" + AddressEntry.Text.Trim() + "$");
-                        IEnumerable<Position> approximateLocations = await geoCoder.GetPositionsForAddressAsync(AddressEntry.Text.Trim());
-                        Position position = approximateLocations.FirstOrDefault();
-
-                        latitude = $"{position.Latitude}";
-                        longitude = $"{position.Longitude}";
-
-                        //used for createaccount endpoint
-                        Preferences.Set("user_latitude", latitude);
-                        Preferences.Set("user_longitude", longitude);
-                        Debug.WriteLine("user latitude: " + latitude);
-                        Debug.WriteLine("user longitude: " + longitude);
-
-                        //https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/categoricalOptions/-121.8866517,37.2270928 long,lat
-                        //var request3 = new HttpRequestMessage();
-                        //Console.WriteLine("user_id: " + (string)Application.Current.Properties["user_id"]);
-                        //Debug.WriteLine("latitude: " + latitude + ", longitude: " + longitude);
-                        string url3 = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/categoricalOptions/" + longitude + "," + latitude;
-                        //request3.RequestUri = new Uri(url3);
-                        //request3.Method = HttpMethod.Get;
-                        //var client3 = new HttpClient();
-                        //HttpResponseMessage response3 = await client3.SendAsync(request3);
-                        Debug.WriteLine("categorical options url: " + url3);
-
-                        var content = client4.DownloadString(url3);
-                        var obj = JsonConvert.DeserializeObject<ZonesDto>(content);
-
-                        //HttpContent content3 = response3.Content;
-                        //Console.WriteLine("content: " + content3);
-                        //var userString3 = await content3.ReadAsStringAsync();
-                        //Debug.WriteLine("userString3: " + userString3);
-                        //JObject info_obj3 = JObject.Parse(userString3);
-                        if (obj.Result.Length == 0)
+                        if (GetXMLElement(element, "DPVConfirmation").Equals("Y") || GetXMLElement(element, "DPVConfirmation").Equals("D") || GetXMLElement(element, "DPVConfirmation").Equals("S"))
                         {
-                            withinZones = false;
+                            Geocoder geoCoder = new Geocoder();
+
+                            Debug.WriteLine("$" + AddressEntry.Text.Trim() + "$");
+                            IEnumerable<Position> approximateLocations = await geoCoder.GetPositionsForAddressAsync(AddressEntry.Text.Trim());
+                            Position position = approximateLocations.FirstOrDefault();
+
+                            latitude = $"{position.Latitude}";
+                            longitude = $"{position.Longitude}";
+
+                            //used for createaccount endpoint
+                            Preferences.Set("user_latitude", latitude);
+                            Preferences.Set("user_longitude", longitude);
+                            Debug.WriteLine("user latitude: " + latitude);
+                            Debug.WriteLine("user longitude: " + longitude);
+
+                            //https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/categoricalOptions/-121.8866517,37.2270928 long,lat
+                            //var request3 = new HttpRequestMessage();
+                            //Console.WriteLine("user_id: " + (string)Application.Current.Properties["user_id"]);
+                            //Debug.WriteLine("latitude: " + latitude + ", longitude: " + longitude);
+                            string url3 = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/categoricalOptions/" + longitude + "," + latitude;
+                            //request3.RequestUri = new Uri(url3);
+                            //request3.Method = HttpMethod.Get;
+                            //var client3 = new HttpClient();
+                            //HttpResponseMessage response3 = await client3.SendAsync(request3);
+                            Debug.WriteLine("categorical options url: " + url3);
+
+                            var content = client4.DownloadString(url3);
+                            var obj = JsonConvert.DeserializeObject<ZonesDto>(content);
+
+                            //HttpContent content3 = response3.Content;
+                            //Console.WriteLine("content: " + content3);
+                            //var userString3 = await content3.ReadAsStringAsync();
+                            //Debug.WriteLine("userString3: " + userString3);
+                            //JObject info_obj3 = JObject.Parse(userString3);
+                            if (obj.Result.Length == 0)
+                            {
+                                withinZones = false;
+                            }
+                            else
+                            {
+                                Debug.WriteLine("first business: " + obj.Result[0].business_name);
+                                passingZones = obj.Result;
+                                withinZones = true;
+                            }
+
+                            break;
                         }
+                        //else if (GetXMLElement(element, "DPVConfirmation").Equals("D"))
+                        //{
+                        //    await DisplayAlert("Alert!", "Please enter a unit number.", "Ok");
+                        //    return;
+                        //}
                         else
                         {
-                            Debug.WriteLine("first business: " + obj.Result[0].business_name);
-                            passingZones = obj.Result;
-                            withinZones = true;
+                            //await DisplayAlert("Alert!", "Seems like your address is invalid.", "Ok");
+                            //return;
                         }
-
-                        break;
                     }
-                    //else if (GetXMLElement(element, "DPVConfirmation").Equals("D"))
-                    //{
-                    //    await DisplayAlert("Alert!", "Please enter a unit number.", "Ok");
-                    //    return;
-                    //}
                     else
-                    {
-                        //await DisplayAlert("Alert!", "Seems like your address is invalid.", "Ok");
+                    {   // USPS sents an error saying address not found in there records. In other words, this address is not valid because it does not exits.
+                        //Console.WriteLine("Seems like your address is invalid.");
+                        //await DisplayAlert("Alert!", "Error from USPS. The address you entered was not found.", "Ok");
                         //return;
                     }
                 }
+                if (latitude == "0" || longitude == "0")
+                {
+                    await DisplayAlert("We couldn't find your address", "Please check for errors.", "OK");
+                }
+                else if (withinZones == false)
+                {
+                    fade.IsVisible = true;
+                    signUpButton2.IsVisible = false;
+                    CheckAddressGrid.IsVisible = true;
+                    CheckAddressHeading.Text = "Still Growing…";
+                    CheckAddressBody.Text = "Sorry, it looks like we don’t deliver to your neighborhood yet. Enter your email address and we will let you know as soon as we come to your neighborhood.";
+                    EmailFrame.IsVisible = true;
+                    OkayButton.Text = "Okay";
+                    //await scroll.ScrollToAsync(0, 0, true);
+                    AddressEntry.Unfocus();
+                }
                 else
-                {   // USPS sents an error saying address not found in there records. In other words, this address is not valid because it does not exits.
-                    //Console.WriteLine("Seems like your address is invalid.");
-                    //await DisplayAlert("Alert!", "Error from USPS. The address you entered was not found.", "Ok");
-                    //return;
+                {
+                    fade.IsVisible = true;
+                    signUpButton2.IsVisible = true;
+                    CheckAddressGrid.IsVisible = true;
+                    CheckAddressHeading.Text = "Hooray!";
+                    CheckAddressBody.Text = "We are so glad that we deliver to your neighborhood. Please click Okay to continue enjoying MealsFor.Me";
+                    EmailFrame.IsVisible = false;
+                    OkayButton.Text = "Explore Meals";
+
+                    Preferences.Set("mainPageAdd", addr1);
+                    Preferences.Set("mainPageCity", city);
+                    if (state.IndexOf(" ") != -1)
+                        state = state.Substring(0, state.IndexOf(" "));
+                    Preferences.Set("mainPageState", state);
+                    Preferences.Set("mainPageZip", zip);
+                    //await scroll.ScrollToAsync(0, 0, true);
+                    AddressEntry.Unfocus();
                 }
             }
-            if (latitude == "0" || longitude == "0")
+            catch (Exception ex)
             {
-                await DisplayAlert("We couldn't find your address", "Please check for errors.", "OK");
-            }
-            else if (withinZones == false)
-            {
-                fade.IsVisible = true;
-                signUpButton2.IsVisible = false;
-                CheckAddressGrid.IsVisible = true;
-                CheckAddressHeading.Text = "Still Growing…";
-                CheckAddressBody.Text = "Sorry, it looks like we don’t deliver to your neighborhood yet. Enter your email address and we will let you know as soon as we come to your neighborhood.";
-                EmailFrame.IsVisible = true;
-                OkayButton.Text = "Okay";
-                //await scroll.ScrollToAsync(0, 0, true);
-                AddressEntry.Unfocus();
-            }
-            else
-            {
-                fade.IsVisible = true;
-                signUpButton2.IsVisible = true;
-                CheckAddressGrid.IsVisible = true;
-                CheckAddressHeading.Text = "Hooray!";
-                CheckAddressBody.Text = "We are so glad that we deliver to your neighborhood. Please click Okay to continue enjoying MealsFor.Me";
-                EmailFrame.IsVisible = false;
-                OkayButton.Text = "Explore Meals";
-
-                Preferences.Set("mainPageAdd", addr1);
-                Preferences.Set("mainPageCity", city);
-                if (state.IndexOf(" ") != -1)
-                    state = state.Substring(0, state.IndexOf(" "));
-                Preferences.Set("mainPageState", state);
-                Preferences.Set("mainPageZip", zip);
-                //await scroll.ScrollToAsync(0, 0, true);
-                AddressEntry.Unfocus();
+                Generic gen = new Generic();
+                gen.parseException(ex.ToString());
             }
         }
 
@@ -2106,6 +2331,39 @@ namespace MTYD
         {
             fade.IsVisible = false;
             CheckAddressGrid.IsVisible = false;
+            baaPopUpGrid.IsVisible = false;
+            DiscountGrid.IsVisible = false;
+        }
+
+        void clickedBecomeAmb(System.Object sender, System.EventArgs e)
+        {
+            fade.IsVisible = true;
+            baaPopUpGrid.IsVisible = true;
+        }
+
+        void clickedCreateAmb(System.Object sender, System.EventArgs e)
+        {
+            try
+            {
+                if (AmbEmailEntry.Text != null && AmbEmailEntry.Text != "")
+                {
+                    createAmb newAmb = new createAmb();
+                    newAmb.code = AmbEmailEntry.Text.Trim();
+                    var createAmbSerializedObj = JsonConvert.SerializeObject(newAmb);
+                    var content = new StringContent(createAmbSerializedObj, Encoding.UTF8, "application/json");
+                    var client = new HttpClient();
+                    var response = client.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/brandAmbassador/create_ambassador", content);
+                    Console.WriteLine("RESPONSE TO CREATE_AMBASSADOR   " + response.Result);
+                    Console.WriteLine("CREATE JSON OBJECT BEING SENT: " + createAmbSerializedObj);
+                    fade.IsVisible = false;
+                    baaPopUpGrid.IsVisible = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                Generic gen = new Generic();
+                gen.parseException(ex.ToString());
+            }
         }
 
         async void OkayClicked(System.Object sender, System.EventArgs e)
@@ -2169,6 +2427,49 @@ namespace MTYD
             Application.Current.MainPage = new MainPage();
         }
         //end of menu functions
+
+        async Task CheckVersion()
+        {
+            var isLatest = await CrossLatestVersion.Current.IsUsingLatestVersion();
+
+            if (!isLatest)
+            {
+                await DisplayAlert("Mealsfor.Me\nhas gotten even better!", "Please visit the App Store to get the latest version.", "OK");
+                await CrossLatestVersion.Current.OpenAppInStore();
+            }
+            else
+            {
+                restOfConstructor();
+                //GetBusinesses();
+
+                //CartTotal.Text = CheckoutPage.total_qty.ToString();
+            }
+        }
+
+        void restOfConstructor()
+        {
+            try
+            {
+                setGrid();
+                // BackgroundImageSource = "new_background.png";
+
+                // APPLE
+                //var vm = new LoginViewModel();
+                vm.AppleError += AppleError;
+                //vm.PlatformError += PlatformError;
+                //BindingContext = vm;
+
+                if (Device.RuntimePlatform == Device.Android)
+                {
+                    appleLoginButton.IsEnabled = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                Generic gen = new Generic();
+                gen.parseException(ex.ToString());
+            }
+        }
     }
 }
 

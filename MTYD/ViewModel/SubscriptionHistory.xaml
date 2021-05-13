@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:Forms9Patch="clr-namespace:Forms9Patch;assembly=Forms9Patch"
+    x:Class="MTYD.ViewModel.SubscriptionHistory">
+    <ContentPage.Content>
+            <ScrollView>
+                <Grid>
+            <StackLayout x:Name="StackL" BackgroundColor="White">
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    
+                    <BoxView x:Name="orangeBox" BackgroundColor="#F26522" HorizontalOptions="Fill"/>
+                    <Image x:Name="heading" Source="heading.png" Margin="0,0,0,10" VerticalOptions="End" HorizontalOptions="Center"/>
+
+                    <Grid x:Name="innerGrid" VerticalOptions="End" HorizontalOptions="End">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <ImageButton x:Name="pfp" BackgroundColor="LightGray" VerticalOptions="End" HorizontalOptions="End" Clicked="clickedPfp"/>
+                        <Label x:Name="initials" TextColor="Black" FontAttributes="Bold" VerticalOptions="Center"  HorizontalOptions="Center"/>
+
+                    </Grid>
+
+                    <!--<ImageButton x:Name="back" IsVisible="false" Source="backButton.png" VerticalOptions="End" HorizontalOptions="Start" Clicked="clickedBack"/>-->
+                    <ImageButton x:Name="menu" Source="new_menu.png" VerticalOptions="End" HorizontalOptions="Start" Clicked="clickedOpenMenu"/>
+                </Grid>
+
+                <BoxView HeightRequest="10"/>
+
+                <Grid HorizontalOptions="Fill" ColumnSpacing="5" BackgroundColor="#f8bb17" Padding="20, 10" Margin="0, 0, 0, 5">
+                    <Label Text="Subscription History" FontAttributes="Bold" TextColor="Black" TextDecorations="Underline" HorizontalOptions="Start" BackgroundColor="Transparent" FontSize="18"/>
+                </Grid>
+
+                <Grid Margin="10,0,10,0" ColumnSpacing="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <!--<ColumnDefinition Width="2*"/>-->
+                        <ColumnDefinition Width="3*"/>
+                    </Grid.ColumnDefinitions>
+
+                <!--<Label Text="Upcoming Menus" Margin="0,20,0,0" TextColor="Black" FontAttributes="Bold" FontSize="Small" HorizontalOptions="Center" VerticalOptions="Start"/>-->
+
+                <StackLayout Grid.Column="0">
+
+                    <Grid>
+                    <ImageButton x:Name="dropDownButton" BackgroundColor="Transparent" HorizontalOptions="Fill" Margin="20,0" Source="planSelecter.png" HeightRequest="55" Aspect="AspectFit" Clicked="clickedExpand"/>
+                    <Label x:Name="dropDownText" VerticalOptions="Center" HorizontalOptions="Start" Margin="35,0,0,0" TextColor="White" FontSize="Medium" FontAttributes="Bold" BackgroundColor="Transparent"/>
+                    <Button BackgroundColor="Transparent" HeightRequest="55" HorizontalOptions="Fill" Clicked="clickedExpand"/>
+                    </Grid>
+
+                    <ListView x:Name="dropDownList" IsVisible="false" HeightRequest="200" ItemSelected="ItemSelected" HorizontalOptions="End" Margin="20, -5, 20, 0">
+                                        <!--<ListView.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextCell Text="Hello" Height="50" TextColor="Black"/>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>-->
+                    </ListView>
+                </StackLayout>
+                </Grid>
+                
+            </StackLayout>
+
+
+
+            <Grid x:Name="openedMenu" IsVisible="false">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                    
+                <BoxView x:Name="orangeBox2" Grid.RowSpan="2" BackgroundColor="#F26522" HorizontalOptions="Fill"/>
+                <Image x:Name="heading2" Source="heading.png" Margin="0,0,0,10" VerticalOptions="End" HorizontalOptions="Center"/>               
+
+                <ImageButton x:Name="menu2" Source="closeMenu.png" VerticalOptions="End" HorizontalOptions="Start" BackgroundColor="Transparent" Clicked="clickedCloseMenu"/>
+
+                <StackLayout Grid.Row="1" Margin="0,0,0,25">
+                    <Forms9Patch:Button Text="    Home" FontAttributes="Bold" OutlineColor="Transparent" FontSize="20" HorizontalTextAlignment="Start" HorizontalOptions="Fill" TextColor="White" Clicked="clickedLanding"/>
+                    <Forms9Patch:Button Text="    Change Meal Plans" FontAttributes="Bold" OutlineColor="Transparent" FontSize="20" HorizontalTextAlignment="Start" HorizontalOptions="Fill" TextColor="White" Clicked="clickedMealPlan"/>
+                    <Forms9Patch:Button Text="    Add Subscriptions" FontAttributes="Bold" OutlineColor="Transparent" FontSize="20" HorizontalTextAlignment="Start" HorizontalOptions="Fill" TextColor="White" Clicked="clickedSubscription"/>
+                    <Forms9Patch:Button Text="    Select Meals" FontAttributes="Bold" OutlineColor="Transparent" FontSize="20" HorizontalTextAlignment="Start" HorizontalOptions="Fill" TextColor="White" Clicked="clickedSelect"/>
+                    <Forms9Patch:Button Text="    Log Out" FontAttributes="Bold" OutlineColor="Transparent" FontSize="20" HorizontalTextAlignment="Start" HorizontalOptions="Fill" TextColor="White" Clicked="clickedLogout"/>
+                </StackLayout>
+
+            </Grid>
+                </Grid>
+        </ScrollView>
+        </ContentPage.Content>
+</ContentPage>

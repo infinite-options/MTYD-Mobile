@@ -8,7 +8,6 @@
         <ScrollView>
         <Grid>
             <StackLayout>
-                <StackLayout x:Name="LoginPage">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
@@ -16,15 +15,15 @@
                     
                         <BoxView x:Name="orangeBox" BackgroundColor="#F26522" HorizontalOptions="Fill"/>
                         <Image x:Name="heading" Source="heading.png" Margin="0,0,0,10" VerticalOptions="End" HorizontalOptions="Center"/>
-
-                        <!--<Grid x:Name="innerGrid" VerticalOptions="End" HorizontalOptions="End">
+                        <!--<Image Source="pgHeader.png" Margin="0,-85,0,0" HorizontalOptions="Fill"/>-->
+                        <Grid x:Name="innerGrid" IsVisible="false" VerticalOptions="End" HorizontalOptions="End">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
-                            <ImageButton x:Name="pfp" BackgroundColor="LightGray" VerticalOptions="End" HorizontalOptions="End" Clicked="clickedPfp"/>
+                            <ImageButton x:Name="pfp" BackgroundColor="LightGray" VerticalOptions="End" HorizontalOptions="End"/>
                             <Label x:Name="initials" TextColor="Black" FontAttributes="Bold" VerticalOptions="Center"  HorizontalOptions="Center"/>
 
-                        </Grid>-->
+                        </Grid>
                         <ImageButton x:Name="menu" Source="backButton.png" VerticalOptions="End" HorizontalOptions="Start" Clicked="clickedMenu"/>
                     </Grid>
 
@@ -112,7 +111,6 @@
 
                     <Button x:Name= "signUpButton" BackgroundColor="White" Clicked="clickedSignUp" Text="Sign up" TextColor="#F26522" Margin="50, 0"
                         FontAttributes="Bold" CornerRadius="15" BorderColor="#F26522" BorderWidth="2"/>
-                </StackLayout>
 
             </StackLayout>
 

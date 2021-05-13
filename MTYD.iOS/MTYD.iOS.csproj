@@ -170,6 +170,9 @@
     <PackageReference Include="Rg.Plugins.Popup">
       <Version>2.0.0.11</Version>
     </PackageReference>
+    <PackageReference Include="Xam.Plugin.LatestVersion">
+      <Version>2.1.0</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
@@ -288,6 +291,12 @@
     <BundleResource Include="Resources\fbColored.png" />
     <BundleResource Include="Resources\gColored.png" />
     <BundleResource Include="Resources\backButton.png" />
+    <BundleResource Include="Resources\profileApple.png" />
+    <BundleResource Include="Resources\profileFb.png" />
+    <BundleResource Include="Resources\saveChanges.png" />
+    <BundleResource Include="Resources\profileGoogle.png" />
+    <BundleResource Include="Resources\discTicket.png" />
+    <BundleResource Include="Resources\pgHeader.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AppleSignIn\" />

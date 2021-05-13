@@ -15,6 +15,7 @@ namespace MTYD.Model
 
         public string ItemUid { get; set; }
         public string MealDesc { get; set; }
+        public bool extraBlockVisible { get; set; }
 
         public string HeartSource
         {
@@ -49,6 +50,7 @@ namespace MTYD.Model
             }
 
         }
+
 
         public bool SeeDesc
         {

@@ -5,15 +5,19 @@ namespace MTYD.Model
 {
     public class AmbassCodePost
     {
-        public string amb_email { get; set; }
-        public string cust_email { get; set; }
+        public string code { get; set; }
+        public string info { get; set; }
+        public string IsGuest { get; set; }
+
     }
 
     public class AmbassadorCouponDto
     {
         public string message { get; set; }
         public string code { get; set; }
-        public AmbassadorCoupon[] result { get; set; }
+        public double discount { get; set; }
+        public string[] uids { get; set; }
+        public AmbassadorCoupon sub { get; set; }
     }
 
 
@@ -33,5 +37,10 @@ namespace MTYD.Model
         public string recurring { get; set; }
         public string email_id { get; set; }
         public string cup_business_uid { get; set; }
+    }
+
+    public class createAmb
+    {
+        public string code { get; set; }
     }
 }

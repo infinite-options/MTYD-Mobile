@@ -364,7 +364,7 @@
                                         </Grid>
 
 
-                                        <Forms9Patch:Label x:Name="mealDesc" Margin="3,0" Text="{Binding MealDesc}" HorizontalTextAlignment="Center" IsVisible="{Binding SeeDesc}" Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="White" TextColor="Black"/>
+                                        <Forms9Patch:Label x:Name="mealDesc" Margin="3,0" Text="{Binding MealDesc}" HorizontalTextAlignment="Center" IsVisible="{Binding SeeDesc}" Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="Transparent" TextColor="Black"/>
 
 
                                     </Grid>
@@ -376,11 +376,12 @@
 
                 <Label Margin="10,10,0,0" x:Name="addOns" Text="ADD-ONS" FontAttributes="Bold"/>
 
+                <StackLayout>
                 <CollectionView x:Name="weekOneAddOns" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" BackgroundColor="White">
                     <CollectionView.ItemsLayout>
                         <GridItemsLayout
                         Orientation="Vertical"
-                        Span="2" />
+                        Span="4" />
                     </CollectionView.ItemsLayout>
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
@@ -484,7 +485,7 @@
                                         </Grid>
 
 
-                                        <Forms9Patch:Label x:Name="mealDesc" Margin="3,0" Text="{Binding MealDesc}" HorizontalTextAlignment="Center" IsVisible="{Binding SeeDesc}" Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="White" TextColor="Black"/>
+                                        <Forms9Patch:Label x:Name="mealDesc" Margin="3,0" Text="{Binding MealDesc}" HorizontalTextAlignment="Center" IsVisible="{Binding SeeDesc}" Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="Transparent" TextColor="Black"/>
 
 
                                     </Grid>
@@ -493,7 +494,7 @@
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
-
+                </StackLayout>
                 <!--new add-ons ui start-->
                 
                 <!--new add-ons ui end-->
