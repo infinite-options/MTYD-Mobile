@@ -604,11 +604,12 @@ namespace MTYD.ViewModel
             string expDate = activePlans[currentIndex]["cc_exp_date"].ToString();
             //var testing = (info_obj["result"])[1];
             //string zip = testing["cc_zip"].ToString();
-
+            /*
             await Navigation.PushAsync(new SubscriptionModal(cust_firstName, cust_lastName, cust_email, activePlans[currentIndex]["user_social_media"].ToString(), activePlans[currentIndex]["mobile_refresh_token"].ToString(), activePlans[currentIndex]["cc_num"].ToString(),
                 expDate.Substring(0, 10),
                 activePlans[currentIndex]["cc_cvv"].ToString(), activePlans[currentIndex]["cc_zip"].ToString(), activePlans[currentIndex]["purchase_id"].ToString(), activePlans[currentIndex]["purchase_uid"].ToString(), itemsStr.Substring(itemsStr.IndexOf("itm_business_uid") + 20, 10),
                 itemsStr.Substring(itemsStr.IndexOf("item_uid") + 12, 10), activePlans[currentIndex]["pur_customer_uid"].ToString(), qty, numMeal, AddressEntry.Text, AptEntry.Text, CityEntry.Text, StateEntry.Text, ZipEntry.Text, activePlans[currentIndex]["delivery_instructions"].ToString(), activePlans[currentIndex]["start_delivery_date"].ToString(), activePlans[currentIndex]["delivery_phone_num"].ToString()), false);
+            */
         }
 
         async void clickedInfo(System.Object sender, System.EventArgs e)

@@ -1925,15 +1925,15 @@ namespace MTYD.ViewModel
                 //Preferences.Set("new_purch_id", newPurchId);
 
                 //add_surprise
-                filler fill = new filler();
-                var fillerJSONString = JsonConvert.SerializeObject(fill);
-                var content5 = new StringContent(fillerJSONString, Encoding.UTF8, "application/json");
-                var client5 = new System.Net.Http.HttpClient();
-                var response5 = await client5.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/add_surprise/" + newPurchId, content5);
-                var message5 = await response5.Content.ReadAsStringAsync();
+                //filler fill = new filler();
+                //var fillerJSONString = JsonConvert.SerializeObject(fill);
+                //var content5 = new StringContent(fillerJSONString, Encoding.UTF8, "application/json");
+                //var client5 = new System.Net.Http.HttpClient();
+                //var response5 = await client5.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/add_surprise/" + newPurchId, content5);
+                //var message5 = await response5.Content.ReadAsStringAsync();
 
-                Debug.WriteLine("response from add_surprise: " + response5.ToString());
-                Debug.WriteLine("json object being sent: " + content5.ToString());
+                //Debug.WriteLine("response from add_surprise: " + response5.ToString());
+                //Debug.WriteLine("json object being sent: " + content5.ToString());
 
                 Debug.WriteLine("response from checkout: " + response.ToString());
                 // HttpResponseMessage response = await client.SendAsync(request);
@@ -3406,6 +3406,50 @@ namespace MTYD.ViewModel
             //Navigation.RemovePage(this.Navigation.NavigationStack[this.Navigation.NavigationStack.Count - 2]);
         }
 
+        async void clickedSubHistory(System.Object sender, System.EventArgs e)
+        {
+            await Navigation.PushAsync(new SubscriptionHistory(cust_firstName, cust_lastName, cust_email), false);
+            //Navigation.RemovePage(this.Navigation.NavigationStack[this.Navigation.NavigationStack.Count - 2]);
+        }
+
+        void xButtonClicked(System.Object sender, System.EventArgs e)
+        {
+            fade.IsVisible = false;
+            baaPopUpGrid.IsVisible = false;
+            CheckAddressGrid.IsVisible = false;
+        }
+
+        void clickedBecomeAmb(System.Object sender, System.EventArgs e)
+        {
+            fade.IsVisible = true;
+            baaPopUpGrid.IsVisible = true;
+        }
+
+        void clickedCreateAmb(System.Object sender, System.EventArgs e)
+        {
+            try
+            {
+                if (AmbEmailEntry.Text != null && AmbEmailEntry.Text != "")
+                {
+                    createAmb newAmb = new createAmb();
+                    newAmb.code = AmbEmailEntry.Text.Trim();
+                    var createAmbSerializedObj = JsonConvert.SerializeObject(newAmb);
+                    var content = new StringContent(createAmbSerializedObj, Encoding.UTF8, "application/json");
+                    var client = new System.Net.Http.HttpClient();
+                    var response = client.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/brandAmbassador/create_ambassador", content);
+                    Console.WriteLine("RESPONSE TO CREATE_AMBASSADOR   " + response.Result);
+                    Console.WriteLine("CREATE JSON OBJECT BEING SENT: " + createAmbSerializedObj);
+                    fade.IsVisible = false;
+                    baaPopUpGrid.IsVisible = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                Generic gen = new Generic();
+                gen.parseException(ex.ToString());
+            }
+        }
+
         void clickedLogout(System.Object sender, System.EventArgs e)
         {
             Xamarin.Forms.Application.Current.Properties.Remove("user_id");
@@ -3427,11 +3471,11 @@ namespace MTYD.ViewModel
             //Application.Current.MainPage = new NavigationPage(new ExploreMeals());
         }
 
-        void xButtonClicked(System.Object sender, System.EventArgs e)
-        {
-            fade.IsVisible = false;
-            CheckAddressGrid.IsVisible = false;
-        }
+        //void xButtonClicked(System.Object sender, System.EventArgs e)
+        //{
+        //    fade.IsVisible = false;
+        //    CheckAddressGrid.IsVisible = false;
+        //}
 
         void loginButtonClicked(System.Object sender, System.EventArgs e)
         {

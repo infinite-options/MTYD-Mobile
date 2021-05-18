@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
@@ -18,7 +19,9 @@ namespace MTYD.ViewModel
         string cust_firstName; string cust_lastName; string cust_email;
         ArrayList namesArray = new ArrayList();
         ArrayList purchIdArray = new ArrayList();
+        ArrayList dateArray = new ArrayList();
         WebClient client2 = new WebClient();
+        public ObservableCollection<SubHist> subHistColl = new ObservableCollection<SubHist>();
 
         public SubscriptionHistory(string firstName, string lastName, string email)
         {
@@ -44,7 +47,7 @@ namespace MTYD.ViewModel
 
                 checkPlatform(height, width);
 
-                getMeals();
+                getPlans();
                 //GetDeliveryDates();
                 //GetPlans();
                 ////Preferences.Set("freqSelected", "");
@@ -143,8 +146,9 @@ namespace MTYD.ViewModel
             //common adjustments regardless of platform
         }
 
-        async void getMeals()
+        async void getPlans()
         {
+
             var request = new HttpRequestMessage();
             string userID = (string)Application.Current.Properties["user_id"];
             Console.WriteLine("Inside GET MEAL PLANS: User ID:  " + userID);
@@ -164,8 +168,7 @@ namespace MTYD.ViewModel
                 var userString = await content.ReadAsStringAsync();
                 JObject mealPlan_obj = JObject.Parse(userString);
 
-
-
+                
                 foreach (var m in mealPlan_obj["result"])
                 {
                     Console.WriteLine("In first foreach loop of getmeal plans func:");
@@ -204,23 +207,171 @@ namespace MTYD.ViewModel
                 dropDownList.SelectedItem = namesArray[0].ToString();
             }
 
-            foreach (string purchId in purchIdArray)
+            //planChange();
+
+            //foreach (string purchId in purchIdArray)
+            //{
+            //    //sample https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected_with_billing?customer_uid=100-000127&purchase_id=400-000189
+            //    string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected_with_billing?customer_uid=" + userID + "&purchase_id=" + purchId;
+            //    Debug.WriteLine("url to be reached: " + url);
+            //    var content2 = client2.DownloadString(url);
+            //    var obj2 = JsonConvert.DeserializeObject<MealsSelected2>(content2);
+
+            //    SubHist subHist = new SubHist();
+
+            //    Debug.WriteLine("next billing date: " + obj2.NextBilling.MenuDate);
+            //    var date1 = new DateTime(int.Parse(obj2.NextBilling.MenuDate.Substring(0, 4)), int.Parse(obj2.NextBilling.MenuDate.Substring(5, 2)), int.Parse(obj2.NextBilling.MenuDate.Substring(8, 2)));
+            //    Debug.WriteLine("formatted next billing date: " + date1.ToString("D").Substring(date1.ToString("D").IndexOf(" ") + 1));
+            //    subHist.Date = date1.ToString("D").Substring(date1.ToString("D").IndexOf(" ") + 1);
+
+            //    ObservableCollection<Meals> mealsColl = new ObservableCollection<Meals>();
+            //    for (int i = 0; i < obj2.Result.Length; i++)
+            //    {
+            //        Debug.WriteLine("entered");
+            //        JArray newobj = Newtonsoft.Json.JsonConvert.DeserializeObject<JArray>(obj2.Result[i].CombinedSelection);
+
+            //        foreach (JObject config in newobj)
+            //        {
+            //            Meals m1 = new Meals();
+            //            m1.mealName = (string)config["name"];
+            //            mealsColl.Add(m1);
+            //        }
+            //    }
+
+            //    subHist.mealColl = mealsColl;
+            //    subHistColl.Add(subHist);
+            //}
+
+            //weekOneMenu.ItemsSource = subHistColl;
+        }
+
+        async void planChange()
+        {
+            dateArray.Clear();
+            subHistColl.Clear();
+
+            int selectedIndex = ((ArrayList)dropDownList.ItemsSource).IndexOf(dropDownText.Text);
+            string selectedPurchId = (string)purchIdArray[selectedIndex];
+            string userID = (string)Application.Current.Properties["user_id"];
+
+
+            //sample https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected_with_billing?customer_uid=100-000127&purchase_id=400-000189
+            string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected_with_billing?customer_uid=" + userID + "&purchase_id=" + selectedPurchId;
+            Debug.WriteLine("url to be reached: " + url);
+            var content2 = client2.DownloadString(url);
+            var obj2 = JsonConvert.DeserializeObject<MealsSelected2>(content2);
+
+            for (int i = 0; i < obj2.Result.Length; i++)
             {
-                //sample https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected_with_billing?customer_uid=100-000127&purchase_id=400-000189
-                string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected_with_billing?customer_uid=" + userID + "&purchase_id=" + purchId;
-                Debug.WriteLine("url to be reached: " + url);
-                var content2 = client2.DownloadString(url);
-                var obj2 = JsonConvert.DeserializeObject<MealsSelected2>(content2);
+                if (obj2.Result[i].PurchaseStatus == "ACTIVE" && dateArray.IndexOf(obj2.Result[i].SelMenuDate) == -1)
+                {
+                    dateArray.Add(obj2.Result[i].SelMenuDate);
+                }
+            }
+            dateArray.Reverse();
 
+            int dateIndex = 0;
+
+            for (int j = 0; j < dateArray.Count; j++)
+            {
+                if (String.Compare(obj2.NextBilling.MenuDate, (string)dateArray[j]) < 0)
+                    continue;
+
+                SubHist subHist = new SubHist();
+
+                var billDate = new DateTime(int.Parse(obj2.NextBilling.MenuDate.ToString().Substring(0, 4)), int.Parse(obj2.NextBilling.MenuDate.ToString().Substring(5, 2)), int.Parse(obj2.NextBilling.MenuDate.ToString().Substring(8, 2)));
+                //subHist.Date = billDate.ToString("D").Substring(billDate.ToString("D").IndexOf(" ") + 1);
                 Debug.WriteLine("next billing date: " + obj2.NextBilling.MenuDate);
-                var date1 = new DateTime(int.Parse(obj2.NextBilling.MenuDate.Substring(0, 4)), int.Parse(obj2.NextBilling.MenuDate.Substring(5, 2)), int.Parse(obj2.NextBilling.MenuDate.Substring(8, 2)));
+                nextBillingLabel.Text = "Next Billing Date: " + billDate.ToString("D").Substring(billDate.ToString("D").IndexOf(" ") + 1);
+                //Debug.WriteLine("next billing date: " + dateArray[j]);
+                var date1 = new DateTime(int.Parse(dateArray[j].ToString().Substring(0, 4)), int.Parse(dateArray[j].ToString().Substring(5, 2)), int.Parse(dateArray[j].ToString().Substring(8, 2)));
                 Debug.WriteLine("formatted next billing date: " + date1.ToString("D").Substring(date1.ToString("D").IndexOf(" ") + 1));
-
+                subHist.Date = date1.ToString("D").Substring(date1.ToString("D").IndexOf(" ") + 1);
+                subHist.CollVisible = false;
+                ObservableCollection<Meals> mealsColl = new ObservableCollection<Meals>();
                 for (int i = 0; i < obj2.Result.Length; i++)
                 {
-                    Debug.WriteLine("entered");
+                    if (obj2.Result[i].SelMenuDate == (string)dateArray[j])
+                    {
+                        Debug.WriteLine("entered");
+                        JArray newobj = Newtonsoft.Json.JsonConvert.DeserializeObject<JArray>(obj2.Result[i].CombinedSelection);
 
+                        foreach (JObject config in newobj)
+                        {
+                            Meals m1 = new Meals();
+                            m1.qty = (string)config["qty"];
+                            m1.mealName = (string)config["name"];
+                            mealsColl.Add(m1);
+                        }
+
+                        //get the name of the meal plan
+                        JArray newobj2 = Newtonsoft.Json.JsonConvert.DeserializeObject<JArray>(obj2.Result[i].Items);
+
+                        foreach (JObject config in newobj2)
+                        {
+                            Console.WriteLine("Inside foreach loop in GetmealsPlan func");
+                            string qty = (string)config["qty"];
+                            string name = (string)config["name"];
+
+                            name = name.Substring(0, name.IndexOf(" "));
+                            name = name + " Meals, ";
+                            qty = qty + " Deliveries";
+                            subHist.mealPlanName = name + qty;
+                        }
+
+                        subHist.mealCollHeight = mealsColl.Count * 50;
+                        break;
+                    }
                 }
+
+                subHist.mealColl = mealsColl;
+                subHistColl.Add(subHist);
+            }
+
+            weekOneMenu.HeightRequest = subHistColl.Count * 120;
+            //SubHist subHist = new SubHist();
+
+            //Debug.WriteLine("next billing date: " + obj2.NextBilling.MenuDate);
+            //var date1 = new DateTime(int.Parse(obj2.NextBilling.MenuDate.Substring(0, 4)), int.Parse(obj2.NextBilling.MenuDate.Substring(5, 2)), int.Parse(obj2.NextBilling.MenuDate.Substring(8, 2)));
+            //Debug.WriteLine("formatted next billing date: " + date1.ToString("D").Substring(date1.ToString("D").IndexOf(" ") + 1));
+            //subHist.Date = date1.ToString("D").Substring(date1.ToString("D").IndexOf(" ") + 1);
+
+            //ObservableCollection<Meals> mealsColl = new ObservableCollection<Meals>();
+            //for (int i = 0; i < obj2.Result.Length; i++)
+            //{
+            //    Debug.WriteLine("entered");
+            //    JArray newobj = Newtonsoft.Json.JsonConvert.DeserializeObject<JArray>(obj2.Result[i].CombinedSelection);
+
+            //    foreach (JObject config in newobj)
+            //    {
+            //        Meals m1 = new Meals();
+            //        m1.mealName = (string)config["name"];
+            //        mealsColl.Add(m1);
+            //    }
+            //}
+
+            //subHist.mealColl = mealsColl;
+            //subHistColl.Add(subHist);
+
+            weekOneMenu.ItemsSource = subHistColl;
+        }
+
+        void clickedSeeMeals(object sender, EventArgs e)
+        {
+            Button b = (Button)sender;
+            SubHist sh = b.BindingContext as SubHist;
+
+               
+
+            if (sh.CollVisible == false)
+            {
+                weekOneMenu.HeightRequest += sh.mealCollHeight + 20;
+                sh.CollVisible = true;
+            }
+            else
+            {
+                weekOneMenu.HeightRequest -= sh.mealCollHeight + 20;
+                sh.CollVisible = false;
             }
         }
 
@@ -238,7 +389,7 @@ namespace MTYD.ViewModel
             //Debug.WriteLine("addy index selected: " + ((ArrayList)dropDownList.ItemsSource).IndexOf(dropDownText.Text));
 
             dropDownList.IsVisible = false;
-            //planChange(sender, e);
+            planChange();
         }
 
         async void clickedPfp(System.Object sender, System.EventArgs e)

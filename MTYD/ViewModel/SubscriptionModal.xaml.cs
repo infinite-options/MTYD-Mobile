@@ -60,7 +60,7 @@ namespace MTYD.ViewModel
         public object NavigationStack { get; private set; }
 
 
-        public SubscriptionModal(string firstName, string lastName, string email, string social, string token, string num, string expDate, string cvv, string zip, string purchaseID, string purchaseUID, string businessID, string itemID, string customerID, string quantity, string numOfMeals, string add, string unit, string city, string state, string zipDeliv, string delivInstr, string startDeliveryDate, string phoneNumber)
+        public SubscriptionModal(string firstName, string lastName, string email, string num, string expDate, string cvv, string zip, string purchaseID, string purchaseUID, string businessID, string itemID, string customerID, string quantity, string numOfMeals, string add, string unit, string city, string state, string zipDeliv, string delivInstr, string startDeliveryDate, string phoneNumber)
         {
             try
             {
@@ -73,7 +73,7 @@ namespace MTYD.ViewModel
                 var height = DeviceDisplay.MainDisplayInfo.Height;
 
                 Console.WriteLine("next entered");
-                socialLogin = social; refresh_token = token; cc_num = num; cc_exp_date = expDate; cc_cvv = cvv; purchase_id = purchaseID; purchase_uid = purchaseUID;
+                 cc_num = num; cc_exp_date = expDate; cc_cvv = cvv; purchase_id = purchaseID; purchase_uid = purchaseUID;
                 new_item_id = itemID; customer_id = customerID; cc_zip = zip; itm_business_uid = businessID; qty = quantity; numMeal = numOfMeals;
                 passedAdd = add.Trim(); passedUnit = unit.Trim(); passedCity = city.Trim(); passedState = state.Trim(); passedZip = zipDeliv.Trim(); delivInstructions = delivInstr;
                 startDeliv = startDeliveryDate; phoneNum = phoneNumber;
@@ -770,29 +770,29 @@ namespace MTYD.ViewModel
                         PurchaseInfo2 updated = new PurchaseInfo2();
 
                         //if direct login
-                        if (socialLogin == "NULL")
-                        {
-                            var request2 = new HttpRequestMessage();
-                            Console.WriteLine("user_id: " + (string)Xamarin.Forms.Application.Current.Properties["user_id"]);
-                            string url2 = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Xamarin.Forms.Application.Current.Properties["user_id"];
-                            //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + (string)Application.Current.Properties["user_id"];
-                            //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + "100-000256";
-                            request2.RequestUri = new Uri(url2);
-                            //request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/get_delivery_info/400-000453");
-                            request2.Method = HttpMethod.Get;
-                            var client2 = new HttpClient();
-                            HttpResponseMessage response2 = await client2.SendAsync(request2);
+                        //if (socialLogin == "NULL")
+                        //{
+                        //    var request2 = new HttpRequestMessage();
+                        //    Console.WriteLine("user_id: " + (string)Xamarin.Forms.Application.Current.Properties["user_id"]);
+                        //    string url2 = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Xamarin.Forms.Application.Current.Properties["user_id"];
+                        //    //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + (string)Application.Current.Properties["user_id"];
+                        //    //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + "100-000256";
+                        //    request2.RequestUri = new Uri(url2);
+                        //    //request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/get_delivery_info/400-000453");
+                        //    request2.Method = HttpMethod.Get;
+                        //    var client2 = new HttpClient();
+                        //    HttpResponseMessage response2 = await client2.SendAsync(request2);
 
-                            if (response2.StatusCode == System.Net.HttpStatusCode.OK)
-                            {
-                                HttpContent content3 = response2.Content;
-                                Console.WriteLine("content: " + content3);
-                                var userString2 = await content3.ReadAsStringAsync();
-                                var info_obj2 = JObject.Parse(userString2);
+                        //    if (response2.StatusCode == System.Net.HttpStatusCode.OK)
+                        //    {
+                        //        HttpContent content3 = response2.Content;
+                        //        Console.WriteLine("content: " + content3);
+                        //        var userString2 = await content3.ReadAsStringAsync();
+                        //        var info_obj2 = JObject.Parse(userString2);
 
-                                //updated.password = (info_obj2["result"])[0]["password_hashed"].ToString();
-                            }
-                        }
+                        //        //updated.password = (info_obj2["result"])[0]["password_hashed"].ToString();
+                        //    }
+                        //}
 
                         //start of stripe processing if there is an additional charge********************************************
 
@@ -1124,29 +1124,29 @@ namespace MTYD.ViewModel
                         PurchaseInfo2 updated = new PurchaseInfo2();
 
                         //if direct login
-                        if (socialLogin == "NULL")
-                        {
-                            var request2 = new HttpRequestMessage();
-                            Console.WriteLine("user_id: " + (string)Xamarin.Forms.Application.Current.Properties["user_id"]);
-                            string url2 = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Xamarin.Forms.Application.Current.Properties["user_id"];
-                            //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + (string)Application.Current.Properties["user_id"];
-                            //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + "100-000256";
-                            request2.RequestUri = new Uri(url2);
-                            //request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/get_delivery_info/400-000453");
-                            request2.Method = HttpMethod.Get;
-                            var client2 = new HttpClient();
-                            HttpResponseMessage response2 = await client2.SendAsync(request2);
+                        //if (socialLogin == "NULL")
+                        //{
+                        //    var request2 = new HttpRequestMessage();
+                        //    Console.WriteLine("user_id: " + (string)Xamarin.Forms.Application.Current.Properties["user_id"]);
+                        //    string url2 = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Xamarin.Forms.Application.Current.Properties["user_id"];
+                        //    //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + (string)Application.Current.Properties["user_id"];
+                        //    //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + "100-000256";
+                        //    request2.RequestUri = new Uri(url2);
+                        //    //request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/get_delivery_info/400-000453");
+                        //    request2.Method = HttpMethod.Get;
+                        //    var client2 = new HttpClient();
+                        //    HttpResponseMessage response2 = await client2.SendAsync(request2);
 
-                            if (response2.StatusCode == System.Net.HttpStatusCode.OK)
-                            {
-                                HttpContent content3 = response2.Content;
-                                Console.WriteLine("content: " + content3);
-                                var userString2 = await content3.ReadAsStringAsync();
-                                var info_obj2 = JObject.Parse(userString2);
+                        //    if (response2.StatusCode == System.Net.HttpStatusCode.OK)
+                        //    {
+                        //        HttpContent content3 = response2.Content;
+                        //        Console.WriteLine("content: " + content3);
+                        //        var userString2 = await content3.ReadAsStringAsync();
+                        //        var info_obj2 = JObject.Parse(userString2);
 
-                                //updated.password = (info_obj2["result"])[0]["password_hashed"].ToString();
-                            }
-                        }
+                        //        //updated.password = (info_obj2["result"])[0]["password_hashed"].ToString();
+                        //    }
+                        //}
 
 
 

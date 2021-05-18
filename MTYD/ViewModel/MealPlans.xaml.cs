@@ -30,6 +30,8 @@ namespace MTYD.ViewModel
         ArrayList itemsArray = new ArrayList();
         ArrayList purchUidArray = new ArrayList();
         ArrayList purchIdArray = new ArrayList();
+        ArrayList nextBillDatesArray = new ArrayList();
+        ArrayList nextBillAmountsArray = new ArrayList();
         ArrayList namesArray = new ArrayList();
         ArrayList itemUidArray = new ArrayList();
         JObject info_obj;
@@ -344,7 +346,10 @@ namespace MTYD.ViewModel
                 Console.WriteLine("fillEntries entered");
                 var request = new HttpRequestMessage();
                 Console.WriteLine("user_id: " + (string)Application.Current.Properties["user_id"]);
-                string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/customer_lplp?customer_uid=" + (string)Application.Current.Properties["user_id"];
+                //used before 5/16/21
+                //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/customer_lplp?customer_uid=" + (string)Application.Current.Properties["user_id"];
+                string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/predict_next_billing_date/" + (string)Application.Current.Properties["user_id"];
+
                 //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + (string)Application.Current.Properties["user_id"];
                 //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + "100-000256";
                 request.RequestUri = new Uri(url);
@@ -485,20 +490,22 @@ namespace MTYD.ViewModel
 
                 try
                 {
-                    WebClient client4 = new WebClient();
-                    string url3 = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/predict_autopay_day/" + chosenPurchId;
-                    Debug.WriteLine("next billing date url: " + url3);
-                    var content = client4.DownloadString(url3);
-                    var obj = JsonConvert.DeserializeObject<nextDelivDate>(content);
+                    nextDate.Text = (string)nextBillDatesArray[selectedIndex];
+                    nextAmount.Text = "$" + (string)nextBillAmountsArray[selectedIndex];
+                    //WebClient client4 = new WebClient();
+                    //string url3 = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/predict_autopay_day/" + chosenPurchId;
+                    //Debug.WriteLine("next billing date url: " + url3);
+                    //var content = client4.DownloadString(url3);
+                    //var obj = JsonConvert.DeserializeObject<nextDelivDate>(content);
 
-                    Debug.WriteLine("next date: " + obj.MenuDate);
-                    Debug.WriteLine("year: " + obj.MenuDate.Substring(0, 4));
-                    Debug.WriteLine("month: " + obj.MenuDate.Substring(5, 2));
-                    Debug.WriteLine("day: " + obj.MenuDate.Substring(8, 2));
-                    var date1 = new DateTime(int.Parse(obj.MenuDate.Substring(0, 4)), int.Parse(obj.MenuDate.Substring(5, 2)), int.Parse(obj.MenuDate.Substring(8, 2)));
-                    nextDate.Text = date1.ToString("D");
+                    //Debug.WriteLine("next date: " + obj.MenuDate);
+                    //Debug.WriteLine("year: " + obj.MenuDate.Substring(0, 4));
+                    //Debug.WriteLine("month: " + obj.MenuDate.Substring(5, 2));
+                    //Debug.WriteLine("day: " + obj.MenuDate.Substring(8, 2));
+                    //var date1 = new DateTime(int.Parse(obj.MenuDate.Substring(0, 4)), int.Parse(obj.MenuDate.Substring(5, 2)), int.Parse(obj.MenuDate.Substring(8, 2)));
+                    //nextDate.Text = date1.ToString("D");
 
-                    nextAmount.Text = "$" + obj.Total;
+                    //nextAmount.Text = "$" + obj.Total;
                 }
                 catch
                 {
@@ -546,7 +553,10 @@ namespace MTYD.ViewModel
                 string userID = (string)Application.Current.Properties["user_id"];
                 Console.WriteLine("Inside GET MEAL PLANS: User ID:  " + userID);
 
-                request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/customer_lplp?customer_uid=" + userID);
+                //used before 5/16/21
+                //request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/customer_lplp?customer_uid=" + userID);
+                request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/predict_next_billing_date/" + userID);
+
                 Console.WriteLine("GET MEALS PLAN ENDPOINT TRYING TO BE REACHED: " + "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/customer_lplp?customer_uid=" + userID);
                 request.Method = HttpMethod.Get;
                 var client = new HttpClient();
@@ -572,12 +582,40 @@ namespace MTYD.ViewModel
                     foreach (var m in mealPlan_obj["result"])
                     {
                         Console.WriteLine("In first foreach loop of getmeal plans func:");
+                        
+                        var date1 = new DateTime(int.Parse(m["next_billing_date"].ToString().Substring(0, 4)), int.Parse(m["next_billing_date"].ToString().Substring(5, 2)), int.Parse(m["next_billing_date"].ToString().Substring(8, 2)));
+                        //nextDate.Text = date1.ToString("D");
+
+                        //            "subtotal": 60.0,
+                        //"amount_discount": 9.0,
+                        //"service_fee": 2.0,
+                        //"delivery_fee": 2.0,
+                        //"driver_tip": 2.0,
+                        //"taxes": 4.72,
+                        //"ambassador_code": 0.0,
+
+                        double total = double.Parse(m["subtotal"].ToString());
+                        total -= double.Parse(m["amount_discount"].ToString());
+                        total += double.Parse(m["taxes"].ToString());
+                        total += double.Parse(m["service_fee"].ToString());
+                        total += double.Parse(m["delivery_fee"].ToString());
+                        total += double.Parse(m["driver_tip"].ToString());
+                        total -= double.Parse(m["ambassador_code"].ToString());
+
+                        if (total < 0)
+                            total = 0.00;
+
+                        Math.Round(total, 2);
+                        Debug.WriteLine("next billing amount calculated: " + total.ToString());
+
 
                         if (m["purchase_status"].ToString() == "ACTIVE")
                         {
                             itemsArray.Add((m["items"].ToString()));
                             purchUidArray.Add((m["purchase_uid"].ToString()));
                             purchIdArray.Add((m["purchase_id"].ToString()));
+                            nextBillDatesArray.Add(date1.ToString("D"));
+                            nextBillAmountsArray.Add(total.ToString());
                             activePlans.Add(m);
                         }
                         else Debug.WriteLine(m["purchase_uid"].ToString() + " was skipped");
@@ -697,7 +735,7 @@ namespace MTYD.ViewModel
                 //var testing = (info_obj["result"])[1];
                 //string zip = testing["cc_zip"].ToString();
 
-                await Navigation.PushAsync(new SubscriptionModal(cust_firstName, cust_lastName, cust_email, activePlans[currentIndex]["user_social_media"].ToString(), activePlans[currentIndex]["mobile_refresh_token"].ToString(), activePlans[currentIndex]["cc_num"].ToString(),
+                await Navigation.PushAsync(new SubscriptionModal(cust_firstName, cust_lastName, cust_email, activePlans[currentIndex]["cc_num"].ToString(),
                     expDate.Substring(0, 10),
                     activePlans[currentIndex]["cc_cvv"].ToString(), activePlans[currentIndex]["cc_zip"].ToString(), activePlans[currentIndex]["purchase_id"].ToString(), activePlans[currentIndex]["purchase_uid"].ToString(), itemsStr.Substring(itemsStr.IndexOf("itm_business_uid") + 20, 10),
                     itemsStr.Substring(itemsStr.IndexOf("item_uid") + 12, 10), activePlans[currentIndex]["pur_customer_uid"].ToString(), qty, numMeal, AddressEntry.Text, AptEntry.Text, CityEntry.Text, StateEntry.Text, ZipEntry.Text, activePlans[currentIndex]["delivery_instructions"].ToString(), activePlans[currentIndex]["start_delivery_date"].ToString(), activePlans[currentIndex]["delivery_phone_num"].ToString()), false);
@@ -1423,8 +1461,51 @@ namespace MTYD.ViewModel
             //Application.Current.Properties.Remove("platform");
             Application.Current.MainPage = new MainPage();
         }
+
+        async void clickedSubHistory(System.Object sender, System.EventArgs e)
+        {
+            await Navigation.PushAsync(new SubscriptionHistory(cust_firstName, cust_lastName, cust_email), false);
+            //Navigation.RemovePage(this.Navigation.NavigationStack[this.Navigation.NavigationStack.Count - 2]);
+        }
+
+        void xButtonClicked(System.Object sender, System.EventArgs e)
+        {
+            fade.IsVisible = false;
+            baaPopUpGrid.IsVisible = false;
+        }
+
+        void clickedBecomeAmb(System.Object sender, System.EventArgs e)
+        {
+            fade.IsVisible = true;
+            baaPopUpGrid.IsVisible = true;
+        }
+
+        void clickedCreateAmb(System.Object sender, System.EventArgs e)
+        {
+            try
+            {
+                if (AmbEmailEntry.Text != null && AmbEmailEntry.Text != "")
+                {
+                    createAmb newAmb = new createAmb();
+                    newAmb.code = AmbEmailEntry.Text.Trim();
+                    var createAmbSerializedObj = JsonConvert.SerializeObject(newAmb);
+                    var content = new StringContent(createAmbSerializedObj, Encoding.UTF8, "application/json");
+                    var client = new HttpClient();
+                    var response = client.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/brandAmbassador/create_ambassador", content);
+                    Console.WriteLine("RESPONSE TO CREATE_AMBASSADOR   " + response.Result);
+                    Console.WriteLine("CREATE JSON OBJECT BEING SENT: " + createAmbSerializedObj);
+                    fade.IsVisible = false;
+                    baaPopUpGrid.IsVisible = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                Generic gen = new Generic();
+                gen.parseException(ex.ToString());
+            }
+        }
         //end of menu functions
-        
+
 
     }
 }

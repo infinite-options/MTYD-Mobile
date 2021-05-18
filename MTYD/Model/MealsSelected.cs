@@ -21,39 +21,7 @@ namespace MTYD.Model.Database
 
     public partial class Result
     {
-        [JsonProperty("selection_uid")]
-        public string SelectionUid { get; set; }
-
-        [JsonProperty("sel_purchase_id")]
-        public string SelPurchaseId { get; set; }
-
-        [JsonProperty("selection_time")]
-        public string SelectionTime { get; set; }
-
-        [JsonProperty("sel_menu_date")]
-        public string SelMenuDate { get; set; }
-
-        [JsonProperty("meal_selection")]
-        public string MealSelection { get; set; }
-
-        [JsonProperty("delivery_day")]
-        public string DeliveryDay { get; set; }
-
-        [JsonProperty("last_sel_pur_id")]
-        public string LastSelPurId { get; set; }
-
-        [JsonProperty("last_menu_date")]
-        public string LastMenuDate { get; set; }
-
-        [JsonProperty("last_selection")]
-        public string LastSelection { get; set; }
-
-        [JsonProperty("addon_selection")]
-        public string AddonSelection { get; set; }
-
-        [JsonProperty("combined_selection")]
-        public string CombinedSelection { get; set; }
-
+        //new start
         [JsonProperty("purchase_uid")]
         public string PurchaseUid { get; set; }
 
@@ -134,6 +102,12 @@ namespace MTYD.Model.Database
         [JsonProperty("cancel_date")]
         public string CancelDate { get; set; }
 
+        [JsonProperty("last_pur_id")]
+        public string LastPurId { get; set; }
+
+        [JsonProperty("last_purchase")]
+        public string LastPurchase { get; set; }
+
         [JsonProperty("payment_uid")]
         public string PaymentUid { get; set; }
 
@@ -155,14 +129,41 @@ namespace MTYD.Model.Database
         [JsonProperty("pay_coupon_id")]
         public string PayCouponId { get; set; }
 
-        [JsonProperty("amount_due")]
-        public double AmountDue { get; set; }
+        //double --> string to handle nulls
+        [JsonProperty("subtotal")]
+        public string Subtotal { get; set; }
 
+        //double --> string to handle nulls
         [JsonProperty("amount_discount")]
         public string AmountDiscount { get; set; }
 
+        //double --> string to handle nulls
+        [JsonProperty("service_fee")]
+        public string ServiceFee { get; set; }
+
+        //double --> string to handle nulls
+        [JsonProperty("delivery_fee")]
+        public string DeliveryFee { get; set; }
+
+        //double --> string to handle nulls
+        [JsonProperty("driver_tip")]
+        public string DriverTip { get; set; }
+
+        //double --> string to handle nulls
+        [JsonProperty("taxes")]
+        public string Taxes { get; set; }
+
+        //double --> string to handle nulls
+        [JsonProperty("ambassador_code")]
+        public string AmbassadorCode { get; set; }
+
+        //double --> string to handle nulls
+        [JsonProperty("amount_due")]
+        public string AmountDue { get; set; }
+
+        //double --> string to handle nulls
         [JsonProperty("amount_paid")]
-        public double AmountPaid { get; set; }
+        public string AmountPaid { get; set; }
 
         [JsonProperty("info_is_Addon")]
         public string InfoIsAddon { get; set; }
@@ -184,6 +185,62 @@ namespace MTYD.Model.Database
 
         [JsonProperty("payment_type")]
         public string PaymentType { get; set; }
+
+        [JsonProperty("last_pay_uid")]
+        public string LastPayUid { get; set; }
+
+        [JsonProperty("last_pay_pur_id")]
+        public string LastPayPurId { get; set; }
+
+        [JsonProperty("last_payment")]
+        public string LastPayment { get; set; }
+
+        [JsonProperty("menu_date")]
+        public string MenuDate { get; set; }
+
+
+        //so far
+
+        [JsonProperty("selection_uid")]
+        public string SelectionUid { get; set; }
+
+        [JsonProperty("sel_purchase_id")]
+        public string SelPurchaseId { get; set; }
+
+        [JsonProperty("selection_time")]
+        public string SelectionTime { get; set; }
+
+        [JsonProperty("sel_menu_date")]
+        public string SelMenuDate { get; set; }
+
+        [JsonProperty("meal_selection")]
+        public string MealSelection { get; set; }
+
+        [JsonProperty("delivery_day")]
+        public string DeliveryDay { get; set; }
+
+        [JsonProperty("last_sel_pur_id")]
+        public string LastSelPurId { get; set; }
+
+        [JsonProperty("last_menu_date")]
+        public string LastMenuDate { get; set; }
+
+        [JsonProperty("last_selection")]
+        public string LastSelection { get; set; }
+
+        [JsonProperty("addon_selection")]
+        public string AddonSelection { get; set; }
+
+        [JsonProperty("combined_selection")]
+        public string CombinedSelection { get; set; }
+
+        [JsonProperty("meals_selected")]
+        public string MealsSelected { get; set; }
+        //end of similarities
+
+
+
+
     }
 
     public partial class MealsSelected2

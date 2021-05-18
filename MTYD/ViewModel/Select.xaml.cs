@@ -770,6 +770,7 @@ namespace MTYD.ViewModel
                 getUserMeals();
 
                 mealsSaved.Clear();   //New Addition SV
+                //testing commenting out resetall 5/17
                 resetAll(); //New Addition SV
 
                 isSkip = false;
@@ -779,7 +780,8 @@ namespace MTYD.ViewModel
                 {
                     checkDateStatuses();
                     GetRecentSelection();
-                    GetRecentSelection2();
+                    //testing commenting the 2nd function out 5/17/21
+                    //GetRecentSelection2();
                 }
                 else
                 {
@@ -1072,6 +1074,7 @@ namespace MTYD.ViewModel
                 getUserMeals();
 
                 mealsSaved.Clear();   //New Addition SV
+                //testing commenting out resetall 5/17
                 resetAll(); //New Addition SV
 
                 isSkip = false;
@@ -1080,7 +1083,8 @@ namespace MTYD.ViewModel
                 if ((string)Application.Current.Properties["platform"] != "GUEST")
                 {
                     await GetRecentSelection();
-                    GetRecentSelection2();
+                    //testing commenting the 2nd function out 5/17/21
+                    //GetRecentSelection2();
                 }
                 else
                 {
@@ -1345,11 +1349,14 @@ namespace MTYD.ViewModel
                     // MealInfo ms = b.BindingContext as MealInfo;
                     // ms.MealQuantity = 0;
                     mealsSaved.Clear(); //New Addition SV
+                    //testing commenting out resetall 5/17
                     resetAll(); //New Addition SV
                                 //Task.Delay(500).Wait();
                                 //getUserMeals();
                     await GetRecentSelection();
-                    GetRecentSelection2();
+                    //testing commenting the 2nd function out 5/17/21
+                    //GetRecentSelection2();
+                    setMenu();
 
                     Console.WriteLine("isAlreadySeleced in planchange" + isAlreadySelected);
 
@@ -2247,17 +2254,19 @@ namespace MTYD.ViewModel
                         // UID = 100-000001 PID = 400-000001
                         var content = client.DownloadString(userMeals);
                         var obj = JsonConvert.DeserializeObject<MealsSelected>(content);
+                        Debug.WriteLine("for this url: " + userMeals + "\n we are getting this: \n" + obj.ToString());
 
                         for (int i = 0; i < obj.Result.Length; i++)
                         {
                             // If meals selected matches menu date, get meals selected
                             Debug.WriteLine("purchId: " + Preferences.Get("purchId", ""));
-                            Debug.WriteLine("Selection purchase id: " + obj.Result[i].SelPurchaseId.ToString());
-                            Debug.WriteLine("purchase uid: " + obj.Result[i].PurchaseUid.ToString());
-                            Debug.WriteLine("purchase id: " + obj.Result[i].PurchaseId.ToString());
-                            Debug.WriteLine("purchase id: " + obj.Result[i].PurchaseId.ToString());
+                            //Debug.WriteLine("Selection purchase id: " + obj.Result[i].SelPurchaseId.ToString());
+                            //Debug.WriteLine("purchase uid: " + obj.Result[i].PurchaseUid.ToString());
+                            //Debug.WriteLine("purchase id: " + obj.Result[i].PurchaseId.ToString());
+                            //Debug.WriteLine("purchase id: " + obj.Result[i].PurchaseId.ToString());
                             //commented for id vs uid
-                            if (obj.Result[i].SelMenuDate.Equals(selectedDate.fullDateTime) && Preferences.Get("purchId", "") == obj.Result[i].SelPurchaseId)
+                            //used to be SelPurchaseId
+                            if (obj.Result[i].MenuDate.Equals(selectedDate.fullDateTime) && Preferences.Get("purchId", "") == obj.Result[i].PurchaseId)
                             //if (obj.Result[i].SelMenuDate.Equals(selectedDate.fullDateTime) && Preferences.Get("purchUid", "") == obj.Result[i].PurchaseUid)
                             {
                                 string json = obj.Result[i].MealSelection;
@@ -2748,8 +2757,9 @@ namespace MTYD.ViewModel
                     // Need to create json formatting for this
                     Items = mealsSaved,
                     //commented out for id vs uid
-                    //PurchaseId = Preferences.Get("purchId", ""),
-                    PurchaseId = Preferences.Get("purchUid", ""),
+                    PurchaseId = Preferences.Get("purchId", ""),
+                    //recommented out 5/16/21
+                    //PurchaseId = Preferences.Get("purchUid", ""),
                     MenuDate = selectedDate.fullDateTime,
                     DeliveryDay = selectedDotw,
                 };
@@ -2849,8 +2859,9 @@ namespace MTYD.ViewModel
                     Debug.WriteLine("availableDate passed in: " + d.fullDateTime);
                     var request = new HttpRequestMessage();
                     //this needs to be purchase ID not uid
-                    //string purchaseID = Preferences.Get("purchId", "");
-                    string purchaseID = Preferences.Get("purchUid", "");
+                    string purchaseID = Preferences.Get("purchId", "");
+                    //recommented out 5/16/21
+                    //string purchaseID = Preferences.Get("purchUid", "");
                     string date = d.fullDateTime.Substring(0, 10);
                     if (date == Preferences.Get("dateSelected", ""))
                         continue;
@@ -2871,6 +2882,7 @@ namespace MTYD.ViewModel
                         bool isSurprise2 = false;
 
                         HttpContent content = response.Content;
+                        Debug.WriteLine("for this url: " + urlSent + "\n we are getting this: \n" + content);
                         var userString = await content.ReadAsStringAsync();
                         JObject recentMeals = JObject.Parse(userString);
                         this.NewPlan.Clear();
@@ -2888,10 +2900,29 @@ namespace MTYD.ViewModel
 
                         foreach (var m in recentMeals["result"])
                         {
+                            //Debug.WriteLine("meal_selection[i].ToString(): " + m["meals_selected"].ToString());
+                            //if (m["meals_selected"].ToString().IndexOf("],") != -1)
+                            //    Debug.WriteLine("combinedArray[i] take out the extra: " + m["meals_selected"].ToString().Substring(0, m["meals_selected"].ToString().IndexOf("],")));
+
+                            //JArray newobj2 = Newtonsoft.Json.JsonConvert.DeserializeObject<JArray>(m["meals_selected"].ToString().Substring(0, m["meals_selected"].ToString().IndexOf("],")));
+
+                            //foreach (JObject config2 in newobj2)
+                            //{
+                            //    Debug.WriteLine("broken up successfully");
+                            //    string qty = (string)config2["qty"];
+                            //    string name = (string)config2["name"];
+                            //    //string price = (string)config["price"];
+                            //    //string mealid = (string)config["item_uid"];
+                            //    namesArray.Add(name);
+                            //    qtyList.Add(qty);
+                            //    Debug.WriteLine("meal updating list name: " + name + " amount: " + qty);
+                            //}
                             //Console.WriteLine("PARSING DATA FROM DB: ITEM_UID: " + m["item_uid"].ToString());
                             //qtyList.Add(double.Parse(m["qty"].ToString()));
                             //nameList.Add(int.Parse(m["name"].ToString()));
-                            combinedArray.Add((m["meal_selection"].ToString()));
+                            //changed 5/17
+                            //combinedArray.Add((m["meal_selection"].ToString()));
+                            combinedArray.Add((m["meals_selected"].ToString()));
                         }
 
                         foreach (var m in recentMeals["result"])
@@ -2915,6 +2946,7 @@ namespace MTYD.ViewModel
                         Console.WriteLine("Trying to enter for loop in Get Recent Selection");
                         for (int i = 0; i < combinedArray.Count; i++)
                         {
+                            
 
                             JArray newobj = Newtonsoft.Json.JsonConvert.DeserializeObject<JArray>(combinedArray[i].ToString());
 
@@ -2985,8 +3017,9 @@ namespace MTYD.ViewModel
             {
                 Console.WriteLine("INSIDE GetRecentSelection #1");
                 var request = new HttpRequestMessage();
-                //string purchaseID = Preferences.Get("purchId", "");
-                string purchaseID = Preferences.Get("purchUid", "");
+                string purchaseID = Preferences.Get("purchId", "");
+                //recommented out 5/16/21
+                //string purchaseID = Preferences.Get("purchUid", "");
                 string date = Preferences.Get("dateSelected", "");
                 string userID = (string)Application.Current.Properties["user_id"];
                 string halfUrl = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected_specific?customer_uid=" + userID;
@@ -3021,7 +3054,9 @@ namespace MTYD.ViewModel
                         //Console.WriteLine("PARSING DATA FROM DB: ITEM_UID: " + m["item_uid"].ToString());
                         //qtyList.Add(double.Parse(m["qty"].ToString()));
                         //nameList.Add(int.Parse(m["name"].ToString()));
-                        combinedArray.Add((m["meal_selection"].ToString()));
+                        //changed 5/17
+                        //combinedArray.Add((m["meal_selection"].ToString()));
+                        combinedArray.Add((m["meals_selected"].ToString()));
                     }
 
                     foreach (var m in recentMeals["result"])
@@ -3043,23 +3078,31 @@ namespace MTYD.ViewModel
                     Console.WriteLine("isAlreadySelected" + isAlreadySelected);
 
                     Console.WriteLine("Trying to enter for loop in Get Recent Selection");
-                    for (int i = 0; i < combinedArray.Count; i++)
+                    try
                     {
-
-                        JArray newobj = Newtonsoft.Json.JsonConvert.DeserializeObject<JArray>(combinedArray[i].ToString());
-
-                        foreach (JObject config in newobj)
+                        for (int i = 0; i < combinedArray.Count; i++)
                         {
-                            string qty = (string)config["qty"];
-                            string name = (string)config["name"];
-                            //string price = (string)config["price"];
-                            //string mealid = (string)config["item_uid"];
-                            namesArray.Add(name);
-                            qtyList.Add(qty);
-                            Debug.WriteLine("meal updating list name: " + name + " amount: " + qty);
+
+                            JArray newobj = Newtonsoft.Json.JsonConvert.DeserializeObject<JArray>(combinedArray[i].ToString());
+
+                            foreach (JObject config in newobj)
+                            {
+                                string qty = (string)config["qty"];
+                                string name = (string)config["name"];
+                                //string price = (string)config["price"];
+                                //string mealid = (string)config["item_uid"];
+                                namesArray.Add(name);
+                                qtyList.Add(qty);
+                                Debug.WriteLine("meal updating list name: " + name + " amount: " + qty);
+                            }
                         }
                     }
+                    catch
+                    {
+                        Debug.WriteLine("exception caught");
+                    }
 
+                    Debug.WriteLine("exception continued");
                     ////source of the crash
                     //for (int i = 0; i < addOnArray.Count; i++)
                     //{
@@ -3210,8 +3253,10 @@ namespace MTYD.ViewModel
                 Console.WriteLine("INSIDE GetRecentSelection #2");
                 var request = new HttpRequestMessage();
                 //commented out for id vs uid
-                //string purchaseID = Preferences.Get("purchId", "");
-                string purchaseID = Preferences.Get("purchUid", "");
+
+                string purchaseID = Preferences.Get("purchId", "");
+                //recommented out 5/16/21
+                //string purchaseID = Preferences.Get("purchUid", "");
                 string date = Preferences.Get("dateSelected", "");
                 string userID = (string)Application.Current.Properties["user_id"];
                 string halfUrl = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected_specific?customer_uid=" + userID;
@@ -3441,6 +3486,43 @@ namespace MTYD.ViewModel
         {
             await Navigation.PushAsync(new SubscriptionHistory(first, last, email), false);
             //Navigation.RemovePage(this.Navigation.NavigationStack[this.Navigation.NavigationStack.Count - 2]);
+        }
+
+        void xButtonClicked(System.Object sender, System.EventArgs e)
+        {
+            fade.IsVisible = false;
+            baaPopUpGrid.IsVisible = false;
+        }
+
+        void clickedBecomeAmb(System.Object sender, System.EventArgs e)
+        {
+            fade.IsVisible = true;
+            baaPopUpGrid.IsVisible = true;
+        }
+
+        void clickedCreateAmb(System.Object sender, System.EventArgs e)
+        {
+            try
+            {
+                if (AmbEmailEntry.Text != null && AmbEmailEntry.Text != "")
+                {
+                    createAmb newAmb = new createAmb();
+                    newAmb.code = AmbEmailEntry.Text.Trim();
+                    var createAmbSerializedObj = JsonConvert.SerializeObject(newAmb);
+                    var content = new StringContent(createAmbSerializedObj, Encoding.UTF8, "application/json");
+                    var client = new HttpClient();
+                    var response = client.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/brandAmbassador/create_ambassador", content);
+                    Console.WriteLine("RESPONSE TO CREATE_AMBASSADOR   " + response.Result);
+                    Console.WriteLine("CREATE JSON OBJECT BEING SENT: " + createAmbSerializedObj);
+                    fade.IsVisible = false;
+                    baaPopUpGrid.IsVisible = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                Generic gen = new Generic();
+                gen.parseException(ex.ToString());
+            }
         }
 
         void clickedLogout(System.Object sender, System.EventArgs e)
