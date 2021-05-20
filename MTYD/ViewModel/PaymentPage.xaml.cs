@@ -23,6 +23,7 @@ using PayPalHttp;
 using PayPalCheckoutSdk.Orders;
 using MTYD.Model.Login.LoginClasses;
 using Stripe;
+using System.Windows.Input;
 
 namespace MTYD.ViewModel
 {
@@ -107,6 +108,7 @@ namespace MTYD.ViewModel
         string checkoutAdd, checkoutUnit, checkoutCity, checkoutState, checkoutZip;
         bool onStripeScreen = false;
         bool onCardAdd = false;
+        bool termsChecked = false;
 
         Model.Address addr;
         
@@ -2134,6 +2136,11 @@ namespace MTYD.ViewModel
                 Debug.WriteLine("PayViaStripe entered");
                 try
                 {
+                    if (termsChecked == false)
+                    {
+                        await DisplayAlert("Error", "Check the terms & conditions before continuing", "OK");
+                        return;
+                    }
                     //await Navigation.PushAsync(new Loading());
                     //-----------validate address start
                     if (cardHolderName.Text == null)
@@ -3480,6 +3487,16 @@ namespace MTYD.ViewModel
         void loginButtonClicked(System.Object sender, System.EventArgs e)
         {
             Xamarin.Forms.Application.Current.MainPage = new MainLogin();
+        }
+
+        public ICommand TapCommand => new Command<string>(async (url) => await Launcher.OpenAsync(url));
+
+        void checkBoxChecked(object sender, CheckedChangedEventArgs e)
+        {
+            Debug.WriteLine("checkbox value: " + e.Value.ToString());
+            if (e.Value.ToString() == "True")
+                termsChecked = true;
+            else termsChecked = false;
         }
     }
 }

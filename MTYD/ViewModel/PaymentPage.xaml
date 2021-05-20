@@ -670,11 +670,38 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
                     </Grid.RowDefinitions>
 
-                    <Button Grid.Row="0" Text="Complete Payment" CornerRadius="15" TextColor="White" HorizontalOptions="Fill" BackgroundColor="#F26522" Clicked="PayViaStripe"/>
+                    <Grid ColumnSpacing="4" Margin="-30,0" HorizontalOptions="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
 
-                    <Button Grid.Row="1" Text="PAYPAL" IsVisible="false" CornerRadius="15" TextColor="White" HorizontalOptions="Fill" BackgroundColor="#F26522" Clicked="CheckouWithPayPayl"/>
+                        <CheckBox x:Name="tcCheckbox" Grid.Column="0" HeightRequest="50" WidthRequest="50" HorizontalOptions="Center" VerticalOptions="Center" CheckedChanged="checkBoxChecked"/>
+
+                        <Label Grid.Column="1" FontSize="17" VerticalTextAlignment="Center" VerticalOptions="Center">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="I agree to the " />
+                                    <Span Text="Terms &amp; Conditions"
+                                          TextColor="#4284DC"
+                                          TextDecorations="Underline">
+                                        <Span.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding TapCommand}"
+                                                                  CommandParameter="https://mealsfor.me/terms-and-conditions" />
+                                        </Span.GestureRecognizers>
+                                    </Span>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+
+                    </Grid>
+
+                    <Button Grid.Row="1" Text="Complete Payment" CornerRadius="15" HeightRequest="40" TextColor="White" HorizontalOptions="Fill" BackgroundColor="#F26522" Clicked="PayViaStripe"/>
+
+                    <Button Grid.Row="2" Text="PAYPAL" IsVisible="false" CornerRadius="15" TextColor="White" HorizontalOptions="Fill" BackgroundColor="#F26522" Clicked="CheckouWithPayPayl"/>
 
                 </Grid>
 

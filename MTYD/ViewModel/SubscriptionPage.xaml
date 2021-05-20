@@ -231,13 +231,44 @@
 
                 <StackLayout Grid.Row="1" Margin="0,0,0,25">
                     <Forms9Patch:Button Text="    Home" FontAttributes="Bold" OutlineColor="Transparent" FontSize="20" HorizontalTextAlignment="Start" HorizontalOptions="Fill" TextColor="White" Clicked="clickedLanding"/>
+                    <Forms9Patch:Button Text="    Select Meals" FontAttributes="Bold" OutlineColor="Transparent" FontSize="20" HorizontalTextAlignment="Start" HorizontalOptions="Fill" TextColor="White" Clicked="clickedSelect"/>
                     <Forms9Patch:Button Text="    Change Meal Plans" FontAttributes="Bold" OutlineColor="Transparent" FontSize="20" HorizontalTextAlignment="Start" HorizontalOptions="Fill" TextColor="White" Clicked="clickedMealPlan"/>
                     <Forms9Patch:Button Text="    Add Subscriptions" FontAttributes="Bold" OutlineColor="Transparent" FontSize="20" HorizontalTextAlignment="Start" HorizontalOptions="Fill" TextColor="White" Clicked="clickedSubscription"/>
-                    <Forms9Patch:Button Text="    Select Meals" FontAttributes="Bold" OutlineColor="Transparent" FontSize="20" HorizontalTextAlignment="Start" HorizontalOptions="Fill" TextColor="White" Clicked="clickedSelect"/>
+                    <Forms9Patch:Button Text="    Subscription History" FontAttributes="Bold" OutlineColor="Transparent" FontSize="20" HorizontalTextAlignment="Start" HorizontalOptions="Fill" TextColor="White" Clicked="clickedSubHistory"/>
+                    <Forms9Patch:Button Text="    Become an Ambassador" FontAttributes="Bold" OutlineColor="Transparent" FontSize="20" HorizontalTextAlignment="Start" HorizontalOptions="Fill" TextColor="White" Clicked="clickedBecomeAmb"/>
                     <Forms9Patch:Button Text="    Log Out" FontAttributes="Bold" OutlineColor="Transparent" FontSize="20" HorizontalTextAlignment="Start" HorizontalOptions="Fill" TextColor="White" Clicked="clickedLogout"/>
                 </StackLayout>
 
             </Grid>
+
+            <BoxView x:Name="fade" IsVisible="false" BackgroundColor="White" Opacity="0.7" Margin="0,-250" HorizontalOptions="Fill" VerticalOptions="Fill"/>
+
+            <Grid x:Name="baaPopUpGrid" VerticalOptions="Start" Margin="40,120,40,0" IsVisible="false">
+                    <Frame BorderColor="#F26522" CornerRadius="0" HasShadow="False">
+                        <StackLayout>
+                            <ImageButton Source="xButton.png" Aspect="AspectFit" HorizontalOptions="End" Margin="-10" WidthRequest="30" Clicked="xButtonClicked"/>
+
+                            <Label Text="Love MealsFor.Me?" FontAttributes="Bold" FontSize="25" HorizontalOptions="Center" Margin="0, 0, 0, 5"/>
+                            <Label Text="Become an Ambassador" FontAttributes="Bold" FontSize="13" HorizontalOptions="Center" Margin="0, 0, 0, 15"/>
+
+                            <Label Text="Your friend(s) saves 20% on their first order and you save 20% on your next renewal&#10;+&#10;Each time your friend renews, you get an additional 5% renewal bonus. Sign up 20 friends and eat for free!"
+                                   HorizontalOptions="Center" HorizontalTextAlignment="Center" HeightRequest="170" FontSize="16" Margin="15, 0"/>
+
+                            <Frame x:Name="AmbEmailFrame" BorderColor="#F26522" CornerRadius="10" HasShadow="false" Padding="15, 5">
+                                <Entry x:Name="AmbEmailEntry" Placeholder="Email" TextColor="Black"/>
+                            </Frame>
+
+                            <Button Text="Sign Up" BackgroundColor="#F26522" TextColor="White" Margin="0, 10, 0, 10" CornerRadius="10" Clicked="clickedCreateAmb"/>
+
+                            <Label Text="Your friends can use this email address as the Ambassador code when they sign up" FontAttributes="Bold" FontSize="16" HorizontalTextAlignment="Center" TextColor="#F26522" HorizontalOptions="Center" HeightRequest="65" Margin="0, 0, 0, 15"/>
+
+                            <!--<Button x:Name="OkayButton" Text="Sign Up" BackgroundColor="#F26522" TextColor="White" Margin="40, 20, 40, 10" CornerRadius="10" Clicked="OkayClicked"/>-->
+                            <!--<Button x:Name="signUpButton2" Text="Sign Up" BackgroundColor="#F26522" TextColor="White" Margin="40, 0, 40, 10" CornerRadius="10" Clicked="clickedSignUp"/>-->
+                        </StackLayout>
+                    </Frame>
+            </Grid>
+
+
                 </Grid>
         </ScrollView>
         </ContentPage.Content>
