@@ -79,11 +79,20 @@ namespace MTYD.ViewModel
                 startDeliv = startDeliveryDate; phoneNum = phoneNumber;
                 Debug.WriteLine("new_item_id: " + new_item_id);
                 Debug.WriteLine("deliv instructions passed in: " + delivInstr);
-                Debug.WriteLine("exp date passed: " + cc_exp_date);
-                Debug.WriteLine("exp year: " + cc_exp_date.Substring(cc_exp_date.IndexOf("-") - 2, 2));
-                cc_exp_year = cc_exp_date.Substring(cc_exp_date.IndexOf("-") - 2, 2);
-                cc_exp_month = cc_exp_date.Substring(cc_exp_date.IndexOf("-") + 1, 2);
-                Debug.WriteLine("exp month: " + cc_exp_date.Substring(cc_exp_date.IndexOf("-") + 1, 2));
+
+                if (cc_num == "")
+                {
+                    cc_exp_year = "";
+                    cc_exp_month = "";
+                }
+                else
+                {
+                    Debug.WriteLine("exp date passed: " + cc_exp_date);
+                    Debug.WriteLine("exp year: " + cc_exp_date.Substring(cc_exp_date.IndexOf("-") - 2, 2));
+                    cc_exp_year = cc_exp_date.Substring(cc_exp_date.IndexOf("-") - 2, 2);
+                    cc_exp_month = cc_exp_date.Substring(cc_exp_date.IndexOf("-") + 1, 2);
+                    Debug.WriteLine("exp month: " + cc_exp_date.Substring(cc_exp_date.IndexOf("-") + 1, 2));
+                }
                 Debug.WriteLine("Address passed in: " + passedAdd + ", unit: " + passedUnit + ", " + passedCity + ", " + passedState + " " + passedZip);
 
                 Console.WriteLine("next2 entered");
@@ -91,6 +100,9 @@ namespace MTYD.ViewModel
                 InitializeComponent();
                 NavigationPage.SetHasBackButton(this, false);
                 NavigationPage.SetHasNavigationBar(this, false);
+
+                tipPrice.Text = tipOpt2.Text;
+
                 checkPlatform(height, width);
                 GetPlans();
                 Preferences.Set("freqSelected", "");
@@ -688,24 +700,46 @@ namespace MTYD.ViewModel
 
 
 
-                    var request3 = new HttpRequestMessage();
-                    Debug.WriteLine("subscriptionModal trying to delete this purchase uid: " + purchase_uid.ToString());
-                    //request2.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/refund_calculator?purchase_uid=" + purchase_id);
-                    request3.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_purchase/" + purchase_uid);
-                    request3.Method = HttpMethod.Get;
-                    var client3 = new HttpClient();
-                    HttpResponseMessage response3 = await client3.SendAsync(request3);
+                    //var request3 = new HttpRequestMessage();
+                    //Debug.WriteLine("subscriptionModal trying to delete this purchase uid: " + purchase_uid.ToString());
+                    ////request2.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/refund_calculator?purchase_uid=" + purchase_id);
+                    //request3.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_purchase/" + purchase_uid);
+                    //request3.Method = HttpMethod.Get;
+                    //var client3 = new HttpClient();
+                    //HttpResponseMessage response3 = await client3.SendAsync(request3);
+                    //Debug.WriteLine("response from refund calc: " + response3);
 
-                    if (response3.StatusCode == System.Net.HttpStatusCode.OK)
-                    {
-                        HttpContent content3 = response3.Content;
-                        var userString3 = await content3.ReadAsStringAsync();
-                        JObject refund_obj = JObject.Parse(userString3);
+                    WebClient client5 = new WebClient();
+                    var content5 = client5.DownloadString("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/calculator/" + purchase_uid);
+                    var obj5 = JsonConvert.DeserializeObject<Calculator>(content5);
+                    Debug.WriteLine("gotten meal refund: " + obj5.MealRefund.ToString());
+                    double totalRefund = obj5.MealRefund;
+                    totalRefund -= obj5.AmtDiscount;
+                    totalRefund += obj5.ServiceFee;
+                    totalRefund += obj5.DelivFee;
+                    totalRefund += obj5.DriverTip;
+                    totalRefund += obj5.Taxes;
+                    totalRefund += obj5.AmbCode;
+
+                    Math.Round(totalRefund, 2);
+                    var refundString = totalRefund.ToString();
+                    if (refundString.Contains(".") == false)
+                        refundString = refundString + ".00";
+                    else if (refundString.Substring(refundString.IndexOf(".") + 1).Length == 1)
+                        refundString = refundString + "0";
+                    else if (refundString.Substring(refundString.IndexOf(".") + 1).Length == 0)
+                        refundString = refundString + "00";
+
+                    //if (response3.StatusCode == System.Net.HttpStatusCode.OK)
+                    //{
+                    //    HttpContent content3 = response3.Content;
+                    //    var userString3 = await content3.ReadAsStringAsync();
+                    //    JObject refund_obj = JObject.Parse(userString3);
 
                         //string updatedDiscount, updatedDue, updatedTax, updatedTip, updatedService, updatedDelivery, updatedSub, updatedAmb;
-                        Debug.WriteLine("first start" + refund_obj.ToString());
-                        Debug.WriteLine("this is what I'm getting: " + refund_obj["refund_amount"].ToString());
-                        double amt = Double.Parse(refund_obj["refund_amount"].ToString());
+                        //Debug.WriteLine("first start" + refund_obj.ToString());
+                        //Debug.WriteLine("this is what I'm getting: " + refund_obj["refund_amount"].ToString());
+                        double amt = totalRefund;
                         double basePrice_dub = deliverySelected * itemPrices[deliverySelected - 1, 6 - mealSelected];
                         //double basePrice_dub = itemPrices[deliverySelected - 1, 6 - mealSelected];
                         double discountAmt_dub = deliverySelected * itemPrices[deliverySelected - 1, 6 - mealSelected] * discounts[deliverySelected - 1, 6 - mealSelected] / 100.0;
@@ -716,13 +750,13 @@ namespace MTYD.ViewModel
                         Debug.WriteLine("this is the amount for tax: " + Math.Round(total * (taxRate), 2).ToString());
                         Debug.WriteLine("tax rate from categorical options: " + taxRate.ToString());
                         Debug.WriteLine("newTotal: " + newTotal.ToString());
-                        newTotal += Double.Parse(refund_obj["delivery_fee"].ToString());
-                        newTotal += Double.Parse(refund_obj["service_fee"].ToString());
-                        newTotal += Double.Parse(refund_obj["driver_tip"].ToString());
-                        updatedTip = refund_obj["driver_tip"].ToString();
-                        updatedService = refund_obj["service_fee"].ToString();
-                        updatedDelivery = refund_obj["delivery_fee"].ToString();
-                        updatedAmb = refund_obj["ambassador_code"].ToString();
+                        newTotal += obj5.DelivFee;
+                        newTotal += obj5.ServiceFee;
+                        newTotal += obj5.DriverTip;
+                        updatedTip = obj5.DriverTip.ToString();
+                        updatedService = obj5.ServiceFee.ToString();
+                        updatedDelivery = obj5.DelivFee.ToString();
+                        updatedAmb = obj5.AmbCode.ToString();
                         newTotal = Math.Round(newTotal, 2);
                         Debug.WriteLine("amt before subtracting: " + amt.ToString());
                         Debug.WriteLine("newTotal before subtracting: " + newTotal.ToString());
@@ -730,9 +764,9 @@ namespace MTYD.ViewModel
 
                         double correct;
                         //check if the ambassador code discount completely covers the meal plan price
-                        if (Double.Parse(refund_obj["ambassador_code"].ToString()) - newTotal > 0)
+                        if (obj5.AmbCode - newTotal > 0)
                             correct = amt;
-                        else correct = amt + Double.Parse(refund_obj["ambassador_code"].ToString()) - newTotal;
+                        else correct = amt + obj5.AmbCode - newTotal;
 
                         //double correct = amt - newTotal;
                         correct = Math.Round(correct, 2);
@@ -754,7 +788,7 @@ namespace MTYD.ViewModel
                         }
 
                         SignUpButton.Text = "SAVE CHANGES";
-                    }
+                    //}
                 }
                 else
                 {
@@ -1040,7 +1074,7 @@ namespace MTYD.ViewModel
                         updatePur.cc_cvv = cc_cvv;
                         updatePur.cc_zip = cc_zip;
                         updatePur.taxes = updatedTax;
-                        updatePur.tip = updatedTip;
+                        updatePur.tip = tipPrice.Text.Substring(1);
                         updatePur.service_fee = updatedService;
                         updatePur.delivery_fee = updatedDelivery;
                         updatePur.subtotal = updatedSub;
@@ -1163,9 +1197,10 @@ namespace MTYD.ViewModel
                         //updated.cc_exp_year = cc_exp_year;
                         //updated.cc_exp_month = cc_exp_month;
                         updated.cc_cvv = cc_cvv;
-                        updated.purchase_id = purchase_uid;
+                        updated.purchase_uid = purchase_uid;
+                        updated.driver_tip = tipPrice.Text.Substring(1);
                         //updated.purchase_id = "400-000019";
-                        updated.new_item_id = Preferences.Get("item_uid", "");
+                        //updated.new_item_id = Preferences.Get("item_uid", "");
                         updated.customer_email = cust_email;
                         updated.cc_zip = cc_zip;
                         updated.start_delivery_date = startDeliv;
@@ -1176,7 +1211,7 @@ namespace MTYD.ViewModel
                         item1.name = Preferences.Get("mealSelected", "") + " Meal Plan";
                         //item1.price = Preferences.Get("price", "");
                         item1.price = Preferences.Get("itemPrice", "00.00");
-                        item1.item_uid = updated.new_item_id;
+                        item1.item_uid = Preferences.Get("item_uid", "");
                         item1.itm_business_uid = itm_business_uid;
                         list1.Add(item1);
                         updated.items = list1;
@@ -1193,10 +1228,13 @@ namespace MTYD.ViewModel
                         request.Content = content;*/
                         var client = new HttpClient();
                         Debug.WriteLine("url we are posting to: " + "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_purchase/" + purchase_uid);
-                        //var response = client.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_purchase_id", content);
-                        var response = client.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_purchase/" + purchase_uid, content2);
-                        // HttpResponseMessage response = await client.SendAsync(request);
-                        Console.WriteLine("RESPONSE TO CHECKOUT   " + response.Result);
+                    //var response = client.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_purchase_id", content);
+                    //change from post (below) to put
+                    //var response = client.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_purchase/" + purchase_uid, content2);
+                    //var response = client.PutAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_purchase/" + purchase_uid, content2);
+                    var response = client.PutAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_purchase", content2);
+                    // HttpResponseMessage response = await client.SendAsync(request);
+                    Console.WriteLine("RESPONSE TO CHECKOUT   " + response.Result);
                         Console.WriteLine("CHECKOUT JSON OBJECT BEING SENT: " + newPaymentJSONString);
                         Console.WriteLine("clickedDone Func ENDED!");
 
@@ -1216,7 +1254,7 @@ namespace MTYD.ViewModel
                         Zones[] zones = new Zones[] { };
                         await Navigation.PushAsync(new Select(zones, cust_firstName, cust_lastName, cust_email));
                     }
-                }
+            }
             }
             catch (Exception ex)
             {
@@ -1370,5 +1408,88 @@ namespace MTYD.ViewModel
             Xamarin.Forms.Application.Current.MainPage = new MainPage();
         }
         //end of menu functions
+
+
+        //driver tip functions
+        private void clickedTip(object sender, EventArgs e)
+        {
+            try
+            {
+                Button button1 = (Button)sender;
+
+                double tipValue = Double.Parse(tipPrice.Text.Substring(1));
+                Debug.WriteLine("tipValue1: " + tipValue.ToString());
+
+                if (button1.Text == tipOpt1.Text)
+                {
+
+                    tipOpt1.BackgroundColor = Color.FromHex("#F26522");
+                    tipOpt2.BackgroundColor = Color.FromHex("#ffffff");
+                    tipOpt3.BackgroundColor = Color.FromHex("#ffffff");
+                    tipOpt4.BackgroundColor = Color.FromHex("#ffffff");
+                    tipOpt1.TextColor = Color.FromHex("#ffffff");
+                    tipOpt2.TextColor = Color.FromHex("#000000");
+                    tipOpt3.TextColor = Color.FromHex("#000000");
+                    tipOpt4.TextColor = Color.FromHex("#000000");
+                    tipPrice.Text = "$0";
+                }
+                else if (button1.Text == tipOpt2.Text)
+                {
+
+                    tipOpt1.BackgroundColor = Color.FromHex("#ffffff");
+                    tipOpt2.BackgroundColor = Color.FromHex("#F26522");
+                    tipOpt3.BackgroundColor = Color.FromHex("#ffffff");
+                    tipOpt4.BackgroundColor = Color.FromHex("#ffffff");
+                    tipOpt1.TextColor = Color.FromHex("#000000");
+                    tipOpt2.TextColor = Color.FromHex("#ffffff");
+                    tipOpt3.TextColor = Color.FromHex("#000000");
+                    tipOpt4.TextColor = Color.FromHex("#000000");
+                    tipPrice.Text = tipOpt2.Text;
+                }
+                else if (button1.Text == tipOpt3.Text)
+                {
+
+                    tipOpt1.BackgroundColor = Color.FromHex("#ffffff");
+                    tipOpt2.BackgroundColor = Color.FromHex("#ffffff");
+                    tipOpt3.BackgroundColor = Color.FromHex("#F26522");
+                    tipOpt4.BackgroundColor = Color.FromHex("#ffffff");
+                    tipOpt1.TextColor = Color.FromHex("#000000");
+                    tipOpt2.TextColor = Color.FromHex("#000000");
+                    tipOpt3.TextColor = Color.FromHex("#ffffff");
+                    tipOpt4.TextColor = Color.FromHex("#000000");
+                    tipPrice.Text = tipOpt3.Text;
+                }
+                else
+                {
+
+                    tipOpt1.BackgroundColor = Color.FromHex("#ffffff");
+                    tipOpt2.BackgroundColor = Color.FromHex("#ffffff");
+                    tipOpt3.BackgroundColor = Color.FromHex("#ffffff");
+                    tipOpt4.BackgroundColor = Color.FromHex("#F26522");
+                    tipOpt1.TextColor = Color.FromHex("#000000");
+                    tipOpt2.TextColor = Color.FromHex("#000000");
+                    tipOpt3.TextColor = Color.FromHex("#000000");
+                    tipOpt4.TextColor = Color.FromHex("#ffffff");
+                    tipPrice.Text = tipOpt4.Text;
+                }
+
+
+                tipValue = Double.Parse(tipPrice.Text.Substring(1));
+                Debug.WriteLine("tipValue2: " + tipValue.ToString());
+
+                if (tipPrice.Text.Contains(".") == false)
+                    tipPrice.Text = tipPrice.Text + ".00";
+                else if (tipPrice.Text.Substring(tipPrice.Text.IndexOf(".") + 1).Length == 1)
+                    tipPrice.Text = tipPrice.Text + "0";
+                else if (tipPrice.Text.Substring(tipPrice.Text.IndexOf(".") + 1).Length == 0)
+                    tipPrice.Text = tipPrice.Text + "00";
+
+            }
+            catch (Exception ex)
+            {
+                Generic gen = new Generic();
+                gen.parseException(ex.ToString());
+            }
+        }
     }
 }

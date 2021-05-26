@@ -11,6 +11,7 @@ namespace MTYD.Model
         bool _collVisible;
         public string mealPlanName { get; set; }
         public int mealCollHeight { get; set; }
+        public bool mainGridVisible { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
 
         public bool CollVisible

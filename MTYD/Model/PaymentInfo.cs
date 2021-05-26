@@ -179,9 +179,9 @@ namespace MTYD.Model
         public string cc_zip { get; set; }
         public string customer_email { get; set; }
         public List<Item> items { get; set; }
-        public string new_item_id { get; set; }
-        //public string password { get; set; }
-        public string purchase_id { get; set; }
+        //public string new_item_id { get; set; }
+        public string purchase_uid { get; set; }
+        public string driver_tip { get; set; }
         public string start_delivery_date { get; set; }
     }
 

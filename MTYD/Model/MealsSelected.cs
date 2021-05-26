@@ -252,7 +252,7 @@ namespace MTYD.Model.Database
         public string Code { get; set; }
 
         [JsonProperty("result")]
-        public Result2[] Result { get; set; }
+        public Result[] Result { get; set; }
 
         [JsonProperty("next_billing")]
         public NextBilling NextBilling { get; set; }

@@ -414,7 +414,7 @@ namespace MTYD.ViewModel
                 //planPicker.BackgroundColor = Color.FromHex("#F26522");
 
                 Console.WriteLine("before frequency " + frequency);
-                getFrequency();
+                //getFrequency();
 
                 Console.WriteLine("after frequency " + frequency);
 
@@ -491,7 +491,16 @@ namespace MTYD.ViewModel
                 try
                 {
                     nextDate.Text = (string)nextBillDatesArray[selectedIndex];
-                    nextAmount.Text = "$" + (string)nextBillAmountsArray[selectedIndex];
+
+                    var nextamt = (string)nextBillAmountsArray[selectedIndex];
+                    if (nextamt.Contains(".") == false)
+                        nextamt = nextamt + ".00";
+                    else if (nextamt.Substring(nextamt.IndexOf(".") + 1).Length == 1)
+                        nextamt = nextamt + "0";
+                    else if (nextamt.Substring(nextamt.IndexOf(".") + 1).Length == 0)
+                        nextamt = nextamt + "00";
+
+                    nextAmount.Text = "$" + nextamt;
                     //WebClient client4 = new WebClient();
                     //string url3 = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/predict_autopay_day/" + chosenPurchId;
                     //Debug.WriteLine("next billing date url: " + url3);
@@ -513,10 +522,17 @@ namespace MTYD.ViewModel
                     nextAmount.Text = "TBD";
                 }
 
-                string creditCardNum = (info_obj["result"])[selectedIndex]["cc_num"].ToString();
-                //cardNum.Text = creditCardNum.Substring(creditCardNum.Length - 2);
-                //cardNum.Text = "**************" + cardNum.Text;
-                cardNum1.Text = "**********" + creditCardNum.Substring(creditCardNum.Length - 2);
+                try
+                {
+                    string creditCardNum = (info_obj["result"])[selectedIndex]["cc_num"].ToString();
+                    //cardNum.Text = creditCardNum.Substring(creditCardNum.Length - 2);
+                    //cardNum.Text = "**************" + cardNum.Text;
+                    cardNum1.Text = "**********" + creditCardNum.Substring(creditCardNum.Length - 2);
+                }
+                catch
+                {
+                    cardNum1.Text = "************";
+                }
 
 
                 string itemsStr = (info_obj["result"])[selectedIndex]["items"].ToString();
@@ -530,9 +546,20 @@ namespace MTYD.ViewModel
                 Console.WriteLine("name: " + itemsStr.Substring(itemsStr.IndexOf("itm_business_uid") + 20, 10));
                 Console.WriteLine("item_uid: " + itemsStr.Substring(itemsStr.IndexOf("item_uid") + 12, 10));
 
-                delivNum1.Text = itemsStr.Substring(itemsStr.IndexOf("qty") + 7, itemsStr.IndexOf("name") - itemsStr.IndexOf("qty") - 7 - 4);
+                JArray newobj = Newtonsoft.Json.JsonConvert.DeserializeObject<JArray>(itemsStr);
+
+
+                foreach (JObject config in newobj)
+                {
+                    delivNum1.Text = (string)config["qty"];
+                    mealNum1.Text = ((string)config["name"]).Substring(0, ((string)config["name"]).IndexOf(" "));
+                    //string qty = (string)config["qty"];
+                    //string name = (string)config["name"];
+                }
+
+                    //delivNum1.Text = itemsStr.Substring(itemsStr.IndexOf("qty") + 7, itemsStr.IndexOf("name") - itemsStr.IndexOf("qty") - 7 - 4);
                 //delivNum1.Text = delivNum1.Text.Substring(delivNum1.Text.IndexOf("\""));
-                mealNum1.Text = itemsStr.Substring(itemsStr.IndexOf("name") + 8, itemsStr.IndexOf("Meal Plan") - 1 - itemsStr.IndexOf("name") - 8);
+                //mealNum1.Text = itemsStr.Substring(itemsStr.IndexOf("name") + 8, itemsStr.IndexOf("Meal Plan") - 1 - itemsStr.IndexOf("name") - 8);
                 //mealNum1.Text = mealNum1.Text.Substring(mealNum1.Text.IndexOf("Meal Plan") - 1);
                 if (AddressEntry.Text != "" && AddressEntry.Text != null)
                     setMap();
@@ -725,20 +752,57 @@ namespace MTYD.ViewModel
                     return;
                 }
 
-                string itemsStr = activePlans[currentIndex]["items"].ToString();
-                string qty = itemsStr.Substring(itemsStr.IndexOf("qty") + 7);
-                qty = qty.Substring(0, qty.IndexOf("\""));
-                string numMeal = itemsStr.Substring(itemsStr.IndexOf("name") + 8);
-                numMeal = numMeal.Substring(0, numMeal.IndexOf(" "));
-                Debug.WriteLine("qty: " + qty);
-                string expDate = activePlans[currentIndex]["cc_exp_date"].ToString();
-                //var testing = (info_obj["result"])[1];
-                //string zip = testing["cc_zip"].ToString();
 
-                await Navigation.PushAsync(new SubscriptionModal(cust_firstName, cust_lastName, cust_email, activePlans[currentIndex]["cc_num"].ToString(),
-                    expDate.Substring(0, 10),
-                    activePlans[currentIndex]["cc_cvv"].ToString(), activePlans[currentIndex]["cc_zip"].ToString(), activePlans[currentIndex]["purchase_id"].ToString(), activePlans[currentIndex]["purchase_uid"].ToString(), itemsStr.Substring(itemsStr.IndexOf("itm_business_uid") + 20, 10),
-                    itemsStr.Substring(itemsStr.IndexOf("item_uid") + 12, 10), activePlans[currentIndex]["pur_customer_uid"].ToString(), qty, numMeal, AddressEntry.Text, AptEntry.Text, CityEntry.Text, StateEntry.Text, ZipEntry.Text, activePlans[currentIndex]["delivery_instructions"].ToString(), activePlans[currentIndex]["start_delivery_date"].ToString(), activePlans[currentIndex]["delivery_phone_num"].ToString()), false);
+                string itemsStr = activePlans[currentIndex]["items"].ToString();
+
+                JArray newobj = Newtonsoft.Json.JsonConvert.DeserializeObject<JArray>(itemsStr);
+
+                string qty = "";
+                string numMeal = "";
+                foreach (JObject config in newobj)
+                {
+                    qty = (string)config["qty"];
+                    numMeal = ((string)config["name"]).Substring(0, ((string)config["name"]).IndexOf(" "));
+                    //string qty = (string)config["qty"];
+                    //string name = (string)config["name"];
+                }
+
+                //string qty = itemsStr.Substring(itemsStr.IndexOf("qty") + 7);
+                //qty = qty.Substring(0, qty.IndexOf("\""));
+                //string numMeal = itemsStr.Substring(itemsStr.IndexOf("name") + 8);
+                //numMeal = numMeal.Substring(0, numMeal.IndexOf(" "));
+                Debug.WriteLine("qty: " + qty);
+                
+
+
+                if (activePlans[currentIndex]["cc_num"].ToString() == null || activePlans[currentIndex]["cc_num"].ToString() == "")
+                {
+                    await Navigation.PushAsync(new SubscriptionModal(cust_firstName, cust_lastName, cust_email, "",
+                    "", "", "",
+                    activePlans[currentIndex]["purchase_id"].ToString(), activePlans[currentIndex]["purchase_uid"].ToString(),
+                    itemsStr.Substring(itemsStr.IndexOf("itm_business_uid") + 20, 10),
+                    itemsStr.Substring(itemsStr.IndexOf("item_uid") + 12, 10), activePlans[currentIndex]["pur_customer_uid"].ToString(),
+                    qty, numMeal, AddressEntry.Text, AptEntry.Text, CityEntry.Text, StateEntry.Text, ZipEntry.Text,
+                    activePlans[currentIndex]["delivery_instructions"].ToString(), activePlans[currentIndex]["start_delivery_date"].ToString(),
+                    activePlans[currentIndex]["delivery_phone_num"].ToString()), false);
+                }
+                else
+                {
+                    string expDate = activePlans[currentIndex]["cc_exp_date"].ToString();
+                    //var testing = (info_obj["result"])[1];
+                    //string zip = testing["cc_zip"].ToString();
+
+                    await Navigation.PushAsync(new SubscriptionModal(cust_firstName, cust_lastName, cust_email,
+                        activePlans[currentIndex]["cc_num"].ToString(), expDate.Substring(0, 10),
+                        activePlans[currentIndex]["cc_cvv"].ToString(), activePlans[currentIndex]["cc_zip"].ToString(),
+                        activePlans[currentIndex]["purchase_id"].ToString(), activePlans[currentIndex]["purchase_uid"].ToString(),
+                        itemsStr.Substring(itemsStr.IndexOf("itm_business_uid") + 20, 10),
+                        itemsStr.Substring(itemsStr.IndexOf("item_uid") + 12, 10), activePlans[currentIndex]["pur_customer_uid"].ToString(),
+                        qty, numMeal, AddressEntry.Text, AptEntry.Text, CityEntry.Text, StateEntry.Text, ZipEntry.Text,
+                        activePlans[currentIndex]["delivery_instructions"].ToString(), activePlans[currentIndex]["start_delivery_date"].ToString(),
+                        activePlans[currentIndex]["delivery_phone_num"].ToString()), false);
+                }
+                
             }
             catch (Exception ex)
             {
@@ -1167,6 +1231,57 @@ namespace MTYD.ViewModel
             return "";
         }
 
+        /*
+         # Refund Logic
+            # IF Nothing comsumed REFUND EVERYTHING
+            # IF Some Meals consumed:
+            #   Subtract Meal Value consumed from Meal Value purchased
+            #   Keep delivery fee and the taxes collected
+            #   Refund a portion of the tip
+            #   Refund a portion of the ambassador code
+            #   Keep service fee (no tax implication)
+            #   Recalculate Taxes
+
+        {
+    "purchase_uid": "400-000007",
+    "purchase_id": "400-000007",
+    "payment_id": "500-000007",
+    "completed_deliveries": 0,
+    "customer_uid": "100-000127",
+    "meal_refund": 560.0,
+    "amount_discount": 44.8,
+    "service_fee": 2.0,
+    "delivery_fee": 2.0,
+    "driver_tip": 2.0,
+    "taxes": 47.66,
+    "ambassador_code": 0.0,
+    "amount_due": 568.86,
+    "amount_paid": 0.0,
+    "charge_id": "pi_1IuptTLMju5RPMEvvXKE80Oz",
+    "delivery_instructions": "M4METEST"
+{
+    "purchase_uid": "400-000007",
+    "purchase_id": "400-000007",
+    "payment_id": "500-000007",
+    "completed_deliveries": 1.0,
+    "customer_uid": "100-000127",
+    "meal_refund": 435.20000000000005,
+    "amount_discount": 0,
+    "service_fee": 0,
+    "delivery_fee": 0,
+    "driver_tip": 1.72,
+    "taxes": 40.26,
+    "ambassador_code": 0.0,
+    "amount_due": 477.18,
+    "amount_paid": 0.0,
+    "charge_id": "pi_1IuptTLMju5RPMEvvXKE80Oz",
+    "delivery_instructions": "M4METEST"
+}
+
+        /calculator/400-000007
+        */
+
+
         async void deleteClicked(object sender, System.EventArgs e)
         {
             try
@@ -1190,24 +1305,46 @@ namespace MTYD.ViewModel
 
 
                     //request2.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/refund_calculator?purchase_uid=" + chosenPurchUid);
-                    request2.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_purchase/" + chosenPurchUid);
-                    request2.Method = HttpMethod.Get;
-                    var client2 = new HttpClient();
-                    HttpResponseMessage response2 = await client2.SendAsync(request2);
-                    Debug.WriteLine("response from refund calc: " + response2.ToString());
-                    if (response2.StatusCode == System.Net.HttpStatusCode.OK)
-                    {
-                        HttpContent content2 = response2.Content;
-                        var userString2 = await content2.ReadAsStringAsync();
-                        JObject refund_obj = JObject.Parse(userString2);
+                    //request2.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_purchase/" + chosenPurchUid);
+                    //request2.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/calculator/" + chosenPurchUid);
+                    //request2.Method = HttpMethod.Get;
+                    //var client2 = new HttpClient();
+                    //HttpResponseMessage response2 = await client2.SendAsync(request2);
+                    //Debug.WriteLine("response from calc: " + response2.ToString());
+                    //if (response2.StatusCode == System.Net.HttpStatusCode.OK)
+                    //{
+                    //    HttpContent content2 = response2.Content;
+                    //    var userString2 = await content2.ReadAsStringAsync();
+                    //    JObject refund_obj = JObject.Parse(userString2);
 
-                        Debug.WriteLine("first start" + refund_obj.ToString());
-                        Debug.WriteLine("this is what I'm getting: " + refund_obj["refund_amount"].ToString());
-                        refundAmount = refund_obj["refund_amount"].ToString();
+                    //    Debug.WriteLine("first start" + refund_obj.ToString());
+                    //    Debug.WriteLine("this is what I'm getting: " + refund_obj["refund_amount"].ToString());
+                    //    refundAmount = refund_obj["refund_amount"].ToString();
 
-                    }
+                    //}
+                    WebClient client4 = new WebClient();
+                    var content = client4.DownloadString("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/calculator/" + chosenPurchUid);
+                    var obj = JsonConvert.DeserializeObject<Calculator>(content);
+                    Debug.WriteLine("gotten meal refund: " + obj.MealRefund.ToString());
+                    double totalRefund = obj.MealRefund;
+                    totalRefund -= obj.AmtDiscount;
+                    totalRefund += obj.ServiceFee;
+                    totalRefund += obj.DelivFee;
+                    totalRefund += obj.DriverTip;
+                    totalRefund += obj.Taxes;
+                    totalRefund -= obj.AmbCode;
 
-                    bool answer = await DisplayAlert("Delete a Plan", "Are you sure you want to delete this " + currentPlan + "? If yes, you will be refunded $" + refundAmount + ".", "Yes", "No");
+                    Math.Round(totalRefund, 2);
+                    var refundString = totalRefund.ToString();
+                    if (refundString.Contains(".") == false)
+                        refundString = refundString + ".00";
+                    else if (refundString.Substring(refundString.IndexOf(".") + 1).Length == 1)
+                        refundString = refundString + "0";
+                    else if (refundString.Substring(refundString.IndexOf(".") + 1).Length == 0)
+                        refundString = refundString + "00";
+
+
+                    bool answer = await DisplayAlert("Delete a Plan", "Are you sure you want to delete this " + currentPlan + "? If yes, you will be refunded $" + refundString + ".", "Yes", "No");
                     Debug.WriteLine("Answer: " + answer);
 
                     if (answer == true)
