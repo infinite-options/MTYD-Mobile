@@ -23,6 +23,10 @@ namespace MTYD.ViewModel
         ArrayList dateArray = new ArrayList();
         WebClient client2 = new WebClient();
         public ObservableCollection<SubHist> subHistColl = new ObservableCollection<SubHist>();
+        Dictionary<string, Dictionary<string, List<HistorySel>>> historyDict = new Dictionary<string, Dictionary<string, List<HistorySel>>>();
+        History subHistJson;
+
+        ObservableCollection<PlanName> namesColl = new ObservableCollection<PlanName>();
 
         public SubscriptionHistory(string firstName, string lastName, string email)
         {
@@ -154,6 +158,58 @@ namespace MTYD.ViewModel
             string userID = (string)Application.Current.Properties["user_id"];
             Console.WriteLine("Inside GET MEAL PLANS: User ID:  " + userID);
 
+            string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/subscription_history/" + userID;
+            Debug.WriteLine("url to be reached: " + url);
+            var content2 = client2.DownloadString(url);
+            var obj2 = JsonConvert.DeserializeObject<History>(content2);
+            subHistJson = obj2;
+            Debug.WriteLine("content from sub history: " + content2.ToString());
+
+            for (int i = 0; i < obj2.Result.Length; i++)
+            {
+                if (obj2.Result[i].PurchStatus == "ACTIVE" && obj2.Result[i].PayTimeStamp != null && historyDict.ContainsKey(obj2.Result[i].PurchId) == false)
+                {
+                    //SubHist newSubHist = new SubHist();
+                    //var date1 = new DateTime(int.Parse(obj2.Result[i].SelMenuDate.Substring(0, 4)), int.Parse(obj2.Result[i].SelMenuDate.Substring(5, 2)), int.Parse(obj2.Result[i].SelMenuDate.Substring(8, 2)));
+                    //Debug.WriteLine("formatted next billing date: " + date1.ToString("D").Substring(date1.ToString("D").IndexOf(" ") + 1));
+                    //newSubHist.Date = date1.ToString("D").Substring(date1.ToString("D").IndexOf(" ") + 1);
+
+                    //List<string> newList = new List<string>();
+                    //newList.Add(obj2.Result[i].SelMenuDate);
+                    //historyDict.Add(obj2.Result[i].PurchId, newList);
+                    //holds the objects with all of the meal info
+                    List<HistorySel> newHistList = new List<HistorySel>();
+                    newHistList.Add(obj2.Result[i]);
+                    //key = menu date, value = json objects that hold the meal info for a certain menu date
+                    Dictionary<string, List<HistorySel>> newHistDict = new Dictionary<string, List<HistorySel>>();
+                    newHistDict.Add(obj2.Result[i].PayTimeStamp, newHistList);
+                    //key = purch id, value = (by purch id) dictionary with meal info sorted by menu dates (the key)
+                    historyDict.Add(obj2.Result[i].PurchId, newHistDict);
+                }
+                else if (obj2.Result[i].PurchStatus == "ACTIVE" && obj2.Result[i].PayTimeStamp != null && historyDict.ContainsKey(obj2.Result[i].PurchId) == true)
+                {
+                    if (historyDict[obj2.Result[i].PurchId].ContainsKey(obj2.Result[i].PayTimeStamp))
+                    {
+                        historyDict[obj2.Result[i].PurchId][obj2.Result[i].PayTimeStamp].Add(obj2.Result[i]);
+                    }
+                    else
+                    {
+                        List<HistorySel> newHistList = new List<HistorySel>();
+                        newHistList.Add(obj2.Result[i]);
+                        historyDict[obj2.Result[i].PurchId].Add(obj2.Result[i].PayTimeStamp, newHistList);
+
+                    }
+                    //historyDict[obj2.Result[i].PurchId].Add(obj2.Result[i].SelMenuDate);
+                }
+            }
+
+            //List<string> selectedList = historyDict["400-000001"];
+            //for (int i = 0; i < selectedList.Count; i++)
+            //{
+            //    Debug.WriteLine(i + " index in selected list: " + selectedList[i]);
+            //}
+
+
             //sample: https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/customer_lplp?customer_uid=100-000119
             request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/customer_lplp?customer_uid=" + userID);
             Console.WriteLine("GET MEALS PLAN ENDPOINT TRYING TO BE REACHED: " + "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/customer_lplp?customer_uid=" + userID);
@@ -181,6 +237,7 @@ namespace MTYD.ViewModel
 
                         foreach (JObject config in newobj)
                         {
+                            PlanName newPlan = new PlanName();
                             Console.WriteLine("Inside foreach loop in GetmealsPlan func");
                             string qty = (string)config["qty"];
                             string name = (string)config["name"];
@@ -196,6 +253,8 @@ namespace MTYD.ViewModel
 
                             //adds purchase uid to front of meal plan name
                             //namesArray.Add(purchIdArray[i].ToString().Substring(4) + " : " + name);
+                            newPlan.name = name + qty + " : " + m["purchase_id"].ToString().Substring(m["purchase_id"].ToString().IndexOf("-") + 1);
+                            namesColl.Add(newPlan);
                             namesArray.Add(name + qty + " : " + m["purchase_id"].ToString().Substring(m["purchase_id"].ToString().IndexOf("-") + 1));
                         }
 
@@ -204,8 +263,10 @@ namespace MTYD.ViewModel
                     }
                 }
 
-                dropDownList.ItemsSource = namesArray;
-                dropDownList.SelectedItem = namesArray[0].ToString();
+                //dropDownList.ItemsSource = namesArray;
+                dropDownList.ItemsSource = namesColl;
+                dropDownList.SelectedItem = namesColl[0];
+                //dropDownList.SelectedItem = namesArray[0].ToString();
             }
 
             //planChange();
@@ -251,104 +312,231 @@ namespace MTYD.ViewModel
             dateArray.Clear();
             subHistColl.Clear();
 
-            int selectedIndex = ((ArrayList)dropDownList.ItemsSource).IndexOf(dropDownText.Text);
+            int selectedIndex = -1;
+            //int selectedIndex = ((ArrayList)dropDownList.ItemsSource).IndexOf(dropDownText.Text);
+            foreach (var plan in namesColl)
+            {
+                selectedIndex++;
+                if (plan.name == dropDownText.Text)
+                {
+                    break;
+                }
+            }
+            //int selectedIndex = ((ObservableCollection<PlanName>)dropDownList.ItemsSource).IndexOf(dropDownText.Text);
             string selectedPurchId = (string)purchIdArray[selectedIndex];
             string userID = (string)Application.Current.Properties["user_id"];
 
 
-            //sample https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected_with_billing?customer_uid=100-000127&purchase_id=400-000189
-            string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected_with_billing?customer_uid=" + userID + "&purchase_id=" + selectedPurchId;
-            Debug.WriteLine("url to be reached: " + url);
-            var content2 = client2.DownloadString(url);
-            var obj2 = JsonConvert.DeserializeObject<MealsSelected2>(content2);
-            Debug.WriteLine("content from meals_selected_with_billing: " + content2.ToString());
+            ////sample https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected_with_billing?customer_uid=100-000127&purchase_id=400-000189
+            //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected_with_billing?customer_uid=" + userID + "&purchase_id=" + selectedPurchId;
+            //Debug.WriteLine("url to be reached: " + url);
+            //var content2 = client2.DownloadString(url);
+            //var obj2 = JsonConvert.DeserializeObject<MealsSelected2>(content2);
+            //Debug.WriteLine("content from meals_selected_with_billing: " + content2.ToString());
 
-            for (int i = 0; i < obj2.Result.Length; i++)
-            {
-                if (obj2.Result[i].PurchaseStatus == "ACTIVE" && dateArray.IndexOf(obj2.Result[i].MenuDate) == -1)
-                {
-                    dateArray.Add(obj2.Result[i].MenuDate);
-                }
-            }
-            dateArray.Reverse();
+            //for (int i = 0; i < obj2.Result.Length; i++)
+            //{
+            //    if (obj2.Result[i].PurchaseStatus == "ACTIVE" && dateArray.IndexOf(obj2.Result[i].MenuDate) == -1)
+            //    {
+            //        dateArray.Add(obj2.Result[i].MenuDate);
+            //    }
+            //}
+            //dateArray.Reverse();
 
             int dateIndex = 0;
+            string mostRecentMenuDate = "";
+            int numMealsDeliv = 0;
 
             //extra subHist for testing
             SubHist subHist_test = new SubHist();
+            ObservableCollection<Meals> mealsColl2 = new ObservableCollection<Meals>();
+            Meals m2 = new Meals();
+            m2.qty = "3";
+            m2.mealName = "YES";
+            mealsColl2.Add(m2);
+            mealsColl2.Add(m2);
+            subHist_test.Date = "Filler Date";
+            subHist_test.mealPlanName = "Filler Meals, Deliveries";
+            subHist_test.mealColl = mealsColl2;
+            subHist_test.mealCollHeight = mealsColl2.Count * 60;
+            subHist_test.CollVisible = false;
             subHist_test.mainGridVisible = false;
             subHistColl.Add(subHist_test);
 
-
-
-            for (int j = 0; j < dateArray.Count; j++)
+            //each value is the dictionary with the menu date key, meal list value
+            foreach (var value in historyDict[selectedPurchId])
+            //foreach (var value in historyDict["400-000001"])
             {
-                if (String.Compare(obj2.NextBilling.MenuDate, (string)dateArray[j]) < 0)
-                    continue;
-
                 SubHist subHist = new SubHist();
-
-                var billDate = new DateTime(int.Parse(obj2.NextBilling.MenuDate.ToString().Substring(0, 4)), int.Parse(obj2.NextBilling.MenuDate.ToString().Substring(5, 2)), int.Parse(obj2.NextBilling.MenuDate.ToString().Substring(8, 2)));
-                //subHist.Date = billDate.ToString("D").Substring(billDate.ToString("D").IndexOf(" ") + 1);
-                Debug.WriteLine("next billing date: " + obj2.NextBilling.MenuDate);
-                nextBillingLabel.Text = billDate.ToString("D").Substring(billDate.ToString("D").IndexOf(" ") + 1);
-                //Debug.WriteLine("next billing date: " + dateArray[j]);
-                var date1 = new DateTime(int.Parse(dateArray[j].ToString().Substring(0, 4)), int.Parse(dateArray[j].ToString().Substring(5, 2)), int.Parse(dateArray[j].ToString().Substring(8, 2)));
+                SubHist subHist2 = new SubHist();
+                var date1 = new DateTime(int.Parse(value.Key.Substring(0, 4)), int.Parse(value.Key.Substring(5, 2)), int.Parse(value.Key.ToString().Substring(8, 2)));
                 Debug.WriteLine("formatted next billing date: " + date1.ToString("D").Substring(date1.ToString("D").IndexOf(" ") + 1));
                 subHist.Date = date1.ToString("D").Substring(date1.ToString("D").IndexOf(" ") + 1);
-                subHist.CollVisible = false;
+                subHist2.Date = date1.ToString("D").Substring(date1.ToString("D").IndexOf(" ") + 1);
+
                 ObservableCollection<Meals> mealsColl = new ObservableCollection<Meals>();
-                for (int i = 0; i < obj2.Result.Length; i++)
+                ObservableCollection<Meals> mealsColl3 = new ObservableCollection<Meals>();
+
+                //list of meals
+                for (int i = 0; i < value.Value.Count; i++)
                 {
-                    if (obj2.Result[i].MenuDate == (string)dateArray[j])
+                    try
                     {
-                        Debug.WriteLine("entered");
-                        try
+                        if ((value.Value)[i].MealName == null && (value.Value)[i].MealDesc != "SURPRISE")
+                            continue;
+                        DateTime currentTime = DateTime.Now;
+
+                        var deliv = new DateTime(int.Parse((value.Value)[i].StartDelivDate.Substring(0, 4)), int.Parse((value.Value)[i].StartDelivDate.Substring(5, 2)), int.Parse((value.Value)[i].StartDelivDate.Substring(8, 2)));
+                        var selmenu = new DateTime(int.Parse((value.Value)[i].SelMenuDate.Substring(0, 4)), int.Parse((value.Value)[i].SelMenuDate.Substring(5, 2)), int.Parse((value.Value)[i].SelMenuDate.Substring(8, 2)));
+                        if (String.Compare(deliv.ToString("u").Substring(0, deliv.ToString("u").IndexOf(" ")), currentTime.ToString("u").Substring(0, currentTime.ToString("u").IndexOf(" "))) >= 0 ||
+                            String.Compare(selmenu.ToString("u").Substring(0, selmenu.ToString("u").IndexOf(" ")), currentTime.ToString("u").Substring(0, currentTime.ToString("u").IndexOf(" "))) >= 0)
+                            continue;
+
+                        Meals m1 = new Meals();
+                        if ((value.Value)[i].SelMenuDate != mostRecentMenuDate)
                         {
-                            JArray newobj = Newtonsoft.Json.JsonConvert.DeserializeObject<JArray>(obj2.Result[i].CombinedSelection);
-
-
-                            foreach (JObject config in newobj)
-                            {
-                                Meals m1 = new Meals();
-                                m1.qty = (string)config["qty"];
-                                m1.mealName = (string)config["name"];
-                                Debug.WriteLine("this was tracked: " + (string)config["name"] + " : " + (string)config["qty"]);
-                                mealsColl.Add(m1);
-                            }
+                            mostRecentMenuDate = (value.Value)[i].SelMenuDate;
+                            m1.DelivDateVisible = true;
+                            numMealsDeliv++;
                         }
-                        catch
+                        else m1.DelivDateVisible = false;
+
+                        if ((value.Value)[i].MealDesc == "SURPRISE")
                         {
-                            Debug.WriteLine("caught from processing combined selection");
+                            m1.DelivDate = selmenu.ToString("D").Substring(selmenu.ToString("D").IndexOf(" ") + 1);
+                            m1.mealName = "SURPRISE";
                         }
-
-                        subHist.mainGridVisible = true;
-                        //get the name of the meal plan
-                        JArray newobj2 = Newtonsoft.Json.JsonConvert.DeserializeObject<JArray>(obj2.Result[i].Items);
-                        Debug.WriteLine("obj2.Result[i].Items: " + obj2.Result[i].Items.ToString());
-                        Debug.WriteLine("newobj2: " + newobj2.ToString());
-                        Debug.WriteLine("newobj2 object: " + newobj2[0].ToString());
-                        foreach (JObject config in newobj2)
+                        else
                         {
-                            Console.WriteLine("Inside foreach loop in GetmealsPlan func");
-                            string qty = (string)config["qty"];
-                            string name = (string)config["name"];
-                            Debug.WriteLine("quantity: " + qty);
-                            Debug.WriteLine("name: " + name);
-                            name = name.Substring(0, name.IndexOf(" "));
-                            name = name + " Meals, ";
-                            qty = qty + " Deliveries";
-                            subHist.mealPlanName = name + qty;
+                            m1.DelivDate = selmenu.ToString("D").Substring(selmenu.ToString("D").IndexOf(" ") + 1);
+                            m1.qty = (value.Value)[i].MealQty;
+                            m1.mealName = (value.Value)[i].MealName;
+                            m1.urlLink = (value.Value)[i].MealPhotoUrl;
                         }
-
-                        subHist.mealCollHeight = mealsColl.Count * 60;
-                        break;
+                        mealsColl.Add(m1);
+                        mealsColl3.Add(m1);
+                    }
+                    catch
+                    {
+                        Debug.WriteLine("bad meal caught");
+                        //try catch block for the objects that don't have any meal info
                     }
                 }
 
+                
+
+                JArray newobj2 = Newtonsoft.Json.JsonConvert.DeserializeObject<JArray>((value.Value)[0].Items);
+                Debug.WriteLine("obj2.Result[i].Items: " + subHistJson.Result[0].Items.ToString());
+                Debug.WriteLine("newobj2: " + newobj2.ToString());
+                Debug.WriteLine("newobj2 object: " + newobj2[0].ToString());
+
+                foreach (JObject config in newobj2)
+                {
+                    Console.WriteLine("Inside foreach loop in GetmealsPlan func");
+                    string qty = (string)config["qty"];
+                    string name = (string)config["name"];
+                    Debug.WriteLine("quantity: " + qty);
+                    Debug.WriteLine("name: " + name);
+                    name = name.Substring(0, name.IndexOf(" "));
+                    name = name + " Meals, ";
+                    qty = qty + " Deliveries  ▼";
+                    //qty = qty + " Deliveries  ▲";
+
+                    subHist.mealPlanName = name + qty;
+                }
+
+                subHist.mealCollHeight = (mealsColl.Count * 70) + (numMealsDeliv * 55);
+                Debug.WriteLine("mealcoll height: " + subHist.mealCollHeight.ToString());
                 subHist.mealColl = mealsColl;
+                subHist.CollVisible = false;
+                subHist.mainGridVisible = true;
+                subHist2.CollVisible = false;
+                subHist2.mainGridVisible = true;
                 subHistColl.Add(subHist);
+                subHist2.mealPlanName = "Second";
+                subHist2.mealCollHeight = mealsColl3.Count * 70;
+                subHist2.mealColl = mealsColl3;
+                //subHistColl.Add(subHist2);
+                //subHistColl.Add(subHist);
+                //subHistColl.Add(subHist);
             }
+
+            SubHist subHist_test2 = new SubHist();
+            subHist_test2.mealCollHeight = mealsColl2.Count * 60;
+            subHist_test2.mealColl = mealsColl2;
+            subHist_test2.CollVisible = false;
+            subHist_test2.mainGridVisible = false;
+            subHistColl.Add(subHist_test2);
+            subHistColl.Add(subHist_test2);
+
+            //for (int j = 0; j < dateArray.Count; j++)
+            //{
+            //    if (String.Compare(obj2.NextBilling.MenuDate, (string)dateArray[j]) < 0)
+            //        continue;
+
+            //    SubHist subHist = new SubHist();
+
+            //    var billDate = new DateTime(int.Parse(obj2.NextBilling.MenuDate.ToString().Substring(0, 4)), int.Parse(obj2.NextBilling.MenuDate.ToString().Substring(5, 2)), int.Parse(obj2.NextBilling.MenuDate.ToString().Substring(8, 2)));
+            //    //subHist.Date = billDate.ToString("D").Substring(billDate.ToString("D").IndexOf(" ") + 1);
+            //    Debug.WriteLine("next billing date: " + obj2.NextBilling.MenuDate);
+            //    nextBillingLabel.Text = billDate.ToString("D").Substring(billDate.ToString("D").IndexOf(" ") + 1);
+            //    //Debug.WriteLine("next billing date: " + dateArray[j]);
+            //    var date1 = new DateTime(int.Parse(dateArray[j].ToString().Substring(0, 4)), int.Parse(dateArray[j].ToString().Substring(5, 2)), int.Parse(dateArray[j].ToString().Substring(8, 2)));
+            //    Debug.WriteLine("formatted next billing date: " + date1.ToString("D").Substring(date1.ToString("D").IndexOf(" ") + 1));
+            //    subHist.Date = date1.ToString("D").Substring(date1.ToString("D").IndexOf(" ") + 1);
+            //    subHist.CollVisible = false;
+            //    ObservableCollection<Meals> mealsColl = new ObservableCollection<Meals>();
+            //    for (int i = 0; i < obj2.Result.Length; i++)
+            //    {
+            //        if (obj2.Result[i].MenuDate == (string)dateArray[j])
+            //        {
+            //            Debug.WriteLine("entered");
+            //            try
+            //            {
+            //                JArray newobj = Newtonsoft.Json.JsonConvert.DeserializeObject<JArray>(obj2.Result[i].CombinedSelection);
+
+
+            //                foreach (JObject config in newobj)
+            //                {
+            //                    Meals m1 = new Meals();
+            //                    m1.qty = (string)config["qty"];
+            //                    m1.mealName = (string)config["name"];
+            //                    Debug.WriteLine("this was tracked: " + (string)config["name"] + " : " + (string)config["qty"]);
+            //                    mealsColl.Add(m1);
+            //                }
+            //            }
+            //            catch
+            //            {
+            //                Debug.WriteLine("caught from processing combined selection");
+            //            }
+
+            //            subHist.mainGridVisible = true;
+            //            //get the name of the meal plan
+            //            JArray newobj2 = Newtonsoft.Json.JsonConvert.DeserializeObject<JArray>(obj2.Result[i].Items);
+            //            Debug.WriteLine("obj2.Result[i].Items: " + obj2.Result[i].Items.ToString());
+            //            Debug.WriteLine("newobj2: " + newobj2.ToString());
+            //            Debug.WriteLine("newobj2 object: " + newobj2[0].ToString());
+            //            foreach (JObject config in newobj2)
+            //            {
+            //                Console.WriteLine("Inside foreach loop in GetmealsPlan func");
+            //                string qty = (string)config["qty"];
+            //                string name = (string)config["name"];
+            //                Debug.WriteLine("quantity: " + qty);
+            //                Debug.WriteLine("name: " + name);
+            //                name = name.Substring(0, name.IndexOf(" "));
+            //                name = name + " Meals, ";
+            //                qty = qty + " Deliveries";
+            //                subHist.mealPlanName = name + qty;
+            //            }
+
+            //            subHist.mealCollHeight = mealsColl.Count * 60;
+            //            break;
+            //        }
+            //    }
+
+            //    subHist.mealColl = mealsColl;
+            //    subHistColl.Add(subHist);
+            //}
 
             weekOneMenu.HeightRequest = subHistColl.Count * 110;
             //SubHist subHist = new SubHist();
@@ -386,11 +574,13 @@ namespace MTYD.ViewModel
             if (sh.CollVisible == false)
             {
                 weekOneMenu.HeightRequest += sh.mealCollHeight + 20;
+                sh.mealPlanName = sh.mealPlanName.Substring(0, sh.mealPlanName.IndexOf("▼")) + "▲";
                 sh.CollVisible = true;
             }
             else
             {
                 weekOneMenu.HeightRequest -= sh.mealCollHeight + 20;
+                sh.mealPlanName = sh.mealPlanName.Substring(0, sh.mealPlanName.IndexOf("▲")) + "▼";
                 sh.CollVisible = false;
             }
         }
@@ -398,16 +588,26 @@ namespace MTYD.ViewModel
         async void clickedExpand(System.Object sender, System.EventArgs e)
         {
             if (dropDownList.IsVisible == false)
+            {
+                connect.IsVisible = true;
                 dropDownList.IsVisible = true;
-            else dropDownList.IsVisible = false;
+            }
+            else
+            {
+                connect.IsVisible = false;
+                dropDownList.IsVisible = false;
+            }
 
         }
 
         void ItemSelected(System.Object sender, Xamarin.Forms.SelectedItemChangedEventArgs e)
         {
-            dropDownText.Text = (string)dropDownList.SelectedItem;
+            Debug.WriteLine("itemselected entered");
+            //dropDownText.Text = (string)dropDownList.SelectedItem;
+            dropDownText.Text = ((PlanName)dropDownList.SelectedItem).name;
+            //dropDownText.Text = "hello";
             //Debug.WriteLine("addy index selected: " + ((ArrayList)dropDownList.ItemsSource).IndexOf(dropDownText.Text));
-
+            connect.IsVisible = false;
             dropDownList.IsVisible = false;
             planChange();
         }

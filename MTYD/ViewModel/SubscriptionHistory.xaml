@@ -48,25 +48,32 @@
 
                 <StackLayout Grid.Column="0">
 
+                    <!--<BoxView Margin="20,10,20,0" BackgroundColor="#F26522" HeightRequest="50"/>-->
                     <Grid>
+                    <BoxView x:Name="connect" IsVisible="false" Margin="20,28,20,-30" BackgroundColor="#F26522" HeightRequest="50"/>
                     <ImageButton x:Name="dropDownButton" BackgroundColor="Transparent" HorizontalOptions="Fill" Margin="20,0" Source="planSelecter.png" HeightRequest="55" Aspect="AspectFit" Clicked="clickedExpand"/>
                     <Label x:Name="dropDownText" VerticalOptions="Center" HorizontalOptions="Start" Margin="35,0,0,0" TextColor="White" FontSize="Medium" FontAttributes="Bold" BackgroundColor="Transparent"/>
                     <Button BackgroundColor="Transparent" HeightRequest="55" HorizontalOptions="Fill" Clicked="clickedExpand"/>
                     </Grid>
 
-                    <ListView x:Name="dropDownList" IsVisible="false" HeightRequest="200" ItemSelected="ItemSelected" HorizontalOptions="End" Margin="20, -5, 20, 0">
-                                        <!--<ListView.ItemTemplate>
-                                            <DataTemplate>
-                                                <TextCell Text="Hello" Height="50" TextColor="Black"/>
-                                            </DataTemplate>
-                                        </ListView.ItemTemplate>-->
+                    <ListView x:Name="dropDownList" IsVisible="false" HeightRequest="200" ItemSelected="ItemSelected" BackgroundColor="#F26522" HorizontalOptions="End" Margin="20, 0, 20, 0">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                <!--<TextCell Text="Hello" Height="50" TextColor="Black"/>-->
+                                <Frame HasShadow="False" Margin="8,5" BackgroundColor="White" Padding="10,0" HeightRequest="40" CornerRadius="17">
+                                    <Label Text="{Binding name}" FontSize="16" HorizontalTextAlignment="Start" VerticalOptions="Center" VerticalTextAlignment="Center" TextColor="Black"/>
+                                </Frame>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
                     </ListView>
                 </StackLayout>
                 </Grid>
 
-                <BoxView HeightRequest="2" Margin="25,0" BackgroundColor="#F26522" HorizontalOptions="Fill"/>
+                <BoxView HeightRequest="2" IsVisible="false"  Margin="25,0" BackgroundColor="#F26522" HorizontalOptions="Fill"/>
 
-                <Grid Margin="0,2">
+                <Grid Margin="0,2" IsVisible="false">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="1*"/>
@@ -75,7 +82,7 @@
                 <Label Grid.Column="1" Margin="0, 0, 25, 0" Text="TBD" x:Name="nextBillingLabel" FontSize="17" TextColor="#F26522" HorizontalTextAlignment="End" HorizontalOptions="Fill"/>
                 </Grid>
 
-                <BoxView HeightRequest="2" Margin="25,0,25,10" BackgroundColor="#F26522" HorizontalOptions="Fill"/> 
+                <BoxView HeightRequest="2" IsVisible="false" Margin="25,0,25,10" BackgroundColor="#F26522" HorizontalOptions="Fill"/> 
 
                 <CollectionView x:Name="weekOneMenu">
                     <CollectionView.ItemsLayout>
@@ -121,8 +128,8 @@
 
                                     <!--<Label Text="{Binding Date}" FontSize="15" HorizontalTextAlignment="Center" HorizontalOptions="Center" Margin="10"/>
                                     <Button Text="{Binding mealPlanName}" HeightRequest="40" FontSize="15" HorizontalOptions="Fill" BackgroundColor="LightGray" Margin="40,5" Clicked="clickedSeeMeals"/>-->  
-
-                                    <CollectionView Margin="15,-15,15,0" ItemsSource="{Binding mealColl}" IsVisible="{Binding CollVisible}" HeightRequest="{Binding mealCollHeight}" BackgroundColor="LightGoldenrodYellow">
+                                    
+                                    <CollectionView Margin="15,-15,15,0" ItemsSource="{Binding mealColl}" IsVisible="{Binding CollVisible}" HeightRequest="{Binding mealCollHeight}">
                                         <CollectionView.ItemsLayout>
                                             <GridItemsLayout
                                             Orientation="Vertical"
@@ -130,7 +137,22 @@
                                         </CollectionView.ItemsLayout>
                                         <CollectionView.ItemTemplate>
                                             <DataTemplate>
-                                                <Grid ColumnSpacing="3">
+                                                <StackLayout>
+                                                <Grid ColumnSpacing="3" Margin="0,5" IsVisible="{Binding DelivDateVisible}">
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="Auto" />
+                                                    </Grid.RowDefinitions>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="1*" />
+                                                        <ColumnDefinition Width="1*" />
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <Label Text="Meals Delivered" Grid.Column="0" FontSize="21" HeightRequest="30" FontAttributes="Bold" VerticalOptions="Center" VerticalTextAlignment="Center" HorizontalOptions="Start" HorizontalTextAlignment="Start"/>
+                                                    <Label Text="{Binding DelivDate}" Grid.Column="1" FontSize="21" HeightRequest="30" FontAttributes="Bold" VerticalOptions="Center" VerticalTextAlignment="Center" HorizontalOptions="End" HorizontalTextAlignment="End"/>
+                                                        
+                                                </Grid>
+
+                                                <Grid ColumnSpacing="3" Margin="0,5">
                                                     <Grid.RowDefinitions>
                                                         <RowDefinition Height="Auto" />
                                                     </Grid.RowDefinitions>
@@ -139,13 +161,13 @@
                                                         <ColumnDefinition Width="4*" />
                                                         <ColumnDefinition Width="1*" />
                                                     </Grid.ColumnDefinitions>
-
                                                         <!--<Forms9Patch:Label x:Name="mealDesc" Margin="3,0" Text="{Binding MealDesc}" HorizontalTextAlignment="Center" IsVisible="{Binding SeeDesc}" Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="Transparent" TextColor="Black"/>-->
-
+                                                        
                                                         <Label Grid.Column="0" Text="{Binding qty}" FontSize="30" HeightRequest="50" FontAttributes="Bold" VerticalOptions="Center" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" HorizontalOptions="Fill"/>
-                                                        <Label Grid.Column="1" Text="{Binding mealName}" FontSize="15" HeightRequest="50" VerticalOptions="Center" VerticalTextAlignment="Center" HorizontalTextAlignment="Start" HorizontalOptions="Fill"/>
-                                    
+                                                        <Label Grid.Column="1" Text="{Binding mealName}" FontSize="16" HeightRequest="50" VerticalOptions="Center" VerticalTextAlignment="Center" HorizontalTextAlignment="Start" HorizontalOptions="Fill"/>
+                                                        <Image Grid.Column="2" HorizontalOptions="Center" Aspect="AspectFill" VerticalOptions="Center" HeightRequest="50" WidthRequest="50" Source="{Binding urlLink}"/>
                                                 </Grid>
+                                                </StackLayout>
                                             </DataTemplate>
                                         </CollectionView.ItemTemplate>
                                     </CollectionView>

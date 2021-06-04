@@ -169,16 +169,16 @@ namespace MTYD.Model.Database
         public string InfoIsAddon { get; set; }
 
         [JsonProperty("cc_num")]
-        public long CcNum { get; set; }
+        public string CcNum { get; set; }
 
         [JsonProperty("cc_exp_date")]
         public string CcExpDate { get; set; }
 
         [JsonProperty("cc_cvv")]
-        public long CcCvv { get; set; }
+        public string CcCvv { get; set; }
 
         [JsonProperty("cc_zip")]
-        public long CcZip { get; set; }
+        public string CcZip { get; set; }
 
         [JsonProperty("charge_id")]
         public string ChargeId { get; set; }

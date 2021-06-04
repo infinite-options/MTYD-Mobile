@@ -18,7 +18,8 @@ using Xamarin.Essentials;
 using System.ComponentModel;
 using System.Diagnostics;
 using Plugin.LatestVersion;
-//using Xamarin.CommunityToolkit;
+using Xamarin.CommunityToolkit;
+using System.Threading;
 
 namespace MTYD.ViewModel
 {
@@ -107,6 +108,7 @@ namespace MTYD.ViewModel
         List<ImageButton> plates;
         bool confirmChangeDate = true;
         object dateDestination;
+        int loadingCount;
 
         WebClient client = new WebClient();
 
@@ -114,6 +116,7 @@ namespace MTYD.ViewModel
         {
             try
             {
+                loadingCount = 0;
                 //public ObservableCollection<AddressAutocomplete> Add;
                 first = firstName;
                 last = lastName;
@@ -436,6 +439,16 @@ namespace MTYD.ViewModel
         {
             try
             {
+                loadingCount++;
+                if (loadingAnim.IsVisible != true)
+                {
+                    loadingAnim.Position = TimeSpan.Zero;
+                    Debug.WriteLine("check buffer prog: " + loadingAnim.BufferingProgress.ToString());
+                    loadingAnim.Play();
+                    loadBackground.IsVisible = true;
+                    loadingAnim.IsVisible = true;
+                }
+
                 Debug.WriteLine("setMenu entered");
                 mealCount = 0;
                 addOnCount = 0;
@@ -669,9 +682,36 @@ namespace MTYD.ViewModel
                     BarParameters[0].margin = new Thickness(this.Width, 0, 0, 0);
                     BarParameters[0].update = new Thickness(this.Width, 0, 0, 0);
                 }
+
+                //Task.Delay(1000).Wait();
+
+                //Thread.Sleep(3000);
+
+                Debug.WriteLine("SetMenu() ended");
+                loadingCount = loadingCount - 1;
+                Debug.WriteLine("loadingCount = " + loadingCount.ToString());
+                if (loadingCount == 0)
+                {
+                    //Thread.Sleep(3000);
+                    //Task.Delay(30000).Wait();
+                    loadBackground.IsVisible = false;
+                    loadingAnim.IsVisible = false;
+                }
+                    
             }
             catch (Exception ex)
             {
+                //Thread.Sleep(3000);
+                loadingCount = loadingCount - 1;
+                Debug.WriteLine("loadingCount = " + loadingCount.ToString());
+                if (loadingCount == 0)
+                {
+                    //Thread.Sleep(3000);
+                    //Task.Delay(30000).Wait();
+                    loadBackground.IsVisible = false;
+                    loadingAnim.IsVisible = false;
+                }
+
                 Generic gen = new Generic();
                 gen.parseException(ex.ToString());
             }
@@ -683,6 +723,17 @@ namespace MTYD.ViewModel
             Debug.WriteLine("setDates entered");
             try
             {
+                loadingCount++;
+                if (loadingAnim.IsVisible != true)
+                {
+                    loadingAnim.Position = TimeSpan.Zero;
+                    Debug.WriteLine("check buffer prog: " + loadingAnim.BufferingProgress.ToString());
+                    loadingAnim.Play();
+                    loadBackground.IsVisible = true;
+                    loadingAnim.IsVisible = true;
+                }
+
+
                 availableDates.Clear();
                 dateDict.Clear();
                 var content = client.DownloadString(menuUrl);
@@ -980,9 +1031,33 @@ namespace MTYD.ViewModel
                         surprise();
 
                 }
+
+                //Thread.Sleep(3000);
+
+                Debug.WriteLine("setDates ended");
+                loadingCount = loadingCount - 1;
+                Debug.WriteLine("loadingCount = " + loadingCount.ToString());
+                if (loadingCount == 0)
+                {
+                    //Thread.Sleep(3000);
+                    //Task.Delay(30000).Wait();
+                    loadBackground.IsVisible = false;
+                    loadingAnim.IsVisible = false;
+                }
             }
             catch (Exception ex)
             {
+                //Thread.Sleep(3000);
+                loadingCount = loadingCount - 1;
+                Debug.WriteLine("loadingCount = " + loadingCount.ToString());
+                if (loadingCount == 0)
+                {
+                    //Thread.Sleep(3000);
+                    //Task.Delay(30000).Wait();
+                    loadBackground.IsVisible = false;
+                    loadingAnim.IsVisible = false;
+                }
+
                 Generic gen = new Generic();
                 gen.parseException(ex.ToString());
             }
@@ -1003,6 +1078,16 @@ namespace MTYD.ViewModel
         {
             try
             {
+                loadingCount++;
+                if (loadingAnim.IsVisible != true)
+                {
+                    loadingAnim.Position = TimeSpan.Zero;
+                    Debug.WriteLine("check buffer prog: " + loadingAnim.BufferingProgress.ToString());
+                    loadingAnim.Play();
+                    loadBackground.IsVisible = true;
+                    loadingAnim.IsVisible = true;
+                }
+
                 string s2 = dropDownText.Text;
                 s2 = s2.Substring(0, 2);
                 //Preferences.Set("total", int.Parse(s));
@@ -1013,6 +1098,7 @@ namespace MTYD.ViewModel
                     popButton2.IsVisible = true;
                     dateDestination = sender;
                     showPopUp("Selections Not Saved", "Please click Save Meals to save your meal selections before moving to another date. You can also click Surprise or Skip.");
+
                     return;
                 }
 
@@ -1280,9 +1366,33 @@ namespace MTYD.ViewModel
                 }
                 //reset the buttons
                 //default to surprise if null
+                //Thread.Sleep(3000);
+                await Task.Delay(1000);
+                Debug.WriteLine("dateChange ended");
+                loadingCount = loadingCount - 1;
+                Debug.WriteLine("loadingCount = " + loadingCount.ToString());
+                if (loadingCount == 0)
+                {
+                    //Thread.Sleep(3000);
+                    //Task.Delay(30000).Wait();
+                    loadBackground.IsVisible = false;
+                    loadingAnim.IsVisible = false;
+                }
             }
             catch (Exception ex)
             {
+                //Thread.Sleep(3000);
+                await Task.Delay(1000);
+                loadingCount = loadingCount - 1;
+                Debug.WriteLine("loadingCount = " + loadingCount.ToString());
+                if (loadingCount == 0)
+                {
+                    //Thread.Sleep(3000);
+                    //Task.Delay(30000).Wait();
+                    loadBackground.IsVisible = false;
+                    loadingAnim.IsVisible = false;
+                }
+
                 Generic gen = new Generic();
                 gen.parseException(ex.ToString());
             }
@@ -1293,6 +1403,16 @@ namespace MTYD.ViewModel
         {
             try
             {
+                loadingCount++;
+                if (loadingAnim.IsVisible != true)
+                {
+                    loadingAnim.Position = TimeSpan.Zero;
+                    Debug.WriteLine("check buffer prog: " + loadingAnim.BufferingProgress.ToString());
+                    loadingAnim.Play();
+                    loadBackground.IsVisible = true;
+                    loadingAnim.IsVisible = true;
+                }
+
                 qtyDict.Clear();
                 qtyDict_addon.Clear();
                 //getUserMeals();
@@ -1603,9 +1723,34 @@ namespace MTYD.ViewModel
                     totalCount.Text = Preferences.Get("total", 0).ToString();
                     Preferences.Set("origMax", int.Parse(s));
                 }
+
+                //Thread.Sleep(3000);
+                await Task.Delay(1000);
+                Debug.WriteLine("planChange ended");
+                loadingCount = loadingCount - 1;
+                Debug.WriteLine("loadingCount = " + loadingCount.ToString());
+                if (loadingCount == 0)
+                {
+                    //Thread.Sleep(3000);
+                    //Task.Delay(30000).Wait();
+                    loadBackground.IsVisible = false;
+                    loadingAnim.IsVisible = false;
+                }
             }
             catch (Exception ex)
             {
+                //Thread.Sleep(3000);
+                await Task.Delay(1000);
+                loadingCount = loadingCount - 1;
+                Debug.WriteLine("loadingCount = " + loadingCount.ToString());
+                if (loadingCount == 0)
+                {
+                    //Thread.Sleep(3000);
+                    //Task.Delay(30000).Wait();
+                    loadBackground.IsVisible = false;
+                    loadingAnim.IsVisible = false;
+                }
+
                 Generic gen = new Generic();
                 gen.parseException(ex.ToString());
             }
@@ -2133,6 +2278,16 @@ namespace MTYD.ViewModel
         {
             try
             {
+                loadingCount++;
+                if (loadingAnim.IsVisible != true)
+                {
+                    loadingAnim.Position = TimeSpan.Zero;
+                    Debug.WriteLine("check buffer prog: " + loadingAnim.BufferingProgress.ToString());
+                    loadingAnim.Play();
+                    loadBackground.IsVisible = true;
+                    loadingAnim.IsVisible = true;
+                }
+
                 Console.WriteLine("ENTER GET MEAL PLANS FUNCTION");
 
                 if ((string)Application.Current.Properties["platform"] == "GUEST")
@@ -2234,9 +2389,33 @@ namespace MTYD.ViewModel
                         Console.WriteLine("END OF GET MEAL PLANS FUNCTION");
                     }
                 }
+
+                //Thread.Sleep(3000);
+                await Task.Delay(1000);
+                loadingCount = loadingCount - 1;
+                Debug.WriteLine("loadingCount = " + loadingCount.ToString());
+                if (loadingCount == 0)
+                {
+                    //Thread.Sleep(3000);
+                    //Task.Delay(30000).Wait();
+                    loadBackground.IsVisible = false;
+                    loadingAnim.IsVisible = false;
+                }
             }
             catch (Exception ex)
             {
+                //Thread.Sleep(3000);
+                await Task.Delay(1000);
+                loadingCount = loadingCount - 1;
+                Debug.WriteLine("loadingCount = " + loadingCount.ToString());
+                if (loadingCount == 0)
+                {
+                    //Thread.Sleep(3000);
+                    //Task.Delay(30000).Wait();
+                    loadBackground.IsVisible = false;
+                    loadingAnim.IsVisible = false;
+                }
+
                 Generic gen = new Generic();
                 gen.parseException(ex.ToString());
             }
@@ -2246,6 +2425,16 @@ namespace MTYD.ViewModel
         {
             try
             {
+                loadingCount++;
+                if (loadingAnim.IsVisible != true)
+                {
+                    loadingAnim.Position = TimeSpan.Zero;
+                    Debug.WriteLine("check buffer prog: " + loadingAnim.BufferingProgress.ToString());
+                    loadingAnim.Play();
+                    loadBackground.IsVisible = true;
+                    loadingAnim.IsVisible = true;
+                }
+
                 if ((string)Application.Current.Properties["platform"] != "GUEST")
                 {
                     try
@@ -2330,9 +2519,33 @@ namespace MTYD.ViewModel
                         Console.WriteLine("GET USER MEALS ERROR CATCHED");
                     }
                 }
+
+                //Thread.Sleep(3000);
+                
+                Debug.WriteLine("getUserMeals ended");
+                loadingCount = loadingCount - 1;
+                Debug.WriteLine("loadingCount = " + loadingCount.ToString());
+                if (loadingCount == 0)
+                {
+                    //Thread.Sleep(3000);
+                    //Task.Delay(30000).Wait();
+                    loadBackground.IsVisible = false;
+                    loadingAnim.IsVisible = false;
+                }
             }
             catch (Exception ex)
             {
+                //Thread.Sleep(3000);
+                loadingCount = loadingCount - 1;
+                Debug.WriteLine("loadingCount = " + loadingCount.ToString());
+                if (loadingCount == 0)
+                {
+                    //Thread.Sleep(3000);
+                    //Task.Delay(30000).Wait();
+                    loadBackground.IsVisible = false;
+                    loadingAnim.IsVisible = false;
+                }
+
                 Generic gen = new Generic();
                 gen.parseException(ex.ToString());
             }
@@ -2853,6 +3066,16 @@ namespace MTYD.ViewModel
         {
             try
             {
+                loadingCount++;
+                if (loadingAnim.IsVisible != true)
+                {
+                    loadingAnim.Position = TimeSpan.Zero;
+                    Debug.WriteLine("check buffer prog: " + loadingAnim.BufferingProgress.ToString());
+                    loadingAnim.Play();
+                    loadBackground.IsVisible = true;
+                    loadingAnim.IsVisible = true;
+                }
+
                 foreach (Date d in availableDates)
                 {
                     Debug.WriteLine("INSIDE checkDateStatuses #1");
@@ -3003,9 +3226,34 @@ namespace MTYD.ViewModel
 
                     }
                 }
+                Debug.WriteLine("checkDateStatuses ended");
+
+                //Thread.Sleep(3000);
+                await Task.Delay(1000);
+                loadingCount = loadingCount - 1;
+                Debug.WriteLine("loadingCount = " + loadingCount.ToString());
+                if (loadingCount == 0)
+                {
+                    //Thread.Sleep(3000);
+                    //Task.Delay(30000).Wait();
+                    loadBackground.IsVisible = false;
+                    loadingAnim.IsVisible = false;
+                }
             }
             catch (Exception ex)
             {
+                //Thread.Sleep(3000);
+                await Task.Delay(1000);
+                loadingCount = loadingCount - 1;
+                Debug.WriteLine("loadingCount = " + loadingCount.ToString());
+                if (loadingCount == 0)
+                {
+                    //Thread.Sleep(3000);
+                    //Task.Delay(30000).Wait();
+                    loadBackground.IsVisible = false;
+                    loadingAnim.IsVisible = false;
+                }
+
                 Generic gen = new Generic();
                 gen.parseException(ex.ToString());
             }
@@ -3015,6 +3263,16 @@ namespace MTYD.ViewModel
         {
             try
             {
+                loadingCount++;
+                if (loadingAnim.IsVisible != true)
+                {
+                    loadingAnim.Position = TimeSpan.Zero;
+                    Debug.WriteLine("check buffer prog: " + loadingAnim.BufferingProgress.ToString());
+                    loadingAnim.Play();
+                    loadBackground.IsVisible = true;
+                    loadingAnim.IsVisible = true;
+                }
+
                 Console.WriteLine("INSIDE GetRecentSelection #1");
                 var request = new HttpRequestMessage();
                 string purchaseID = Preferences.Get("purchId", "");
@@ -3159,6 +3417,19 @@ namespace MTYD.ViewModel
                         selectedDate.fillColor = Color.White;
                         selectedDate.status = "Surprise / No Selection";
                     }
+
+                    //Thread.Sleep(3000);
+                    await Task.Delay(1000);
+                    loadingCount = loadingCount - 1;
+                    Debug.WriteLine("loadingCount = " + loadingCount.ToString());
+                    if (loadingCount == 0)
+                    {
+                        //Thread.Sleep(3000);
+                        //Task.Delay(30000).Wait();
+                        loadBackground.IsVisible = false;
+                        loadingAnim.IsVisible = false;
+                    }
+
                     Console.WriteLine("isSurprise value: " + isSurprise + " isSkip value: " + isSkip);
                     return;
                     Console.WriteLine("Trying to enter second for loop in Get Recent Selection");
@@ -3238,9 +3509,33 @@ namespace MTYD.ViewModel
                     Console.WriteLine("END OF GET RECENT SELECTION");
 
                 }
+
+                //Thread.Sleep(3000);
+                await Task.Delay(1000);
+                loadingCount = loadingCount - 1;
+                Debug.WriteLine("loadingCount = " + loadingCount.ToString());
+                if (loadingCount == 0)
+                {
+                    //Thread.Sleep(3000);
+                    //Task.Delay(30000).Wait();
+                    loadBackground.IsVisible = false;
+                    loadingAnim.IsVisible = false;
+                }
             }
             catch (Exception ex)
             {
+                //Thread.Sleep(3000);
+                await Task.Delay(1000);
+                loadingCount = loadingCount - 1;
+                Debug.WriteLine("loadingCount = " + loadingCount.ToString());
+                if (loadingCount == 0)
+                {
+                    //Thread.Sleep(3000);
+                    //Task.Delay(30000).Wait();
+                    loadBackground.IsVisible = false;
+                    loadingAnim.IsVisible = false;
+                }
+
                 Generic gen = new Generic();
                 gen.parseException(ex.ToString());
             }
@@ -3250,6 +3545,17 @@ namespace MTYD.ViewModel
         {
             try
             {
+                loadingCount++;
+                if (loadingAnim.IsVisible != true)
+                {
+                    loadingAnim.Position = TimeSpan.Zero;
+                    Debug.WriteLine("check buffer prog: " + loadingAnim.BufferingProgress.ToString());
+                    loadingAnim.Play();
+                    loadBackground.IsVisible = true;
+                    loadingAnim.IsVisible = true;
+                }
+                
+
                 Console.WriteLine("INSIDE GetRecentSelection #2");
                 var request = new HttpRequestMessage();
                 //commented out for id vs uid
@@ -3408,9 +3714,33 @@ namespace MTYD.ViewModel
                     Console.WriteLine("END OF GET RECENT SELECTION #2");
 
                 }
+
+                //Thread.Sleep(3000);
+                await Task.Delay(1000);
+                loadingCount = loadingCount - 1;
+                Debug.WriteLine("loadingCount = " + loadingCount.ToString());
+                if (loadingCount == 0)
+                {
+                    //Thread.Sleep(3000);
+                    //Task.Delay(30000).Wait();
+                    loadBackground.IsVisible = false;
+                    loadingAnim.IsVisible = false;
+                }
             }
             catch (Exception ex)
             {
+                //Thread.Sleep(3000);
+                await Task.Delay(1000);
+                loadingCount = loadingCount - 1;
+                Debug.WriteLine("loadingCount = " + loadingCount.ToString());
+                if (loadingCount == 0)
+                {
+                    //Thread.Sleep(3000);
+                    //Task.Delay(30000).Wait();
+                    loadBackground.IsVisible = false;
+                    loadingAnim.IsVisible = false;
+                }
+
                 Generic gen = new Generic();
                 gen.parseException(ex.ToString());
             }

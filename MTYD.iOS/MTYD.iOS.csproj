@@ -297,6 +297,8 @@
     <BundleResource Include="Resources\profileGoogle.png" />
     <BundleResource Include="Resources\discTicket.png" />
     <BundleResource Include="Resources\pgHeader.png" />
+    <BundleResource Include="Resources\pulseLoadingAnim.mp4" />
+    <BundleResource Include="Resources\loadingClear.mp4" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AppleSignIn\" />
