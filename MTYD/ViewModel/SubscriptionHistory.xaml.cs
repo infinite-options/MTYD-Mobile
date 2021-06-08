@@ -377,6 +377,26 @@ namespace MTYD.ViewModel
                 ObservableCollection<Meals> mealsColl = new ObservableCollection<Meals>();
                 ObservableCollection<Meals> mealsColl3 = new ObservableCollection<Meals>();
 
+                JArray newobj2 = Newtonsoft.Json.JsonConvert.DeserializeObject<JArray>((value.Value)[0].Items);
+                Debug.WriteLine("obj2.Result[i].Items: " + subHistJson.Result[0].Items.ToString());
+                Debug.WriteLine("newobj2: " + newobj2.ToString());
+                Debug.WriteLine("newobj2 object: " + newobj2[0].ToString());
+
+                foreach (JObject config in newobj2)
+                {
+                    Console.WriteLine("Inside foreach loop in GetmealsPlan func");
+                    string qty = (string)config["qty"];
+                    string name = (string)config["name"];
+                    Debug.WriteLine("quantity: " + qty);
+                    Debug.WriteLine("name: " + name);
+                    name = name.Substring(0, name.IndexOf(" "));
+                    name = name + " Meals, ";
+                    qty = qty + " Deliveries  ▼";
+                    //qty = qty + " Deliveries  ▲";
+
+                    subHist.mealPlanName = name + qty;
+                }
+
                 //list of meals
                 for (int i = 0; i < value.Value.Count; i++)
                 {
@@ -405,6 +425,7 @@ namespace MTYD.ViewModel
                         {
                             m1.DelivDate = selmenu.ToString("D").Substring(selmenu.ToString("D").IndexOf(" ") + 1);
                             m1.mealName = "SURPRISE";
+                            m1.qty = subHist.mealPlanName.Substring(0, 1);
                         }
                         else
                         {
@@ -424,26 +445,26 @@ namespace MTYD.ViewModel
                 }
 
                 
+                //old location
+                //JArray newobj2 = Newtonsoft.Json.JsonConvert.DeserializeObject<JArray>((value.Value)[0].Items);
+                //Debug.WriteLine("obj2.Result[i].Items: " + subHistJson.Result[0].Items.ToString());
+                //Debug.WriteLine("newobj2: " + newobj2.ToString());
+                //Debug.WriteLine("newobj2 object: " + newobj2[0].ToString());
 
-                JArray newobj2 = Newtonsoft.Json.JsonConvert.DeserializeObject<JArray>((value.Value)[0].Items);
-                Debug.WriteLine("obj2.Result[i].Items: " + subHistJson.Result[0].Items.ToString());
-                Debug.WriteLine("newobj2: " + newobj2.ToString());
-                Debug.WriteLine("newobj2 object: " + newobj2[0].ToString());
+                //foreach (JObject config in newobj2)
+                //{
+                //    Console.WriteLine("Inside foreach loop in GetmealsPlan func");
+                //    string qty = (string)config["qty"];
+                //    string name = (string)config["name"];
+                //    Debug.WriteLine("quantity: " + qty);
+                //    Debug.WriteLine("name: " + name);
+                //    name = name.Substring(0, name.IndexOf(" "));
+                //    name = name + " Meals, ";
+                //    qty = qty + " Deliveries  ▼";
+                //    //qty = qty + " Deliveries  ▲";
 
-                foreach (JObject config in newobj2)
-                {
-                    Console.WriteLine("Inside foreach loop in GetmealsPlan func");
-                    string qty = (string)config["qty"];
-                    string name = (string)config["name"];
-                    Debug.WriteLine("quantity: " + qty);
-                    Debug.WriteLine("name: " + name);
-                    name = name.Substring(0, name.IndexOf(" "));
-                    name = name + " Meals, ";
-                    qty = qty + " Deliveries  ▼";
-                    //qty = qty + " Deliveries  ▲";
-
-                    subHist.mealPlanName = name + qty;
-                }
+                //    subHist.mealPlanName = name + qty;
+                //}
 
                 subHist.mealCollHeight = (mealsColl.Count * 70) + (numMealsDeliv * 55);
                 Debug.WriteLine("mealcoll height: " + subHist.mealCollHeight.ToString());

@@ -74,10 +74,10 @@ namespace MTYD.ViewModel
         private static string jsonMeals;
         public static ObservableCollection<MealInfo> Meals1 = new ObservableCollection<MealInfo>();
         public static ObservableCollection<MealInfo> Meals2 = new ObservableCollection<MealInfo>();
-        public static string userId = (string)Application.Current.Properties["user_id"];
-        private string postUrl = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selection?customer_uid=" + userId;
+        public string userId = (string)Application.Current.Properties["user_id"];
+        private string postUrl;// = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selection?customer_uid=" + userId;
         private const string menuUrl = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/upcoming_menu";
-        private string userMeals = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + userId;
+        private string userMeals;// = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + userId;
         //private const string userMeals = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=100-000001";
         private static Dictionary<string, string> qtyDict = new Dictionary<string, string>();
         private static Dictionary<string, string> qtyDict_addon = new Dictionary<string, string>();
@@ -109,6 +109,7 @@ namespace MTYD.ViewModel
         bool confirmChangeDate = true;
         object dateDestination;
         int loadingCount;
+        ObservableCollection<PlanName> namesColl = new ObservableCollection<PlanName>();
 
         WebClient client = new WebClient();
 
@@ -116,6 +117,8 @@ namespace MTYD.ViewModel
         {
             try
             {
+                postUrl = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selection?customer_uid=" + userId;
+                userMeals = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + userId;
                 loadingCount = 0;
                 //public ObservableCollection<AddressAutocomplete> Add;
                 first = firstName;
@@ -133,6 +136,7 @@ namespace MTYD.ViewModel
                 favDict = new Dictionary<string, bool>();
                 passedZones = zones;
                 InitializeComponent();
+                Debug.WriteLine("user id: " + (string)Application.Current.Properties["user_id"]);
 
                 //checkPlatform(height, width);
 
@@ -341,9 +345,12 @@ namespace MTYD.ViewModel
         //}
         void addy_ItemSelected(System.Object sender, Xamarin.Forms.SelectedItemChangedEventArgs e)
         {
-            dropDownText.Text = (string)dropDownList.SelectedItem;
-            Debug.WriteLine("addy index selected: " + ((ArrayList)dropDownList.ItemsSource).IndexOf(dropDownText.Text));
+            //dropDownText.Text = (string)dropDownList.SelectedItem;
+            dropDownText.Text = ((PlanName)dropDownList.SelectedItem).name;
+            //Debug.WriteLine("addy index selected: " + ((ArrayList)dropDownList.ItemsSource).IndexOf(dropDownText.Text));
 
+            //dropDownList.IsVisible = false;
+            connect.IsVisible = false;
             dropDownList.IsVisible = false;
             planChange(sender, e);
         }
@@ -394,8 +401,15 @@ namespace MTYD.ViewModel
         async void clickedExpand(System.Object sender, System.EventArgs e)
         {
             if (dropDownList.IsVisible == false)
+            {
+                connect.IsVisible = true;
                 dropDownList.IsVisible = true;
-            else dropDownList.IsVisible = false;
+            }
+            else
+            {
+                connect.IsVisible = false;
+                dropDownList.IsVisible = false;
+            }
 
         }
 
@@ -488,7 +502,7 @@ namespace MTYD.ViewModel
                             mealQty = 0;
                         }
 
-                        Debug.WriteLine("itemuid: " + obj.Result[i].MealUid + " and meal name: " + obj.Result[i].MealName);
+                        Debug.WriteLine("itemuid: " + obj.Result[i].MealUid + " and meal name: " + obj.Result[i].MealName + " and meal qty: " + mealQty);
 
                         //b.Source = "filledHeart.png";
                         //b.Source = "emptyHeart.png";
@@ -1454,7 +1468,18 @@ namespace MTYD.ViewModel
                 if ((string)Application.Current.Properties["platform"] != "GUEST")
                 {
                     //int indexOfMealPlanSelected = (int)SubscriptionPicker.SelectedIndex;
-                    int indexOfMealPlanSelected = ((ArrayList)dropDownList.ItemsSource).IndexOf(dropDownText.Text);
+                    //int indexOfMealPlanSelected = ((ArrayList)dropDownList.ItemsSource).IndexOf(dropDownText.Text);
+                    int indexOfMealPlanSelected = -1;
+                    //int selectedIndex = ((ArrayList)dropDownList.ItemsSource).IndexOf(dropDownText.Text);
+                    foreach (var plan in namesColl)
+                    {
+                        indexOfMealPlanSelected++;
+                        if (plan.name == dropDownText.Text)
+                        {
+                            break;
+                        }
+                    }
+
                     if (indexOfMealPlanSelected < 0)
                         indexOfMealPlanSelected = 0;
                     Debug.WriteLine("index of meal plan selected in plan change: " + indexOfMealPlanSelected.ToString());
@@ -1568,7 +1593,17 @@ namespace MTYD.ViewModel
                         saveFrame.BackgroundColor = Color.White;
                         saveBttn.TextColor = Color.Black;
 
-                        indexOfMealPlanSelected = ((ArrayList)dropDownList.ItemsSource).IndexOf(dropDownText.Text);
+                        //indexOfMealPlanSelected = ((ArrayList)dropDownList.ItemsSource).IndexOf(dropDownText.Text);
+                        int selectedIndex = -1;
+                        //int selectedIndex = ((ArrayList)dropDownList.ItemsSource).IndexOf(dropDownText.Text);
+                        foreach (var plan in namesColl)
+                        {
+                            selectedIndex++;
+                            if (plan.name == dropDownText.Text)
+                            {
+                                break;
+                            }
+                        }
                         Preferences.Set("purchId", purchIdArray[indexOfMealPlanSelected].ToString());
                         Preferences.Set("purchUid", purchUidArray[indexOfMealPlanSelected].ToString());
                         Console.WriteLine("Purch Id: " + Preferences.Get("purchId", ""));
@@ -1613,7 +1648,17 @@ namespace MTYD.ViewModel
                         saveFrame.BackgroundColor = Color.White;
                         saveBttn.TextColor = Color.Black;
 
-                        indexOfMealPlanSelected = ((ArrayList)dropDownList.ItemsSource).IndexOf(dropDownText.Text);
+                        //indexOfMealPlanSelected = ((ArrayList)dropDownList.ItemsSource).IndexOf(dropDownText.Text);
+                        int selectedIndex = -1;
+                        //int selectedIndex = ((ArrayList)dropDownList.ItemsSource).IndexOf(dropDownText.Text);
+                        foreach (var plan in namesColl)
+                        {
+                            selectedIndex++;
+                            if (plan.name == dropDownText.Text)
+                            {
+                                break;
+                            }
+                        }
                         Preferences.Set("purchId", purchIdArray[indexOfMealPlanSelected].ToString());
                         Preferences.Set("purchUid", purchUidArray[indexOfMealPlanSelected].ToString());
                         Console.WriteLine("Purch Id: " + Preferences.Get("purchId", ""));
@@ -2293,13 +2338,18 @@ namespace MTYD.ViewModel
                 if ((string)Application.Current.Properties["platform"] == "GUEST")
                 {
                     ArrayList namesArray = new ArrayList();
+                    PlanName newPlan = new PlanName();
+                    newPlan.name = (Preferences.Get("item_name", "").Substring(0, 1) + " Meal Plan");
+                    namesColl.Add(newPlan);
                     namesArray.Add(Preferences.Get("item_name", "").Substring(0, 1) + " Meal Plan");
                     SubscriptionPicker.ItemsSource = namesArray;
                     //mealPlansList.ItemsSource = namesArray;
                     dropDownList.HeightRequest = 100;
-                    dropDownList.ItemsSource = namesArray;
+                    //dropDownList.ItemsSource = namesArray;
+                    dropDownList.ItemsSource = namesColl;
                     SubscriptionPicker.SelectedItem = namesArray[0].ToString();
-                    dropDownList.SelectedItem = namesArray[0].ToString();
+                    //dropDownList.SelectedItem = namesArray[0].ToString();
+                    dropDownList.SelectedItem = namesColl[0];
                     //Preferences.Get("item_name", "").Substring(0, 1) + " Meals for " + Preferences.Get("freqSelected", "") + " Deliveries): 
                 }
                 else
@@ -2368,6 +2418,9 @@ namespace MTYD.ViewModel
 
                                 //adds purchase uid to front of meal plan name
                                 //namesArray.Add(purchIdArray[i].ToString().Substring(4) + " : " + name);
+                                PlanName newPlan = new PlanName();
+                                newPlan.name = (name + qty + " : " + purchIdCurrent);
+                                namesColl.Add(newPlan);
                                 namesArray.Add(name + qty + " : " + purchIdCurrent);
                             }
                         }
@@ -2377,12 +2430,15 @@ namespace MTYD.ViewModel
                         //Console.WriteLine("namesArray contents:" + namesArray[0].ToString() + " " + namesArray[1].ToString() + " " + namesArray[2].ToString() + " ");
                         SubscriptionPicker.ItemsSource = namesArray;
                         //mealPlansList.ItemsSource = namesArray;
-                        dropDownList.ItemsSource = namesArray;
-                        if (namesArray.Count < 4)
+                        //dropDownList.ItemsSource = namesArray;
+                        dropDownList.ItemsSource = namesColl;
+                        
+                        if (namesColl.Count < 4)
                             dropDownList.HeightRequest = 100;
 
                         SubscriptionPicker.SelectedItem = namesArray[0].ToString();
-                        dropDownList.SelectedItem = namesArray[0].ToString();
+                        //dropDownList.SelectedItem = namesArray[0].ToString();
+                        dropDownList.SelectedItem = namesColl[0];
                         Console.WriteLine("namesArray contents:" + namesArray[0].ToString());
                         //SubscriptionPicker.Title = namesArray[0];
 
@@ -2448,14 +2504,18 @@ namespace MTYD.ViewModel
                         for (int i = 0; i < obj.Result.Length; i++)
                         {
                             // If meals selected matches menu date, get meals selected
-                            Debug.WriteLine("purchId: " + Preferences.Get("purchId", ""));
+                            //Debug.WriteLine("purchId: " + Preferences.Get("purchId", ""));
                             //Debug.WriteLine("Selection purchase id: " + obj.Result[i].SelPurchaseId.ToString());
                             //Debug.WriteLine("purchase uid: " + obj.Result[i].PurchaseUid.ToString());
                             //Debug.WriteLine("purchase id: " + obj.Result[i].PurchaseId.ToString());
                             //Debug.WriteLine("purchase id: " + obj.Result[i].PurchaseId.ToString());
                             //commented for id vs uid
                             //used to be SelPurchaseId
-                            if (obj.Result[i].MenuDate.Equals(selectedDate.fullDateTime) && Preferences.Get("purchId", "") == obj.Result[i].PurchaseId)
+                            Debug.WriteLine("obj.Result[i].MenuDate = " + obj.Result[i].MenuDate);
+                            Debug.WriteLine("selectedDate.fullDateTime = " + selectedDate.fullDateTime);
+                            Debug.WriteLine("Preferences.Get(purchId, ) = " + Preferences.Get("purchId", ""));
+                            Debug.WriteLine("obj.Result[i].PurchaseId = " + obj.Result[i].PurchaseId);
+                            if (obj.Result[i].MenuDate.Equals(selectedDate.fullDateTime) && Preferences.Get("purchId", "") == obj.Result[i].PurchaseId && obj.Result[i].PurchaseStatus.Equals("ACTIVE"))
                             //if (obj.Result[i].SelMenuDate.Equals(selectedDate.fullDateTime) && Preferences.Get("purchUid", "") == obj.Result[i].PurchaseUid)
                             {
                                 string json = obj.Result[i].MealSelection;
@@ -2747,7 +2807,17 @@ namespace MTYD.ViewModel
                 popButton2.IsVisible = false;
                 showPopUp("Delivery Skipped", "You won't receive any meals this day. We will extend your subscription accordingly.");
                 mealsSaved.Clear();
-                int indexOfMealPlanSelected = ((ArrayList)dropDownList.ItemsSource).IndexOf(dropDownText.Text);
+                //int indexOfMealPlanSelected = ((ArrayList)dropDownList.ItemsSource).IndexOf(dropDownText.Text);
+                int indexOfMealPlanSelected = -1;
+                //int selectedIndex = ((ArrayList)dropDownList.ItemsSource).IndexOf(dropDownText.Text);
+                foreach (var plan in namesColl)
+                {
+                    indexOfMealPlanSelected++;
+                    if (plan.name == dropDownText.Text)
+                    {
+                        break;
+                    }
+                }
                 Preferences.Set("purchId", purchIdArray[indexOfMealPlanSelected].ToString());
                 Preferences.Set("purchUid", purchUidArray[indexOfMealPlanSelected].ToString());
                 Console.WriteLine("Purch Id: " + Preferences.Get("purchId", ""));
@@ -2828,7 +2898,17 @@ namespace MTYD.ViewModel
                 //postData();
                 //DisplayAlert("SUPRISE", "You will be surprised with a randomized meal selection. If you want to select meals again for this meal plan then click the RESET button!", "OK");
                 mealsSaved.Clear();
-                int indexOfMealPlanSelected = ((ArrayList)dropDownList.ItemsSource).IndexOf(dropDownText.Text);
+                //int indexOfMealPlanSelected = ((ArrayList)dropDownList.ItemsSource).IndexOf(dropDownText.Text);
+                int indexOfMealPlanSelected = -1;
+                //int selectedIndex = ((ArrayList)dropDownList.ItemsSource).IndexOf(dropDownText.Text);
+                foreach (var plan in namesColl)
+                {
+                    indexOfMealPlanSelected++;
+                    if (plan.name == dropDownText.Text)
+                    {
+                        break;
+                    }
+                }
                 Preferences.Set("purchId", purchIdArray[indexOfMealPlanSelected].ToString());
                 Preferences.Set("purchUid", purchUidArray[indexOfMealPlanSelected].ToString());
                 Console.WriteLine("Purch Id: " + Preferences.Get("purchId", ""));
@@ -2933,7 +3013,17 @@ namespace MTYD.ViewModel
                 popButton2.IsVisible = false;
                 showPopUp("Surprise!", "We’ll surprise you with some of our specials on this day!");
                 mealsSaved.Clear();
-                int indexOfMealPlanSelected = ((ArrayList)dropDownList.ItemsSource).IndexOf(dropDownText.Text);
+                //int indexOfMealPlanSelected = ((ArrayList)dropDownList.ItemsSource).IndexOf(dropDownText.Text);
+                int indexOfMealPlanSelected = -1;
+                //int selectedIndex = ((ArrayList)dropDownList.ItemsSource).IndexOf(dropDownText.Text);
+                foreach (var plan in namesColl)
+                {
+                    indexOfMealPlanSelected++;
+                    if (plan.name == dropDownText.Text)
+                    {
+                        break;
+                    }
+                }
                 Preferences.Set("purchId", purchIdArray[indexOfMealPlanSelected].ToString());
                 Preferences.Set("purchUid", purchUidArray[indexOfMealPlanSelected].ToString());
                 Console.WriteLine("Purch Id: " + Preferences.Get("purchId", ""));
@@ -3758,7 +3848,17 @@ namespace MTYD.ViewModel
 
             }
 
-            int indexOfMealPlanSelected = ((ArrayList)dropDownList.ItemsSource).IndexOf(dropDownText.Text);
+            //int indexOfMealPlanSelected = ((ArrayList)dropDownList.ItemsSource).IndexOf(dropDownText.Text);
+            int indexOfMealPlanSelected = -1;
+            //int selectedIndex = ((ArrayList)dropDownList.ItemsSource).IndexOf(dropDownText.Text);
+            foreach (var plan in namesColl)
+            {
+                indexOfMealPlanSelected++;
+                if (plan.name == dropDownText.Text)
+                {
+                    break;
+                }
+            }
             Preferences.Set("purchId", purchIdArray[indexOfMealPlanSelected].ToString());
             Preferences.Set("purchUid", purchUidArray[indexOfMealPlanSelected].ToString());
             Console.WriteLine("Purch Id: " + Preferences.Get("purchId", ""));

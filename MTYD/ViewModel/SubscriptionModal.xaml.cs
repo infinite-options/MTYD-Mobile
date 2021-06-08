@@ -994,7 +994,7 @@ namespace MTYD.ViewModel
                             }
                             //NEED CARDHOLDER ADDRESS
                             customer.Address = new AddressOptions { City = passedCity.Trim(), Country = Constant.Contry, Line1 = passedAdd.Trim(), Line2 = passedUnit.Trim(), PostalCode = passedZip.Trim(), State = passedState.Trim() };
-
+                            
 
                             var customerService = new CustomerService();
                             var cust = customerService.Create(customer);
