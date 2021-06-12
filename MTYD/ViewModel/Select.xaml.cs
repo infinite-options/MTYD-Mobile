@@ -3882,6 +3882,12 @@ namespace MTYD.ViewModel
             openedMenu.IsVisible = false;
         }
 
+        async void clickedStripeTest(System.Object sender, System.EventArgs e)
+        {
+            await Navigation.PushAsync(new StripeTesting(), false);
+            //Navigation.RemovePage(this.Navigation.NavigationStack[this.Navigation.NavigationStack.Count - 2]);
+        }
+
         async void clickedLanding(System.Object sender, System.EventArgs e)
         {
             await Navigation.PushAsync(new MainPage(first, last, email), false);

@@ -25,6 +25,7 @@ using MTYD.Model.Login.LoginClasses;
 using Stripe;
 using System.Windows.Input;
 
+
 namespace MTYD.ViewModel
 {
     /*
@@ -52,9 +53,9 @@ namespace MTYD.ViewModel
     Preferences.Set("prevAddFilled", prevAddFilled);
     Preferences.Set("anyPrev", anyPrev);
      */
+    
 
-
-    [XamlCompilation(XamlCompilationOptions.Compile)]
+        [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class PaymentPage : ContentPage
     {
         string cust_firstName; string cust_lastName; string cust_email;
@@ -2526,6 +2527,7 @@ namespace MTYD.ViewModel
                         //var req = await stripe.createPaymentMethod();
                         StripeClient stripeClient = new StripeClient();
 
+                        PaymentIntent newPayInt = new PaymentIntent();
 
                         string CardNo = cardHolderNumber.Text.Trim();
                         string expMonth = cardExpMonth.Text.Trim();
@@ -2539,15 +2541,19 @@ namespace MTYD.ViewModel
                         stripeOption.ExpMonth = Convert.ToInt64(expMonth);
                         stripeOption.ExpYear = Convert.ToInt64(expYear);
                         stripeOption.Cvc = cardCvv;
-
-
+                        //Stripe.PaymentIntentConfirmOptions pay = new Stripe.PaymentIntentConfirmOptions();
+                        
                         Debug.WriteLine("step 2 reached");
                         // Step 2: Assign card to token object
                         TokenCreateOptions stripeCard = new TokenCreateOptions();
                         stripeCard.Card = stripeOption;
-
+                        
                         TokenService service = new TokenService();
                         Stripe.Token newToken = service.Create(stripeCard);
+
+
+                        //Stripe.PaymentIntentConfirmOptions newpayIntConf = new Stripe.PaymentIntentConfirmOptions();
+                        //newpayIntConf.
 
                         Debug.WriteLine("step 3 reached");
                         // Step 3: Assign the token to the soruce 
@@ -2555,11 +2561,31 @@ namespace MTYD.ViewModel
                         option.Type = SourceType.Card;
                         option.Currency = "usd";
                         option.Token = newToken.Id;
-
+                        
                         var sourceService = new SourceService();
                         Source source = sourceService.Create(option);
+                        Debug.WriteLine("option: " + option);
+                        Debug.WriteLine("source: " + source);
+                        //getting payment intent from backend
+                        //StripePayment stripePayInt = new StripePayment();
+                        //stripePayInt.customer_uid = (string)Xamarin.Forms.Application.Current.Properties["user_id"];
+                        //stripePayInt.business_code = DeliveryEntry.Text;
+                        //stripePayInt.currency = "usd";
+                        //PaySummary newPaySum = new PaySummary();
+                        //newPaySum.total = total.ToString();
+                        //stripePayInt.payment_summary = newPaySum;
 
-                        source.ClientSecret = clientSec;
+                        //var PayIntSerializedObj = JsonConvert.SerializeObject(stripePayInt);
+                        //var content4 = new StringContent(PayIntSerializedObj, Encoding.UTF8, "application/json");
+                        //var client4 = new System.Net.Http.HttpClient();
+                        //var response4 = await client4.PostAsync("https://huo8rhh76i.execute-api.us-west-1.amazonaws.com/dev/api/v2/createPaymentIntent", content4);
+                        //var message4 = await response4.Content.ReadAsStringAsync();
+                        //Debug.WriteLine("RESPONSE TO createPaymentIntent   " + response4.ToString());
+                        //Debug.WriteLine("json object sent:  " + PayIntSerializedObj.ToString());
+                        //Debug.WriteLine("message received:  " + message4.ToString());
+                        // ^^
+
+                        //source.ClientSecret = clientSec;
                         //source.Card
 
                         Debug.WriteLine("step 4 reached");
@@ -2576,22 +2602,51 @@ namespace MTYD.ViewModel
                         }
                         customer.Address = new AddressOptions { City = cardCity.Text.Trim(), Country = Constant.Contry, Line1 = cardHolderAddress.Text.Trim(), Line2 = cardHolderUnit.Text.Trim(), PostalCode = cardZip.Text.Trim(), State = cardState.Text.Trim() };
 
-
                         var customerService = new CustomerService();
+                        
+                        //Customer newCust = new Customer();
+
                         var cust = customerService.Create(customer);
+                        //var cus = 
+                        
+                        //new code 6/11 to try and implement recurring payments
+                        cust.Id = (string)Xamarin.Forms.Application.Current.Properties["user_id"];
+                        Debug.WriteLine("cust.Id: " + cust.Id);
+
+                        //PaymentIntentCreateOptions payIntentCreate = new PaymentIntentCreateOptions();
+                        //payIntentCreate.Amount = (long)RemoveDecimalFromTotalAmount(total);
+                        //payIntentCreate.Currency = "usd";
+                        //payIntentCreate.Customer = (string)Xamarin.Forms.Application.Current.Properties["user_id"];
+                        //payIntentCreate.OffSession = true;
+                        //PaymentMethodCreateOptions payMethodCreate = new PaymentMethodCreateOptions();
+                        //payMethodCreate.Customer = (string)Xamarin.Forms.Application.Current.Properties["user_id"];
+                        //payMethodCreate.Type = "card";
+                        //var payMethodService = new PaymentMethodService();
+                        //Stripe.PaymentMethod payMet = payMethodService.Create(payMethodCreate);
+                        ////payIntentCreate.
+                        //var payService = new PaymentIntentService();
+                        //var completePaymentIntent = payService.Create(payIntentCreate);
+                        //completePaymentIntent.PaymentMethod = payMet;
+                        //new code 6/11
 
                         Debug.WriteLine("step 5 reached");
                         // Step 5: Charge option
                         var chargeOption = new ChargeCreateOptions();
+                        
                         chargeOption.Amount = (long)RemoveDecimalFromTotalAmount(total);
-
+                        Debug.WriteLine("chargeOption.Amount: " + chargeOption.Amount);
                         Debug.WriteLine("hopefully correct total: " + total);
                         chargeOption.Currency = "usd";
+                        Debug.WriteLine("chargeOption.Currency: " + chargeOption.Currency);
                         chargeOption.ReceiptEmail = cardHolderEmail.Text.ToLower().Trim();
+                        Debug.WriteLine("chargeOption.ReceiptEmail: " + chargeOption.ReceiptEmail);
                         chargeOption.Customer = cust.Id;
+                        Debug.WriteLine("chargeOption.Customer: " + chargeOption.Customer);
                         chargeOption.Source = source.Id;
+                        Debug.WriteLine("chargeOption.Source: " + chargeOption.Source);
                         //if (cardDescription.Text == "" || cardDescription.Text == null)
                         chargeOption.Description = "";
+                        Debug.WriteLine("chargeOption.Description: " + chargeOption.Description);
                         //else chargeOption.Description = cardDescription.Text.Trim();
 
                         //chargeOption.Description = cardDescription.Text.Trim();
@@ -2599,7 +2654,6 @@ namespace MTYD.ViewModel
                         Debug.WriteLine("step 6 reached");
                         // Step 6: charge the customer COMMENTED OUT FOR TESTING, backend already charges stripe so we don't have to do it here
                         var chargeService = new ChargeService();
-
                         Charge charge = chargeService.Create(chargeOption);
                         //charge.PaymentIntent = (PaymentIntent)payIntent;
                         Debug.WriteLine("charge: " + charge.ToString());
