@@ -2521,6 +2521,7 @@ namespace MTYD.ViewModel
                         param.Add("type", "card");
                         param.Add("card", card);
 
+                        //Stripe.confirmPayment(this, confirmParams);
                         //Stripe.PaymentMethodCard
                         Stripe.PaymentMethod paymentMethod = new Stripe.PaymentMethod();
                         Stripe.PaymentMethodCard paywith = new Stripe.PaymentMethodCard();
