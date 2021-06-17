@@ -9,6 +9,7 @@ using Android.OS;
 using Android.Gms.Common;
 using Android.Util;
 using Android.Content;
+using MediaManager;
 
 namespace MTYD.Droid
 {
@@ -27,6 +28,7 @@ namespace MTYD.Droid
             Xamarin.FormsMaps.Init(this, savedInstanceState);
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
+            CrossMediaManager.Current.Init(this);
 
             //forms9patch
             Forms9Patch.Droid.Settings.Initialize(this);

@@ -35,6 +35,7 @@
     <PackageReference Include="Xamarin.Forms.DropdownMenu" Version="1.0.2" />
     <PackageReference Include="Rg.Plugins.Popup" Version="2.0.0.11" />
     <PackageReference Include="Xam.Plugin.LatestVersion" Version="2.1.0" />
+    <PackageReference Include="Plugin.MediaManager.Forms" Version="1.0.9" />
   </ItemGroup>
   
   <ItemGroup>

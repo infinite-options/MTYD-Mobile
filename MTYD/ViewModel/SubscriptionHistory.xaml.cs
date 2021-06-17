@@ -167,17 +167,23 @@ namespace MTYD.ViewModel
 
             for (int i = 0; i < obj2.Result.Length; i++)
             {
+
                 if (obj2.Result[i].PurchStatus == "ACTIVE" && obj2.Result[i].PayTimeStamp != null && historyDict.ContainsKey(obj2.Result[i].PurchId) == false)
                 {
+                    //if (nextBillingLabel.Text == "TBD")
+                    //{
+                    //    var nextBill = new DateTime(int.Parse(obj2.Result[i].NextBillingDate.Substring(0, 4)), int.Parse(obj2.Result[i].NextBillingDate.Substring(5, 2)), int.Parse(obj2.Result[i].NextBillingDate.Substring(8, 2)));
+                    //    nextBillingLabel.Text =  nextBill.ToString("D").Substring(nextBill.ToString("D").IndexOf(" ") + 1);
+                    //}
                     //SubHist newSubHist = new SubHist();
                     //var date1 = new DateTime(int.Parse(obj2.Result[i].SelMenuDate.Substring(0, 4)), int.Parse(obj2.Result[i].SelMenuDate.Substring(5, 2)), int.Parse(obj2.Result[i].SelMenuDate.Substring(8, 2)));
                     //Debug.WriteLine("formatted next billing date: " + date1.ToString("D").Substring(date1.ToString("D").IndexOf(" ") + 1));
                     //newSubHist.Date = date1.ToString("D").Substring(date1.ToString("D").IndexOf(" ") + 1);
 
-                    //List<string> newList = new List<string>();
-                    //newList.Add(obj2.Result[i].SelMenuDate);
-                    //historyDict.Add(obj2.Result[i].PurchId, newList);
-                    //holds the objects with all of the meal info
+                        //List<string> newList = new List<string>();
+                        //newList.Add(obj2.Result[i].SelMenuDate);
+                        //historyDict.Add(obj2.Result[i].PurchId, newList);
+                        //holds the objects with all of the meal info
                     List<HistorySel> newHistList = new List<HistorySel>();
                     newHistList.Add(obj2.Result[i]);
                     //key = menu date, value = json objects that hold the meal info for a certain menu date
@@ -188,6 +194,12 @@ namespace MTYD.ViewModel
                 }
                 else if (obj2.Result[i].PurchStatus == "ACTIVE" && obj2.Result[i].PayTimeStamp != null && historyDict.ContainsKey(obj2.Result[i].PurchId) == true)
                 {
+                    //if (nextBillingLabel.Text == "TBD")
+                    //{
+                    //    var nextBill = new DateTime(int.Parse(obj2.Result[i].NextBillingDate.Substring(0, 4)), int.Parse(obj2.Result[i].NextBillingDate.Substring(5, 2)), int.Parse(obj2.Result[i].NextBillingDate.Substring(8, 2)));
+                    //    nextBillingLabel.Text = nextBill.ToString("D").Substring(nextBill.ToString("D").IndexOf(" ") + 1);
+                    //}
+
                     if (historyDict[obj2.Result[i].PurchId].ContainsKey(obj2.Result[i].PayTimeStamp))
                     {
                         historyDict[obj2.Result[i].PurchId][obj2.Result[i].PayTimeStamp].Add(obj2.Result[i]);
@@ -367,6 +379,10 @@ namespace MTYD.ViewModel
             foreach (var value in historyDict[selectedPurchId])
             //foreach (var value in historyDict["400-000001"])
             {
+                var nextBill = new DateTime(int.Parse((value.Value)[0].NextBillingDate.Substring(0, 4)), int.Parse((value.Value)[0].NextBillingDate.Substring(5, 2)), int.Parse((value.Value)[0].NextBillingDate.Substring(8, 2)));
+                nextBillingLabel.Text = nextBill.ToString("D").Substring(nextBill.ToString("D").IndexOf(" ") + 1);
+
+                //nextBillingLabel.Text = (value.Value)[0].NextBillingDate;
                 SubHist subHist = new SubHist();
                 SubHist subHist2 = new SubHist();
                 var date1 = new DateTime(int.Parse(value.Key.Substring(0, 4)), int.Parse(value.Key.Substring(5, 2)), int.Parse(value.Key.ToString().Substring(8, 2)));

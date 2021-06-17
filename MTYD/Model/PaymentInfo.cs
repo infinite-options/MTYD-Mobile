@@ -60,6 +60,7 @@ namespace MTYD.Model
         public string delivery_fee { get; set; }
         public string subtotal { get; set; }
         public string amb { get; set; }
+        //public string payment_intent { get; set; }
         /*
         public string customer_uid { get; set; }
         public string business_id { get; set; }

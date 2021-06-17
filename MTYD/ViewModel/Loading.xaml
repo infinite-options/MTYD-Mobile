@@ -1,8 +1,18 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="MTYD.ViewModel.Loading">
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MTYD.ViewModel.Loading"
+             Title="Load"
+             BackgroundColor="#F3F2DC"
+             xmlns:Forms9Patch="clr-namespace:Forms9Patch;assembly=Forms9Patch"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit">
     <ContentPage.Content>
 
-            <Image x:Name="logo" Source="logo.png" HorizontalOptions="Center" VerticalOptions="Center" Aspect="AspectFit"/>
-         
+        
+        <Grid>
+            <!--<Label Text="loading page" FontSize="15" HorizontalOptions="Center" Margin="0,20,0,0"/>-->
+            <Image x:Name="logo" Source="logo.png" HorizontalOptions="Center" VerticalOptions="Center" Aspect="AspectFit" BackgroundColor="#F3F2DC"/>
+           <!--<xct:MediaElement x:Name="loading" Aspect="AspectFit" HorizontalOptions="Fill" VerticalOptions="CenterAndExpand" Margin="0,0,0,0" AutoPlay="True" ShowsPlaybackControls="False" />-->
+        </Grid>
     </ContentPage.Content>
 </ContentPage>

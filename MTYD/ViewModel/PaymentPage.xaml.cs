@@ -110,6 +110,7 @@ namespace MTYD.ViewModel
         bool onStripeScreen = false;
         bool onCardAdd = false;
         bool termsChecked = false;
+        string usedPaymentIntent = "";
 
         Model.Address addr;
         
@@ -2458,6 +2459,7 @@ namespace MTYD.ViewModel
                     //create payment intent url: https://huo8rhh76i.execute-api.us-west-1.amazonaws.com/dev/api/v2/createPaymentIntent
                     string secret = clientSecret;
                     string intent = payIntent;
+                    usedPaymentIntent = payIntent;
                     //^^
                     Debug.WriteLine("reached after intent");
                     //var address = _shippingAddressViewModel.ShippingAddress;
@@ -2504,7 +2506,7 @@ namespace MTYD.ViewModel
 
                     if (successfulPurch == true)
                     {
-                        chargeId = "";
+                        chargeId = payIntent;
                         //chargeId = charge.ToString().Substring(charge.ToString().IndexOf("id") + 3, charge.ToString().IndexOf(">") - charge.ToString().IndexOf("id") - 3);
 
                         //await Navigation.PushAsync(new Loading());

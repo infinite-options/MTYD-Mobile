@@ -8,6 +8,7 @@ using MTYD.Model.Login.LoginClasses;
 using UIKit;
 using UserNotifications;
 using Xamarin.Essentials;
+using MediaManager;
 
 namespace MTYD.iOS
 {
@@ -32,7 +33,7 @@ namespace MTYD.iOS
             Xamarin.Forms.Forms.SetFlags("Shapes_Experimental");
             global::Xamarin.Forms.Forms.Init();
             Xamarin.FormsMaps.Init();
-
+            CrossMediaManager.Current.Init();
             //forms9patch
             Forms9Patch.iOS.Settings.Initialize(this);
             //Syncfusion.XForms.iOS.Expander.SfExpanderRenderer.Init();

@@ -103,6 +103,36 @@ namespace MTYD.ViewModel
 
                 tipPrice.Text = tipOpt2.Text;
 
+                WebClient client4 = new WebClient();
+                var content4 = client4.DownloadString("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/calculator/" + purchase_uid);
+                var obj4 = JsonConvert.DeserializeObject<Calculator>(content4);
+                Debug.WriteLine("display driver tip: " + obj4.DriverTip.ToString());
+                double driverTip = Double.Parse(obj4.DriverTip.ToString());
+                if (driverTip == Double.Parse(tipOpt2.Text.Substring(1)))
+                {
+                    tipPrice.Text = tipOpt2.Text;
+                    tipOpt2.BackgroundColor = Color.FromHex("#F26522");
+                    tipOpt2.TextColor = Color.White;
+                }
+                else if (driverTip == Double.Parse(tipOpt3.Text.Substring(1)))
+                {
+                    tipPrice.Text = tipOpt3.Text;
+                    tipOpt3.BackgroundColor = Color.FromHex("#F26522");
+                    tipOpt3.TextColor = Color.White;
+                }
+                else if (driverTip == Double.Parse(tipOpt4.Text.Substring(1)))
+                {
+                    tipPrice.Text = tipOpt4.Text;
+                    tipOpt4.BackgroundColor = Color.FromHex("#F26522");
+                    tipOpt4.TextColor = Color.White;
+                }
+                else
+                {
+                    tipPrice.Text = "$0";
+                    tipOpt1.BackgroundColor = Color.FromHex("#F26522");
+                    tipOpt1.TextColor = Color.White;
+                }
+
                 checkPlatform(height, width);
                 GetPlans();
                 Preferences.Set("freqSelected", "");
@@ -589,6 +619,14 @@ namespace MTYD.ViewModel
             }
         }
 
+        public StripeClient GetClient(bool usePublishedKey = false)
+        {
+            //return with published key
+            if (delivInstructions.Trim() == "M4METEST" || delivInstructions.Trim() == "M4ME TEST")
+                return new StripeClient(Constant.TestPK);
+            else return new StripeClient(Constant.LivePK);
+        }
+
         private async void clickedDone(object sender, EventArgs e)
         {
             try
@@ -803,244 +841,267 @@ namespace MTYD.ViewModel
 
                         PurchaseInfo2 updated = new PurchaseInfo2();
 
-                        //if direct login
-                        //if (socialLogin == "NULL")
+                        //start of stripe processing if there is an additional charge********************************************
+                        WebClient client5 = new WebClient();
+                        var content5 = client5.DownloadString("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/calculator/" + purchase_uid);
+                        var obj5 = JsonConvert.DeserializeObject<Calculator>(content5);
+                        Debug.WriteLine("gotten meal refund: " + obj5.MealRefund.ToString());
+                        //double totalRefund = obj5.MealRefund;
+                        //totalRefund -= obj5.AmtDiscount;
+                        //totalRefund += obj5.ServiceFee;
+                        //totalRefund += obj5.DelivFee;
+                        //totalRefund += obj5.DriverTip;
+                        //totalRefund += obj5.Taxes;
+                        //totalRefund += obj5.AmbCode;
+
+
+                        Debug.WriteLine("reached after address");
+                        if (delivInstructions.Trim() == "M4METEST" || delivInstructions.Trim() == "M4ME TEST")
+                            StripeConfiguration.ApiKey = Constant.TestSK;
+                        else StripeConfiguration.ApiKey = Constant.LiveSK;
+
+
+                        var options = new PaymentMethodCreateOptions
+                        {
+                            Type = "card",
+                            Card = new PaymentMethodCardOptions
+                            {
+                                Number = cc_num.Trim(),
+                                ExpMonth = long.Parse(cc_exp_month.Trim()),
+                                ExpYear = long.Parse(cc_exp_year.Trim()),
+                                Cvc = cc_cvv.Trim(),
+                            },
+                        };
+                        Debug.WriteLine("reached after options");
+                        var payMethodService = new PaymentMethodService();
+                        var tempPayMethod = payMethodService.Create(options);
+                        var method = tempPayMethod;
+                        //item1.qty = Preferences.Get("freqSelected", "");
+                        //item1.name = Preferences.Get("mealSelected", "") + " Meal Plan";
+                        //trying to implement stripe with payment intent and payment method
+                        GetPaymentIntent newPaymentIntent = new GetPaymentIntent();
+                        newPaymentIntent.currency = "usd";
+                        newPaymentIntent.customer_uid = (string)Xamarin.Forms.Application.Current.Properties["user_id"];
+                        newPaymentIntent.business_code = delivInstructions.Trim();
+                        newPaymentIntent.item_uid = Preferences.Get("item_uid", "");
+                        newPaymentIntent.num_items = Int32.Parse(Preferences.Get("mealSelected", ""));//Int32.Parse(Preferences.Get("item_name", "").Substring(0, Preferences.Get("item_name", "").IndexOf(" ")));
+                        newPaymentIntent.num_deliveries = Int32.Parse(Preferences.Get("freqSelected", ""));
+                        newPaymentIntent.delivery_discount = Double.Parse(obj5.AmtDiscount.ToString());// / Double.Parse(subtotalPrice.Text.Substring(subtotalPrice.Text.IndexOf("$") + 1)), 0);
+                        PaymentSummary paymentSum = new PaymentSummary();
+                        paymentSum.mealSubPrice = obj5.MealRefund.ToString();//subtotalPrice.Text.Substring(subtotalPrice.Text.IndexOf("$") + 1);
+                        paymentSum.discountAmount = obj5.AmtDiscount.ToString();//discountPrice.Text.Substring(discountPrice.Text.IndexOf("$") + 1);
+                        paymentSum.addOns = "0.00";
+                        paymentSum.tip = tipPrice.Text.Substring(tipPrice.Text.IndexOf("$") + 1);
+                        paymentSum.serviceFee = obj5.ServiceFee.ToString();//serviceFeePrice.Text.Substring(serviceFeePrice.Text.IndexOf("$") + 1);
+                        paymentSum.deliveryFee = obj5.DelivFee.ToString();//deliveryFeePrice.Text.Substring(deliveryFeePrice.Text.IndexOf("$") + 1);
+                        paymentSum.taxRate = taxRate;
+                        paymentSum.taxAmount = obj5.Taxes.ToString();//taxPrice.Text.Substring(taxPrice.Text.IndexOf("$") + 1);
+                        paymentSum.ambassadorDiscount = obj5.AmbCode.ToString();// ambassDisc.Text.Substring(ambassDisc.Text.IndexOf("$") + 1);
+                        paymentSum.total = extraCharge.ToString().Substring(extraCharge.ToString().IndexOf("$") + 1);
+                        paymentSum.subtotal = extraCharge.ToString().Substring(extraCharge.ToString().IndexOf("$") + 1);
+                        newPaymentIntent.payment_summary = paymentSum;
+
+
+                        var paymentIntentJSONString = JsonConvert.SerializeObject(newPaymentIntent);
+                        Console.WriteLine("paymentIntentJSONString" + paymentIntentJSONString);
+                        var content3 = new StringContent(paymentIntentJSONString, Encoding.UTF8, "application/json");
+                        Console.WriteLine("Content: " + content3);
+                        var client3 = new System.Net.Http.HttpClient();
+                        var response3 = await client3.PostAsync("https://huo8rhh76i.execute-api.us-west-1.amazonaws.com/dev/api/v2/createPaymentIntent", content3);
+                        var message3 = await response3.Content.ReadAsStringAsync();
+                        Debug.WriteLine("create payment intent response: " + message3);
+                        string clientSecret = message3.Substring(1);
+                        clientSecret = clientSecret.Substring(0, clientSecret.IndexOf("\""));
+                        //Debug.WriteLine("the full client secret test 1: " + clientSecret.Substring(0, clientSecret.IndexOf("\"")));
+                        //Debug.WriteLine("the full client secret test 2: " + clientSecret.Substring(0, clientSecret.IndexOf("\"") - 1));
+                        string payIntent = message3.Substring(1, message3.IndexOf("secret") - 2);
+                        Debug.WriteLine("only the payment intent: " + message3.Substring(1, message3.IndexOf("secret") - 2));
+
+                        //sample paymentIntent: pi_1J1kQHLMju5RPMEv04DxTaEz_secret_PdIVSBkslT04C71Ah2NY5MAbf
+                        //sample JSON object: {"currency":"usd","customer_uid":"100-000119","business_code":"M4METEST","item_uid":"320-000054","num_items":4,"num_deliveries":4,"delivery_discount":0.0,"payment_summary":{"mealSubPrice":"256.00","discountAmount":"12.80","addOns":"0.00","tip":"2.00","serviceFee":"0.00","deliveryFee":"0.00","taxRate":0.0,"taxAmount":"0.00","ambassadorDiscount":"0.00","total":"200.21","subtotal":"200.21"}}
+                        //create payment intent url: https://huo8rhh76i.execute-api.us-west-1.amazonaws.com/dev/api/v2/createPaymentIntent
+                        string secret = clientSecret;
+                        string intent = payIntent;
+                        //^^
+                        Debug.WriteLine("reached after intent");
+                        //var address = _shippingAddressViewModel.ShippingAddress;
+                        //var method = _paymentOptionsViewModel.PaymentMethods.SingleOrDefault(pm => pm.Selected)?.PaymentMethod;
+
+                        if (method == null) throw new Exception("Payment method unexpectedly null");
+
+                        //var (secret, intent) = await EphemeralService.Instance.CreatePaymentIntent(products, address, method);
+                        Debug.WriteLine("reached after method == null");
+                        var paymentIntentService = new PaymentIntentService(GetClient(true));
+                        Debug.WriteLine("reached after paymentIntentService");
+                        var paymentConfirmOptions = new PaymentIntentConfirmOptions
+                        {
+                            ClientSecret = secret,
+                            Expand = new List<string> { "payment_method" },
+                            PaymentMethod = method.Id,
+                            UseStripeSdk = true,
+                            ReturnUrl = "payments-example://stripe-redirect",
+                            SetupFutureUsage = "off_session"
+                        };
+                        Debug.WriteLine("paymentConfirmOptions: " + paymentConfirmOptions);
+                        Debug.WriteLine("ClientSecret: " + paymentConfirmOptions.ClientSecret);
+                        Debug.WriteLine("Expand: " + paymentConfirmOptions.Expand);
+                        Debug.WriteLine("PaymentMethod: " + paymentConfirmOptions.PaymentMethod);
+                        Debug.WriteLine("UseStripeSdk: " + paymentConfirmOptions.UseStripeSdk);
+                        Debug.WriteLine("ReturnUrl: " + paymentConfirmOptions.ReturnUrl);
+                        Debug.WriteLine("reached after paymentConfirmOptions");
+                        //below is where the stripe charge happens
+                        var result = await paymentIntentService.ConfirmAsync(intent, paymentConfirmOptions);
+                        Debug.WriteLine("reached after result");
+                        Debug.WriteLine("result after paymentIntentService.ConfirmAsync" + result);
+                        bool successfulPurch = false;
+                        switch (result.NextAction?.Type)
+                        {
+                            case null:
+                                Debug.WriteLine("Success", "Your purchase was successful!");
+                                successfulPurch = true;
+                                chargeId = payIntent;
+                                break; // All good
+
+                            case "stripe_3ds2_fingerprint":
+                            default:
+                                throw new NotImplementedException($"Not implemented: Can't handle {result.NextAction.Type}");
+                        }
+
+                        //var total2 = extraCharge.ToString();
+                        //var clientHttp = new System.Net.Http.HttpClient();
+                        //var stripe = new Credentials();
+                        //if (delivInstructions == "M4METEST" || delivInstructions == "M4ME TEST")
+                        //    stripe.key = Constant.TestPK;
+                        //else stripe.key = Constant.LivePK;
+
+                        //var stripeObj = JsonConvert.SerializeObject(stripe);
+                        //var stripeContent = new StringContent(stripeObj, Encoding.UTF8, "application/json");
+                        //var RDSResponse = await clientHttp.PostAsync(Constant.StripeModeUrl, stripeContent);
+                        //var content = await RDSResponse.Content.ReadAsStringAsync();
+
+                        //Debug.WriteLine("key to send JSON: " + stripeObj);
+                        //Debug.WriteLine("Response from key: " + content);
+                        //Debug.WriteLine("RDSResponse" + RDSResponse.IsSuccessStatusCode.ToString());
+                        //if (RDSResponse.IsSuccessStatusCode)
                         //{
-                        //    var request2 = new HttpRequestMessage();
-                        //    Console.WriteLine("user_id: " + (string)Xamarin.Forms.Application.Current.Properties["user_id"]);
-                        //    string url2 = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/Profile/" + (string)Xamarin.Forms.Application.Current.Properties["user_id"];
-                        //    //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + (string)Application.Current.Properties["user_id"];
-                        //    //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + "100-000256";
-                        //    request2.RequestUri = new Uri(url2);
-                        //    //request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/get_delivery_info/400-000453");
-                        //    request2.Method = HttpMethod.Get;
-                        //    var client2 = new HttpClient();
-                        //    HttpResponseMessage response2 = await client2.SendAsync(request2);
+                        //    string SK = "";
+                        //    string mode = "";
 
-                        //    if (response2.StatusCode == System.Net.HttpStatusCode.OK)
+                        //    if (stripeObj.Contains("test"))
                         //    {
-                        //        HttpContent content3 = response2.Content;
-                        //        Console.WriteLine("content: " + content3);
-                        //        var userString2 = await content3.ReadAsStringAsync();
-                        //        var info_obj2 = JObject.Parse(userString2);
+                        //        mode = "TEST";
+                        //        SK = Constant.TestSK;
+                        //    }
+                        //    else if (stripeObj.Contains("live"))
+                        //    {
+                        //        mode = "LIVE";
+                        //        SK = Constant.LiveSK;
+                        //    }
 
-                        //        //updated.password = (info_obj2["result"])[0]["password_hashed"].ToString();
+
+                        //    Debug.WriteLine("MODE          : " + mode);
+                        //    Debug.WriteLine("STRIPE SECRET : " + SK);
+
+                        //    //Debug.WriteLine("SK" + SK);
+                        //    StripeConfiguration.ApiKey = SK;
+
+                        //    string CardNo = cc_num.Trim();
+                        //    string expMonth = cc_exp_month.Trim();
+                        //    string expYear = cc_exp_year.Trim();
+                        //    string cardCvv = cc_cvv.Trim();
+
+                        //    Debug.WriteLine("step 1 reached");
+                        //    // Step 1: Create Card
+                        //    TokenCardOptions stripeOption = new TokenCardOptions();
+                        //    stripeOption.Number = CardNo;
+                        //    stripeOption.ExpMonth = Convert.ToInt64(expMonth);
+                        //    stripeOption.ExpYear = Convert.ToInt64(expYear);
+                        //    stripeOption.Cvc = cardCvv;
+
+
+                        //    Debug.WriteLine("step 2 reached");
+                        //    // Step 2: Assign card to token object
+                        //    TokenCreateOptions stripeCard = new TokenCreateOptions();
+                        //    stripeCard.Card = stripeOption;
+
+                        //    TokenService service = new TokenService();
+                        //    Stripe.Token newToken = service.Create(stripeCard);
+
+                        //    Debug.WriteLine("step 3 reached");
+                        //    // Step 3: Assign the token to the soruce 
+                        //    var option = new SourceCreateOptions();
+                        //    option.Type = SourceType.Card;
+                        //    option.Currency = "usd";
+                        //    option.Token = newToken.Id;
+
+                        //    var sourceService = new SourceService();
+                        //    Source source = sourceService.Create(option);
+
+                        //    //source.ClientSecret = clientSec;
+                        //    //source.Card
+
+                        //    Debug.WriteLine("step 4 reached");
+                        //    // Step 4: Create customer
+                        //    CustomerCreateOptions customer = new CustomerCreateOptions();
+                        //    //NEED CARDHOLDER NAME
+                        //    customer.Name = cust_firstName + " " + cust_lastName;
+                        //    customer.Email = cust_email.ToLower().Trim();
+                        //    //if (cardDescription.Text == "" || cardDescription.Text == null)
+                        //    customer.Description = "";
+                        //    //else customer.Description = cardDescription.Text.Trim();
+                        //    if (passedUnit == null)
+                        //    {
+                        //        passedUnit = "";
+                        //    }
+                        //    //NEED CARDHOLDER ADDRESS
+                        //    customer.Address = new AddressOptions { City = passedCity.Trim(), Country = Constant.Contry, Line1 = passedAdd.Trim(), Line2 = passedUnit.Trim(), PostalCode = passedZip.Trim(), State = passedState.Trim() };
+
+
+                        //    var customerService = new CustomerService();
+                        //    var cust = customerService.Create(customer);
+
+                        //    Debug.WriteLine("step 5 reached");
+                        //    // Step 5: Charge option
+                        //    var chargeOption = new ChargeCreateOptions();
+                        //    chargeOption.Amount = (long)RemoveDecimalFromTotalAmount(total2);
+
+                        //    Debug.WriteLine("hopefully correct total: " + total2);
+                        //    chargeOption.Currency = "usd";
+                        //    chargeOption.ReceiptEmail = cust_email.ToLower().Trim();
+                        //    chargeOption.Customer = cust.Id;
+                        //    chargeOption.Source = source.Id;
+                        //    //if (cardDescription.Text == "" || cardDescription.Text == null)
+                        //    chargeOption.Description = "";
+                        //    //else chargeOption.Description = cardDescription.Text.Trim();
+
+                        //    //chargeOption.Description = cardDescription.Text.Trim();
+
+                        //    Debug.WriteLine("step 6 reached");
+                        //    // Step 6: charge the customer COMMENTED OUT FOR TESTING, backend already charges stripe so we don't have to do it here
+                        //    var chargeService = new ChargeService();
+
+                        //    Charge charge = chargeService.Create(chargeOption);
+                        //    //charge.PaymentIntent = (PaymentIntent)payIntent;
+                        //    Debug.WriteLine("charge: " + charge.ToString());
+                        //    Debug.WriteLine("charge id: " + charge.ToString().Substring(charge.ToString().IndexOf("id") + 3, charge.ToString().IndexOf(">") - charge.ToString().IndexOf("id") - 3));
+                        //    //chargeId = charge.ToString().Substring(charge.ToString().IndexOf("id") + 3, charge.ToString().IndexOf(">") - charge.ToString().IndexOf("id") - 3);
+                        //    if (charge.Status == "succeeded")
+                        //    {
+                        //        chargeId = charge.ToString().Substring(charge.ToString().IndexOf("id") + 3, charge.ToString().IndexOf(">") - charge.ToString().IndexOf("id") - 3);
+
+
+                        //        Debug.WriteLine("STRIPE PAYMENT WAS SUCCESSFUL");
+                        //        //end of stripe payment frontend processing
+
+                        //        //done from checkout button clicked
+                        //    }
+                        //    else
+                        //    {
+                        //        //await Navigation.PopAsync(false);
+                        //        // Fail
+                        //        await DisplayAlert("Ooops", "Payment was not succesfull. Please try again", "OK");
                         //    }
                         //}
-
-                        //start of stripe processing if there is an additional charge********************************************
-
-                        var total2 = extraCharge.ToString();
-                        var clientHttp = new System.Net.Http.HttpClient();
-                        var stripe = new Credentials();
-                        if (delivInstructions == "M4METEST" || delivInstructions == "M4ME TEST")
-                            stripe.key = Constant.TestPK;
-                        else stripe.key = Constant.LivePK;
-
-                        var stripeObj = JsonConvert.SerializeObject(stripe);
-                        var stripeContent = new StringContent(stripeObj, Encoding.UTF8, "application/json");
-                        var RDSResponse = await clientHttp.PostAsync(Constant.StripeModeUrl, stripeContent);
-                        var content = await RDSResponse.Content.ReadAsStringAsync();
-
-                        Debug.WriteLine("key to send JSON: " + stripeObj);
-                        Debug.WriteLine("Response from key: " + content);
-                        Debug.WriteLine("RDSResponse" + RDSResponse.IsSuccessStatusCode.ToString());
-                        if (RDSResponse.IsSuccessStatusCode)
-                        {
-                            //Carlos original code
-                            //if (content != "200")
-                            //if (content.Contains("200"))
-                            //{
-                            //Debug.WriteLine("error encountered");
-                            string SK = "";
-                            string mode = "";
-
-                            if (stripeObj.Contains("test"))
-                            {
-                                mode = "TEST";
-                                SK = Constant.TestSK;
-                            }
-                            else if (stripeObj.Contains("live"))
-                            {
-                                mode = "LIVE";
-                                SK = Constant.LiveSK;
-                            }
-                            //Carlos original code
-                            //if (content.Contains("Test"))
-                            //{
-                            //    mode = "TEST";
-                            //    SK = Constant.TestSK;
-                            //}
-                            //else if (content.Contains("Live"))
-                            //{
-                            //    mode = "LIVE";
-                            //    SK = Constant.LiveSK;
-                            //}
-
-
-
-                            //trying to implement stripe with payment intent and payment method
-                            //GetPaymentIntent newPaymentIntent = new GetPaymentIntent();
-                            //newPaymentIntent.currency = "usd";
-                            //newPaymentIntent.customer_uid = (string)Xamarin.Forms.Application.Current.Properties["user_id"];
-                            //newPaymentIntent.business_code = DeliveryEntry.Text.Trim();
-                            //newPaymentIntent.item_uid = Preferences.Get("item_uid", "");
-                            //newPaymentIntent.num_items = Int32.Parse(Preferences.Get("item_name", "").Substring(0, Preferences.Get("item_name", "").IndexOf(" ")));
-                            //newPaymentIntent.num_deliveries = Int32.Parse(Preferences.Get("freqSelected", ""));
-                            //newPaymentIntent.delivery_discount = Math.Round(Double.Parse(discountPrice.Text.Substring(discountPrice.Text.IndexOf("$") + 1)) / Double.Parse(subtotalPrice.Text.Substring(subtotalPrice.Text.IndexOf("$") + 1)), 0);
-                            //PaymentSummary paymentSum = new PaymentSummary();
-                            //paymentSum.mealSubPrice = subtotalPrice.Text.Substring(subtotalPrice.Text.IndexOf("$") + 1);
-                            //paymentSum.discountAmount = discountPrice.Text.Substring(discountPrice.Text.IndexOf("$") + 1);
-                            //paymentSum.addOns = "0.00";
-                            //paymentSum.tip = tipPrice.Text.Substring(tipPrice.Text.IndexOf("$") + 1);
-                            //paymentSum.serviceFee = serviceFeePrice.Text.Substring(serviceFeePrice.Text.IndexOf("$") + 1);
-                            //paymentSum.deliveryFee = deliveryFeePrice.Text.Substring(deliveryFeePrice.Text.IndexOf("$") + 1);
-                            //paymentSum.taxRate = tax;
-                            //paymentSum.taxAmount = taxPrice.Text.Substring(taxPrice.Text.IndexOf("$") + 1);
-                            //paymentSum.ambassadorDiscount = ambassDisc.Text.Substring(ambassDisc.Text.IndexOf("$") + 1);
-                            //paymentSum.total = grandTotalPrice.Text.Substring(grandTotalPrice.Text.IndexOf("$") + 1);
-                            //paymentSum.subtotal = grandTotalPrice.Text.Substring(grandTotalPrice.Text.IndexOf("$") + 1);
-                            //newPaymentIntent.payment_summary = paymentSum;
-
-
-                            //var paymentIntentJSONString = JsonConvert.SerializeObject(newPaymentIntent);
-                            //Console.WriteLine("paymentIntentJSONString" + paymentIntentJSONString);
-                            //var content3 = new StringContent(paymentIntentJSONString, Encoding.UTF8, "application/json");
-                            //Console.WriteLine("Content: " + content3);
-                            //var client3 = new System.Net.Http.HttpClient();
-                            //var response3 = await client3.PostAsync("https://huo8rhh76i.execute-api.us-west-1.amazonaws.com/dev/api/v2/createPaymentIntent", content3);
-                            //var message3 = await response3.Content.ReadAsStringAsync();
-                            //Debug.WriteLine("create payment intent response: " + message3);
-                            //string payIntent = message3.Substring(1, message3.IndexOf("secret") - 2);
-                            //Debug.WriteLine("only the payment intent: " + message3.Substring(1, message3.IndexOf("secret") - 2));
-                            //string secret = message3.Substring(message3.IndexOf("secret") + 7);
-                            //secret = secret.Substring(0, secret.IndexOf("\""));
-                            //Debug.WriteLine("only the secret: " + secret);
-                            //string clientSec = message3.Substring(1);
-                            //clientSec = clientSec.Substring(0, clientSec.IndexOf("\""));
-                            //Debug.WriteLine("client secret: " + clientSec);
-
-                            //PaymentMethodCard payWithCard = new PaymentMethodCard();
-
-                            Debug.WriteLine("MODE          : " + mode);
-                            Debug.WriteLine("STRIPE SECRET : " + SK);
-
-                            //Debug.WriteLine("SK" + SK);
-                            StripeConfiguration.ApiKey = SK;
-
-                            //Dictionary<String, Object> card = new Dictionary<string, object>();
-                            //card.Add("number", "4242424242424242");
-                            //card.Add("exp_month", 4);
-                            //card.Add("exp_year", 2022);
-                            //card.Add("cvc", "314");
-                            //Dictionary<String, Object> param = new Dictionary<string, object>();
-                            //param.Add("type", "card");
-                            //param.Add("card", card);
-
-                            ////Stripe.PaymentMethodCard
-                            //Stripe.PaymentMethod paymentMethod = new Stripe.PaymentMethod();
-                            //Stripe.PaymentMethodCard paywith = new Stripe.PaymentMethodCard();
-                            ////var req = await stripe.createPaymentMethod();
-                            //StripeClient stripeClient = new StripeClient();
-                            //string cc_num; string cc_exp_year; string cc_exp_month; string cc_cvv;
-
-                            string CardNo = cc_num.Trim();
-                            string expMonth = cc_exp_month.Trim();
-                            string expYear = cc_exp_year.Trim();
-                            string cardCvv = cc_cvv.Trim();
-
-                            Debug.WriteLine("step 1 reached");
-                            // Step 1: Create Card
-                            TokenCardOptions stripeOption = new TokenCardOptions();
-                            stripeOption.Number = CardNo;
-                            stripeOption.ExpMonth = Convert.ToInt64(expMonth);
-                            stripeOption.ExpYear = Convert.ToInt64(expYear);
-                            stripeOption.Cvc = cardCvv;
-
-
-                            Debug.WriteLine("step 2 reached");
-                            // Step 2: Assign card to token object
-                            TokenCreateOptions stripeCard = new TokenCreateOptions();
-                            stripeCard.Card = stripeOption;
-
-                            TokenService service = new TokenService();
-                            Stripe.Token newToken = service.Create(stripeCard);
-
-                            Debug.WriteLine("step 3 reached");
-                            // Step 3: Assign the token to the soruce 
-                            var option = new SourceCreateOptions();
-                            option.Type = SourceType.Card;
-                            option.Currency = "usd";
-                            option.Token = newToken.Id;
-
-                            var sourceService = new SourceService();
-                            Source source = sourceService.Create(option);
-
-                            //source.ClientSecret = clientSec;
-                            //source.Card
-
-                            Debug.WriteLine("step 4 reached");
-                            // Step 4: Create customer
-                            CustomerCreateOptions customer = new CustomerCreateOptions();
-                            //NEED CARDHOLDER NAME
-                            customer.Name = cust_firstName + " " + cust_lastName;
-                            customer.Email = cust_email.ToLower().Trim();
-                            //if (cardDescription.Text == "" || cardDescription.Text == null)
-                            customer.Description = "";
-                            //else customer.Description = cardDescription.Text.Trim();
-                            if (passedUnit == null)
-                            {
-                                passedUnit = "";
-                            }
-                            //NEED CARDHOLDER ADDRESS
-                            customer.Address = new AddressOptions { City = passedCity.Trim(), Country = Constant.Contry, Line1 = passedAdd.Trim(), Line2 = passedUnit.Trim(), PostalCode = passedZip.Trim(), State = passedState.Trim() };
-                            
-
-                            var customerService = new CustomerService();
-                            var cust = customerService.Create(customer);
-
-                            Debug.WriteLine("step 5 reached");
-                            // Step 5: Charge option
-                            var chargeOption = new ChargeCreateOptions();
-                            chargeOption.Amount = (long)RemoveDecimalFromTotalAmount(total2);
-
-                            Debug.WriteLine("hopefully correct total: " + total2);
-                            chargeOption.Currency = "usd";
-                            chargeOption.ReceiptEmail = cust_email.ToLower().Trim();
-                            chargeOption.Customer = cust.Id;
-                            chargeOption.Source = source.Id;
-                            //if (cardDescription.Text == "" || cardDescription.Text == null)
-                            chargeOption.Description = "";
-                            //else chargeOption.Description = cardDescription.Text.Trim();
-
-                            //chargeOption.Description = cardDescription.Text.Trim();
-
-                            Debug.WriteLine("step 6 reached");
-                            // Step 6: charge the customer COMMENTED OUT FOR TESTING, backend already charges stripe so we don't have to do it here
-                            var chargeService = new ChargeService();
-
-                            Charge charge = chargeService.Create(chargeOption);
-                            //charge.PaymentIntent = (PaymentIntent)payIntent;
-                            Debug.WriteLine("charge: " + charge.ToString());
-                            Debug.WriteLine("charge id: " + charge.ToString().Substring(charge.ToString().IndexOf("id") + 3, charge.ToString().IndexOf(">") - charge.ToString().IndexOf("id") - 3));
-                            //chargeId = charge.ToString().Substring(charge.ToString().IndexOf("id") + 3, charge.ToString().IndexOf(">") - charge.ToString().IndexOf("id") - 3);
-                            if (charge.Status == "succeeded")
-                            {
-                                chargeId = charge.ToString().Substring(charge.ToString().IndexOf("id") + 3, charge.ToString().IndexOf(">") - charge.ToString().IndexOf("id") - 3);
-
-
-                                Debug.WriteLine("STRIPE PAYMENT WAS SUCCESSFUL");
-                                //end of stripe payment frontend processing
-
-                                //done from checkout button clicked
-                            }
-                            else
-                            {
-                                //await Navigation.PopAsync(false);
-                                // Fail
-                                await DisplayAlert("Ooops", "Payment was not succesfull. Please try again", "OK");
-                            }
-                        }
 
                         //end of stripe processing*******************************************************************************************
 
@@ -1112,33 +1173,6 @@ namespace MTYD.ViewModel
                         Console.WriteLine("RESPONSE TO update purchase   " + response.Result);
                         Console.WriteLine("update JSON OBJECT BEING SENT: " + updateJSONString);
 
-                        //add_surprise
-                        //filler fill = new filler();
-                        //var fillerJSONString = JsonConvert.SerializeObject(fill);
-                        //var content5 = new StringContent(fillerJSONString, Encoding.UTF8, "application/json");
-                        //var client5 = new System.Net.Http.HttpClient();
-                        //var response5 = await client5.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/add_surprise/" + purchase_id, content5);
-                        //var message5 = await response5.Content.ReadAsStringAsync();
-
-                        //Debug.WriteLine("response from add_surprise: " + response5.ToString());
-                        //Debug.WriteLine("json object being sent: " + content5.ToString());
-                        //reset the previously selected meals
-
-                        //var newPaymentJSONString = JsonConvert.SerializeObject(updated);
-                        //Console.WriteLine("updatedJSONString" + newPaymentJSONString);
-                        //var content2 = new StringContent(newPaymentJSONString, Encoding.UTF8, "application/json");
-                        //Console.WriteLine("updatedContent: " + content2);
-                        ///*var request = new HttpRequestMessage();
-                        //request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/checkout");
-                        //request.Method = HttpMethod.Post;
-                        //request.Content = content;*/
-                        //var client = new HttpClient();
-                        //Debug.WriteLine("url we are posting to: " + "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_purchase/" + purchase_id);
-                        ////var response = client.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_purchase_id", content);
-                        //var response = client.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_purchase/" + purchase_id, content2);
-                        //// HttpResponseMessage response = await client.SendAsync(request);
-                        //Console.WriteLine("RESPONSE TO CHECKOUT   " + response.Result);
-                        //Console.WriteLine("CHECKOUT JSON OBJECT BEING SENT: " + newPaymentJSONString);
                         Console.WriteLine("clickedDone Func ENDED!");
 
                         Zones[] zones = new Zones[] { };

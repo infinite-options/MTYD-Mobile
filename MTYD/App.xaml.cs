@@ -64,7 +64,10 @@ namespace MTYD
         public App()
         {
             InitializeComponent();
-            
+
+            //for MediaElement
+            Device.SetFlags(new string[] { "MediaElement_Experimental" });
+
             // User id and time_stamp are retrieved from local phone memory (written by Login View Model, Signup, Social Signup and MainPage.xaml.cs)
             if (Application.Current.Properties.ContainsKey("user_id"))
             {

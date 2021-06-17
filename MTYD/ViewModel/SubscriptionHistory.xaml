@@ -71,9 +71,9 @@
                 </StackLayout>
                 </Grid>
 
-                <BoxView HeightRequest="2" IsVisible="false"  Margin="25,0" BackgroundColor="#F26522" HorizontalOptions="Fill"/>
+                <BoxView HeightRequest="2"  Margin="25,0" BackgroundColor="#F26522" HorizontalOptions="Fill"/>
 
-                <Grid Margin="0,2" IsVisible="false">
+                <Grid Margin="0,2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="1*"/>
@@ -82,7 +82,7 @@
                 <Label Grid.Column="1" Margin="0, 0, 25, 0" Text="TBD" x:Name="nextBillingLabel" FontSize="17" TextColor="#F26522" HorizontalTextAlignment="End" HorizontalOptions="Fill"/>
                 </Grid>
 
-                <BoxView HeightRequest="2" IsVisible="false" Margin="25,0,25,10" BackgroundColor="#F26522" HorizontalOptions="Fill"/> 
+                <BoxView HeightRequest="2" Margin="25,0,25,10" BackgroundColor="#F26522" HorizontalOptions="Fill"/> 
 
                 <CollectionView x:Name="weekOneMenu">
                     <CollectionView.ItemsLayout>

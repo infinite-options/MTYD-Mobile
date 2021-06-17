@@ -122,8 +122,7 @@ namespace MTYD.Model
         [JsonProperty("meal_qty")]
         public string MealQty { get; set; }
 
-        [JsonProperty("meal_desc")]
-        public string MealDesc { get; set; }
+        
 
         [JsonProperty("meal_photo_URL")]
         public string MealPhotoUrl { get; set; }
@@ -134,13 +133,22 @@ namespace MTYD.Model
         [JsonProperty("start_delivery_date")]
         public string StartDelivDate { get; set; }
 
+        [JsonProperty("last_delivery")]
+        public string LastDeliv { get; set; }
+
+        [JsonProperty("next_billing_date")]
+        public string NextBillingDate { get; set; }
+
         [JsonProperty("charge_id")]
         public string ChargeId { get; set; }
 
-        [JsonProperty("last_payment")]
-        public string LastPayment { get; set; }
+        //[JsonProperty("last_payment")]
+        //public string LastPayment { get; set; }
 
         [JsonProperty("sel_menu_date")]
         public string SelMenuDate { get; set; }
+
+        [JsonProperty("meal_desc")]
+        public string MealDesc { get; set; }
     }
 }
