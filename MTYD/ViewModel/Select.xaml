@@ -30,6 +30,8 @@
                     <ImageButton x:Name="menu" Source="new_menu.png" VerticalOptions="End" HorizontalOptions="Start" BackgroundColor="Transparent" Clicked="clickedOpenMenu"/>
 
                 </Grid>
+
+                <StackLayout x:Name="belowMenu">
                 <!--CARLOS UI REARRANGING -->
 
                 <!--<BoxView x:Name="spacer1" HeightRequest="5"/>-->
@@ -529,6 +531,7 @@
                 </StackLayout>-->
                 <BoxView x:Name="spacer5" HeightRequest="30"/>
             </StackLayout>
+          </StackLayout>
 
             <Grid x:Name="openedMenu" IsVisible="false">
                 <Grid.RowDefinitions>
@@ -604,6 +607,7 @@
             <xct:MediaElement x:Name="loadingAnim" Source="ms-appx:///pulseLoadingAnim.mp4" IsVisible="False" Aspect="AspectFit" HorizontalOptions="Fill" VerticalOptions="Start" Margin="0,0,0,0"  AutoPlay="True" BackgroundColor="Transparent" IsLooping="True" ShowsPlaybackControls="False" />
 
          </Grid>
+                
 
         </StackLayout>
     </ScrollView>

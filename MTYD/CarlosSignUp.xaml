@@ -10,9 +10,9 @@
                     </Grid.RowDefinitions>
                     
                     <BoxView x:Name="orangeBox" BackgroundColor="#F26522" HorizontalOptions="Fill"/>
-                    <Image x:Name="heading" Source="heading.png" VerticalOptions="End" HorizontalOptions="Center"/>
+                    <Image x:Name="heading" Source="heading.png" Margin="0,0,0,10" VerticalOptions="End" HorizontalOptions="Center"/>
 
-                    <Button x:Name="backButton" Text="&lt; Back" TextColor="White" FontSize="Medium" FontAttributes="Bold" Margin="25, 10"
+                    <ImageButton x:Name="backButton" Source="backButton.png"
                             VerticalOptions="End" HorizontalOptions="Start" Clicked="BackClick"/>
                 </Grid>
 
@@ -173,6 +173,9 @@
                             FontSize="20" Clicked="SignupClicked"/>
 
                     </StackLayout>
+
+                <BoxView HeightRequest="500" Color="White" HorizontalOptions="Fill"/>
+
                 </StackLayout>
                 
                 <BoxView x:Name="fade" BackgroundColor="White" Opacity="0.6" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" IsVisible="false"/>

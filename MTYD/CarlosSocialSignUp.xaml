@@ -2,7 +2,183 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="MTYD.CarlosSocialSignUp">
    <ContentPage.Content>
         <ScrollView>
-        <StackLayout Padding="0,0,0,0">
+            <Grid>
+            <StackLayout>
+                <Grid x:Name="headingGrid">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    
+                    <BoxView x:Name="orangeBox" BackgroundColor="#F26522" HorizontalOptions="Fill"/>
+                    <Image x:Name="heading" Source="heading.png" Margin="0,0,0,10" VerticalOptions="End" HorizontalOptions="Center"/>
+
+                    <ImageButton x:Name="backButton" Source="backButton.png"
+                            VerticalOptions="End" HorizontalOptions="Start" Clicked="BackClick"/>
+                </Grid>
+
+                
+
+                <Label Text="Social Sign Up" HorizontalOptions="Center" FontAttributes="Bold" FontSize="Large" Margin="0, 20"/>
+
+                <StackLayout x:Name="addressEntries">
+                    <Label Text="First, let’s make sure we deliver to you." TextColor="Black" HorizontalOptions="Center"/>
+
+                    <Grid x:Name="addressInfo" Margin="20, 30" RowSpacing="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Frame x:Name="street" Grid.Row="0" Padding="10,5" HasShadow="False" CornerRadius="10" HorizontalOptions="Fill" BorderColor="#F26522">
+                            <Entry x:Name="AddressEntry" TextColor="Black" Text="{Binding AddressText}" TextChanged="OnAddressChanged" 
+                                   PlaceholderColor="Black" Placeholder="Address*" Focused="addressEntryFocused" Unfocused="addressEntryUnfocused"/>
+                        </Frame>
+
+                        <ListView x:Name="addressList" Grid.Row="1" ItemsSource="{Binding Addresses}" IsVisible="false" ItemSelected="addressSelected">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <TextCell Text="{Binding Address}"/>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+
+                        <Grid x:Name="UnitCity" Grid.Row="1" HorizontalOptions="Fill">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Frame x:Name="unit" Grid.Column="0" Padding="10,5" HasShadow="False" CornerRadius="10" HorizontalOptions="Fill" BorderColor="#F26522">
+                                <Entry x:Name="AptEntry" Keyboard="Text" TextColor="Black" PlaceholderColor="Black" Placeholder="Unit"/>
+                            </Frame>
+
+                            <Frame x:Name="city" Grid.Column="1" Padding="10,5" HasShadow="False" CornerRadius="10" HorizontalOptions="Fill" BorderColor="#F26522">
+                                <Entry x:Name="CityEntry" Keyboard="Text" TextColor="Black" PlaceholderColor="Black" Placeholder="City*"/>
+                            </Frame>
+                        </Grid>
+
+                        <Grid x:Name="StateZip" Grid.Row="2" HorizontalOptions="Fill">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Frame x:Name="state" Grid.Column="0" Padding="10,5" HasShadow="False" CornerRadius="10" HorizontalOptions="Fill" BorderColor="#F26522">
+                                <Entry x:Name="StateEntry" Keyboard="Text" TextColor="Black" PlaceholderColor="Black" Placeholder="State*"/>
+                            </Frame>
+
+                            <Frame x:Name="zipCode" Grid.Column="1" Padding="10,5" HasShadow="False" CornerRadius="10" HorizontalOptions="Fill" BorderColor="#F26522">
+                                <Entry x:Name="ZipEntry" Keyboard="Numeric" TextColor="Black" PlaceholderColor="Black" Placeholder="Zip*"/>
+                            </Frame>
+                        </Grid>
+
+                        <Frame x:Name="phoneNum" Grid.Row="3" Padding="10,5" HasShadow="False" CornerRadius="10" HorizontalOptions="Fill" BorderColor="#F26522">
+                            <Entry x:Name="PhoneEntry" MaxLength="10" Keyboard="Numeric" TextColor="Black" PlaceholderColor="Black" Placeholder="Phone Number*"/>
+                        </Frame>
+
+                    </Grid>
+
+                    <Button x:Name= "continueButton" BackgroundColor="#F26522" Text="Continue" TextColor="White" Margin="50, 0, 50, 20" HeightRequest="50" CornerRadius="15"
+                            FontSize="20" Clicked="continueClicked"/>
+                </StackLayout>
+
+                <StackLayout x:Name="mainEntries" IsVisible="false">
+                    <Grid Margin="80, 0" RowSpacing="8">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!--<ImageButton Grid.Row="0" x:Name="appleSignupButton" Source="login_apple.png" HorizontalOptions="Center" Clicked="appleSignupButtonClicked"/>
+
+                        <ImageButton Grid.Row="1" x:Name="fbSignupButton" Source="login_facebook.png" HorizontalOptions="Center" Clicked="fbSignupButtonClicked"/>
+
+                        <ImageButton Grid.Row="2" x:Name="googleSignupButton" Source="login_google.png" HorizontalOptions="Center" Clicked="googleSignupButtonClicked"/>-->
+
+                        <!--<Frame x:Name="appleSignupFrame" Grid.Row="0" BackgroundColor="#516de5" HasShadow="False" CornerRadius="15" HorizontalOptions="Center" Padding="10">
+                            <StackLayout Orientation="Horizontal">
+                                <Image Source="appleicon3.png" VerticalOptions="Center" Margin="5, 0, 5, 0"/>
+                                <Label x:Name="appleSignupText" Text="Continue with Apple" TextColor="White" VerticalOptions="Center"/>
+                            </StackLayout>
+                        </Frame>
+                        <Button Grid.Row="0" x:Name="appleSignupButton" BackgroundColor="Transparent" CornerRadius="15" HorizontalOptions="Center" Clicked="appleSignupButtonClicked"/>
+
+                        <Frame x:Name="fbSignupFrame" Grid.Row="1" BackgroundColor="#4c5a91" HasShadow="False" CornerRadius="15" HorizontalOptions="Center" Padding="10">
+                            <StackLayout Orientation="Horizontal">
+                                <Image Source="facebookicon3.png" VerticalOptions="Center" Margin="5, 0, 5, 0"/>
+                                <Label x:Name="fbSignupText" Text="Continue with Facebook" TextColor="White" VerticalOptions="Center"/>
+                            </StackLayout>
+                        </Frame>
+                        <Button Grid.Row="1" x:Name="fbSignupButton" BackgroundColor="Transparent" CornerRadius="15" HorizontalOptions="Center" Clicked="fbSignupButtonClicked"/>
+
+                        <Frame x:Name="googleSignupFrame" Grid.Row="2" BackgroundColor="#db4437" HasShadow="False" CornerRadius="15" HorizontalOptions="Center" Padding="10">
+                            <StackLayout Orientation="Horizontal">
+                                <Image Source="googleicon3.png" VerticalOptions="Center" Margin="5, 0, 5, 0"/>
+                                <Label x:Name="googleSignupText" Text="Continue with Google" TextColor="White" VerticalOptions="Center"/>
+                            </StackLayout>
+                        </Frame>
+                        <Button Grid.Row="2" x:Name="googleSignupButton" BackgroundColor="Transparent" CornerRadius="15" HorizontalOptions="Center" Clicked="googleSignupButtonClicked"/>-->
+                    </Grid>
+
+            
+                    <!--<Label x:Name="emailOption" Text="OR" TextColor="Black" FontAttributes="Bold" FontSize="Large" HorizontalOptions="Center" Margin="0, 15, 0, 15"/>-->
+
+                    <Grid x:Name="userInfo" Margin="20, 0, 20, 15" RowSpacing="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Frame x:Name="firstName" Grid.Row="0" Grid.Column="0" Padding="10,5" HasShadow="False" CornerRadius="10" HorizontalOptions="Fill" BorderColor="#F26522">
+                            <Entry x:Name="FNameEntry" Keyboard="Text" TextColor="Black" PlaceholderColor="Black" Placeholder="First Name*"/>
+                        </Frame>
+
+                        <Frame x:Name="lastName" Grid.Row="0" Grid.Column="1" Padding="10,5" HasShadow="False" CornerRadius="10" HorizontalOptions="Fill" BorderColor="#F26522">
+                            <Entry x:Name="LNameEntry" Keyboard="Text" TextColor="Black" PlaceholderColor="Black" Placeholder="Last Name*"/>
+                        </Frame>
+
+                        <Frame x:Name="emailAdd" Grid.Row="1" Grid.ColumnSpan="2" Padding="10,5" HasShadow="False" CornerRadius="10" HorizontalOptions="Fill" BorderColor="#F26522">
+                            <Entry x:Name="emailEntry" Keyboard="Email" TextColor="Black" PlaceholderColor="Black" Placeholder="Email Address*"/>
+                        </Frame>
+
+                        <!--<Frame x:Name="reenterEmailAdd" Grid.Row="2" Grid.ColumnSpan="2" Padding="10,5" HasShadow="False" CornerRadius="10" HorizontalOptions="Fill" BorderColor="#F26522">
+                            <Entry x:Name="reenterEmailEntry" Keyboard="Email" TextColor="Black" PlaceholderColor="Black" Placeholder="Confirm Email Address*"/>
+                        </Frame>-->
+
+                        <!--<Frame x:Name="password" Grid.Row="3" Grid.ColumnSpan="2" Padding="10,5" HasShadow="False" CornerRadius="10" HorizontalOptions="Fill" BorderColor="#F26522">
+                            <Entry x:Name="passwordEntry" Keyboard="Text" IsPassword="True" TextColor="Black" PlaceholderColor="Black" Placeholder="Create Password*"/>
+                        </Frame>
+
+                        <Frame x:Name="reenterPassword" Grid.Row="4" Grid.ColumnSpan="2" Padding="10,5" HasShadow="False" CornerRadius="10" HorizontalOptions="Fill" BorderColor="#F26522">
+                            <Entry x:Name="reenterPasswordEntry" Keyboard="Text" IsPassword="True" TextColor="Black" PlaceholderColor="Black" Placeholder="Confirm Password*"/>
+                        </Frame>-->
+
+                    </Grid>
+
+                    <Button x:Name= "SignUpButton" BackgroundColor="#F26522" Text="Sign Up" TextColor="White" Margin="50, 0, 50, 20" HeightRequest="50" CornerRadius="15"
+                            FontSize="20" Clicked="SignUpSocialUserClick"/>
+
+                    </StackLayout>
+          
+                
+                
+        <!--<StackLayout Padding="0,0,0,0">
 
             <Label x:Name="heading" Text="SOCIAL SIGNUP" TextColor="#F59A28" FontAttributes="Bold"/>
 
@@ -181,7 +357,32 @@
 
                 </Grid>
 
+            </StackLayout>-->
+                <BoxView HeightRequest="500" Color="White" HorizontalOptions="Fill"/>
             </StackLayout>
+
+            <BoxView x:Name="fade" BackgroundColor="White" Opacity="0.6" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" IsVisible="false"/>
+
+                <Grid x:Name="CheckAddressGrid" VerticalOptions="Start" IsVisible="false" Margin="50, 120">
+                    <Frame BorderColor="#F26522" CornerRadius="0" HasShadow="False">
+                        <StackLayout>
+                            <ImageButton Source="xButton.png" Aspect="AspectFit" HorizontalOptions="End" Margin="-10" WidthRequest="30" Clicked="xButtonClicked"/>
+
+                            <Label x:Name="CheckAddressHeading" Text="Hooray!" FontAttributes="Bold" FontSize="25" HorizontalOptions="Center" Margin="0, 0, 0, 20"/>
+
+                            <Label x:Name="CheckAddressBody" Text="We are so glad that we deliver to your neighborhood. Please click Continue to complete the Sign Up process."
+                                    HorizontalOptions="Center" HorizontalTextAlignment="Center" HeightRequest="150" FontSize="16" Margin="15, 0"/>
+
+                            <Frame x:Name="EmailFrame" BorderColor="#F26522" CornerRadius="10" HasShadow="false" Padding="15, 5" IsVisible="false">
+                                <Entry x:Name="EmailEntry" Placeholder="Email" TextColor="Black"/>
+                            </Frame>
+
+                            <Button x:Name="OkayButton" Text="Explore Meals" BackgroundColor="#F26522" TextColor="White" Margin="50, 20, 50, 10" CornerRadius="10" Clicked="OkayClicked"/>
+                        </StackLayout>
+                    </Frame>
+                </Grid>
+                
+            </Grid>
             </ScrollView>
     </ContentPage.Content>
 </ContentPage>

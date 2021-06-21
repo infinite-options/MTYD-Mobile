@@ -497,7 +497,7 @@ namespace MTYD.ViewModel
         //                 )
         //             )
         //         );
-        //        var url = "http://production.shippingapis.com/ShippingAPI.dll?API=Verify&XML=" + requestDoc;
+        //        var url = "https://production.shippingapis.com/ShippingAPI.dll?API=Verify&XML=" + requestDoc;
         //        Console.WriteLine(url);
         //        var client = new WebClient();
         //        var response = client.DownloadString(url);

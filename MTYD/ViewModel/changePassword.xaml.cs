@@ -34,26 +34,26 @@ namespace MTYD.ViewModel
             Console.WriteLine("Width = " + width.ToString());
             Console.WriteLine("Height = " + height.ToString());
 
-            BackgroundColor = Color.FromHex("White");
+            BackgroundColor = Color.White;
 
             //passFrame.HeightRequest = 50;
             //passFrame2.HeightRequest = 50;
-            headSpacer.HeightRequest = height / 6;
+            //headSpacer.HeightRequest = height / 8;
 
-            grid2.Margin = new Thickness(width / 13, height / 90, width / 13, 0);
-            currentPassword.Margin = new Thickness(0, height / (-120), width / 55, height / (-120));
-            password.Margin = new Thickness(0, height / (-120), width / 55, height / (-120));
-            password2.Margin = new Thickness(0, height / (-120), width / 55, height / (-120));
-            currentPassFrame.HeightRequest = height / 180;
-            passFrame.HeightRequest = height / 180;
-            passFrame2.HeightRequest = height / 180;
+            //grid2.Margin = new Thickness(width / 13, height / 90, width / 13, 0);
+            //currentPassword.Margin = new Thickness(0, height / (-120), width / 55, height / (-120));
+            //password.Margin = new Thickness(0, height / (-120), width / 55, height / (-120));
+            //password2.Margin = new Thickness(0, height / (-120), width / 55, height / (-120));
+            //currentPassFrame.HeightRequest = height / 180;
+            //passFrame.HeightRequest = height / 180;
+            //passFrame2.HeightRequest = height / 180;
 
-            loginButton.HeightRequest = height / 35;
-            signUpButton.HeightRequest = height / 35;
-            loginButton.WidthRequest = width / 4;
-            signUpButton.WidthRequest = width / 4;
-            loginButton.CornerRadius = (int)(height / 70);
-            signUpButton.CornerRadius = (int)(height / 70);
+            //loginButton.HeightRequest = height / 35;
+            //signUpButton.HeightRequest = height / 35;
+            //loginButton.WidthRequest = width / 4;
+            //signUpButton.WidthRequest = width / 4;
+            //loginButton.CornerRadius = (int)(height / 70);
+            //signUpButton.CornerRadius = (int)(height / 70);
         }
 
         async void clickedBack(System.Object sender, System.EventArgs e)

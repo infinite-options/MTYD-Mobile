@@ -110,6 +110,7 @@ namespace MTYD.ViewModel
         object dateDestination;
         int loadingCount;
         ObservableCollection<PlanName> namesColl = new ObservableCollection<PlanName>();
+        DateTime addOnChargeDate;
 
         WebClient client = new WebClient();
 
@@ -117,6 +118,7 @@ namespace MTYD.ViewModel
         {
             try
             {
+                addOnChargeDate = DateTime.Now;
                 postUrl = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selection?customer_uid=" + userId;
                 userMeals = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + userId;
                 loadingCount = 0;
@@ -459,7 +461,8 @@ namespace MTYD.ViewModel
                     loadingAnim.Position = TimeSpan.Zero;
                     Debug.WriteLine("check buffer prog: " + loadingAnim.BufferingProgress.ToString());
                     loadingAnim.Play();
-                    loadBackground.IsVisible = true;
+                    //loadBackground.IsVisible = true;
+                    belowMenu.IsVisible = false;
                     loadingAnim.IsVisible = true;
                 }
 
@@ -708,8 +711,10 @@ namespace MTYD.ViewModel
                 {
                     //Thread.Sleep(3000);
                     //Task.Delay(30000).Wait();
-                    loadBackground.IsVisible = false;
+                    //loadBackground.IsVisible = false;
+                    
                     loadingAnim.IsVisible = false;
+                    belowMenu.IsVisible = true;
                 }
                     
             }
@@ -722,8 +727,10 @@ namespace MTYD.ViewModel
                 {
                     //Thread.Sleep(3000);
                     //Task.Delay(30000).Wait();
-                    loadBackground.IsVisible = false;
+                    //loadBackground.IsVisible = false;
+                    
                     loadingAnim.IsVisible = false;
+                    belowMenu.IsVisible = true;
                 }
 
                 Generic gen = new Generic();
@@ -743,7 +750,8 @@ namespace MTYD.ViewModel
                     loadingAnim.Position = TimeSpan.Zero;
                     Debug.WriteLine("check buffer prog: " + loadingAnim.BufferingProgress.ToString());
                     loadingAnim.Play();
-                    loadBackground.IsVisible = true;
+                    //loadBackground.IsVisible = true;
+                    belowMenu.IsVisible = false;
                     loadingAnim.IsVisible = true;
                 }
 
@@ -807,6 +815,9 @@ namespace MTYD.ViewModel
                 selectedDate = availableDates[0];
                 selectedDate.outlineColor = Color.FromHex("#F26522");
                 text1 = selectedDate.fullDateTime;
+                DateTime selected = new DateTime(Int32.Parse(text1.Substring(0, 4)), Int32.Parse(text1.Substring(5, 2)), Int32.Parse(text1.Substring(8, 2)));
+                TimeSpan oneDay = new TimeSpan(1, 0, 0, 0);
+                addOnChargeDate = selected.Subtract(oneDay);
                 //Debug.WriteLine("date picked: " + text1);
                 Preferences.Set("dateSelected", availableDates[0].fullDateTime.Substring(0,10));
                 Console.WriteLine("dateSet: " + Preferences.Get("dateSelected", ""));
@@ -1055,8 +1066,9 @@ namespace MTYD.ViewModel
                 {
                     //Thread.Sleep(3000);
                     //Task.Delay(30000).Wait();
-                    loadBackground.IsVisible = false;
+                    //loadBackground.IsVisible = false;
                     loadingAnim.IsVisible = false;
+                    belowMenu.IsVisible = true;
                 }
             }
             catch (Exception ex)
@@ -1068,8 +1080,9 @@ namespace MTYD.ViewModel
                 {
                     //Thread.Sleep(3000);
                     //Task.Delay(30000).Wait();
-                    loadBackground.IsVisible = false;
+                    //loadBackground.IsVisible = false;
                     loadingAnim.IsVisible = false;
+                    belowMenu.IsVisible = true;
                 }
 
                 Generic gen = new Generic();
@@ -1098,7 +1111,8 @@ namespace MTYD.ViewModel
                     loadingAnim.Position = TimeSpan.Zero;
                     Debug.WriteLine("check buffer prog: " + loadingAnim.BufferingProgress.ToString());
                     loadingAnim.Play();
-                    loadBackground.IsVisible = true;
+                    //loadBackground.IsVisible = true;
+                    belowMenu.IsVisible = false;
                     loadingAnim.IsVisible = true;
                 }
 
@@ -1133,12 +1147,21 @@ namespace MTYD.ViewModel
                 //tempHolder = tempHolder.Substring(tempHolder.IndexOf("-") + 1);
                 Debug.WriteLine("day:" + text1.Substring(8, 2));
                 //getDayOfTheWeek();
-                DateTime selected = new DateTime(Int32.Parse(text1.Substring(0, 4)), Int32.Parse(text1.Substring(5, 2)), Int32.Parse(text1.Substring(8, 2)));
+                //DateTime selected = new DateTime(Int32.Parse(text1.Substring(0, 4)), Int32.Parse(text1.Substring(5, 2)), Int32.Parse(text1.Substring(8, 2)));
+                //TimeSpan oneDay = new TimeSpan(1, 0, 0, 0);
+                //addOnChargeDate = selected.Subtract(oneDay);
+                //Debug.WriteLine("selected date: " + selected.ToString("D") + " and addOnChargeDate: " + addOnChargeDate.ToString("D"));
+
                 Debug.WriteLine(sender.GetType().ToString());
                 Button button1 = (Button)sender;
                 Date dateChosen = button1.BindingContext as Date;
                 selectedDate.outlineColor = Color.White;
                 selectedDate = dateChosen;
+                text1 = dateChosen.fullDateTime;
+                DateTime selected = new DateTime(Int32.Parse(text1.Substring(0, 4)), Int32.Parse(text1.Substring(5, 2)), Int32.Parse(text1.Substring(8, 2)));
+                TimeSpan oneDay = new TimeSpan(1, 0, 0, 0);
+                addOnChargeDate = selected.Subtract(oneDay);
+                Debug.WriteLine("selected date: " + selected.ToString("D") + " and addOnChargeDate: " + addOnChargeDate.ToString("D"));
                 selectedDate.outlineColor = Color.FromHex("#F26522");
                 //dateChosen.fillColor = Color.LightGray;
                 selectedDotw = dateChosen.dotw;
@@ -1389,8 +1412,9 @@ namespace MTYD.ViewModel
                 {
                     //Thread.Sleep(3000);
                     //Task.Delay(30000).Wait();
-                    loadBackground.IsVisible = false;
+                    //loadBackground.IsVisible = false;
                     loadingAnim.IsVisible = false;
+                    belowMenu.IsVisible = true;
                 }
             }
             catch (Exception ex)
@@ -1403,8 +1427,9 @@ namespace MTYD.ViewModel
                 {
                     //Thread.Sleep(3000);
                     //Task.Delay(30000).Wait();
-                    loadBackground.IsVisible = false;
+                    //loadBackground.IsVisible = false;
                     loadingAnim.IsVisible = false;
+                    belowMenu.IsVisible = true;
                 }
 
                 Generic gen = new Generic();
@@ -1423,7 +1448,8 @@ namespace MTYD.ViewModel
                     loadingAnim.Position = TimeSpan.Zero;
                     Debug.WriteLine("check buffer prog: " + loadingAnim.BufferingProgress.ToString());
                     loadingAnim.Play();
-                    loadBackground.IsVisible = true;
+                    //loadBackground.IsVisible = true;
+                    belowMenu.IsVisible = false;
                     loadingAnim.IsVisible = true;
                 }
 
@@ -1778,8 +1804,9 @@ namespace MTYD.ViewModel
                 {
                     //Thread.Sleep(3000);
                     //Task.Delay(30000).Wait();
-                    loadBackground.IsVisible = false;
+                    //loadBackground.IsVisible = false;
                     loadingAnim.IsVisible = false;
+                    belowMenu.IsVisible = true;
                 }
             }
             catch (Exception ex)
@@ -1792,8 +1819,9 @@ namespace MTYD.ViewModel
                 {
                     //Thread.Sleep(3000);
                     //Task.Delay(30000).Wait();
-                    loadBackground.IsVisible = false;
+                    //loadBackground.IsVisible = false;
                     loadingAnim.IsVisible = false;
+                    belowMenu.IsVisible = true;
                 }
 
                 Generic gen = new Generic();
@@ -2329,7 +2357,8 @@ namespace MTYD.ViewModel
                     loadingAnim.Position = TimeSpan.Zero;
                     Debug.WriteLine("check buffer prog: " + loadingAnim.BufferingProgress.ToString());
                     loadingAnim.Play();
-                    loadBackground.IsVisible = true;
+                    //loadBackground.IsVisible = true;
+                    belowMenu.IsVisible = false;
                     loadingAnim.IsVisible = true;
                 }
 
@@ -2454,8 +2483,9 @@ namespace MTYD.ViewModel
                 {
                     //Thread.Sleep(3000);
                     //Task.Delay(30000).Wait();
-                    loadBackground.IsVisible = false;
+                    //loadBackground.IsVisible = false;
                     loadingAnim.IsVisible = false;
+                    belowMenu.IsVisible = true;
                 }
             }
             catch (Exception ex)
@@ -2468,8 +2498,9 @@ namespace MTYD.ViewModel
                 {
                     //Thread.Sleep(3000);
                     //Task.Delay(30000).Wait();
-                    loadBackground.IsVisible = false;
+                    //loadBackground.IsVisible = false;
                     loadingAnim.IsVisible = false;
+                    belowMenu.IsVisible = true;
                 }
 
                 Generic gen = new Generic();
@@ -2487,7 +2518,8 @@ namespace MTYD.ViewModel
                     loadingAnim.Position = TimeSpan.Zero;
                     Debug.WriteLine("check buffer prog: " + loadingAnim.BufferingProgress.ToString());
                     loadingAnim.Play();
-                    loadBackground.IsVisible = true;
+                    //loadBackground.IsVisible = true;
+                    belowMenu.IsVisible = false;
                     loadingAnim.IsVisible = true;
                 }
 
@@ -2589,8 +2621,9 @@ namespace MTYD.ViewModel
                 {
                     //Thread.Sleep(3000);
                     //Task.Delay(30000).Wait();
-                    loadBackground.IsVisible = false;
+                    //loadBackground.IsVisible = false;
                     loadingAnim.IsVisible = false;
+                    belowMenu.IsVisible = true;
                 }
             }
             catch (Exception ex)
@@ -2602,8 +2635,9 @@ namespace MTYD.ViewModel
                 {
                     //Thread.Sleep(3000);
                     //Task.Delay(30000).Wait();
-                    loadBackground.IsVisible = false;
+                    //loadBackground.IsVisible = false;
                     loadingAnim.IsVisible = false;
+                    belowMenu.IsVisible = true;
                 }
 
                 Generic gen = new Generic();
@@ -2699,7 +2733,8 @@ namespace MTYD.ViewModel
                         BarParameters[0].barLabel = "All Meals Selected";
                         popButton1.Text = "Okay";
                         popButton2.IsVisible = false;
-                        showPopUp("Selection Saved", "You will be charged for your add-ons at a later date");
+                        string addOnMsg = "You will be charged for your add-ons on " + addOnChargeDate.ToString("M") + ".";
+                        showPopUp("Selection Saved", addOnMsg);
                         //DisplayAlert("Selection Saved", "You will be charged for your add-ons on 1/1/2021.", "OK");
                     }
                     else
@@ -3162,7 +3197,8 @@ namespace MTYD.ViewModel
                     loadingAnim.Position = TimeSpan.Zero;
                     Debug.WriteLine("check buffer prog: " + loadingAnim.BufferingProgress.ToString());
                     loadingAnim.Play();
-                    loadBackground.IsVisible = true;
+                    //loadBackground.IsVisible = true;
+                    belowMenu.IsVisible = false;
                     loadingAnim.IsVisible = true;
                 }
 
@@ -3326,8 +3362,9 @@ namespace MTYD.ViewModel
                 {
                     //Thread.Sleep(3000);
                     //Task.Delay(30000).Wait();
-                    loadBackground.IsVisible = false;
+                    //loadBackground.IsVisible = false;
                     loadingAnim.IsVisible = false;
+                    belowMenu.IsVisible = true;
                 }
             }
             catch (Exception ex)
@@ -3340,8 +3377,9 @@ namespace MTYD.ViewModel
                 {
                     //Thread.Sleep(3000);
                     //Task.Delay(30000).Wait();
-                    loadBackground.IsVisible = false;
+                    //loadBackground.IsVisible = false;
                     loadingAnim.IsVisible = false;
+                    belowMenu.IsVisible = true;
                 }
 
                 Generic gen = new Generic();
@@ -3359,7 +3397,8 @@ namespace MTYD.ViewModel
                     loadingAnim.Position = TimeSpan.Zero;
                     Debug.WriteLine("check buffer prog: " + loadingAnim.BufferingProgress.ToString());
                     loadingAnim.Play();
-                    loadBackground.IsVisible = true;
+                    //loadBackground.IsVisible = true;
+                    belowMenu.IsVisible = false;
                     loadingAnim.IsVisible = true;
                 }
 
@@ -3516,8 +3555,9 @@ namespace MTYD.ViewModel
                     {
                         //Thread.Sleep(3000);
                         //Task.Delay(30000).Wait();
-                        loadBackground.IsVisible = false;
+                        //loadBackground.IsVisible = false;
                         loadingAnim.IsVisible = false;
+                        belowMenu.IsVisible = true;
                     }
 
                     Console.WriteLine("isSurprise value: " + isSurprise + " isSkip value: " + isSkip);
@@ -3608,8 +3648,9 @@ namespace MTYD.ViewModel
                 {
                     //Thread.Sleep(3000);
                     //Task.Delay(30000).Wait();
-                    loadBackground.IsVisible = false;
+                    //loadBackground.IsVisible = false;
                     loadingAnim.IsVisible = false;
+                    belowMenu.IsVisible = true;
                 }
             }
             catch (Exception ex)
@@ -3622,8 +3663,9 @@ namespace MTYD.ViewModel
                 {
                     //Thread.Sleep(3000);
                     //Task.Delay(30000).Wait();
-                    loadBackground.IsVisible = false;
+                    //loadBackground.IsVisible = false;
                     loadingAnim.IsVisible = false;
+                    belowMenu.IsVisible = true;
                 }
 
                 Generic gen = new Generic();
@@ -3641,7 +3683,8 @@ namespace MTYD.ViewModel
                     loadingAnim.Position = TimeSpan.Zero;
                     Debug.WriteLine("check buffer prog: " + loadingAnim.BufferingProgress.ToString());
                     loadingAnim.Play();
-                    loadBackground.IsVisible = true;
+                    //loadBackground.IsVisible = true;
+                    belowMenu.IsVisible = false;
                     loadingAnim.IsVisible = true;
                 }
                 
@@ -3813,8 +3856,9 @@ namespace MTYD.ViewModel
                 {
                     //Thread.Sleep(3000);
                     //Task.Delay(30000).Wait();
-                    loadBackground.IsVisible = false;
+                    //loadBackground.IsVisible = false;
                     loadingAnim.IsVisible = false;
+                    belowMenu.IsVisible = true;
                 }
             }
             catch (Exception ex)
@@ -3827,8 +3871,9 @@ namespace MTYD.ViewModel
                 {
                     //Thread.Sleep(3000);
                     //Task.Delay(30000).Wait();
-                    loadBackground.IsVisible = false;
+                    //loadBackground.IsVisible = false;
                     loadingAnim.IsVisible = false;
+                    belowMenu.IsVisible = true;
                 }
 
                 Generic gen = new Generic();

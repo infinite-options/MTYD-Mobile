@@ -125,7 +125,7 @@ namespace MTYD.ViewModel
                          )
                      )
                  );
-                var url = "http://production.shippingapis.com/ShippingAPI.dll?API=Verify&XML=" + requestDoc;
+                var url = "https://production.shippingapis.com/ShippingAPI.dll?API=Verify&XML=" + requestDoc;
                 Console.WriteLine(url);
                 var client2 = new WebClient();
                 var response2 = client2.DownloadString(url);
@@ -915,7 +915,7 @@ namespace MTYD.ViewModel
                          )
                      )
                  );
-                var url = "http://production.shippingapis.com/ShippingAPI.dll?API=Verify&XML=" + requestDoc;
+                var url = "https://production.shippingapis.com/ShippingAPI.dll?API=Verify&XML=" + requestDoc;
                 Console.WriteLine(url);
                 var client2 = new WebClient();
                 var response2 = client2.DownloadString(url);
@@ -1117,7 +1117,7 @@ namespace MTYD.ViewModel
                          )
                      )
                  );
-                var url = "http://production.shippingapis.com/ShippingAPI.dll?API=Verify&XML=" + requestDoc;
+                var url = "https://production.shippingapis.com/ShippingAPI.dll?API=Verify&XML=" + requestDoc;
                 Console.WriteLine(url);
                 var client = new WebClient();
                 var response = client.DownloadString(url);

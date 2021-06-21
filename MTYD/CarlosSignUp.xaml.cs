@@ -32,6 +32,9 @@ namespace MTYD
 
         public CarlosSignUp()
         {
+            NavigationPage.SetHasBackButton(this, false);
+            NavigationPage.SetHasNavigationBar(this, false);
+
             addr = new Address();
             InitializeComponent();
             BindingContext = this;
@@ -50,6 +53,9 @@ namespace MTYD
             heading.WidthRequest = 140;
             fade.Margin = new Thickness(0, -height / 3, 0, 0);
             addressList.HeightRequest = width / 5;
+            backButton.Margin = new Thickness(25, 0, 0, 30);
+            backButton.HeightRequest = 25;
+
 
             if (Device.RuntimePlatform == Device.iOS)
             {
@@ -451,7 +457,7 @@ namespace MTYD
                      )
                  )
              );
-            var url = "http://production.shippingapis.com/ShippingAPI.dll?API=Verify&XML=" + requestDoc;
+            var url = "https://production.shippingapis.com/ShippingAPI.dll?API=Verify&XML=" + requestDoc;
             Console.WriteLine(url);
             var client = new WebClient();
             var response = client.DownloadString(url);
