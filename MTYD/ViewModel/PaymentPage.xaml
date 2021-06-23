@@ -210,7 +210,7 @@
 
                    <Frame x:Name="deliveryInstr" Grid.Row="0" Grid.Column="0" Padding="10,5" Margin="20,0.5" BackgroundColor="White" HasShadow="False"
                           BorderColor="#F26522" CornerRadius="10">
-                        <Editor x:Name="DeliveryEntry" Keyboard="Text" FontSize="17" TextColor="Black" HeightRequest="80" PlaceholderColor="Black"
+                        <Editor x:Name="DeliveryEntry" Focused="DeliveryEntry_Focused"  Keyboard="Text" FontSize="17" TextColor="Black" HeightRequest="80" PlaceholderColor="Black"
                                 Placeholder="Delivery Instructions (for example:&#x0a;gate code, or where to put&#x0a;your meals if you're not home)" TextChanged="DeliveryAdd_TextChanged"/>
                    </Frame>
                 </Grid>
@@ -326,7 +326,7 @@
             <!--payment summary-->
 
             <StackLayout x:Name="paymentStack" IsVisible="false">
-
+              <StackLayout x:Name="receiptStack">
                 <Grid HorizontalOptions="Fill" ColumnSpacing="5" BackgroundColor="#f8bb16" Padding="20, 10" Margin="0, 10, 0, 10">
                     <Label Text="Payment Summary" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Start" BackgroundColor="Transparent" FontSize="18"/>
                 </Grid>
@@ -469,6 +469,7 @@
                     <Label Grid.Column="1" x:Name="grandTotalPrice" FontSize="16" HorizontalOptions="End" TextColor="Black" FontAttributes="Bold"/>
 
                 </Grid>
+              </StackLayout>
 
                 <Grid HorizontalOptions="Fill" ColumnSpacing="5" BackgroundColor="#f8bb16" Padding="20, 10" Margin="0, 10, 0, 10">
                     <Label Text="Complete Payment" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Start" BackgroundColor="Transparent" FontSize="18"/>
@@ -490,7 +491,7 @@
                    <Frame  Grid.Row="0" Grid.Column="0" Padding="10,5" Margin="20,10,20,1" BackgroundColor="White" HasShadow="False"
                           BorderColor="#F26522" CornerRadius="10">
                         <Entry x:Name="cardHolderName" Keyboard="Text" FontSize="17" TextColor="Black" Placeholder="Cardholder Name*" PlaceholderColor="Black"
-                               />
+                               Focused="stripeInfo_Focused"/>
                    </Frame>
 
                 </Grid>
@@ -507,7 +508,7 @@
                    <Frame  Grid.Row="0" Grid.Column="0" Padding="10,5" Margin="20,1" BackgroundColor="White" HasShadow="False"
                           BorderColor="#F26522" CornerRadius="10">
                         <Entry x:Name="cardHolderNumber" Keyboard="Text" FontSize="17" TextColor="Black" Placeholder="Card Number*" MaxLength="16" PlaceholderColor="Black"
-                               />
+                               Focused="stripeInfo_Focused"/>
                    </Frame>
 
                 </Grid>
@@ -525,19 +526,19 @@
                    <Frame  Grid.Row="0" Grid.Column="0" Padding="10,5" Margin="20,1,2,1" BackgroundColor="White" HasShadow="False"
                           BorderColor="#F26522" CornerRadius="10">
                         <Entry x:Name="cardExpMonth" Keyboard="Numeric" FontSize="17" TextColor="Black" Placeholder="Exp MM*" MaxLength="2" PlaceholderColor="Black"
-                               />
+                               Focused="stripeInfo_Focused"/>
                    </Frame>
 
                    <Frame  Grid.Row="0" Grid.Column="1" Padding="10,5" Margin="1,1,2,1" BackgroundColor="White" HasShadow="False"
                           BorderColor="#F26522" CornerRadius="10">
                         <Entry x:Name="cardExpYear" Keyboard="Numeric" FontSize="17" TextColor="Black" Placeholder="Exp YY*" MaxLength="2" PlaceholderColor="Black"
-                               />
+                               Focused="stripeInfo_Focused"/>
                    </Frame>
 
                     <Frame  Grid.Row="0" Grid.Column="2" Padding="10,5" Margin="2,1,20,1" BackgroundColor="White" HasShadow="False"
                           BorderColor="#F26522" CornerRadius="10">
                         <Entry x:Name="cardCVV" Keyboard="Numeric" FontSize="17" TextColor="Black" Placeholder="CVV*" MaxLength="3" PlaceholderColor="Black"
-                               />
+                               Focused="stripeInfo_Focused"/>
                    </Frame>
                 </Grid>
 

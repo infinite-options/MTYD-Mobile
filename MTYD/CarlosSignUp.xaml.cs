@@ -470,7 +470,8 @@ namespace MTYD
             {
                 if (GetXMLElement(element, "Error").Equals(""))
                 {
-                    if (GetXMLElement(element, "DPVConfirmation").Equals("Y") || GetXMLElement(element, "DPVConfirmation").Equals("D") || GetXMLElement(element, "DPVConfirmation").Equals("S"))
+                    if (GetXMLElement(element, "DPVConfirmation").Equals("Y") ||
+                        GetXMLElement(element, "DPVConfirmation").Equals("S"))
                     {
                         Geocoder geoCoder = new Geocoder();
 
@@ -503,17 +504,20 @@ namespace MTYD
                     }
                     else if (GetXMLElement(element, "DPVConfirmation").Equals("D"))
                     {
-                        //await DisplayAlert("Alert!", "Address is missing information like 'Apartment number'.", "Ok");
-                        //return;
+                        await DisplayAlert("Missing Info", "Please enter your unit/apartment number into the appropriate field.", "OK");
+                        return;
                     }
                     else
                     {
-                        //await DisplayAlert("Alert!", "Seems like your address is invalid.", "Ok");
-                        //return;
+                        await DisplayAlert("Invalid Address", "The address you entered couldn't be confirmed. Please enter another one.", "OK");
+                        return;
                     }
                 }
                 else
-                {   // USPS sents an error saying address not found in there records. In other words, this address is not valid because it does not exits.
+                {
+                    await DisplayAlert("Invalid Address", "The address you entered couldn't be confirmed. Please enter another one.", "OK");
+                    return;
+                    // USPS sents an error saying address not found in there records. In other words, this address is not valid because it does not exits.
                     //Console.WriteLine("Seems like your address is invalid.");
                     //await DisplayAlert("Alert!", "Error from USPS. The address you entered was not found.", "Ok");
                     //return;

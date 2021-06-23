@@ -671,7 +671,8 @@ namespace MTYD.ViewModel
                     {
                         if (GetXMLElement(element, "Error").Equals(""))
                         {
-                            if (GetXMLElement(element, "DPVConfirmation").Equals("Y") && GetXMLElement(element, "Zip5").Equals(passedZip) && GetXMLElement(element, "City").Equals(passedCity.ToUpper())) // Best case
+                            if ((GetXMLElement(element, "DPVConfirmation").Equals("Y") ||
+                                    GetXMLElement(element, "DPVConfirmation").Equals("S")) && GetXMLElement(element, "Zip5").Equals(passedZip) && GetXMLElement(element, "City").Equals(passedCity.ToUpper())) // Best case
                             {
                                 // Get longitude and latitide because we can make a deliver here. Move on to next page.
                                 // Console.WriteLine("The address you entered is valid and deliverable by USPS. We are going to get its latitude & longitude");
@@ -730,8 +731,27 @@ namespace MTYD.ViewModel
                                 //passingZones = obj.Result;
                                 //withinZones = true;
                             }
+                            else if (GetXMLElement(element, "DPVConfirmation").Equals("D"))
+                            {
+                                await DisplayAlert("Missing Info", "Please enter your unit/apartment number into the appropriate field.", "OK");
+                                return;
+                            }
+                            else
+                            {
+                                await DisplayAlert("Invalid Address", "The address you entered couldn't be confirmed. Please enter another one.", "OK");
+                                return;
+                            }
 
                             break;
+                        }
+                        else
+                        {
+                            await DisplayAlert("Invalid Address", "The address you entered couldn't be confirmed. Please enter another one.", "OK");
+                            return;
+                            // USPS sents an error saying address not found in there records. In other words, this address is not valid because it does not exits.
+                            //Console.WriteLine("Seems like your address is invalid.");
+                            //await DisplayAlert("Alert!", "Error from USPS. The address you entered was not found.", "Ok");
+                            //return;
                         }
                     }
 

@@ -2207,7 +2207,7 @@ namespace MTYD
                 {
                     if (GetXMLElement(element, "Error").Equals(""))
                     {
-                        if (GetXMLElement(element, "DPVConfirmation").Equals("Y") || GetXMLElement(element, "DPVConfirmation").Equals("D") || GetXMLElement(element, "DPVConfirmation").Equals("S"))
+                        if (GetXMLElement(element, "DPVConfirmation").Equals("Y") || GetXMLElement(element, "DPVConfirmation").Equals("S"))
                         {
                             Geocoder geoCoder = new Geocoder();
 

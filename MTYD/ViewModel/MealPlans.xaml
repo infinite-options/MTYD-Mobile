@@ -6,7 +6,7 @@
     x:Class="MTYD.ViewModel.MealPlans">
 
     <ContentPage.Content>
-        <ScrollView>
+        <ScrollView x:Name="scroller">
             <Grid>
             <StackLayout x:Name="StackL" BackgroundColor="White">
 
@@ -31,6 +31,7 @@
 
                 </Grid>
 
+              <StackLayout x:Name="beforeDelivDetailsStack">
                 <Grid HorizontalOptions="Fill" ColumnSpacing="5" BackgroundColor="#f8bb16" Padding="20, 10" Margin="0, 10, 0, 4">
                     <Label Text="Select Meal Plan" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Start" BackgroundColor="Transparent" FontSize="18"/>
                 </Grid>
@@ -99,6 +100,7 @@
                     <Label Grid.Column="2" x:Name="ambassDisc" FontSize="Medium" Text="-$0.00" HorizontalOptions="End" TextColor="Black" VerticalOptions="Center"/>
 
                 </Grid>
+              </StackLayout>
 
                 <Grid HorizontalOptions="Fill" ColumnSpacing="5" BackgroundColor="#f8bb16" Padding="20, 10" Margin="0, 5">
                     <Label Text="Edit Delivery Details" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Start" BackgroundColor="Transparent" FontSize="18"/>
@@ -117,13 +119,13 @@
                    <Frame x:Name="firstName" Grid.Row="0" Grid.Column="0" Padding="10,5" Margin="20,0.5,1,5" BackgroundColor="White" HasShadow="False"
                           BorderColor="#F26522" CornerRadius="10">
                         <Entry x:Name="FNameEntry" Keyboard="Text" FontSize="17" TextColor="Black" Placeholder="First Name*" PlaceholderColor="Black"
-                               />
+                                Focused="Edit_Focused"/>
                    </Frame>
 
                    <Frame x:Name="lastName" Grid.Row="0" Grid.Column="1" Padding="10,5" Margin="1,0.5,20,5" BackgroundColor="White" HasShadow="False"
                           BorderColor="#F26522" CornerRadius="10">
                         <Entry x:Name="LNameEntry" Keyboard="Text" FontSize="17" TextColor="Black" Placeholder="Last Name*" PlaceholderColor="Black"
-                               />
+                               Focused="Edit_Focused"/>
                    </Frame>
                 </Grid>
 
@@ -138,7 +140,7 @@
                    <Frame x:Name="emailAdd" Grid.Row="0" Grid.Column="0" Padding="10,5" Margin="20,0.5, 20, 5" BackgroundColor="White" HasShadow="False"
                           BorderColor="#F26522" CornerRadius="10">
                         <Entry x:Name="emailEntry" Keyboard="Email" FontSize="17" TextColor="Black" Placeholder="Email Address*" PlaceholderColor="Black"
-                               />
+                               Focused="Edit_Focused"/>
                    </Frame>
 
                 </Grid>
@@ -155,7 +157,7 @@
                           BorderColor="#F26522" CornerRadius="10">
 
                         <Entry x:Name="PhoneEntry" MaxLength="10" Keyboard="Numeric" FontSize="17" TextColor="Black" Placeholder="Phone Number*" PlaceholderColor="Black"
-                               />
+                               Focused="Edit_Focused"/>
 
                     </Frame>
 
@@ -241,7 +243,7 @@
                    <Frame x:Name="deliveryInstr" Grid.Row="0" Grid.Column="0" Padding="10,5" Margin="20,0.5,20,5" BackgroundColor="White" HasShadow="False"
                           BorderColor="#F26522" CornerRadius="10">
                         <Editor x:Name="DeliveryEntry" Keyboard="Text" FontSize="17" TextColor="Black" HeightRequest="80" PlaceholderColor="Black"
-                                Placeholder="Delivery Instructions (for example:&#x0a;gate code, or where to put&#x0a;your meals if you're not home)"/>
+                                Focused="Edit_Focused" Placeholder="Delivery Instructions (for example:&#x0a;gate code, or where to put&#x0a;your meals if you're not home)"/>
                    </Frame>
                 </Grid>
 
