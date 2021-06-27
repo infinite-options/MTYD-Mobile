@@ -58,6 +58,10 @@ namespace MTYD.ViewModel
             {
                 logo.WidthRequest = width / 3;
             }
+            else
+            {
+                logo.WidthRequest = width / 3;
+            }
         }
     }
 }

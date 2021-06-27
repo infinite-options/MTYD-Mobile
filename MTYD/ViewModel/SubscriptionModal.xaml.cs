@@ -322,6 +322,7 @@ namespace MTYD.ViewModel
             else //android
             {
                 //open menu adjustments
+                Xamarin.Forms.NavigationPage.SetHasNavigationBar(this, false);
                 orangeBox2.HeightRequest = height / 2;
                 orangeBox2.Margin = new Thickness(0, -height / 2.2, 0, 0);
                 orangeBox2.CornerRadius = height / 40;
@@ -336,15 +337,36 @@ namespace MTYD.ViewModel
                 orangeBox.HeightRequest = height / 2;
                 orangeBox.Margin = new Thickness(0, -height / 2.2, 0, 0);
                 orangeBox.CornerRadius = height / 40;
-                //heading.FontSize = width / 45;
-                //heading.Margin = new Thickness(0, 0, 0, 40);
+                //heading.FontSize = width / 32;
+                //heading.Margin = new Thickness(0, 0, 0, 30);
                 pfp.HeightRequest = 40;
                 pfp.WidthRequest = 40;
                 pfp.CornerRadius = 20;
-                pfp.Margin = new Thickness(0, 0, 23, 35);
+                //pfp.Margin = new Thickness(0, 0, 23, 27);
+                innerGrid.Margin = new Thickness(0, 0, 23, 27);
+
+                initials.FontSize = 20;
+                if (Preferences.Get("profilePicLink", "") == "")
+                {
+                    string userInitials = "";
+                    if (cust_firstName != "" && cust_firstName != null)
+                    {
+                        userInitials += cust_firstName.Substring(0, 1);
+                    }
+                    if (cust_lastName != "" && cust_lastName != null)
+                    {
+                        userInitials += cust_lastName.Substring(0, 1);
+                    }
+                    initials.Text = userInitials.ToUpper();
+                    initials.FontSize = 20;
+                }
+                else pfp.Source = Preferences.Get("profilePicLink", "");
+
                 menu.Margin = new Thickness(25, 0, 0, 30);
                 menu.WidthRequest = 40;
-                //menu.Margin = new Thickness(25, 0, 0, 40);
+
+                CurrPlan.FontSize = 15;
+                updatedPlan.FontSize = 15;
             }
 
             //common adjustments regardless of platform

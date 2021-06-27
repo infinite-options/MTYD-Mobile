@@ -96,6 +96,16 @@ namespace MTYD
 
                 SignUpButton.CornerRadius = 25;
             }
+            else
+            {
+                Xamarin.Forms.NavigationPage.SetHasNavigationBar(this, false);
+                orangeBox.HeightRequest = height / 2;
+                orangeBox.Margin = new Thickness(0, -height / 2.2, 0, 0);
+                orangeBox.CornerRadius = height / 40;
+                heading.WidthRequest = 140;
+                backButton.Margin = new Thickness(25, 0, 0, 30);
+                backButton.HeightRequest = 25;
+            }
         }
 
 

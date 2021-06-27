@@ -212,6 +212,20 @@ namespace MTYD.ViewModel
             }
             else //android
             {
+                Xamarin.Forms.NavigationPage.SetHasNavigationBar(this, false);
+                orangeBox.HeightRequest = height / 2;
+                orangeBox.Margin = new Thickness(0, -height / 2.2, 0, 0);
+                orangeBox.CornerRadius = height / 40;
+                heading.WidthRequest = 140;
+
+                pfp.HeightRequest = 40;
+                pfp.WidthRequest = 40;
+                pfp.CornerRadius = 20;
+                pfp.Margin = new Thickness(0, 0, 23, 27);
+                innerGrid.Margin = new Thickness(0, 0, 23, 27);
+
+                userFrame.HeightRequest = 42;
+                passFrame.HeightRequest = 42;
             }
         }
 

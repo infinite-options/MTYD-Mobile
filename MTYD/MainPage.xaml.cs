@@ -89,6 +89,7 @@ namespace MTYD
                 InitializeComponent();
                 BindingContext = this;
 
+
                 string version = "";
                 string build = "";
                 version = DependencyService.Get<IAppVersionAndBuild>().GetVersionNumber();
@@ -151,6 +152,7 @@ namespace MTYD
                 //double marg = HomePage.Height - 100;
                 //Debug.WriteLine("marg: " + marg.ToString());
                 //CheckAddressGrid.Margin = new Thickness(50, marg, 50, 120);
+                CheckVersion();
             }
             catch (Exception ex)
             {
@@ -191,12 +193,27 @@ namespace MTYD
                 LandingPage.IsVisible = true;
                 checkLandingPlatform(height, width);
                 setGrid();
-
+                CheckVersion();
             }
             catch (Exception ex)
             {
                 Generic gen = new Generic();
                 gen.parseException(ex.ToString());
+            }
+        }
+
+        public async Task CheckVersion()
+        {
+            var client = new AppVersion();
+            string versionStr = DependencyService.Get<IAppVersionAndBuild>().GetVersionNumber();
+            var result = client.isRunningLatestVersion(versionStr);
+            Debug.WriteLine("isRunningLatestVersion: " + result);
+            string resultStr = await result;
+            if (resultStr == "FALSE")
+            {
+                await DisplayAlert("Mealsfor.Me\nhas gotten even better!", "Please visit the App Store to get the latest version.", "OK");
+                    
+                await CrossLatestVersion.Current.OpenAppInStore();
             }
         }
 
@@ -315,6 +332,9 @@ namespace MTYD
                 directLoginButton.HeightRequest = 42;
                 directLoginButton.WidthRequest = 42;
                 directLoginButton.CornerRadius = 21;
+
+                androidBuffer.HeightRequest = 20;
+                AddressEntryFrame.HeightRequest = 42;
             }
         }
 
@@ -490,6 +510,7 @@ namespace MTYD
                 pfp.HeightRequest = 40;
                 pfp.WidthRequest = 40;
                 pfp.CornerRadius = 20;
+                initials.FontSize = 20;
 
                 //mainLogo.HeightRequest = height / 20;
                 getStarted.HeightRequest = height / 45;
@@ -2449,23 +2470,23 @@ namespace MTYD
         }
         //end of menu functions
 
-        async Task CheckVersion()
-        {
-            var isLatest = await CrossLatestVersion.Current.IsUsingLatestVersion();
+        //async Task CheckVersion()
+        //{
+        //    var isLatest = await CrossLatestVersion.Current.IsUsingLatestVersion();
 
-            if (!isLatest)
-            {
-                await DisplayAlert("Mealsfor.Me\nhas gotten even better!", "Please visit the App Store to get the latest version.", "OK");
-                await CrossLatestVersion.Current.OpenAppInStore();
-            }
-            else
-            {
-                restOfConstructor();
-                //GetBusinesses();
+        //    if (!isLatest)
+        //    {
+        //        await DisplayAlert("Mealsfor.Me\nhas gotten even better!", "Please visit the App Store to get the latest version.", "OK");
+        //        await CrossLatestVersion.Current.OpenAppInStore();
+        //    }
+        //    else
+        //    {
+        //        restOfConstructor();
+        //        //GetBusinesses();
 
-                //CartTotal.Text = CheckoutPage.total_qty.ToString();
-            }
-        }
+        //        //CartTotal.Text = CheckoutPage.total_qty.ToString();
+        //    }
+        //}
 
         void restOfConstructor()
         {

@@ -337,6 +337,7 @@
                                                         Grid.Row="2"
                                                         Grid.ColumnSpan="2"
                                                         FontSize="Small"
+                                                        TextColor="Black"
                                                         VerticalTextAlignment="Center"
                                                        Text="{Binding MealName}"
                                                        FontAttributes="Bold"
@@ -344,9 +345,10 @@
                                                        />
 
                                         <Label x:Name="mealCal" Grid.Row="3"
-                                                       FontSize="Micro"
+                                                       FontSize="13"
                                                        Grid.Column="0"
                                                        Grid.ColumnSpan="2"
+                                                       TextColor="Black"
                                                        Text="{Binding MealCalories}"
                                                        Margin="10,0,0,0"
                                                        VerticalOptions="Start" />
@@ -359,13 +361,13 @@
                                             </Grid.ColumnDefinitions>
 
                                             <Frame Margin="-0.25,0,0,0" CornerRadius="0" HasShadow="False" BorderColor="#F26522" HorizontalOptions="Fill" VerticalOptions="Fill" Padding="0" BackgroundColor="Transparent">
-                                            <Button  FontSize="40" CornerRadius="0" TextColor="Black" HorizontalOptions="Fill" VerticalOptions="Fill" Text="-" Clicked="clickDecrease" BorderColor="#F26522" BorderWidth="1"/>
+                                            <ImageButton Source="minusSign.png" CornerRadius="0" BackgroundColor="Transparent" HorizontalOptions="Fill" VerticalOptions="Fill" Clicked="clickDecrease" BorderColor="#F26522" BorderWidth="1"/>
                                             </Frame>
                                             <Frame Grid.Column="1"  CornerRadius="0" HasShadow="False" BorderColor="#F26522" HorizontalOptions="Fill" VerticalOptions="Fill" Padding="0" BackgroundColor="Transparent">
-                                            <Label Text="{Binding MealQuantity}" HorizontalOptions="Center" VerticalOptions="Center" FontSize="19" FontAttributes="Bold"/>
+                                            <Label Text="{Binding MealQuantity}" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center" FontSize="19" FontAttributes="Bold"/>
                                             </Frame>
                                             <Frame Grid.Column="2" Margin="0,0,-0.25,0" CornerRadius="0" HasShadow="False" BorderColor="#F26522" HorizontalOptions="Fill" VerticalOptions="Fill" Padding="0" BackgroundColor="Transparent">
-                                            <Button x:Name="increase" CornerRadius="0" Grid.Column="2" FontSize="30" TextColor="Black" HorizontalOptions="Fill" VerticalOptions="Fill" FontAttributes="Bold" Text="+" Clicked="clickIncrease" BorderColor="#F26522" BorderWidth="1"/>
+                                            <ImageButton x:Name="increase"  Source="plusSign.png" BackgroundColor="Transparent" CornerRadius="0" Grid.Column="2"  HorizontalOptions="Fill" VerticalOptions="Fill" Clicked="clickIncrease" BorderColor="#F26522" BorderWidth="1"/>
                                                 </Frame>
                                         </Grid>
 
@@ -382,7 +384,7 @@
                     </CollectionView.ItemTemplate>
                 </CollectionView>
 
-                <Label Margin="10,10,0,0" x:Name="addOns" Text="ADD-ONS" FontAttributes="Bold"/>
+                <Label Margin="10,10,0,0" x:Name="addOns" Text="ADD-ONS" TextColor="Black" FontAttributes="Bold"/>
 
                 <Grid></Grid>
 
@@ -436,6 +438,7 @@
                                                         Grid.Row="2"
                                                         Grid.ColumnSpan="2"
                                                         FontSize="Small"
+                                                        TextColor="Black"
                                                         VerticalTextAlignment="Center"
                                                        Text="{Binding MealName}"
                                                        FontAttributes="Bold"
@@ -443,8 +446,9 @@
                                                        />
 
                                         <Label x:Name="mealCal" Grid.Row="3"
-                                                       FontSize="Micro"
+                                                       FontSize="13"
                                                        Grid.Column="0"
+                                                       TextColor="Black"
                                                        Grid.ColumnSpan="2"
                                                        Text="{Binding MealCalories}"
                                                        Margin="10,0,0,0"
@@ -458,14 +462,16 @@
                                             </Grid.ColumnDefinitions>
 
                                             <Frame Margin="-0.25,0,0,0" CornerRadius="0" HasShadow="False" BorderColor="#F26522" HorizontalOptions="Fill" VerticalOptions="Fill" Padding="0" BackgroundColor="Transparent">
-                                            <Button  FontSize="40" CornerRadius="0" TextColor="Black" HorizontalOptions="Fill" VerticalOptions="Fill" Text="-" Clicked="clickDecreaseAddOn" BorderColor="#F26522" BorderWidth="1"/>
+                                            <!--<Button  FontSize="40" BackgroundColor="Transparent" CornerRadius="0" TextColor="Black" HorizontalOptions="Fill" VerticalOptions="Fill" Text="-" Clicked="clickDecreaseAddOn" BorderColor="#F26522" BorderWidth="1"/>-->
+                                            <ImageButton Source="minusSign.png" BackgroundColor="Transparent" CornerRadius="0" HorizontalOptions="Fill" VerticalOptions="Fill" Clicked="clickDecreaseAddOn" BorderColor="#F26522" BorderWidth="1"/>
                                             </Frame>
                                             <Frame Grid.Column="1"  CornerRadius="0" HasShadow="False" BorderColor="#F26522" HorizontalOptions="Fill" VerticalOptions="Fill" Padding="0" BackgroundColor="Transparent">
-                                            <Label Text="{Binding MealQuantity}" HorizontalOptions="Center" VerticalOptions="Center" FontSize="19" FontAttributes="Bold"/>
+                                            <Label Text="{Binding MealQuantity}" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center" FontSize="19" FontAttributes="Bold"/>
                                             </Frame>
                                             <Frame Grid.Column="2" Margin="0,0,-0.25,0" CornerRadius="0" HasShadow="False" BorderColor="#F26522" HorizontalOptions="Fill" VerticalOptions="Fill" Padding="0" BackgroundColor="Transparent">
-                                            <Button x:Name="increase_AddOns" CornerRadius="0" Grid.Column="2" FontSize="30" TextColor="Black" HorizontalOptions="Fill" VerticalOptions="Fill" FontAttributes="Bold" Text="+" Clicked="clickIncreaseAddOn" BorderColor="#F26522" BorderWidth="1"/>
-                                                </Frame>
+                                            <!--<Button x:Name="increase_AddOns" BackgroundColor="Transparent" CornerRadius="0" Grid.Column="2" FontSize="30" TextColor="Black" HorizontalOptions="Fill" VerticalOptions="Fill" FontAttributes="Bold" Text="+" Clicked="clickIncreaseAddOn" BorderColor="#F26522" BorderWidth="1"/>-->
+                                            <ImageButton x:Name="increase_AddOns" Source="plusSign.png" BackgroundColor="Transparent" CornerRadius="0" Grid.Column="2" HorizontalOptions="Fill" VerticalOptions="Fill" Clicked="clickIncreaseAddOn" BorderColor="#F26522" BorderWidth="1"/>
+                                            </Frame>
                                         </Grid>
 
                                         <Forms9Patch:Label x:Name="mealDesc" Margin="3,0" Text="{Binding MealDesc}" HorizontalTextAlignment="Center" IsVisible="{Binding SeeDesc}" Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="Transparent" TextColor="Black"/>
@@ -545,7 +551,7 @@
                 <ImageButton x:Name="menu2" Source="closeMenu.png" VerticalOptions="End" HorizontalOptions="Start" BackgroundColor="Transparent" Clicked="clickedCloseMenu"/>
 
                 <StackLayout Grid.Row="1" Margin="0,0,0,25">
-                    <Forms9Patch:Button Text="    Home" FontAttributes="Bold" OutlineColor="Transparent" FontSize="20" HorizontalTextAlignment="Start" HorizontalOptions="Fill" TextColor="White" Clicked="clickedStripeTest"/>
+                    <Forms9Patch:Button Text="    Home" FontAttributes="Bold" OutlineColor="Transparent" FontSize="20" HorizontalTextAlignment="Start" HorizontalOptions="Fill" TextColor="White" Clicked="clickedLanding"/>
                     <Forms9Patch:Button Text="    Select Meals" FontAttributes="Bold" OutlineColor="Transparent" FontSize="20" HorizontalTextAlignment="Start" HorizontalOptions="Fill" TextColor="White" Clicked="clickedSelect"/>
                     <Forms9Patch:Button Text="    Change Meal Plans" FontAttributes="Bold" OutlineColor="Transparent" FontSize="20" HorizontalTextAlignment="Start" HorizontalOptions="Fill" TextColor="White" Clicked="clickedMealPlan"/>
                     <Forms9Patch:Button Text="    Add Subscriptions" FontAttributes="Bold" OutlineColor="Transparent" FontSize="20" HorizontalTextAlignment="Start" HorizontalOptions="Fill" TextColor="White" Clicked="clickedSubscription"/>

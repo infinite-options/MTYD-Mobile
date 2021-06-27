@@ -20,14 +20,14 @@
                         <Label x:Name="initials" TextColor="Black" FontAttributes="Bold" VerticalOptions="Center"  HorizontalOptions="Center"/>
                      </Grid>
 
-                     <ImageButton x:Name="menu" Source="new_menu.png" VerticalOptions="End" HorizontalOptions="Start" Clicked="clickedOpenMenu"/>
+                     <ImageButton x:Name="menu" Source="new_menu.png" BackgroundColor="Transparent" VerticalOptions="End" HorizontalOptions="Start" Clicked="clickedOpenMenu"/>
                 </Grid>
 
                 <Grid HorizontalOptions="Fill" BackgroundColor="#f8bb16" Padding="20, 10" Margin="0, 10">
                     <Label Text="Edit Plan" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Start" BackgroundColor="Transparent" FontSize="18"/>
                 </Grid>
 
-                <Label Text="Current Plan" TextColor="Black" FontAttributes="Bold" Margin="30, 0"/>
+                <Label x:Name="CurrPlan" Text="Current Plan" TextColor="Black" FontAttributes="Bold" Margin="30, 0"/>
 
                 <Grid Margin="0, 10, 80, 50" RowSpacing="10">
                     <Grid.RowDefinitions>
@@ -45,8 +45,8 @@
 
                     <Frame Grid.Row="0" Grid.Column="1" HasShadow="False" BorderColor="#F26522" CornerRadius="0" Padding="0" WidthRequest="100" HorizontalOptions="Center">
                         <StackLayout VerticalOptions="Center">
-                            <Label x:Name="currentDelivNum" FontAttributes="Bold" FontSize="30" HorizontalOptions="Center"/>
-                            <Label x:Name="currentDiscount" FontSize="16" HorizontalOptions="Center"/>
+                            <Label TextColor="Black" x:Name="currentDelivNum" FontAttributes="Bold" FontSize="30" HorizontalOptions="Center"/>
+                            <Label x:Name="currentDiscount" TextColor="Black" FontSize="16" HorizontalOptions="Center"/>
                         </StackLayout>
                     </Frame>
 
@@ -55,7 +55,7 @@
                     <Label Grid.Row="1" Grid.Column="1" Text="DELIVERIES" TextColor="Black" FontSize="16" HorizontalOptions="Center"/>
                 </Grid>
 
-                <Label Text="Updated Plan" TextColor="Black" FontAttributes="Bold" Margin="30, 0"/>
+                <Label x:Name="updatedPlan" Text="Updated Plan" TextColor="Black" FontAttributes="Bold" Margin="30, 0"/>
 
                 <Label x:Name="numMeals" Text="NUMBER OF MEALS PER DELIVERY" HorizontalTextAlignment="Start" HorizontalOptions="Start" Margin="30, 20, 0, 10" TextColor="Black"/>
 
@@ -68,25 +68,25 @@
                         <ColumnDefinition Width="1*" />
                     </Grid.ColumnDefinitions>
 
-                    <ImageButton x:Name="meals1" Grid.Column="0" Source="meal_num_button_yellow.png" WidthRequest="50" HorizontalOptions="Center" Clicked="clickedMeals1"/>
+                    <ImageButton x:Name="meals1" BackgroundColor="Transparent" Grid.Column="0" Source="meal_num_button_yellow.png" WidthRequest="50" HorizontalOptions="Center" Clicked="clickedMeals1"/>
                     <Label x:Name="meals1Text" Grid.Column="0" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center"/>
-                    <Button HorizontalOptions="Fill" VerticalOptions="Fill" Clicked="clickedMeals1"/>
+                    <Button HorizontalOptions="Fill" BackgroundColor="Transparent" VerticalOptions="Fill" Clicked="clickedMeals1"/>
 
-                    <ImageButton x:Name="meals2" Grid.Column="1" Source="meal_num_button_yellow.png" WidthRequest="50" HorizontalOptions="Center" Clicked="clickedMeals2"/>
+                    <ImageButton x:Name="meals2" BackgroundColor="Transparent" Grid.Column="1" Source="meal_num_button_yellow.png" WidthRequest="50" HorizontalOptions="Center" Clicked="clickedMeals2"/>
                     <Label x:Name="meals2Text" Grid.Column="1" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center"/>
-                    <Button Grid.Column="1" HorizontalOptions="Fill" VerticalOptions="Fill" Clicked="clickedMeals2"/>
+                    <Button Grid.Column="1" BackgroundColor="Transparent" HorizontalOptions="Fill" VerticalOptions="Fill" Clicked="clickedMeals2"/>
 
-                    <ImageButton x:Name="meals3" Grid.Column="2" Source="meal_num_button_yellow.png" WidthRequest="50" HorizontalOptions="Center" Clicked="clickedMeals3"/>
+                    <ImageButton x:Name="meals3" BackgroundColor="Transparent" Grid.Column="2" Source="meal_num_button_yellow.png" WidthRequest="50" HorizontalOptions="Center" Clicked="clickedMeals3"/>
                     <Label x:Name="meals3Text" Grid.Column="2" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center"/>
-                    <Button Grid.Column="2" HorizontalOptions="Fill" VerticalOptions="Fill" Clicked="clickedMeals3"/>
+                    <Button Grid.Column="2" BackgroundColor="Transparent" HorizontalOptions="Fill" VerticalOptions="Fill" Clicked="clickedMeals3"/>
 
-                    <ImageButton x:Name="meals4" Grid.Column="3" Source="meal_num_button_yellow.png" WidthRequest="50" HorizontalOptions="Center" Clicked="clickedMeals4"/>
+                    <ImageButton x:Name="meals4" BackgroundColor="Transparent" Grid.Column="3" Source="meal_num_button_yellow.png" WidthRequest="50" HorizontalOptions="Center" Clicked="clickedMeals4"/>
                     <Label x:Name="meals4Text" Grid.Column="3" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center"/>
-                    <Button Grid.Column="3" HorizontalOptions="Fill" VerticalOptions="Fill" Clicked="clickedMeals4"/>
+                    <Button Grid.Column="3" BackgroundColor="Transparent" HorizontalOptions="Fill" VerticalOptions="Fill" Clicked="clickedMeals4"/>
 
-                    <ImageButton x:Name="meals5" Grid.Column="4" Source="meal_num_button_yellow.png" WidthRequest="50" HorizontalOptions="Center" Clicked="clickedMeals5"/>
+                    <ImageButton x:Name="meals5" BackgroundColor="Transparent" Grid.Column="4" Source="meal_num_button_yellow.png" WidthRequest="50" HorizontalOptions="Center" Clicked="clickedMeals5"/>
                     <Label x:Name="meals5Text" Grid.Column="4" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center"/>
-                    <Button Grid.Column="4" HorizontalOptions="Fill" VerticalOptions="Fill" Clicked="clickedMeals5"/>
+                    <Button Grid.Column="4" BackgroundColor="Transparent" HorizontalOptions="Fill" VerticalOptions="Fill" Clicked="clickedMeals5"/>
 
                 </Grid>
 
@@ -221,7 +221,7 @@
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
 
-                    <Button Grid.ColumnSpan="2" BorderWidth="2" BorderColor="#F26522" CornerRadius="20"/>
+                    <Button BackgroundColor="Transparent" Grid.ColumnSpan="2" BorderWidth="2" BorderColor="#F26522" CornerRadius="20"/>
 
                     <Label Grid.Column="0" Text="Applied Discount" TextColor="Black" VerticalOptions="Center" HorizontalOptions="Start" Margin="30, 0, 0, 0"/>
 

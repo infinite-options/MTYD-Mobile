@@ -123,29 +123,55 @@ namespace MTYD.ViewModel
             else //android
             {
                 //open menu adjustments
+                Xamarin.Forms.NavigationPage.SetHasNavigationBar(this, false);
                 orangeBox2.HeightRequest = height / 2;
                 orangeBox2.Margin = new Thickness(0, -height / 2.2, 0, 0);
                 orangeBox2.CornerRadius = height / 40;
-                heading2.WidthRequest = width / 5.3;
+                heading2.WidthRequest = 140;
                 menu.WidthRequest = 40;
                 menu2.Margin = new Thickness(25, 0, 0, 30);
-                //open menu adjustments
+                heading.WidthRequest = 140;
+                //heading adjustments
 
                 orangeBox.HeightRequest = height / 2;
                 orangeBox.Margin = new Thickness(0, -height / 2.2, 0, 0);
                 orangeBox.CornerRadius = height / 40;
-
+                //heading.WidthRequest = width / 3;
+                heading.WidthRequest = 140;
                 pfp.HeightRequest = 40;
                 pfp.WidthRequest = 40;
                 pfp.CornerRadius = 20;
-                pfp.Margin = new Thickness(0, 0, 23, 35);
+                //pfp.Margin = new Thickness(0, 0, 23, 27);
+                innerGrid.Margin = new Thickness(0, 0, 23, 27);
 
-                //menu.HeightRequest = width / 30;
+                initials.FontSize = 20;
+                if (Preferences.Get("profilePicLink", "") == "")
+                {
+                    string userInitials = "";
+                    if (cust_firstName != "" && cust_firstName != null)
+                    {
+                        userInitials += cust_firstName.Substring(0, 1);
+                    }
+                    if (cust_lastName != "" && cust_lastName != null)
+                    {
+                        userInitials += cust_lastName.Substring(0, 1);
+                    }
+                    initials.Text = userInitials.ToUpper();
+                    initials.FontSize = 20;
+                }
+                else pfp.Source = Preferences.Get("profilePicLink", "");
+
+                //#F8BB17
+                //#F8BB17
+                //menu.Margin = new Thickness(25, 0, 0, 30);
+                menu.Margin = new Thickness(25, 0, 0, 30);
+                //menu.HeightRequest = width / 18;
                 menu.WidthRequest = 40;
-                menu.Margin = new Thickness(25, 0, 0, 40);
+                //back.Margin = new Thickness(25, 0, 0, 30);
                 //back.HeightRequest = 25;
-                ////back.WidthRequest = width / 30;
-                //back.Margin = new Thickness(25, 0, 0, 40);
+                //back.WidthRequest = width / 18;
+                menu2.WidthRequest = 40;
+                menu2.Margin = new Thickness(25, 0, 0, 30);
             }
 
             //common adjustments regardless of platform

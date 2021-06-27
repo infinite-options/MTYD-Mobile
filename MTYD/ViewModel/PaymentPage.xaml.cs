@@ -111,6 +111,7 @@ namespace MTYD.ViewModel
         bool onCardAdd = false;
         bool termsChecked = false;
         string usedPaymentIntent = "";
+        string uspsCode = "";
 
         Model.Address addr;
         
@@ -1885,7 +1886,8 @@ namespace MTYD.ViewModel
                 if (paymentMethod == "STRIPE")
                 {
                     //newPayment.purchase_notes = cardDescription.Text;
-                    //newPayment.purchase_notes = 
+                    //newPayment.purchase_notes =
+                    newPayment.purchase_notes = uspsCode;
                     newPayment.cc_num = cardHolderNumber.Text;
                     newPayment.cc_exp_year = "20" + cardExpYear.Text;
                     newPayment.cc_exp_month = cardExpMonth.Text;
@@ -2305,6 +2307,10 @@ namespace MTYD.ViewModel
                                 // Get longitude and latitide because we can make a deliver here. Move on to next page.
                                 // Console.WriteLine("The address you entered is valid and deliverable by USPS. We are going to get its latitude & longitude");
                                 //GetAddressLatitudeLongitude();
+                                if (GetXMLElement(element, "DPVConfirmation").Equals("Y"))
+                                    uspsCode = "Y";
+                                else uspsCode = "S";
+
                                 Geocoder geoCoder = new Geocoder();
 
                                 IEnumerable<Position> approximateLocations = await geoCoder.GetPositionsForAddressAsync(cardHolderAddress.Text.Trim() + "," + cardCity.Text.Trim() + "," + cardState.Text.Trim());
@@ -2331,15 +2337,18 @@ namespace MTYD.ViewModel
                             else if (GetXMLElement(element, "DPVConfirmation").Equals("D"))
                             {
                                 await DisplayAlert("Missing Info", "Please enter your unit/apartment number into the appropriate field.", "OK");
+                                return;
                             }
                             else
                             {
                                 await DisplayAlert("Invalid Address", "The address you entered couldn't be confirmed. Please enter another one.", "OK");
+                                return;
                             }
                         }
                         else
                         {
                             await DisplayAlert("Invalid Address", "The address you entered couldn't be confirmed. Please enter another one.", "OK");
+                            return;
                             // USPS sents an error saying address not found in there records. In other words, this address is not valid because it does not exits.
                             //Console.WriteLine("Seems like your address is invalid.");
                             //await DisplayAlert("Alert!", "Error from USPS. The address you entered was not found.", "Ok");

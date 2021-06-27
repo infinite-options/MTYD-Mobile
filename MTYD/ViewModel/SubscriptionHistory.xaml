@@ -26,7 +26,7 @@
                     </Grid>
 
                     <!--<ImageButton x:Name="back" IsVisible="false" Source="backButton.png" VerticalOptions="End" HorizontalOptions="Start" Clicked="clickedBack"/>-->
-                    <ImageButton x:Name="menu" Source="new_menu.png" VerticalOptions="End" HorizontalOptions="Start" Clicked="clickedOpenMenu"/>
+                    <ImageButton x:Name="menu" Source="new_menu.png" BackgroundColor="Transparent" VerticalOptions="End" HorizontalOptions="Start" Clicked="clickedOpenMenu"/>
                 </Grid>
 
                 <BoxView HeightRequest="10"/>
@@ -147,8 +147,8 @@
                                                         <ColumnDefinition Width="1*" />
                                                     </Grid.ColumnDefinitions>
 
-                                                    <Label Text="Meals Delivered" Grid.Column="0" FontSize="21" HeightRequest="30" FontAttributes="Bold" VerticalOptions="Center" VerticalTextAlignment="Center" HorizontalOptions="Start" HorizontalTextAlignment="Start"/>
-                                                    <Label Text="{Binding DelivDate}" Grid.Column="1" FontSize="21" HeightRequest="30" FontAttributes="Bold" VerticalOptions="Center" VerticalTextAlignment="Center" HorizontalOptions="End" HorizontalTextAlignment="End"/>
+                                                    <Label Text="Meals Delivered" TextColor="Black" Grid.Column="0" FontSize="21" HeightRequest="30" FontAttributes="Bold" VerticalOptions="Center" VerticalTextAlignment="Center" HorizontalOptions="Start" HorizontalTextAlignment="Start"/>
+                                                    <Label Text="{Binding DelivDate}" TextColor="Black" Grid.Column="1" FontSize="21" HeightRequest="30" FontAttributes="Bold" VerticalOptions="Center" VerticalTextAlignment="Center" HorizontalOptions="End" HorizontalTextAlignment="End"/>
                                                         
                                                 </Grid>
 
@@ -163,8 +163,8 @@
                                                     </Grid.ColumnDefinitions>
                                                         <!--<Forms9Patch:Label x:Name="mealDesc" Margin="3,0" Text="{Binding MealDesc}" HorizontalTextAlignment="Center" IsVisible="{Binding SeeDesc}" Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="Transparent" TextColor="Black"/>-->
                                                         
-                                                        <Label Grid.Column="0" Text="{Binding qty}" FontSize="30" HeightRequest="50" FontAttributes="Bold" VerticalOptions="Center" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" HorizontalOptions="Fill"/>
-                                                        <Label Grid.Column="1" Text="{Binding mealName}" FontSize="16" HeightRequest="50" VerticalOptions="Center" VerticalTextAlignment="Center" HorizontalTextAlignment="Start" HorizontalOptions="Fill"/>
+                                                        <Label Grid.Column="0" TextColor="Black" Text="{Binding qty}" FontSize="30" HeightRequest="50" FontAttributes="Bold" VerticalOptions="Center" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" HorizontalOptions="Fill"/>
+                                                        <Label Grid.Column="1" TextColor="Black" Text="{Binding mealName}" FontSize="16" HeightRequest="50" VerticalOptions="Center" VerticalTextAlignment="Center" HorizontalTextAlignment="Start" HorizontalOptions="Fill"/>
                                                         <Image Grid.Column="2" HorizontalOptions="Center" Aspect="AspectFill" VerticalOptions="Center" HeightRequest="50" WidthRequest="50" Source="{Binding urlLink}"/>
                                                 </Grid>
                                                 </StackLayout>

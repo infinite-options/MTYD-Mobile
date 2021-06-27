@@ -323,7 +323,9 @@
                 <Image x:Name="platformSignedIn" HorizontalOptions="Fill" Margin="70,15"/>
 
                 <Label Text="Please contact support@mealsfor.me to change your First Name, Last Name or Email Address." FontSize="18" HorizontalTextAlignment="Start"
-                       Margin="20, 25, 20, 15"/>
+                       Margin="20, 25, 20, 15" HeightRequest="70"/>
+
+                <BoxView x:Name="androidBuffer" IsVisible="false" HeightRequest="200" BackgroundColor="Transparent"/>
 
             </StackLayout>
 

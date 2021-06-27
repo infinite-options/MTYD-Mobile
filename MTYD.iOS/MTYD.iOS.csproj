@@ -27,8 +27,8 @@
     <MtouchArch>x86_64</MtouchArch>
     <MtouchLink>SdkOnly</MtouchLink>
     <MtouchDebug>true</MtouchDebug>
-    <CodesignKey>Apple Development: Jonathan Ly (MS5P32VUQF)</CodesignKey>
-    <CodesignProvision>VS: com.infiniteoptions.MTYD Development</CodesignProvision>
+    <CodesignKey>Apple Distribution: Infinite Options, LLC (8V66NC2T37)</CodesignKey>
+    <CodesignProvision>com.infiniteoptions.MTYD</CodesignProvision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>
@@ -304,6 +304,8 @@
     <BundleResource Include="Resources\pulseLoadingAnim.mp4" />
     <BundleResource Include="Resources\loadingClear.mp4" />
     <BundleResource Include="Resources\pulseLoadingAnim2.mp4" />
+    <BundleResource Include="Resources\minusSign.png" />
+    <BundleResource Include="Resources\plusSign.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AppleSignIn\" />

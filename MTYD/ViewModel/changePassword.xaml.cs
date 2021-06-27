@@ -36,6 +36,10 @@ namespace MTYD.ViewModel
 
             BackgroundColor = Color.White;
 
+            if (Device.RuntimePlatform == Device.Android)
+            {
+                headSpacer.HeightRequest = 80;
+            }
             //passFrame.HeightRequest = 50;
             //passFrame2.HeightRequest = 50;
             //headSpacer.HeightRequest = height / 8;

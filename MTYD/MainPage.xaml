@@ -7,6 +7,8 @@
         <Grid VerticalOptions="CenterAndExpand">
             <StackLayout>
                 <StackLayout x:Name="HomePage">
+                    <BoxView x:Name="androidBuffer" HeightRequest="0" HorizontalOptions="Fill"/>
+
                     <Grid HorizontalOptions="End" Margin="0,0,15,0" RowSpacing="10">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="1*" />
@@ -29,12 +31,12 @@
                         <Image Source="MealsForMeMainPage.png" HeightRequest="100"></Image>
                     </StackLayout>
 
-                    <Frame BackgroundColor="White" Margin="50, 0, 50, 10" HeightRequest="20" CornerRadius="15" BorderColor="#F26522" HasShadow="false">
+                    <Frame x:Name="AddressEntryFrame" BackgroundColor="White" Margin="50, 0, 50, 10" HeightRequest="20" CornerRadius="15" BorderColor="#F26522" HasShadow="false">
                         <Entry x:Name="AddressEntry" Text="{Binding AddressText}" TextChanged="OnAddressChanged" TextColor="Black" PlaceholderColor="#B4B4B4" Placeholder="Search Your Address"
                               HorizontalTextAlignment="Center" Focused="addressEntryFocused" Unfocused="addressEntryUnfocused"/>
                     </Frame>
 
-                    <ListView x:Name="addressList" ItemsSource="{Binding Addresses}" IsVisible="false" Margin="50, 0, 50, 30" HeightRequest="200"
+                    <ListView BackgroundColor="White" x:Name="addressList" ItemsSource="{Binding Addresses}" IsVisible="false" Margin="50, 0, 50, 30" HeightRequest="200"
                               ItemSelected="addressSelected">
                         <ListView.ItemTemplate>
                             <DataTemplate>
@@ -183,7 +185,7 @@
                             <Label x:Name="initials" TextColor="Black" FontAttributes="Bold" VerticalOptions="Center"  HorizontalOptions="Center"/>
 
                         </Grid>
-                        <ImageButton x:Name="menu" Source="new_menu.png" VerticalOptions="End" HorizontalOptions="Start" Clicked="clickedOpenMenu"/>
+                        <ImageButton x:Name="menu" BackgroundColor="Transparent" Source="new_menu.png" VerticalOptions="End" HorizontalOptions="Start" Clicked="clickedOpenMenu"/>
 
 
                     </Grid>
@@ -283,7 +285,7 @@
                                 <ColumnDefinition Width="2*"/>
                             </Grid.ColumnDefinitions>
 
-                            <ImageButton Grid.Column="0" Source="button_search.png" WidthRequest="115" Aspect="AspectFit" HorizontalOptions="End" Clicked="clickedExplore"/>
+                            <ImageButton BackgroundColor="Transparent" Grid.Column="0" Source="button_search.png" WidthRequest="115" Aspect="AspectFit" HorizontalOptions="End" Clicked="clickedExplore"/>
 
                             <Grid Grid.Column="1" VerticalOptions="Center">
                                 <Grid.RowDefinitions>
@@ -305,7 +307,7 @@
                                 <ColumnDefinition Width="1*"/>
                             </Grid.ColumnDefinitions>
 
-                            <ImageButton Grid.Column="1" Source="button_card.png" WidthRequest="115" Aspect="AspectFit" HorizontalOptions="Start" Clicked="clickedPurchase"/>
+                            <ImageButton BackgroundColor="Transparent" Grid.Column="1" Source="button_card.png" WidthRequest="115" Aspect="AspectFit" HorizontalOptions="Start" Clicked="clickedPurchase"/>
 
                             <Grid Grid.Column="0" VerticalOptions="Center">
                                 <Grid.RowDefinitions>
@@ -327,7 +329,7 @@
                                 <ColumnDefinition Width="2*"/>
                             </Grid.ColumnDefinitions>
 
-                            <ImageButton Grid.Column="0" Source="button_choose.png" WidthRequest="115" Aspect="AspectFit" HorizontalOptions="End" Clicked="clickedExplore"/>
+                            <ImageButton BackgroundColor="Transparent" Grid.Column="0" Source="button_choose.png" WidthRequest="115" Aspect="AspectFit" HorizontalOptions="End" Clicked="clickedExplore"/>
 
                             <Grid Grid.Column="1" VerticalOptions="Center">
                                 <Grid.RowDefinitions>
@@ -349,7 +351,7 @@
                                 <ColumnDefinition Width="1*"/>
                             </Grid.ColumnDefinitions>
 
-                            <ImageButton Grid.Column="1" Source="button_deliver.png" WidthRequest="115" Aspect="AspectFit" HorizontalOptions="Start"/>
+                            <ImageButton BackgroundColor="Transparent" Grid.Column="1" Source="button_deliver.png" WidthRequest="115" Aspect="AspectFit" HorizontalOptions="Start"/>
 
                             <Grid Grid.Column="0" VerticalOptions="Center">
                                 <Grid.RowDefinitions>
@@ -429,9 +431,9 @@
                                     <ColumnDefinition Width="1*"/>
                                 </Grid.ColumnDefinitions>
 
-                                <ImageButton Grid.Column="0" Source="fbicon_white.png" WidthRequest="50" HorizontalOptions="Center" Clicked="clickedFb"/>
+                                <ImageButton BackgroundColor="Transparent" Grid.Column="0" Source="fbicon_white.png" WidthRequest="50" HorizontalOptions="Center" Clicked="clickedFb"/>
 
-                                <ImageButton Grid.Column="1" Source="insicon_white.png" WidthRequest="50" HorizontalOptions="Center" Clicked="clickedIns"/>
+                                <ImageButton BackgroundColor="Transparent" Grid.Column="1" Source="insicon_white.png" WidthRequest="50" HorizontalOptions="Center" Clicked="clickedIns"/>
                             </Grid>
                         </Grid>
 
@@ -510,7 +512,7 @@
                 <Grid x:Name="DiscountGrid" VerticalOptions="Start" HorizontalOptions="Fill"  Margin="40,100,40,120" IsVisible="false">
                     <Frame BorderColor="#F26522" CornerRadius="0" HasShadow="False" BackgroundColor="#F8BB17">
                         <StackLayout>
-                            <ImageButton Source="xButton.png" Aspect="AspectFit" HorizontalOptions="End" Margin="-10" WidthRequest="30" Clicked="xButtonClicked"/>
+                            <ImageButton Source="xButton.png" BackgroundColor="Transparent" Aspect="AspectFit" HorizontalOptions="End" Margin="-10" WidthRequest="30" Clicked="xButtonClicked"/>
 
                             <Label Text="Our Special Discounts" FontAttributes="Bold" FontSize="25" Margin="5, 10, 5, 15" HorizontalTextAlignment="Center" TextColor="White"/>
 
@@ -589,7 +591,7 @@
                 <Grid x:Name="CheckAddressGrid" VerticalOptions="Start" IsVisible="false">
                     <Frame BorderColor="#F26522" CornerRadius="0" HasShadow="False">
                         <StackLayout>
-                            <ImageButton Source="xButton.png" Aspect="AspectFit" HorizontalOptions="End" Margin="-10" WidthRequest="30" Clicked="xButtonClicked"/>
+                            <ImageButton Source="xButton.png" BackgroundColor="Transparent" Aspect="AspectFit" HorizontalOptions="End" Margin="-10" WidthRequest="30" Clicked="xButtonClicked"/>
 
                             <Label x:Name="CheckAddressHeading" Text="Hooray!" FontAttributes="Bold" FontSize="25" HorizontalOptions="Center" Margin="0, 0, 0, 20"/>
 
@@ -611,7 +613,7 @@
                 <Grid x:Name="baaPopUpGrid" VerticalOptions="End" Margin="40,0,40,120" IsVisible="false">
                     <Frame BorderColor="#F26522" CornerRadius="0" HasShadow="False">
                         <StackLayout>
-                            <ImageButton Source="xButton.png" Aspect="AspectFit" HorizontalOptions="End" Margin="-10" WidthRequest="30" Clicked="xButtonClicked"/>
+                            <ImageButton Source="xButton.png" BackgroundColor="Transparent" Aspect="AspectFit" HorizontalOptions="End" Margin="-10" WidthRequest="30" Clicked="xButtonClicked"/>
 
                             <Label Text="Love MealsFor.Me?" FontAttributes="Bold" FontSize="25" HorizontalOptions="Center" Margin="0, 0, 0, 5"/>
                             <Label Text="Become an Ambassador" FontAttributes="Bold" FontSize="13" HorizontalOptions="Center" Margin="0, 0, 0, 15"/>

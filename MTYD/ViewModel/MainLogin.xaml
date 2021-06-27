@@ -24,7 +24,7 @@
                             <Label x:Name="initials" TextColor="Black" FontAttributes="Bold" VerticalOptions="Center"  HorizontalOptions="Center"/>
 
                         </Grid>
-                        <ImageButton x:Name="menu" Source="backButton.png" VerticalOptions="End" HorizontalOptions="Start" Clicked="clickedMenu"/>
+                        <ImageButton x:Name="menu" BackgroundColor="Transparent" Source="backButton.png" VerticalOptions="End" HorizontalOptions="Start" Clicked="clickedMenu"/>
                     </Grid>
 
                 
@@ -95,7 +95,7 @@
                    
                         </Frame>
 
-                        <ImageButton Grid.Row="1" x:Name="seePassword" HorizontalOptions="End" VerticalOptions="Center"
+                        <ImageButton BackgroundColor="Transparent" Grid.Row="1" x:Name="seePassword" HorizontalOptions="End" VerticalOptions="Center"
                                  HeightRequest="28" WidthRequest="28" Source="eye.png" Margin="0,0,6,0"
                                  Aspect="AspectFit" Opacity="0.5" Clicked="clickedSeePassword" />
 
@@ -109,7 +109,7 @@
 
                     <Label Text="Don't have an account?" TextColor="Black" HorizontalOptions="Center" Margin="0, 10, 0, 0"/>
 
-                    <Button x:Name= "signUpButton" BackgroundColor="White" Clicked="clickedSignUp" Text="Sign up" TextColor="#F26522" Margin="50, 0"
+                    <Button x:Name= "signUpButton" BackgroundColor="White" Clicked="clickedSignUp" Text="Sign up" TextColor="#F26522" Margin="50, 0, 50, 20"
                         FontAttributes="Bold" CornerRadius="15" BorderColor="#F26522" BorderWidth="2"/>
 
             </StackLayout>

@@ -82,14 +82,14 @@
 
                 </Grid>
 
-                <Grid Margin="10,0,10,5">
+                <Grid x:Name="ambassGrid" Margin="10,0,10,5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="2*"/>
                         <ColumnDefinition Width="1.3*"/>
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
 
-                    <Frame Padding="10,0" HorizontalOptions="Fill" CornerRadius="15" HasShadow="False" BackgroundColor="White" Grid.Column="0" BorderColor="#F26522">
+                    <Frame x:Name="ambassFrame" Padding="10,0" HorizontalOptions="Fill" CornerRadius="15" HasShadow="False" BackgroundColor="White" Grid.Column="0" BorderColor="#F26522">
                         <Entry x:Name="ambassTitle" Placeholder="Enter Ambassador Code" IsTextPredictionEnabled="False" FontSize="Small"
                                BackgroundColor="White" PlaceholderColor="Black" TextColor="Black"/>
                     </Frame>
@@ -254,7 +254,7 @@
                     </maps:Map>
                 </Frame>
 
-                <ImageButton Source="saveButton.png" Margin="20,3" HeightRequest="50" HorizontalOptions="Fill" Clicked="clickedSave"/>
+                <ImageButton Source="saveButton.png" BackgroundColor="Transparent" Margin="20,3" HeightRequest="50" HorizontalOptions="Fill" Clicked="clickedSave"/>
 
                 <Grid HorizontalOptions="Fill" ColumnSpacing="5" BackgroundColor="#f8bb16" Padding="20, 10" Margin="0, 10, 0, 4">
                     <Label Text="Edit Options" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Start" BackgroundColor="Transparent" FontSize="18"/>
@@ -270,14 +270,14 @@
 
                     <StackLayout Grid.Column="0">
                         <Label HorizontalTextAlignment="Center" FontSize="17" Text="Card" FontAttributes="Bold" TextColor="Black" Margin="0,0,0,5"/>
-                        <ImageButton HorizontalOptions="Center" Source="MPcard.png" HeightRequest="65" WidthRequest="65" Aspect="AspectFit" VerticalOptions="Center" Clicked="clickedInfo"/>
+                        <ImageButton HorizontalOptions="Center" BackgroundColor="Transparent" Source="MPcard.png" HeightRequest="65" WidthRequest="65" Aspect="AspectFit" VerticalOptions="Center" Clicked="clickedInfo"/>
                         <Forms9Patch:Label x:Name="cardNum1" Text="**********##" FontSize="Small" HorizontalTextAlignment="Center" HorizontalOptions="Fill" Margin="3,0,3,5" TextColor="Black"/>
                     </StackLayout>
 
                     <StackLayout Grid.Column="1">
                         <Label HorizontalTextAlignment="Center" FontSize="17" Text="Meals" FontAttributes="Bold" TextColor="Black" Margin="0,0,0,5"/>
                         <Grid>
-                        <ImageButton HorizontalOptions="Center" Source="meal_num_button_orange.png" HeightRequest="65" WidthRequest="65" Aspect="AspectFit" VerticalOptions="Center"/>
+                        <ImageButton HorizontalOptions="Center" BackgroundColor="Transparent" Source="meal_num_button_orange.png" HeightRequest="65" WidthRequest="65" Aspect="AspectFit" VerticalOptions="Center"/>
                         <Label x:Name="mealNum1" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center" FontAttributes="Bold" FontSize="17"/>
                         <Button BackgroundColor="Transparent" HorizontalOptions="Fill" VerticalOptions="Fill" Clicked="clickedSub"/>
                         </Grid>
@@ -286,7 +286,7 @@
                     <StackLayout Grid.Column="2">
                         <Label HorizontalTextAlignment="Center" FontSize="17" Text="Deliveries" FontAttributes="Bold" TextColor="Black" Margin="0,0,0,5"/>
                         <Grid>
-                        <ImageButton HorizontalOptions="Center" Source="MPbox.png" HeightRequest="65" WidthRequest="65" Aspect="AspectFit" VerticalOptions="Center"/>
+                        <ImageButton HorizontalOptions="Center" BackgroundColor="Transparent" Source="MPbox.png" HeightRequest="65" WidthRequest="65" Aspect="AspectFit" VerticalOptions="Center"/>
                         <Label x:Name="delivNum1" TextColor="Black" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" FontSize="20"/>
                         <Button BackgroundColor="Transparent" HorizontalOptions="Fill" VerticalOptions="Fill" Clicked="clickedSub"/>
                         </Grid>
@@ -294,7 +294,7 @@
 
                     <StackLayout Grid.Column="3">
                         <Label HorizontalTextAlignment="Center" FontSize="17" Text="Cancel" FontAttributes="Bold" TextColor="Black" Margin="0,0,0,5"/>
-                        <ImageButton HorizontalOptions="Center" Source="MPtrash.png" HeightRequest="65" WidthRequest="65" Aspect="AspectFit" VerticalOptions="Center" Clicked="deleteClicked"/>
+                        <ImageButton HorizontalOptions="Center" BackgroundColor="Transparent" Source="MPtrash.png" HeightRequest="65" WidthRequest="65" Aspect="AspectFit" VerticalOptions="Center" Clicked="deleteClicked"/>
                     </StackLayout>
                 </Grid>
 

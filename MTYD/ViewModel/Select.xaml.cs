@@ -20,6 +20,7 @@ using System.Diagnostics;
 using Plugin.LatestVersion;
 using Xamarin.CommunityToolkit;
 using System.Threading;
+using MTYD.Interfaces;
 
 namespace MTYD.ViewModel
 {
@@ -223,13 +224,28 @@ namespace MTYD.ViewModel
                 //Debug.WriteLine("height:" + weekOneMenu.Height.ToString());
                 //fillGrid();
 
-
+                CheckVersion();
                 Debug.WriteLine("finished with constructor");
             }
             catch (Exception ex)
             {
                 Generic gen = new Generic();
                 gen.parseException(ex.ToString());
+            }
+        }
+
+        public async Task CheckVersion()
+        {
+            var client = new AppVersion();
+            string versionStr = DependencyService.Get<IAppVersionAndBuild>().GetVersionNumber();
+            var result = client.isRunningLatestVersion(versionStr);
+            Debug.WriteLine("isRunningLatestVersion: " + result);
+            string resultStr = await result;
+            if (resultStr == "FALSE")
+            {
+                await DisplayAlert("Mealsfor.Me\nhas gotten even better!", "Please visit the App Store to get the latest version.", "OK");
+
+                await CrossLatestVersion.Current.OpenAppInStore();
             }
         }
 
@@ -333,7 +349,86 @@ namespace MTYD.ViewModel
             }
             else //android
             {
+                //open menu adjustments
+                Xamarin.Forms.NavigationPage.SetHasNavigationBar(this, false);
+                orangeBox2.HeightRequest = height / 2;
+                orangeBox2.Margin = new Thickness(0, -height / 2.2, 0, 0);
+                orangeBox2.CornerRadius = height / 40;
+                heading2.WidthRequest = 140;
+                menu2.Margin = new Thickness(25, 0, 0, 0);
+                //menu.WidthRequest = 40; = width / 20;
+                //menu2.WidthRequest = width / 20;
+                //menu2.Margin = new Thickness(25, 0, 0, 30);
+                heading.WidthRequest = 140;
+                //open menu adjustments
 
+                orangeBox.HeightRequest = height / 2;
+                orangeBox.Margin = new Thickness(0, -height / 2.2, 0, 0);
+                orangeBox.CornerRadius = height / 40;
+                //orangeBox2.HeightRequest = height / 2;
+                //orangeBox2.Margin = new Thickness(0, -height / 2.2, 0, 0);
+                //orangeBox2.CornerRadius = height / 40;
+                //heading.FontSize = width / 32;
+                //heading.Margin = new Thickness(0, 0, 0, 30);
+                //heading2.WidthRequest = width / 5.3;
+                pfp.HeightRequest = 40;
+                pfp.WidthRequest = 40;
+                pfp.CornerRadius = 20;
+                //pfp.Margin = new Thickness(0, 0, 23, 27);
+                innerGrid.Margin = new Thickness(0, 0, 23, 27);
+
+                initials.FontSize = 20;
+                if (Preferences.Get("profilePicLink", "") == "")
+                {
+                    string userInitials = "";
+                    if (first != "" && first != null)
+                    {
+                        userInitials += first.Substring(0, 1);
+                    }
+                    if (last != "" && last != null)
+                    {
+                        userInitials += last.Substring(0, 1);
+                    }
+                    initials.Text = userInitials.ToUpper();
+                    initials.FontSize = 20;
+                }
+                else pfp.Source = Preferences.Get("profilePicLink", "");
+
+                //#F8BB17
+                //#F8BB17
+                menu.Margin = new Thickness(25, 0, 0, 30);
+                //#F8BB17
+                menu.WidthRequest = 40;
+                menu2.Margin = new Thickness(25, 0, 0, 30);
+                //menu.WidthRequest = 40; = width / 20;
+                menu2.WidthRequest = 40;
+
+                popUpFrame.Margin = new Thickness(0, height / 10, 0, 0);
+                popUpFrame.WidthRequest = width / 2.5;
+                Debug.WriteLine("width: " + width.ToString());
+                var frameVal = (width / 2) - 20;
+                Debug.WriteLine("frameVal: " + frameVal.ToString());
+                SubscriptionPicker.VerticalOptions = LayoutOptions.Fill;
+                SubscriptionPicker.HorizontalOptions = LayoutOptions.Fill;
+
+                datePicker.VerticalOptions = LayoutOptions.Fill;
+                datePicker.HorizontalOptions = LayoutOptions.Fill;
+
+                //weekOneMenu.HeightRequest = height / 6.8;
+
+                addOns.FontSize = width / 32;
+
+                dropDownButton.WidthRequest = (width / 2) + 20;
+                dropDownList.WidthRequest = (width / 2) + 20;
+
+                saveBttn.FontSize = 14;
+                surpriseBttn.FontSize = 14;
+                skipBttn.FontSize = 14;
+                saveBttn.Text = "Save Meals";
+                surpriseBttn.Text = "Surprise Me";
+                skipBttn.Text = "Skip This Day"; 
+                mealsLeftLabel.FontSize = 18;
+                
             }
             Debug.WriteLine("checkPlatform done");
         }
@@ -4031,27 +4126,27 @@ namespace MTYD.ViewModel
             popUpFrame.IsVisible = true;
         }
 
-        async Task CheckVersion()
-        {
-            Debug.WriteLine("before getting latest");
-            var isLatest = await CrossLatestVersion.Current.IsUsingLatestVersion();
-            Debug.WriteLine("after getting latest");
+        //async Task CheckVersion()
+        //{
+        //    Debug.WriteLine("before getting latest");
+        //    var isLatest = await CrossLatestVersion.Current.IsUsingLatestVersion();
+        //    Debug.WriteLine("after getting latest");
 
-            if (!isLatest)
-            {
-                Debug.WriteLine("not latest version");
-                await DisplayAlert("Mealsfor.Me\nhas gotten even better!", "Please visit the App Store to get the latest version.", "OK");
-                await CrossLatestVersion.Current.OpenAppInStore();
-            }
-            else
-            {
-                Debug.WriteLine("current version");
-                restOfConstructor();
-                //GetBusinesses();
+        //    if (!isLatest)
+        //    {
+        //        Debug.WriteLine("not latest version");
+        //        await DisplayAlert("Mealsfor.Me\nhas gotten even better!", "Please visit the App Store to get the latest version.", "OK");
+        //        await CrossLatestVersion.Current.OpenAppInStore();
+        //    }
+        //    else
+        //    {
+        //        Debug.WriteLine("current version");
+        //        restOfConstructor();
+        //        //GetBusinesses();
 
-                //CartTotal.Text = CheckoutPage.total_qty.ToString();
-            }
-        }
+        //        //CartTotal.Text = CheckoutPage.total_qty.ToString();
+        //    }
+        //}
 
         void restOfConstructor()
         {
