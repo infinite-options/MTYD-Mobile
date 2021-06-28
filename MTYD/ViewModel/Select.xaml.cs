@@ -2196,7 +2196,7 @@ namespace MTYD.ViewModel
 
                     Preferences.Set("total", count);
 
-                    Button b = (Button)sender;
+                    ImageButton b = (ImageButton)sender;
                     MealInfo ms = b.BindingContext as MealInfo;
                     ms.MealQuantity++;
                     ms.Background = Color.FromHex("#F8BB17");
@@ -2274,7 +2274,7 @@ namespace MTYD.ViewModel
                 skipBttn.TextColor = Color.Black;
                 confirmChangeDate = false;
 
-                Button b = (Button)sender;
+                ImageButton b = (ImageButton)sender;
                 MealInfo ms = b.BindingContext as MealInfo;
                 ms.MealQuantity++;
                 ms.Background = Color.FromHex("#F8BB17");
@@ -2290,7 +2290,7 @@ namespace MTYD.ViewModel
         {
             try
             {
-                Button b = (Button)sender;
+                ImageButton b = (ImageButton)sender;
                 MealInfo ms = b.BindingContext as MealInfo;
                 int count = Preferences.Get("total", 0);
                 //if meal quantity is 0, don't do anything
@@ -2412,7 +2412,7 @@ namespace MTYD.ViewModel
         {
             try
             {
-                Button b = (Button)sender;
+                ImageButton b = (ImageButton)sender;
                 MealInfo ms = b.BindingContext as MealInfo;
                 if (ms.MealQuantity != 0)
                 {
