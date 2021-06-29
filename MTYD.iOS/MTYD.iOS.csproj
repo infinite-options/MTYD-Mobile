@@ -306,6 +306,8 @@
     <BundleResource Include="Resources\pulseLoadingAnim2.mp4" />
     <BundleResource Include="Resources\minusSign.png" />
     <BundleResource Include="Resources\plusSign.png" />
+    <BundleResource Include="Resources\appleLoginButtonBlack.png" />
+    <BundleResource Include="Resources\appleSignUpButtonBlack.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AppleSignIn\" />

@@ -446,7 +446,9 @@ namespace MTYD.ViewModel
 
                             loginButton.IsEnabled = true;
                         }
-                        else if (loginAttempt != null && loginAttempt.message != "Request failed, wrong password.")
+
+                        //else if (loginAttempt != null && loginAttempt.message != "Request failed, wrong password.")
+                        if (loginAttempt != null && loginAttempt.message != "Request failed, wrong password.")
                         {
                             System.Diagnostics.Debug.WriteLine("USER'S DATA");
                             System.Diagnostics.Debug.WriteLine("USER CUSTOMER_UID: " + loginAttempt.result[0].customer_uid);

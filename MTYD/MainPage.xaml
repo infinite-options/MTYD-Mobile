@@ -109,7 +109,7 @@
                             <ColumnDefinition Width="1*"/>
                         </Grid.ColumnDefinitions>
 
-                        <ImageButton Grid.Row="0" x:Name="appleSignupButton" Source="login_apple.png" HorizontalOptions="Center" Clicked="appleLoginButtonClicked"/>
+                        <ImageButton Grid.Row="0" x:Name="appleSignupButton" Source="appleSignUpButtonBlack.png" HorizontalOptions="Center" Clicked="appleLoginButtonClicked"/>
 
                         <ImageButton Grid.Row="1" x:Name="fbSignupButton" Source="login_facebook.png" HorizontalOptions="Center" Clicked="facebookLoginButtonClicked"/>
 

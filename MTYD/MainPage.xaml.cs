@@ -570,6 +570,8 @@ namespace MTYD
                     {
                         var loginAttempt = await LogInUser(loginUsername.Text.ToLower(), loginPassword.Text, accountSalt);
 
+                        
+                        //change from if, elseif to if and if to allow user to go through with unverified email
                         if (directEmailVerified == 0)
                         {
                             DisplayAlert("Please Verify Email", "Please click the link in the email sent to " + loginUsername.Text + ". Check inbox and spam folders.", "OK");
@@ -584,9 +586,19 @@ namespace MTYD
                             Console.WriteLine("RESPONSE TO CHECKOUT   " + response3.Result);
                             Console.WriteLine("CHECKOUT JSON OBJECT BEING SENT: " + emailVerSerializedObj);
 
+
+                            Debug.WriteLine("loginAttempt: " + loginAttempt);
+                            Debug.WriteLine("USER'S DATA");
+                            Debug.WriteLine("USER CUSTOMER_UID: " + loginAttempt.result[0].customer_uid);
+                            Debug.WriteLine("USER FIRST NAME: " + loginAttempt.result[0].customer_first_name);
+                            Debug.WriteLine("USER LAST NAME: " + loginAttempt.result[0].customer_last_name);
+                            Debug.WriteLine("USER EMAIL: " + loginAttempt.result[0].customer_email);
                             loginButton.IsEnabled = true;
                         }
-                        else if (loginAttempt != null && loginAttempt.message != "Request failed, wrong password.")
+
+
+                        //if (loginAttempt != null && loginAttempt.message != "Request failed, wrong password.")
+                        if ((loginAttempt != null && loginAttempt.message != "Request failed, wrong password.") || directEmailVerified == 0)
                         {
                             System.Diagnostics.Debug.WriteLine("USER'S DATA");
                             System.Diagnostics.Debug.WriteLine("USER CUSTOMER_UID: " + loginAttempt.result[0].customer_uid);
@@ -897,6 +909,14 @@ namespace MTYD
 
                 if (message.Contains(Constant.AutheticatedSuccesful))
                 {
+                    Debug.WriteLine("successful authentication");
+                    var responseContent = await response.Content.ReadAsStringAsync();
+                    var loginResponse = JsonConvert.DeserializeObject<LogInResponse>(responseContent);
+                    return loginResponse;
+                }
+                else if (message.Contains("Authenticated successfully"))
+                {
+                    Debug.WriteLine("successfully authenticated");
                     var responseContent = await response.Content.ReadAsStringAsync();
                     var loginResponse = JsonConvert.DeserializeObject<LogInResponse>(responseContent);
                     return loginResponse;
