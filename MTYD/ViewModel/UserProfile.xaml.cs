@@ -404,12 +404,12 @@ namespace MTYD.ViewModel
                                                                                                           //passwordUpdate.old_password = hashedPassword;
 
                 if (passwordEntry.Text == null)
-                {
+                { //1
                     await DisplayAlert("Error", "Please enter your new password", "OK");
                     return;
                 }
                 else if (confirmPasswordEntry.Text == null)
-                {
+                { //1
                     await DisplayAlert("Error", "Please re-enter your new password", "OK");
                     return;
                 }
@@ -425,12 +425,12 @@ namespace MTYD.ViewModel
                     Console.WriteLine("Content: " + content2);
                     var client = new HttpClient();
                     var response = client.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_password", content2);
-                    DisplayAlert("Success", "password updated!", "close");
+                    DisplayAlert("Success", "password updated!", "close"); //40
                     Console.WriteLine("RESPONSE TO CHECKOUT   " + response.Result);
                     Console.WriteLine("CHECKOUT JSON OBJECT BEING SENT: " + newPaymentJSONString);
                     Console.WriteLine("clickedSave Func ENDED!");
                 }
-                else DisplayAlert("Error", "passwords don't match", "close");
+                else DisplayAlert("Error", "passwords don't match", "close"); //41
 
 
 

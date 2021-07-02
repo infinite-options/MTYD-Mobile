@@ -376,10 +376,12 @@ namespace MTYD
 
             if (!isAddressValidated)
             {
+                //8
                 await DisplayAlert("Message", "We were not able to validate your address. Please try again.", "OK");
             }
             else
             {
+                //9
                 await DisplayAlert("Message", "We validated your address please tap on the Sign up button to create your account!", "OK");
             }
         }
@@ -503,6 +505,7 @@ namespace MTYD
                     }
                     else if (GetXMLElement(element, "DPVConfirmation").Equals("D"))
                     {
+                        //6
                         await DisplayAlert("Missing Info", "Please enter your unit/apartment number into the appropriate field.", "OK");
                         return;
                     }
@@ -530,7 +533,7 @@ namespace MTYD
             {
                 fade.IsVisible = true;
                 CheckAddressGrid.IsVisible = true;
-                CheckAddressHeading.Text = "Oops!";
+                CheckAddressHeading.Text = "Oops!"; //42
                 CheckAddressBody.Text = "Sorry, it looks like we don’t deliver to your Zip Code yet. Please feel free to leave us your email address and we will let you know as soon as we come to your neighborhood.";
                 EmailFrame.IsVisible = true;
                 OkayButton.Text = "Okay";
@@ -539,7 +542,7 @@ namespace MTYD
             {
                 fade.IsVisible = true;
                 CheckAddressGrid.IsVisible = true;
-                CheckAddressHeading.Text = "Hooray!";
+                CheckAddressHeading.Text = "Hooray!"; //43
                 CheckAddressBody.Text = "We are so glad that we deliver to your neighborhood. Please click Continue to complete the Sign Up process.";
                 EmailFrame.IsVisible = false;
                 OkayButton.Text = "Continue";
@@ -621,6 +624,7 @@ namespace MTYD
             }
             else
             {
+                //6
                 await DisplayAlert("Message", "We weren't able to sign you up", "OK");
             }
         }

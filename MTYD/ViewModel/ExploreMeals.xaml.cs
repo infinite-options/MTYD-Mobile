@@ -830,7 +830,7 @@ namespace MTYD.ViewModel
             ImageButton b = (ImageButton)sender;
             MealInfo ms = b.BindingContext as MealInfo;
             //ms.MealQuantity++;
-            popUpHeader.HeightRequest = 70;
+            popUpHeader.HeightRequest = 70; //44
             popUpHeader.Text = "Don’t forget your favorite meals! Click the heart to easily find your favorite meals and get reminders.";
 
             fade.IsVisible = true;
@@ -983,7 +983,7 @@ namespace MTYD.ViewModel
 
         private async void clickIncrease(object sender, EventArgs e)
         {
-            popUpHeader.HeightRequest = 100;
+            popUpHeader.HeightRequest = 100; //45
             popUpHeader.Text = "Looks like you're enjoying MealsFor.Me! The + and - buttons help you add / remove meals from your meal plan.";
 
             fade.IsVisible = true;
@@ -993,7 +993,7 @@ namespace MTYD.ViewModel
 
         private async void clickIncreaseAddOn(object sender, EventArgs e)
         {
-            popUpHeader.HeightRequest = 100;
+            popUpHeader.HeightRequest = 100; //45
             popUpHeader.Text = "Looks like you're enjoying MealsFor.Me! The + and - buttons help you add / remove meals from your meal plan.";
 
             fade.IsVisible = true;
@@ -1018,7 +1018,7 @@ namespace MTYD.ViewModel
 
         private async void clickDecrease(object sender, EventArgs e)
         {
-            popUpHeader.HeightRequest = 100;
+            popUpHeader.HeightRequest = 100; //45
             popUpHeader.Text = "Looks like you're enjoying MealsFor.Me! The + and - buttons help you add / remove meals from your meal plan.";
 
             fade.IsVisible = true;
@@ -1128,7 +1128,7 @@ namespace MTYD.ViewModel
 
         private async void clickDecreaseAddOn(object sender, EventArgs e)
         {
-            popUpHeader.HeightRequest = 100;
+            popUpHeader.HeightRequest = 100; //45
             popUpHeader.Text = "Looks like you're enjoying MealsFor.Me! The + and - buttons help you add / remove meals from your meal plan.";
 
             fade.IsVisible = true;
@@ -1160,7 +1160,7 @@ namespace MTYD.ViewModel
         
         private async void saveUserMeals(object sender, EventArgs e)
         {
-            popUpHeader.HeightRequest = 80;
+            popUpHeader.HeightRequest = 80; //46
             popUpHeader.Text = "Save allows you to select your meals up to 3 weeks in advance.";
 
             fade.IsVisible = true;
@@ -1170,7 +1170,7 @@ namespace MTYD.ViewModel
 
         private async void skipMealSelection(object sender, EventArgs e)
         {
-            popUpHeader.HeightRequest = 100;
+            popUpHeader.HeightRequest = 100; //47
             popUpHeader.Text = "Not at home or have other plans? Its easy to Skip a delivery and we’ll automatically extend your subscription.";
 
             fade.IsVisible = true;
@@ -1186,7 +1186,7 @@ namespace MTYD.ViewModel
 
         private async void surpriseMealSelection(object sender, EventArgs e)
         {
-            popUpHeader.HeightRequest = 90;
+            popUpHeader.HeightRequest = 90; //48
             popUpHeader.Text = "Surprise means we'll give you an assortment of meals on the specific delivery day.";
 
             fade.IsVisible = true;

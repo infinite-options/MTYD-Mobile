@@ -1219,7 +1219,7 @@ namespace MTYD.ViewModel
                 {
                     popButton1.Text = "Go Back";
                     popButton2.IsVisible = true;
-                    dateDestination = sender;
+                    dateDestination = sender; //52
                     showPopUp("Selections Not Saved", "Please click Save Meals to save your meal selections before moving to another date. You can also click Surprise or Skip.");
 
                     return;
@@ -2246,7 +2246,7 @@ namespace MTYD.ViewModel
                 else
                 {
                     popButton1.Text = "Okay";
-                    popButton2.IsVisible = false;
+                    popButton2.IsVisible = false; //53
                     showPopUp("Oops", "You have reached the maximum amount of meals that can be selected for this plan.");
                     //DisplayAlert("Alert", "You have reached the maximum amount of meals that can be selected for this plan.", "OK");
                 }
@@ -2829,7 +2829,7 @@ namespace MTYD.ViewModel
                         popButton1.Text = "Okay";
                         popButton2.IsVisible = false;
                         string addOnMsg = "You will be charged for your add-ons on " + addOnChargeDate.ToString("M") + ".";
-                        showPopUp("Selection Saved", addOnMsg);
+                        showPopUp("Selection Saved", addOnMsg); //54
                         //DisplayAlert("Selection Saved", "You will be charged for your add-ons on 1/1/2021.", "OK");
                     }
                     else
@@ -2845,7 +2845,7 @@ namespace MTYD.ViewModel
                         mealsLeftLabel.Text = "All Meals Selected";
                         BarParameters[0].barLabel = "All Meals Selected";
                         popButton1.Text = "Okay";
-                        popButton2.IsVisible = false;
+                        popButton2.IsVisible = false; //55
                         showPopUp("Selection Saved", "You've successfully saved your meal selection.");
                         //DisplayAlert("Selection Saved", "You've successfully saved your meal selection.", "OK");
                     }
@@ -2857,7 +2857,7 @@ namespace MTYD.ViewModel
                 else
                 {
                     popButton1.Text = "Okay";
-                    popButton2.IsVisible = false;
+                    popButton2.IsVisible = false; //56
                     showPopUp("Incomplete Meal Selection", "Please select additional meals.");
                     //DisplayAlert("Incomplete Meal Selection", "Please select additional meals.", "OK");
 
@@ -2934,7 +2934,7 @@ namespace MTYD.ViewModel
                 selectedDate.status = "Skipped";
                 //DisplayAlert("Delivery Skipped", "You won't receive any meals for this delivery cycle. We'll extend your subscription accordingly.", "OK");
                 popButton1.Text = "Okay";
-                popButton2.IsVisible = false;
+                popButton2.IsVisible = false; //57
                 showPopUp("Delivery Skipped", "You won't receive any meals this day. We will extend your subscription accordingly.");
                 mealsSaved.Clear();
                 //int indexOfMealPlanSelected = ((ArrayList)dropDownList.ItemsSource).IndexOf(dropDownText.Text);
@@ -3140,7 +3140,7 @@ namespace MTYD.ViewModel
 
                 //DisplayAlert("SURPRISE", "We'll select a random assortment of nutritious, healthy meals for you!", "OK");
                 popButton1.Text = "Okay";
-                popButton2.IsVisible = false;
+                popButton2.IsVisible = false; //58
                 showPopUp("Surprise!", "We’ll surprise you with some of our specials on this day!");
                 mealsSaved.Clear();
                 //int indexOfMealPlanSelected = ((ArrayList)dropDownList.ItemsSource).IndexOf(dropDownText.Text);

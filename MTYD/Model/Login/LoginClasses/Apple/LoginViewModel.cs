@@ -127,6 +127,7 @@ namespace MTYD.Model.Login.LoginClasses.Apple
                         }
                         else
                         {
+                            //14
                             await Application.Current.MainPage.DisplayAlert("Ooops", "Our system is not working. We can't process your request at this moment", "OK");
                         }
                     }
@@ -171,6 +172,7 @@ namespace MTYD.Model.Login.LoginClasses.Apple
                     var data5 = JsonConvert.DeserializeObject<SuccessfulSocialLogIn>(responseContent);
                     if (data5.code.ToString() == Constant.EmailNotFound)
                     {
+                        //15
                         var signUp = await Application.Current.MainPage.DisplayAlert("Message", "It looks like you don't have a MTYD account. Please sign up!", "OK", "Cancel");
                         if (signUp)
                         {
@@ -372,6 +374,7 @@ namespace MTYD.Model.Login.LoginClasses.Apple
                         }
                         else
                         {
+                            //14
                             await Application.Current.MainPage.DisplayAlert("Oops", "We are facing some problems with our internal system. We weren't able to update your credentials", "OK");
                         }
                     }
@@ -383,6 +386,7 @@ namespace MTYD.Model.Login.LoginClasses.Apple
 
                     else if (data5.code.ToString() == Constant.ErrorUserDirectLogIn)
                     {
+                        //16
                         await Application.Current.MainPage.DisplayAlert("Oops!", "You have an existing MTYD account. Please use direct login", "OK");
                     }
                 }

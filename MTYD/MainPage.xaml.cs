@@ -211,6 +211,7 @@ namespace MTYD
             string resultStr = await result;
             if (resultStr == "FALSE")
             {
+                //25
                 await DisplayAlert("Mealsfor.Me\nhas gotten even better!", "Please visit the App Store to get the latest version.", "OK");
                     
                 await CrossLatestVersion.Current.OpenAppInStore();
@@ -221,6 +222,7 @@ namespace MTYD
         {
             if (Application.Current.Properties.ContainsKey("platform"))
             {
+                //17
                 string platform = (string)Application.Current.Properties["platform"];
                 await DisplayAlert("Alert!", "Our records show that you have an account associated with " + platform + ". Please log in with " + platform, "OK");
             }
@@ -229,6 +231,7 @@ namespace MTYD
 
         private async void AppleError(object sender, EventArgs e)
         {
+            //18
             await DisplayAlert("Error", "We weren't able to set an account for you", "OK");
         }
 
@@ -851,6 +854,7 @@ namespace MTYD
                     }
                     else if (DRSMessage.Contains(Constant.EmailNotFound))
                     {
+                        //22
                         await DisplayAlert("Oops!", "Our records show that you don't have an accout. Please sign up!", "OK");
                     }
                     else
@@ -1057,7 +1061,7 @@ namespace MTYD
                             //testing with loading page
                             Application.Current.MainPage = new MainPage();
 
-
+                            //22
                             var signUp = await Application.Current.MainPage.DisplayAlert("Message", "It looks like you don't have a MTYD account. Please sign up!", "OK", "Cancel");
                             if (signUp)
                             {
@@ -1692,7 +1696,7 @@ namespace MTYD
                                         }
 
                                         Console.WriteLine("go to SubscriptionPage");
-                                        DisplayAlert("navigation", "sending to subscription", "close");
+                                        //DisplayAlert("navigation", "sending to subscription", "close");
                                         Preferences.Set("canChooseSelect", false);
                                         await Application.Current.SavePropertiesAsync();
                                         Application.Current.MainPage = new NavigationPage(new SubscriptionPage((info_obj2["result"])[0]["customer_first_name"].ToString(), (info_obj2["result"])[0]["customer_last_name"].ToString(), (info_obj2["result"])[0]["customer_email"].ToString()));
@@ -1737,7 +1741,7 @@ namespace MTYD
                                             //Application.Current.Properties["user_id"] = data.result[0].customer_uid;
                                         }
 
-                                        DisplayAlert("navigation", "sending to select", "close");
+                                        //DisplayAlert("navigation", "sending to select", "close");
                                         Console.WriteLine("delivery first name: " + (info_obj["result"])[0]["delivery_first_name"].ToString());
                                         Console.WriteLine("delivery last name: " + (info_obj["result"])[0]["delivery_last_name"].ToString());
                                         Console.WriteLine("delivery email: " + (info_obj["result"])[0]["delivery_email"].ToString());
@@ -2002,7 +2006,7 @@ namespace MTYD
             }
             else
             {
-                if (Preferences.Get("canChooseSelect", false) == false)
+                if (Preferences.Get("canChooseSelect", false) == false) //26
                     DisplayAlert("Error", "please purchase a meal plan first", "OK");
                 else
                 {
@@ -2317,13 +2321,14 @@ namespace MTYD
                 }
                 if (latitude == "0" || longitude == "0")
                 {
+                    //8
                     await DisplayAlert("We couldn't find your address", "Please check for errors.", "OK");
                 }
                 else if (withinZones == false)
                 {
                     fade.IsVisible = true;
                     signUpButton2.IsVisible = false;
-                    CheckAddressGrid.IsVisible = true;
+                    CheckAddressGrid.IsVisible = true; //49
                     CheckAddressHeading.Text = "Still Growing…";
                     CheckAddressBody.Text = "Sorry, it looks like we don’t deliver to your neighborhood yet. Enter your email address and we will let you know as soon as we come to your neighborhood.";
                     EmailFrame.IsVisible = true;
@@ -2336,7 +2341,7 @@ namespace MTYD
                     fade.IsVisible = true;
                     signUpButton2.IsVisible = true;
                     CheckAddressGrid.IsVisible = true;
-                    CheckAddressHeading.Text = "Hooray!";
+                    CheckAddressHeading.Text = "Hooray!"; //50 
                     CheckAddressBody.Text = "We are so glad that we deliver to your neighborhood. Please click Okay to continue enjoying MealsFor.Me";
                     EmailFrame.IsVisible = false;
                     OkayButton.Text = "Explore Meals";

@@ -654,7 +654,7 @@ namespace MTYD.ViewModel
             try
             {
                 if (total == 0)
-                {
+                { //37
                     await DisplayAlert("Warning!", "pick a valid plan to continue", "OK");
                     return;
                 }
@@ -855,14 +855,14 @@ namespace MTYD.ViewModel
 
                         if (correct < 0)
                         {
-                            correct *= -1;
+                            correct *= -1; //38
                             await DisplayAlert("Extra Charge", "You will be charged $" + correct.ToString() + " for this plan change.", "OK");
                             extraCharge = correct;
                             updatedDue = extraCharge.ToString();
                             shouldCharge = true;
                         }
                         else
-                        {
+                        { //39
                             await DisplayAlert("Reimbursement", "You will be reimbursed $" + correct.ToString() + " for this plan change.", "OK");
                             shouldCharge = false;
                         }

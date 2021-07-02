@@ -104,6 +104,7 @@ namespace MTYD
             }
             else
             {
+                //1
                 await DisplayAlert("Error", "Please enter your first name.", "OK");
                 return;
             }
@@ -133,6 +134,7 @@ namespace MTYD
                 string conformEmail = reenterEmailEntry.Text.ToLower().Trim();
                 if (!directSignUp.email.Equals(conformEmail))
                 {
+                    //2
                     await DisplayAlert("Error", "Your email doesn't match", "OK");
                     return;
                 }
@@ -158,6 +160,7 @@ namespace MTYD
                 string password = reenterPasswordEntry.Text.Trim();
                 if (!directSignUp.password.Equals(password))
                 {
+                    //3
                     await DisplayAlert("Error", "Your password doesn't match", "OK");
                     return;
                 }
@@ -264,6 +267,7 @@ namespace MTYD
 
                     if (RDSData.message.Contains("taken"))
                     {
+                        //4
                         DisplayAlert("Error", "email address is already in use", "OK");
                     }
                     else
@@ -504,11 +508,13 @@ namespace MTYD
                     }
                     else if (GetXMLElement(element, "DPVConfirmation").Equals("D"))
                     {
+                        //6
                         await DisplayAlert("Missing Info", "Please enter your unit/apartment number into the appropriate field.", "OK");
                         return;
                     }
                     else
                     {
+                        //7
                         await DisplayAlert("Invalid Address", "The address you entered couldn't be confirmed. Please enter another one.", "OK");
                         return;
                     }
@@ -531,7 +537,7 @@ namespace MTYD
             {
                 fade.IsVisible = true;
                 CheckAddressGrid.IsVisible = true;
-                CheckAddressHeading.Text = "Oops!";
+                CheckAddressHeading.Text = "Oops!"; //42
                 CheckAddressBody.Text = "Sorry, it looks like we don’t deliver to your Zip Code yet. Please feel free to leave us your email address and we will let you know as soon as we come to your neighborhood.";
                 EmailFrame.IsVisible = true;
                 OkayButton.Text = "Okay";
@@ -540,7 +546,7 @@ namespace MTYD
             {
                 fade.IsVisible = true;
                 CheckAddressGrid.IsVisible = true;
-                CheckAddressHeading.Text = "Hooray!";
+                CheckAddressHeading.Text = "Hooray!"; //43
                 CheckAddressBody.Text = "We are so glad that we deliver to your neighborhood. Please click Continue to complete the Sign Up process.";
                 EmailFrame.IsVisible = false;
                 OkayButton.Text = "Continue";

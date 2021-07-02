@@ -115,6 +115,7 @@ namespace MTYD.ViewModel
         {
             if (Application.Current.Properties.ContainsKey("platform"))
             {
+                //17
                 string platform = (string)Application.Current.Properties["platform"];
                 await DisplayAlert("Alert!", "Our records show that you have an account associated with " + platform + ". Please log in with " + platform, "OK");
             }
@@ -123,6 +124,7 @@ namespace MTYD.ViewModel
 
         private async void AppleError(object sender, EventArgs e)
         {
+            //18
             await DisplayAlert("Error", "We weren't able to set an account for you", "OK");
         }
 
@@ -432,6 +434,7 @@ namespace MTYD.ViewModel
 
                         if (directEmailVerified == 0)
                         {
+                            //19
                             DisplayAlert("Please Verify Email", "Please click the link in the email sent to " + loginUsername.Text + ". Check inbox and spam folders.", "OK");
 
                             //send email to verify email
@@ -526,6 +529,7 @@ namespace MTYD.ViewModel
                                         }
                                         else
                                         {
+
                                             await DisplayAlert("Ooops!", "Something went wrong. We are not able to send you notification at this moment", "OK");
                                         }
                                     }
@@ -651,6 +655,7 @@ namespace MTYD.ViewModel
                         }
                         else
                         {
+                            //21
                             await DisplayAlert("Error", "Wrong password was entered", "OK");
                             loginButton.IsEnabled = true;
                         }
@@ -702,6 +707,7 @@ namespace MTYD.ViewModel
                     }
                     else if (DRSMessage.Contains(Constant.EmailNotFound))
                     {
+                        //15
                         await DisplayAlert("Oops!", "Our records show that you don't have an accout. Please sign up!", "OK");
                     }
                     else
@@ -897,7 +903,7 @@ namespace MTYD.ViewModel
                             //testing with loading page
                             Application.Current.MainPage = new MainPage();
 
-
+                            //22
                             var signUp = await Application.Current.MainPage.DisplayAlert("Message", "It looks like you don't have a MTYD account. Please sign up!", "OK", "Cancel");
                             if (signUp)
                             {
@@ -1005,6 +1011,7 @@ namespace MTYD.ViewModel
                                             }
                                             else
                                             {
+                                                //20
                                                 await DisplayAlert("Ooops!", "Something went wrong. We are not able to send you notification at this moment", "OK");
                                             }
                                         }
@@ -1121,7 +1128,7 @@ namespace MTYD.ViewModel
                             {
                                 //testing with loading page
                                 Application.Current.MainPage = new MainPage();
-
+                                //14
                                 await Application.Current.MainPage.DisplayAlert("Oops", "We are facing some problems with our internal system. We weren't able to update your credentials", "OK");
                             }
                         }
@@ -1142,7 +1149,7 @@ namespace MTYD.ViewModel
                         {
                             //testing with loading page
                             Application.Current.MainPage = new MainPage();
-
+                            //16
                             await Application.Current.MainPage.DisplayAlert("Oops!", "You have an existing MTYD account. Please use direct login", "OK");
                         }
                     }
@@ -1300,7 +1307,7 @@ namespace MTYD.ViewModel
                         {
                             //testing with loading page
                             Application.Current.MainPage = new MainPage();
-
+                            //22
                             var signUp = await Application.Current.MainPage.DisplayAlert("Message", "It looks like you don't have a MTYD account. Please sign up!", "OK", "Cancel");
                             if (signUp)
                             {
@@ -1406,6 +1413,7 @@ namespace MTYD.ViewModel
                                             }
                                             else
                                             {
+                                                //20
                                                 await DisplayAlert("Ooops!", "Something went wrong. We are not able to send you notification at this moment", "OK");
                                             }
                                         }
@@ -1524,7 +1532,7 @@ namespace MTYD.ViewModel
                                         }
 
                                         Console.WriteLine("go to SubscriptionPage");
-                                        DisplayAlert("navigation", "sending to subscription", "close");
+                                        //DisplayAlert("navigation", "sending to subscription", "close");
                                         Preferences.Set("canChooseSelect", false);
                                         await Application.Current.SavePropertiesAsync();
                                         Application.Current.MainPage = new NavigationPage(new SubscriptionPage((info_obj2["result"])[0]["customer_first_name"].ToString(), (info_obj2["result"])[0]["customer_last_name"].ToString(), (info_obj2["result"])[0]["customer_email"].ToString()));
@@ -1569,7 +1577,7 @@ namespace MTYD.ViewModel
                                             //Application.Current.Properties["user_id"] = data.result[0].customer_uid;
                                         }
 
-                                        DisplayAlert("navigation", "sending to select", "close");
+                                        //DisplayAlert("navigation", "sending to select", "close");
                                         Console.WriteLine("delivery first name: " + (info_obj["result"])[0]["delivery_first_name"].ToString());
                                         Console.WriteLine("delivery last name: " + (info_obj["result"])[0]["delivery_last_name"].ToString());
                                         Console.WriteLine("delivery email: " + (info_obj["result"])[0]["delivery_email"].ToString());
@@ -1593,7 +1601,7 @@ namespace MTYD.ViewModel
                             {
                                 //testing with loading page
                                 Application.Current.MainPage = new MainPage();
-
+                                //14
                                 await Application.Current.MainPage.DisplayAlert("Oops", "We are facing some problems with our internal system. We weren't able to update your credentials", "OK");
                             }
                         }
@@ -1617,7 +1625,7 @@ namespace MTYD.ViewModel
                             //await Navigation.PopAsync();
                             Application.Current.MainPage = new MainPage();
                             //Navigation.RemovePage(this.Navigation.NavigationStack[0]);
-
+                            //16
                             await Application.Current.MainPage.DisplayAlert("Oops!", "You have an existing MTYD account. Please use direct login", "OK");
                         }
                     }
@@ -1687,6 +1695,7 @@ namespace MTYD.ViewModel
             {
                 if (loginUsername.Text == "" || loginUsername.Text == null)
                 {
+                    //24
                     DisplayAlert("Error", "please enter your email into the username box first", "OK");
                     return;
                 }

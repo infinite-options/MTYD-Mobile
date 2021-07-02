@@ -300,6 +300,7 @@ namespace MTYD.ViewModel
         public async void skipClicked(object sender, EventArgs e)
         {
             Zones[] passZone = new Zones[0];
+            //10
             await DisplayAlert("Success", "Your assigned password is \n" + Preferences.Get(savedFirstName, "") + Preferences.Get(savedAdd, "").Substring(0, Preferences.Get(savedAdd, "").IndexOf(" ")), "continue");
             await Navigation.PushAsync(new Select(passZone, cust_firstName, cust_lastName, cust_email));
         }
@@ -324,6 +325,7 @@ namespace MTYD.ViewModel
                     var client = new HttpClient();
                     var response = client.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_password", content2);
                     await DisplayAlert("Success", "password updated!", "continue");
+                    //11
                     Console.WriteLine("RESPONSE TO CHECKOUT   " + response.Result);
                     Console.WriteLine("CHECKOUT JSON OBJECT BEING SENT: " + newPaymentJSONString);
                     Console.WriteLine("clickedSave Func ENDED!");
@@ -332,11 +334,13 @@ namespace MTYD.ViewModel
                 }
                 else if (passwordEntry.Text != null && passwordEntry.Text != confirmPasswordEntry.Text)
                 {
+                    //3
                     await DisplayAlert("Error", "Your password doesn't match", "OK");
                     return;
                 }
                 else
                 {
+                    //12
                     await DisplayAlert("Error", "Please enter a password or click SKIP.", "OK");
                     return;
                 }
@@ -535,6 +539,7 @@ namespace MTYD.ViewModel
 
                     if (RDSData.message.Contains("taken"))
                     {
+                        //13
                         DisplayAlert("Error", "email address is already in use, please log in", "OK");
                     }
                     else

@@ -70,17 +70,17 @@ namespace MTYD.ViewModel
             //if any entries empty, return
             //if passwords not matching
             if (password.Text == "" || password.Text == null)
-            {
+            { //1
                 DisplayAlert("Error", "Please enter the new password.", "OK");
                 return;
             }
             else if (password2.Text == "" || password2.Text == null)
-            {
+            { //1
                 DisplayAlert("Error", "Please re-enter the new password.", "OK");
                 return;
             }
             else if (password.Text != password2.Text)
-            {
+            { //41
                 DisplayAlert("Error", "Your password entries don't match.", "OK");
                 return;
             }
@@ -114,11 +114,11 @@ namespace MTYD.ViewModel
         private async void clickedLogin(object sender, EventArgs e)
         {
             if (String.IsNullOrEmpty(currentPassword.Text) || String.IsNullOrEmpty(password.Text) || String.IsNullOrEmpty(password2.Text))
-            { // check if all fields are filled out
+            { // check if all fields are filled out //1
                 await DisplayAlert("Error", "Please fill in all fields", "OK");
             }
             else if (password.Text != password2.Text)
-            {
+            {//41
                 await DisplayAlert("Error", "New passwords don't match", "OK");
             }    
             else
@@ -289,7 +289,7 @@ namespace MTYD.ViewModel
                         }
                     }
                     else
-                    {
+                    { //21
                         await DisplayAlert("Error", "Wrong password was entered", "OK");
                     }
                 }
@@ -331,7 +331,7 @@ namespace MTYD.ViewModel
                         await DisplayAlert("Oops!", data.message, "OK");
                     }
                     else if (DRSMessage.Contains(Constant.EmailNotFound))
-                    {
+                    { //15
                         await DisplayAlert("Oops!", "Our records show that you don't have an accout. Please sign up!", "OK");
                     }
                     else
@@ -421,12 +421,12 @@ namespace MTYD.ViewModel
                 Console.WriteLine("Content: " + content2);
                 var client = new HttpClient();
                 var response = client.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_password", content2);
-                DisplayAlert("Success", "password updated!", "close");
+                DisplayAlert("Success", "password updated!", "close"); //40
                 Console.WriteLine("RESPONSE TO CHECKOUT   " + response.Result);
                 Console.WriteLine("CHECKOUT JSON OBJECT BEING SENT: " + newPaymentJSONString);
                 Console.WriteLine("clickedSave Func ENDED!");
             }
-            else DisplayAlert("Error", "passwords don't match", "close");
+            else DisplayAlert("Error", "passwords don't match", "close"); //41
 
 
 

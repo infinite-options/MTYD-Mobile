@@ -807,7 +807,7 @@ namespace MTYD.ViewModel
             try
             {
                 if (planChangeCalled == false)
-                {
+                {//27
                     DisplayAlert("Invalid Selection", "Please select a meal plan first.", "OK");
                     return;
                 }
@@ -1071,6 +1071,7 @@ namespace MTYD.ViewModel
                     }
 
                     isAddessValidated = true;
+                    //9
                     await DisplayAlert("We validated your address", "Please click on the Sign up button to create your account!", "OK");
                     await Application.Current.SavePropertiesAsync();
                     //await tagUser(emailEntry.Text.Trim(), ZipEntry.Text.Trim());
@@ -1276,7 +1277,7 @@ namespace MTYD.ViewModel
                         StateEntry.Text = xdocState;
                     }
 
-                    isAddessValidated = true;
+                    isAddessValidated = true; //9
                     await DisplayAlert("We validated your address", "Please click on the Sign up button to create your account!", "OK");
                     await Application.Current.SavePropertiesAsync();
                     //await tagUser(emailEntry.Text.Trim(), ZipEntry.Text.Trim());
@@ -1411,7 +1412,7 @@ namespace MTYD.ViewModel
                     else if (refundString.Substring(refundString.IndexOf(".") + 1).Length == 0)
                         refundString = refundString + "00";
 
-
+                    //28
                     bool answer = await DisplayAlert("Delete a Plan", "Are you sure you want to delete this " + currentPlan + "? If yes, you will be refunded $" + refundString + ".", "Yes", "No");
                     Debug.WriteLine("Answer: " + answer);
 
@@ -1604,7 +1605,7 @@ namespace MTYD.ViewModel
                         //Preferences.Set("price", grandTotalString);
 
                         //grandTotalPrice.Text = "$" + grandTotalString;
-
+                        //29
                         DisplayAlert("Error", "invalid ambassador code", "OK");
                         ambassDisc.Text = "-$0.00";
                     }
@@ -1642,7 +1643,7 @@ namespace MTYD.ViewModel
 
         async void clickedSelect(System.Object sender, System.EventArgs e)
         {
-            if (Preferences.Get("canChooseSelect", false) == false)
+            if (Preferences.Get("canChooseSelect", false) == false) //26
                 DisplayAlert("Error", "please purchase a meal plan first", "OK");
             else
             {

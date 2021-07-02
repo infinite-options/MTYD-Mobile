@@ -650,6 +650,7 @@ namespace MTYD.ViewModel
 
                 if (FNameEntry.Text == null || FNameEntry.Text == "")
                 {
+                    //1
                     await DisplayAlert("Error", "first name required", "okay");
                     return;
                 }
@@ -823,7 +824,7 @@ namespace MTYD.ViewModel
                 }
                 else if (withinZones == false)
                 {
-                    CheckAddressHeading.Text = "Still Growing…";
+                    CheckAddressHeading.Text = "Still Growing…"; //49
                     CheckAddressBody.Text = "Sorry, it looks like we don’t deliver to your neighborhood yet. Enter your email address and we will let you know as soon as we come to your neighborhood.";
                     EmailFrame.IsVisible = true;
                     OkayButton.Text = "Okay";
@@ -860,7 +861,7 @@ namespace MTYD.ViewModel
 
                     isAddessValidated = true;
                     Button b = (Button)sender;
-                    if (b.Text == "Save")
+                    if (b.Text == "Save") //30
                         await DisplayAlert("We validated your address", "Please click on the proceed button to select a form of payment!", "OK");
                     await Xamarin.Forms.Application.Current.SavePropertiesAsync();
                     //await tagUser(emailEntry.Text.Trim(), ZipEntry.Text.Trim());
@@ -958,7 +959,7 @@ namespace MTYD.ViewModel
                                 }
                                 catch
                                 {
-                                    CheckAddressHeading.Text = "Hmm...";
+                                    CheckAddressHeading.Text = "Hmm..."; //51
                                     CheckAddressBody.Text = "Looks like the email address is already in use by another account. Please login to continue with that user account.";
                                     EmailFrame.IsVisible = false;
                                     OkayButton.Text = "Go Back";
@@ -1993,7 +1994,7 @@ namespace MTYD.ViewModel
                         PayPalScreen.Height = 0;
                         orangeBox.HeightRequest = deviceHeight / 2;
                         await Navigation.PopAsync(false);
-                    }
+                    } //14
                     await DisplayAlert("Ooops", "Our system is down. We were able to process your request. We are currently working to solve this issue", "OK");
                 }
             }
@@ -2026,7 +2027,7 @@ namespace MTYD.ViewModel
                         Console.WriteLine("In set payment info:  Password Hashed!");
                         if (Preferences.Get("password_hashed", "") != hashedPassword2)
                         {
-                            Debug.WriteLine("wrong password entered");
+                            Debug.WriteLine("wrong password entered"); //21
                             DisplayAlert("Error", "Wrong password entered.", "OK");
                             return;
                         }
@@ -2146,7 +2147,7 @@ namespace MTYD.ViewModel
                     //await scroller.ScrollToAsync(0, -40, false);
                 }
                 else
-                {
+                { //32
                     await DisplayAlert("Ooops", "The amount to pay is zero. It must be greater than zero to process a payment", "OK");
                 }
             }
@@ -2174,7 +2175,7 @@ namespace MTYD.ViewModel
                 try
                 {
                     if (termsChecked == false)
-                    {
+                    { //33
                         await DisplayAlert("Error", "Check the terms & conditions before continuing", "OK");
                         return;
                     }
@@ -2204,7 +2205,7 @@ namespace MTYD.ViewModel
                         return;
                     }
                     else if (cardExpMonth.Text.Length < 2)
-                    {
+                    { //34
                         await DisplayAlert("Error", "invalid month", "OK");
                         return;
                     }
@@ -2215,7 +2216,7 @@ namespace MTYD.ViewModel
                         return;
                     }
                     else if (cardExpYear.Text.Length < 2)
-                    {
+                    { //35
                         await DisplayAlert("Error", "invalid year", "OK");
                         return;
                     }
@@ -2357,7 +2358,7 @@ namespace MTYD.ViewModel
                     }
                     if (latitude == "0" || longitude == "0")
                     {
-                        await Navigation.PopAsync(false);
+                        await Navigation.PopAsync(false); //8
                         await DisplayAlert("We couldn't find your address", "Please check for errors.", "Ok");
                         return;
                     }
@@ -3580,7 +3581,7 @@ namespace MTYD.ViewModel
                                 //JObject info_obj3 = JObject.Parse(userString3);
                                 if (obj.Result.Length == 0)
                                 {
-                                    CheckAddressHeading.Text = "Still Growing…";
+                                    CheckAddressHeading.Text = "Still Growing…"; //49
                                     CheckAddressBody.Text = "Sorry, it looks like we don’t deliver to your neighborhood yet. Enter your email address and we will let you know as soon as we come to your neighborhood.";
                                     EmailFrame.IsVisible = true;
                                     OkayButton.Text = "Okay";

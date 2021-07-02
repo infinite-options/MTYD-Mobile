@@ -686,7 +686,7 @@ namespace MTYD.ViewModel
             try
             {
                 if (TotalPrice.Text == "$0" || TotalPrice.Text == "$00.00")
-                {
+                {//37
                     await DisplayAlert("Warning!", "pick a valid plan to continue", "OK");
                     return;
                 }
@@ -769,7 +769,7 @@ namespace MTYD.ViewModel
         }
 
         async void clickedSelect(System.Object sender, System.EventArgs e)
-        {
+        {//26
             if (Preferences.Get("canChooseSelect", false) == false)
                 DisplayAlert("Error", "please purchase a meal plan first", "OK");
             else
