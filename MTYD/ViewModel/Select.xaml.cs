@@ -623,7 +623,7 @@ namespace MTYD.ViewModel
                             MealImage = obj.Result[i].MealPhotoUrl,
                             MealQuantity = mealQty,
                             Background = backgroundColor,
-                            MealPrice = obj.Result[i].MealPrice,
+                            MealPrice = obj.Result[i].MenuMealPrice,
                             ItemUid = obj.Result[i].MealUid,
                             MealDesc = obj.Result[i].MealDesc,
                             SeeDesc = false,
@@ -702,7 +702,7 @@ namespace MTYD.ViewModel
                             MealImage = obj.Result[i].MealPhotoUrl,
                             MealQuantity = mealQty,
                             Background = backgroundColor,
-                            MealPrice = obj.Result[i].MealPrice,
+                            MealPrice = obj.Result[i].MenuMealPrice,
                             ItemUid = obj.Result[i].MealUid,
                             MealDesc = obj.Result[i].MealDesc,
                             SeeDesc = false,
@@ -2908,7 +2908,7 @@ namespace MTYD.ViewModel
                 //{
                 mealsSaved.Add(new MealInformation
                 {
-                    Qty = "",
+                    Qty = dropDownText.Text.Substring(0, dropDownText.Text.IndexOf(" ")),
                     Name = "SKIP",
                     Price = "",
                     ItemUid = "",
@@ -3014,7 +3014,7 @@ namespace MTYD.ViewModel
                 //{
                 mealsSaved.Add(new MealInformation
                 {
-                    Qty = "",
+                    Qty = dropDownText.Text.Substring(0, dropDownText.Text.IndexOf(" ")),
                     Name = "SURPRISE",
                     Price = "",
                     ItemUid = "",
@@ -3116,7 +3116,7 @@ namespace MTYD.ViewModel
                 //{
                 mealsSaved.Add(new MealInformation
                 {
-                    Qty = "",
+                    Qty = dropDownText.Text.Substring(0, dropDownText.Text.IndexOf(" ")),
                     Name = "SURPRISE",
                     Price = "",
                     ItemUid = "",

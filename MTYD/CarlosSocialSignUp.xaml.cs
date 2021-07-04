@@ -625,7 +625,18 @@ namespace MTYD
             else
             {
                 //6
-                await DisplayAlert("Message", "We weren't able to sign you up", "OK");
+                try
+                {
+                    WebClient client4 = new WebClient();
+                    var content2 = client4.DownloadString(Constant.AlertUrl);
+                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                    await DisplayAlert(obj.result[4].title, obj.result[4].message, obj.result[4].responses);
+                }
+                catch
+                {
+                    await DisplayAlert("Message", "We weren't able to sign you up", "OK");
+                }
             }
         }
 

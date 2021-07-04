@@ -1696,7 +1696,19 @@ namespace MTYD.ViewModel
                 if (loginUsername.Text == "" || loginUsername.Text == null)
                 {
                     //24
-                    DisplayAlert("Error", "please enter your email into the username box first", "OK");
+                    try
+                    {
+                        WebClient client4 = new WebClient();
+                        var content = client4.DownloadString(Constant.AlertUrl);
+                        var obj = JsonConvert.DeserializeObject<AlertsObj>(content);
+
+                        DisplayAlert(obj.result[23].title, obj.result[23].message, obj.result[23].responses);
+                    }
+                    catch
+                    {
+                        DisplayAlert("Error", "please enter your email into the username box first", "OK");
+                    }
+                    //DisplayAlert("Error", "please enter your email into the username box first", "OK");
                     return;
                 }
                 //if endpoint returns email not found, display an alert

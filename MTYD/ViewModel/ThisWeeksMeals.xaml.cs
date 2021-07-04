@@ -97,7 +97,7 @@ namespace MTYD.ViewModel
                             MealCalories = "Cal: " + obj.Result[i].MealCalories.ToString(),
                             MealImage = obj.Result[i].MealPhotoUrl,
                             MealQuantity = mealQty,
-                            MealPrice = obj.Result[i].MealPrice,
+                            MealPrice = obj.Result[i].MenuMealPrice,
                             ItemUid = obj.Result[i].MealUid,
                         });
 
@@ -132,7 +132,7 @@ namespace MTYD.ViewModel
                             MealCalories = "Cal: " + obj.Result[i].MealCalories.ToString(),
                             MealImage = obj.Result[i].MealPhotoUrl,
                             MealQuantity = mealQty,
-                            MealPrice = obj.Result[i].MealPrice,
+                            MealPrice = obj.Result[i].MenuMealPrice,
                             ItemUid = obj.Result[i].MealUid,
                         });
 

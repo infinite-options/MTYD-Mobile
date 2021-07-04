@@ -335,7 +335,18 @@ namespace MTYD.ViewModel
                 else if (passwordEntry.Text != null && passwordEntry.Text != confirmPasswordEntry.Text)
                 {
                     //3
-                    await DisplayAlert("Error", "Your password doesn't match", "OK");
+                    try
+                    {
+                        WebClient client4 = new WebClient();
+                        var content = client4.DownloadString(Constant.AlertUrl);
+                        var obj = JsonConvert.DeserializeObject<AlertsObj>(content);
+
+                        await DisplayAlert(obj.result[2].title, obj.result[2].message, obj.result[2].responses);
+                    }
+                    catch
+                    {
+                        await DisplayAlert("Error", "Your password doesn't match", "OK");
+                    }
                     return;
                 }
                 else

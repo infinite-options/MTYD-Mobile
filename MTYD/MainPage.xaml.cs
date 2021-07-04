@@ -1878,7 +1878,12 @@ namespace MTYD
             {
                 if (loginUsername.Text == "" || loginUsername.Text == null)
                 {
-                    DisplayAlert("Error", "please enter your email into the username box first", "OK");
+                    WebClient client4 = new WebClient();
+                    var content = client4.DownloadString(Constant.AlertUrl);
+                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content);
+
+                    DisplayAlert(obj.result[0].title, obj.result[0].message, obj.result[0].responses);
+                    //DisplayAlert("Error", "please enter your email into the username box first", "OK");
                     return;
                 }
                 //if endpoint returns email not found, display an alert

@@ -47,8 +47,8 @@ namespace MTYD.Model
         [JsonProperty("delivery_days")]
         public string DeliveryDays { get; set; }
 
-        [JsonProperty("meal_price")]
-        public long MealPrice { get; set; }
+        [JsonProperty("menu_meal_price")]
+        public long MenuMealPrice { get; set; }
 
         //public string meal_uid = "0";
         //public string meal_category = "none";
@@ -58,6 +58,9 @@ namespace MTYD.Model
         //public string meal_photo_URL = "http";
         [JsonProperty("meal_uid")]
         public string MealUid { get; set; }
+
+        [JsonProperty("meal_business")]
+        public string MealBusiness { get; set; }
 
         [JsonProperty("meal_category")]
         public string MealCategory { get; set; }
@@ -94,6 +97,18 @@ namespace MTYD.Model
 
         [JsonProperty("meal_sat")]
         public double MealSat { get; set; }
+
+        [JsonProperty("meal_cost")]
+        public string MealCost { get; set; }
+
+        [JsonProperty("meal_price")]
+        public string MealPrice { get; set; }
+
+        [JsonProperty("meal_price_addon")]
+        public string MealPriceAddon { get; set; }
+
+        [JsonProperty("meal_status")]
+        public string MealStatus { get; set; }
     }
 
     public enum DefaultMeal { False, True };
