@@ -21,6 +21,7 @@ using Plugin.LatestVersion;
 using Xamarin.CommunityToolkit;
 using System.Threading;
 using MTYD.Interfaces;
+using MTYD.Constants;
 
 namespace MTYD.ViewModel
 {
@@ -226,6 +227,19 @@ namespace MTYD.ViewModel
 
                 CheckVersion();
                 Debug.WriteLine("finished with constructor");
+
+                try
+                {
+                    WebClient client4 = new WebClient();
+                    var content3 = client4.DownloadString(Constant.AlertUrl);
+                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                    baaHeader.Text = obj.result[58].title;
+                    baaBody.Text = obj.result[58].message;
+                }
+                catch
+                {
+                }
             }
             catch (Exception ex)
             {
@@ -243,7 +257,20 @@ namespace MTYD.ViewModel
             string resultStr = await result;
             if (resultStr == "FALSE")
             {
-                await DisplayAlert("Mealsfor.Me\nhas gotten even better!", "Please visit the App Store to get the latest version.", "OK");
+                try
+                {
+                    WebClient client4 = new WebClient();
+                    var content3 = client4.DownloadString(Constant.AlertUrl);
+                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                    await DisplayAlert(obj.result[24].title, obj.result[24].message, obj.result[24].responses);
+                }
+                catch
+                {
+                    await DisplayAlert("Mealsfor.Me\nhas gotten even better!", "Please visit the App Store to get the latest version.", "OK");
+                }
+
+                
 
                 await CrossLatestVersion.Current.OpenAppInStore();
             }
@@ -1220,7 +1247,21 @@ namespace MTYD.ViewModel
                     popButton1.Text = "Go Back";
                     popButton2.IsVisible = true;
                     dateDestination = sender; //52
-                    showPopUp("Selections Not Saved", "Please click Save Meals to save your meal selections before moving to another date. You can also click Surprise or Skip.");
+
+                    try
+                    {
+                        WebClient client4 = new WebClient();
+                        var content3 = client4.DownloadString(Constant.AlertUrl);
+                        var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                        showPopUp(obj.result[51].title, obj.result[51].message);
+                    }
+                    catch
+                    {
+                        showPopUp("Selections Not Saved", "Please click Save Meals to save your meal selections before moving to another date. You can also click Surprise or Skip.");
+                    }
+
+                    
 
                     return;
                 }
@@ -2247,7 +2288,21 @@ namespace MTYD.ViewModel
                 {
                     popButton1.Text = "Okay";
                     popButton2.IsVisible = false; //53
-                    showPopUp("Oops", "You have reached the maximum amount of meals that can be selected for this plan.");
+
+                    try
+                    {
+                        WebClient client4 = new WebClient();
+                        var content3 = client4.DownloadString(Constant.AlertUrl);
+                        var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                        showPopUp(obj.result[52].title, obj.result[52].message);
+                    }
+                    catch
+                    {
+                        showPopUp("Oops", "You have reached the maximum amount of meals that can be selected for this plan.");
+                    }
+
+                    
                     //DisplayAlert("Alert", "You have reached the maximum amount of meals that can be selected for this plan.", "OK");
                 }
             }
@@ -2829,7 +2884,23 @@ namespace MTYD.ViewModel
                         popButton1.Text = "Okay";
                         popButton2.IsVisible = false;
                         string addOnMsg = "You will be charged for your add-ons on " + addOnChargeDate.ToString("M") + ".";
-                        showPopUp("Selection Saved", addOnMsg); //54
+
+                        try
+                        {
+                            WebClient client4 = new WebClient();
+                            var content3 = client4.DownloadString(Constant.AlertUrl);
+                            var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+                            string msg = obj.result[53].message;
+                            msg = msg.Replace("#", addOnChargeDate.ToString("M"));
+
+                            showPopUp(obj.result[53].title, msg);
+                        }
+                        catch
+                        {
+                            showPopUp("Selection Saved", addOnMsg);
+                        }
+
+                         //54
                         //DisplayAlert("Selection Saved", "You will be charged for your add-ons on 1/1/2021.", "OK");
                     }
                     else
@@ -2846,7 +2917,21 @@ namespace MTYD.ViewModel
                         BarParameters[0].barLabel = "All Meals Selected";
                         popButton1.Text = "Okay";
                         popButton2.IsVisible = false; //55
-                        showPopUp("Selection Saved", "You've successfully saved your meal selection.");
+
+                        try
+                        {
+                            WebClient client4 = new WebClient();
+                            var content3 = client4.DownloadString(Constant.AlertUrl);
+                            var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                            showPopUp(obj.result[54].title, obj.result[54].message);
+                        }
+                        catch
+                        {
+                            showPopUp("Selection Saved", "You've successfully saved your meal selection.");
+                        }
+
+                        
                         //DisplayAlert("Selection Saved", "You've successfully saved your meal selection.", "OK");
                     }
                     addOnSelected = false;
@@ -2858,7 +2943,21 @@ namespace MTYD.ViewModel
                 {
                     popButton1.Text = "Okay";
                     popButton2.IsVisible = false; //56
-                    showPopUp("Incomplete Meal Selection", "Please select additional meals.");
+
+                    try
+                    {
+                        WebClient client4 = new WebClient();
+                        var content3 = client4.DownloadString(Constant.AlertUrl);
+                        var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                        showPopUp(obj.result[55].title, obj.result[55].message);
+                    }
+                    catch
+                    {
+                        showPopUp("Incomplete Meal Selection", "Please select additional meals.");
+                    }
+
+                    
                     //DisplayAlert("Incomplete Meal Selection", "Please select additional meals.", "OK");
 
                 }
@@ -2935,7 +3034,21 @@ namespace MTYD.ViewModel
                 //DisplayAlert("Delivery Skipped", "You won't receive any meals for this delivery cycle. We'll extend your subscription accordingly.", "OK");
                 popButton1.Text = "Okay";
                 popButton2.IsVisible = false; //57
-                showPopUp("Delivery Skipped", "You won't receive any meals this day. We will extend your subscription accordingly.");
+
+                try
+                {
+                    WebClient client4 = new WebClient();
+                    var content3 = client4.DownloadString(Constant.AlertUrl);
+                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                    showPopUp(obj.result[56].title, obj.result[56].message);
+                }
+                catch
+                {
+                    showPopUp("Delivery Skipped", "You won't receive any meals this day. We will extend your subscription accordingly.");
+                }
+
+                
                 mealsSaved.Clear();
                 //int indexOfMealPlanSelected = ((ArrayList)dropDownList.ItemsSource).IndexOf(dropDownText.Text);
                 int indexOfMealPlanSelected = -1;
@@ -3141,7 +3254,21 @@ namespace MTYD.ViewModel
                 //DisplayAlert("SURPRISE", "We'll select a random assortment of nutritious, healthy meals for you!", "OK");
                 popButton1.Text = "Okay";
                 popButton2.IsVisible = false; //58
-                showPopUp("Surprise!", "We’ll surprise you with some of our specials on this day!");
+
+                try
+                {
+                    WebClient client4 = new WebClient();
+                    var content3 = client4.DownloadString(Constant.AlertUrl);
+                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                    showPopUp(obj.result[57].title, obj.result[57].message);
+                }
+                catch
+                {
+                    showPopUp("Surprise!", "We’ll surprise you with some of our specials on this day!");
+                }
+
+                
                 mealsSaved.Clear();
                 //int indexOfMealPlanSelected = ((ArrayList)dropDownList.ItemsSource).IndexOf(dropDownText.Text);
                 int indexOfMealPlanSelected = -1;
@@ -4043,7 +4170,20 @@ namespace MTYD.ViewModel
         async void clickedSelect(System.Object sender, System.EventArgs e)
         {
             if (Preferences.Get("canChooseSelect", false) == false)
-                DisplayAlert("Error", "please purchase a meal plan first", "OK");
+            {
+                try
+                {
+                    WebClient client4 = new WebClient();
+                    var content2 = client4.DownloadString(Constant.AlertUrl);
+                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                    await DisplayAlert(obj.result[25].title, obj.result[25].message, obj.result[25].responses);
+                }
+                catch
+                {
+                    await DisplayAlert("Error", "please purchase a meal plan first", "OK");
+                }
+            }
             else
             {
                 Zones[] zones = new Zones[] { };

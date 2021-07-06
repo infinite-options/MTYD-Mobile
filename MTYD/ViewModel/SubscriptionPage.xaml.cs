@@ -16,6 +16,8 @@ using Xamarin.Forms;
 using Xamarin.CommunityToolkit;
 using Xamarin.Forms.Xaml;
 using MTYD.Interfaces;
+using System.Net;
+using MTYD.Constants;
 
 namespace MTYD.ViewModel
 {
@@ -296,6 +298,19 @@ namespace MTYD.ViewModel
                 ////Preferences.Set("freqSelected", "");
                 //pfp.Source = Preferences.Get("profilePicLink", "");
                 CheckVersion();
+
+                try
+                {
+                    WebClient client4 = new WebClient();
+                    var content3 = client4.DownloadString(Constant.AlertUrl);
+                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                    baaHeader.Text = obj.result[58].title;
+                    baaBody.Text = obj.result[58].message;
+                }
+                catch
+                {
+                }
             }
             catch (Exception ex)
             {
@@ -313,7 +328,18 @@ namespace MTYD.ViewModel
             string resultStr = await result;
             if (resultStr == "FALSE")
             {
-                await DisplayAlert("Mealsfor.Me\nhas gotten even better!", "Please visit the App Store to get the latest version.", "OK");
+                try
+                {
+                    WebClient client4 = new WebClient();
+                    var content3 = client4.DownloadString(Constant.AlertUrl);
+                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                    await DisplayAlert(obj.result[24].title, obj.result[24].message, obj.result[24].responses);
+                }
+                catch
+                {
+                    await DisplayAlert("Mealsfor.Me\nhas gotten even better!", "Please visit the App Store to get the latest version.", "OK");
+                }
 
                 await CrossLatestVersion.Current.OpenAppInStore();
             }
@@ -687,7 +713,18 @@ namespace MTYD.ViewModel
             {
                 if (TotalPrice.Text == "$0" || TotalPrice.Text == "$00.00")
                 {//37
-                    await DisplayAlert("Warning!", "pick a valid plan to continue", "OK");
+                    try
+                    {
+                        WebClient client4 = new WebClient();
+                        var content3 = client4.DownloadString(Constant.AlertUrl);
+                        var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                        await DisplayAlert(obj.result[36].title, obj.result[36].message, obj.result[36].responses);
+                    }
+                    catch
+                    {
+                        await DisplayAlert("Warning!", "pick a valid plan to continue", "OK");
+                    }
                     return;
                 }
 
@@ -771,7 +808,20 @@ namespace MTYD.ViewModel
         async void clickedSelect(System.Object sender, System.EventArgs e)
         {//26
             if (Preferences.Get("canChooseSelect", false) == false)
-                DisplayAlert("Error", "please purchase a meal plan first", "OK");
+            {
+                try
+                {
+                    WebClient client4 = new WebClient();
+                    var content2 = client4.DownloadString(Constant.AlertUrl);
+                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                    await DisplayAlert(obj.result[25].title, obj.result[25].message, obj.result[25].responses);
+                }
+                catch
+                {
+                    await DisplayAlert("Error", "please purchase a meal plan first", "OK");
+                }
+            }
             else
             {
                 Zones[] zones = new Zones[] { };

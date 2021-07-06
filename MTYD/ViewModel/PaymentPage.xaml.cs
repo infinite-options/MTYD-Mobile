@@ -227,16 +227,49 @@ namespace MTYD.ViewModel
                                 }
                                 else if (GetXMLElement(element, "DPVConfirmation").Equals("D"))
                                 {
-                                    await DisplayAlert("Missing Info", "Please enter your unit/apartment number into the appropriate field.", "OK");
+                                    try
+                                    {
+                                        WebClient client4 = new WebClient();
+                                        var content2 = client4.DownloadString(Constant.AlertUrl);
+                                        var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                                        await DisplayAlert(obj.result[5].title, obj.result[5].message, obj.result[5].responses);
+                                    }
+                                    catch
+                                    {
+                                        await DisplayAlert("Missing Info", "Please enter your unit/apartment number into the appropriate field.", "OK");
+                                    }
                                 }
                                 else
                                 {
-                                    await DisplayAlert("Invalid Address", "The address you entered couldn't be confirmed. Please enter another one.", "OK");
+                                    try
+                                    {
+                                        WebClient client4 = new WebClient();
+                                        var content2 = client4.DownloadString(Constant.AlertUrl);
+                                        var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                                        await DisplayAlert(obj.result[6].title, obj.result[6].message, obj.result[6].responses);
+                                    }
+                                    catch
+                                    {
+                                        await DisplayAlert("Invalid Address", "The address you entered couldn't be confirmed. Please enter another one.", "OK");
+                                    }
                                 }
                             }
                             else
                             {
-                                await DisplayAlert("Invalid Address", "The address you entered couldn't be confirmed. Please enter another one.", "OK");
+                                try
+                                {
+                                    WebClient client4 = new WebClient();
+                                    var content2 = client4.DownloadString(Constant.AlertUrl);
+                                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                                    await DisplayAlert(obj.result[6].title, obj.result[6].message, obj.result[6].responses);
+                                }
+                                catch
+                                {
+                                    await DisplayAlert("Invalid Address", "The address you entered couldn't be confirmed. Please enter another one.", "OK");
+                                }
                             }
                         }
                         //end address updating
@@ -314,16 +347,49 @@ namespace MTYD.ViewModel
                             }
                             else if (GetXMLElement(element, "DPVConfirmation").Equals("D"))
                             {
-                                await DisplayAlert("Missing Info", "Please enter your unit/apartment number into the appropriate field.", "OK");
+                                try
+                                {
+                                    WebClient client4 = new WebClient();
+                                    var content2 = client4.DownloadString(Constant.AlertUrl);
+                                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                                    await DisplayAlert(obj.result[5].title, obj.result[5].message, obj.result[5].responses);
+                                }
+                                catch
+                                {
+                                    await DisplayAlert("Missing Info", "Please enter your unit/apartment number into the appropriate field.", "OK");
+                                }
                             }
                             else
                             {
-                                await DisplayAlert("Invalid Address", "The address you entered couldn't be confirmed. Please enter another one.", "OK");
+                                try
+                                {
+                                    WebClient client4 = new WebClient();
+                                    var content2 = client4.DownloadString(Constant.AlertUrl);
+                                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                                    await DisplayAlert(obj.result[6].title, obj.result[6].message, obj.result[6].responses);
+                                }
+                                catch
+                                {
+                                    await DisplayAlert("Invalid Address", "The address you entered couldn't be confirmed. Please enter another one.", "OK");
+                                }
                             }
                         }
                         else
                         {
-                            await DisplayAlert("Invalid Address", "The address you entered couldn't be confirmed. Please enter another one.", "OK");
+                            try
+                            {
+                                WebClient client4 = new WebClient();
+                                var content2 = client4.DownloadString(Constant.AlertUrl);
+                                var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                                await DisplayAlert(obj.result[6].title, obj.result[6].message, obj.result[6].responses);
+                            }
+                            catch
+                            {
+                                await DisplayAlert("Invalid Address", "The address you entered couldn't be confirmed. Please enter another one.", "OK");
+                            }
                         }
                     }
                     //end address updating
@@ -595,6 +661,18 @@ namespace MTYD.ViewModel
 
                 fillEntriesDeliv();
                 //saveContact.IsVisible = false;
+                try
+                {
+                    WebClient client4 = new WebClient();
+                    var content3 = client4.DownloadString(Constant.AlertUrl);
+                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                    baaHeader.Text = obj.result[58].title;
+                    baaBody.Text = obj.result[58].message;
+                }
+                catch
+                {
+                }
             }
             catch (Exception ex)
             {
@@ -626,50 +704,145 @@ namespace MTYD.ViewModel
 
                 if (AddressEntry.Text == null)
                 {
-                    await DisplayAlert("Error", "Please enter your address", "OK");
+                    try
+                    {
+                        WebClient client4 = new WebClient();
+                        var content2 = client4.DownloadString(Constant.AlertUrl);
+                        var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                        await DisplayAlert(obj.result[0].title, obj.result[0].message, obj.result[0].responses);
+                    }
+                    catch
+                    {
+                        await DisplayAlert("Error", "Please enter your address", "OK");
+                    }
                     return;
                 }
 
                 if (CityEntry.Text == null)
                 {
-                    await DisplayAlert("Error", "Please enter your city", "OK");
+                    try
+                    {
+                        WebClient client4 = new WebClient();
+                        var content2 = client4.DownloadString(Constant.AlertUrl);
+                        var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                        await DisplayAlert(obj.result[0].title, obj.result[0].message, obj.result[0].responses);
+                    }
+                    catch
+                    {
+                        await DisplayAlert("Error", "Please enter your city", "OK");
+                    }
                     return;
                 }
 
                 if (StateEntry.Text == null)
                 {
-                    await DisplayAlert("Error", "Please enter your state", "OK");
+                    try
+                    {
+                        WebClient client4 = new WebClient();
+                        var content2 = client4.DownloadString(Constant.AlertUrl);
+                        var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                        await DisplayAlert(obj.result[0].title, obj.result[0].message, obj.result[0].responses);
+                    }
+                    catch
+                    {
+                        await DisplayAlert("Error", "Please enter your state", "OK");
+                    }
                     return;
                 }
 
                 if (ZipEntry.Text == null)
                 {
-                    await DisplayAlert("Error", "Please enter your zipcode", "OK");
+                    try
+                    {
+                        WebClient client4 = new WebClient();
+                        var content2 = client4.DownloadString(Constant.AlertUrl);
+                        var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                        await DisplayAlert(obj.result[0].title, obj.result[0].message, obj.result[0].responses);
+                    }
+                    catch
+                    {
+                        await DisplayAlert("Error", "Please enter your zipcode", "OK");
+                    }
                     return;
                 }
 
                 if (FNameEntry.Text == null || FNameEntry.Text == "")
                 {
                     //1
-                    await DisplayAlert("Error", "first name required", "okay");
+                    try
+                    {
+                        WebClient client4 = new WebClient();
+                        var content3 = client4.DownloadString(Constant.AlertUrl);
+                        var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                        await DisplayAlert(obj.result[0].title, obj.result[0].message, obj.result[0].responses);
+                    }
+                    catch
+                    {
+                        await DisplayAlert("Error", "first name required", "okay");
+                    }
+
+                    
                     return;
                 }
 
                 if (LNameEntry.Text == null || LNameEntry.ToString() == "")
                 {
-                    await DisplayAlert("Error", "last name required", "okay");
+                    try
+                    {
+                        WebClient client4 = new WebClient();
+                        var content3 = client4.DownloadString(Constant.AlertUrl);
+                        var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                        await DisplayAlert(obj.result[0].title, obj.result[0].message, obj.result[0].responses);
+                    }
+                    catch
+                    {
+                        await DisplayAlert("Error", "last name required", "okay");
+                    }
+
+                    
                     return;
                 }
 
                 if (emailEntry.Text == null || emailEntry.Text == "")
                 {
-                    await DisplayAlert("Error", "email required", "okay");
+                    try
+                    {
+                        WebClient client4 = new WebClient();
+                        var content3 = client4.DownloadString(Constant.AlertUrl);
+                        var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                        await DisplayAlert(obj.result[0].title, obj.result[0].message, obj.result[0].responses);
+                    }
+                    catch
+                    {
+                        await DisplayAlert("Error", "email required", "okay");
+                    }
+
+                    
                     return;
                 }
 
                 if (PhoneEntry.Text == null || PhoneEntry.Text == "")
                 {
-                    await DisplayAlert("Error", "phone number required", "okay");
+                    try
+                    {
+                        WebClient client4 = new WebClient();
+                        var content3 = client4.DownloadString(Constant.AlertUrl);
+                        var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                        await DisplayAlert(obj.result[0].title, obj.result[0].message, obj.result[0].responses);
+                    }
+                    catch
+                    {
+                        await DisplayAlert("Error", "phone number required", "okay");
+                    }
+
                     return;
                 }
 
@@ -799,18 +972,51 @@ namespace MTYD.ViewModel
                         }
                         else if (GetXMLElement(element, "DPVConfirmation").Equals("D"))
                         {
-                            await DisplayAlert("Missing Info", "Please enter your unit/apartment number into the appropriate field.", "OK");
+                            try
+                            {
+                                WebClient client4 = new WebClient();
+                                var content2 = client4.DownloadString(Constant.AlertUrl);
+                                var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                                await DisplayAlert(obj.result[5].title, obj.result[5].message, obj.result[5].responses);
+                            }
+                            catch
+                            {
+                                await DisplayAlert("Missing Info", "Please enter your unit/apartment number into the appropriate field.", "OK");
+                            }
                             return;
                         }
                         else
                         {
-                            await DisplayAlert("Invalid Address", "The address you entered couldn't be confirmed. Please enter another one.", "OK");
+                            try
+                            {
+                                WebClient client4 = new WebClient();
+                                var content2 = client4.DownloadString(Constant.AlertUrl);
+                                var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                                await DisplayAlert(obj.result[6].title, obj.result[6].message, obj.result[6].responses);
+                            }
+                            catch
+                            {
+                                await DisplayAlert("Invalid Address", "The address you entered couldn't be confirmed. Please enter another one.", "OK");
+                            }
                             return;
                         }
                     }
                     else
                     {
-                        await DisplayAlert("Invalid Address", "The address you entered couldn't be confirmed. Please enter another one.", "OK");
+                        try
+                        {
+                            WebClient client4 = new WebClient();
+                            var content2 = client4.DownloadString(Constant.AlertUrl);
+                            var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                            await DisplayAlert(obj.result[6].title, obj.result[6].message, obj.result[6].responses);
+                        }
+                        catch
+                        {
+                            await DisplayAlert("Invalid Address", "The address you entered couldn't be confirmed. Please enter another one.", "OK");
+                        }
                         return;
                         // USPS sents an error saying address not found in there records. In other words, this address is not valid because it does not exits.
                         //Console.WriteLine("Seems like your address is invalid.");
@@ -820,14 +1026,45 @@ namespace MTYD.ViewModel
                 }
                 if (latitude == "0" || longitude == "0")
                 {
-                    await DisplayAlert("We couldn't find your address", "Please check for errors.", "Ok");
+                    try
+                    {
+                        WebClient client4 = new WebClient();
+                        var content2 = client4.DownloadString(Constant.AlertUrl);
+                        var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                        await DisplayAlert(obj.result[7].title, obj.result[7].message, obj.result[7].responses);
+                    }
+                    catch
+                    {
+                        await DisplayAlert("We couldn't find your address", "Please check for errors.", "OK");
+                    }
                 }
                 else if (withinZones == false)
                 {
-                    CheckAddressHeading.Text = "Still Growing…"; //49
-                    CheckAddressBody.Text = "Sorry, it looks like we don’t deliver to your neighborhood yet. Enter your email address and we will let you know as soon as we come to your neighborhood.";
+
+                    try
+                    {
+                        WebClient client4 = new WebClient();
+                        var content3 = client4.DownloadString(Constant.AlertUrl);
+                        var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                        //await DisplayAlert(obj.result[48].title, obj.result[48].message, obj.result[48].responses);
+                        CheckAddressHeading.Text = obj.result[48].title;
+                        CheckAddressBody.Text = obj.result[48].message;
+                        OkayButton.Text = obj.result[48].responses;
+                    }
+                    catch
+                    {
+                        CheckAddressHeading.Text = "Still Growing…";
+                        CheckAddressBody.Text = "Sorry, it looks like we don’t deliver to your neighborhood yet. Enter your email address and we will let you know as soon as we come to your neighborhood.";
+                        //EmailFrame.IsVisible = true;
+                        OkayButton.Text = "Okay";
+                    }
+
+                    //CheckAddressHeading.Text = "Still Growing…"; //49
+                    //CheckAddressBody.Text = "Sorry, it looks like we don’t deliver to your neighborhood yet. Enter your email address and we will let you know as soon as we come to your neighborhood.";
                     EmailFrame.IsVisible = true;
-                    OkayButton.Text = "Okay";
+                    //OkayButton.Text = "Okay";
                     loginButton2.IsVisible = false;
                     //await DisplayAlert("Invalid Address", "Address is not within any of our delivery zones.", "OK");
                     fade.IsVisible = true;
@@ -862,7 +1099,21 @@ namespace MTYD.ViewModel
                     isAddessValidated = true;
                     Button b = (Button)sender;
                     if (b.Text == "Save") //30
-                        await DisplayAlert("We validated your address", "Please click on the proceed button to select a form of payment!", "OK");
+                    {
+                        try
+                        {
+                            WebClient client4 = new WebClient();
+                            var content3 = client4.DownloadString(Constant.AlertUrl);
+                            var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                            await DisplayAlert(obj.result[29].title, obj.result[29].message, obj.result[29].responses);
+                        }
+                        catch
+                        {
+                            await DisplayAlert("We validated your address", "Please click on the proceed button to select a form of payment!", "OK");
+                        }
+                    }
+                        
                     await Xamarin.Forms.Application.Current.SavePropertiesAsync();
                     //await tagUser(emailEntry.Text.Trim(), ZipEntry.Text.Trim());
 
@@ -959,10 +1210,29 @@ namespace MTYD.ViewModel
                                 }
                                 catch
                                 {
-                                    CheckAddressHeading.Text = "Hmm..."; //51
-                                    CheckAddressBody.Text = "Looks like the email address is already in use by another account. Please login to continue with that user account.";
+                                    try
+                                    {
+                                        WebClient client4 = new WebClient();
+                                        var content4 = client4.DownloadString(Constant.AlertUrl);
+                                        var obj = JsonConvert.DeserializeObject<AlertsObj>(content4);
+
+                                        //await DisplayAlert(obj.result[50].title, obj.result[50].message, obj.result[50].responses);
+                                        CheckAddressHeading.Text = obj.result[50].title;
+                                        CheckAddressBody.Text = obj.result[50].message;
+                                        OkayButton.Text = obj.result[50].responses;
+                                    }
+                                    catch
+                                    {
+                                        CheckAddressHeading.Text = "Hmm..."; //51
+                                        CheckAddressBody.Text = "Looks like the email address is already in use by another account. Please login to continue with that user account.";
+                                        //EmailFrame.IsVisible = false;
+                                        OkayButton.Text = "Go Back";
+                                    }
+
+                                    //CheckAddressHeading.Text = "Hmm..."; //51
+                                    //CheckAddressBody.Text = "Looks like the email address is already in use by another account. Please login to continue with that user account.";
                                     EmailFrame.IsVisible = false;
-                                    OkayButton.Text = "Go Back";
+                                    //OkayButton.Text = "Go Back";
                                     loginButton2.IsVisible = true;
                                     fade.IsVisible = true;
                                     CheckAddressGrid.IsVisible = true;
@@ -1258,7 +1528,20 @@ namespace MTYD.ViewModel
 
                     if (RDSData.message.Contains("taken"))
                     {
-                        await DisplayAlert("Email Address Already In Use", "Please log in with the account that uses this email. If you previously used this email for guest checkout, your password is {first name}{house #}.", "OK");
+                        try
+                        {
+                            WebClient client4 = new WebClient();
+                            var content4 = client4.DownloadString(Constant.AlertUrl);
+                            var obj = JsonConvert.DeserializeObject<AlertsObj>(content4);
+
+                            await DisplayAlert(obj.result[30].title, obj.result[30].message, obj.result[30].responses);
+                        }
+                        catch
+                        {
+                            await DisplayAlert("Email Address Already In Use", "Please log in with the account that uses this email. If you previously used this email for guest checkout, your password is {first name}{house #}.", "OK");
+                        }
+
+                        
 
                         Xamarin.Forms.Application.Current.MainPage = new MainPage();
                         return;
@@ -1324,25 +1607,73 @@ namespace MTYD.ViewModel
             {
                 if (FNameEntry.Text == null || FNameEntry.Text == "")
                 {
-                    DisplayAlert("Warning!", "first name required", "okay");
+                    try
+                    {
+                        WebClient client4 = new WebClient();
+                        var content3 = client4.DownloadString(Constant.AlertUrl);
+                        var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                        DisplayAlert(obj.result[0].title, obj.result[0].message, obj.result[0].responses);
+                    }
+                    catch
+                    {
+                        DisplayAlert("Error", "first name required", "okay");
+                    }
                     return;
                 }
 
                 if (LNameEntry.Text == null || LNameEntry.ToString() == "")
                 {
-                    DisplayAlert("Warning!", "last name required", "okay");
+                    try
+                    {
+                        WebClient client4 = new WebClient();
+                        var content3 = client4.DownloadString(Constant.AlertUrl);
+                        var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                        DisplayAlert(obj.result[0].title, obj.result[0].message, obj.result[0].responses);
+                    }
+                    catch
+                    {
+                        DisplayAlert("Error", "last name required", "okay");
+                    }
                     return;
                 }
 
                 if (emailEntry.Text == null || emailEntry.Text == "")
                 {
-                    DisplayAlert("Warning!", "email required", "okay");
+                    try
+                    {
+                        WebClient client4 = new WebClient();
+                        var content3 = client4.DownloadString(Constant.AlertUrl);
+                        var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                        DisplayAlert(obj.result[0].title, obj.result[0].message, obj.result[0].responses);
+                    }
+                    catch
+                    {
+                        DisplayAlert("Warning!", "email required", "okay");
+                    }
+
+                    
                     return;
                 }
 
                 if (PhoneEntry.Text == null || PhoneEntry.Text == "")
                 {
-                    DisplayAlert("Warning!", "phone number required", "okay");
+                    try
+                    {
+                        WebClient client4 = new WebClient();
+                        var content3 = client4.DownloadString(Constant.AlertUrl);
+                        var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                        DisplayAlert(obj.result[0].title, obj.result[0].message, obj.result[0].responses);
+                    }
+                    catch
+                    {
+                        DisplayAlert("Warning!", "phone number required", "okay");
+                    }
+
+                    
                     return;
                 }
 
@@ -1704,7 +2035,18 @@ namespace MTYD.ViewModel
 
                         grandTotalPrice.Text = "$" + grandTotalString;
 
-                        DisplayAlert("Error", "invalid ambassador code", "OK");
+                        try
+                        {
+                            WebClient client4 = new WebClient();
+                            var content3 = client4.DownloadString(Constant.AlertUrl);
+                            var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                            await DisplayAlert(obj.result[28].title, obj.result[28].message, obj.result[28].responses);
+                        }
+                        catch
+                        {
+                            await DisplayAlert("Error", "invalid ambassador code", "OK");
+                        }
                         ambassDisc.Text = "$0";
                     }
                 }
@@ -1995,7 +2337,20 @@ namespace MTYD.ViewModel
                         orangeBox.HeightRequest = deviceHeight / 2;
                         await Navigation.PopAsync(false);
                     } //14
-                    await DisplayAlert("Ooops", "Our system is down. We were able to process your request. We are currently working to solve this issue", "OK");
+
+                    try
+                    {
+                        WebClient client4 = new WebClient();
+                        var content2 = client4.DownloadString(Constant.AlertUrl);
+                        var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                        await DisplayAlert(obj.result[13].title, obj.result[13].message, obj.result[13].responses);
+                    }
+                    catch
+                    {
+                        await DisplayAlert("Ooops", "Our system is not working. We can't process your request at this moment", "OK");
+                    }
+
                 }
             }
             catch (Exception ex)
@@ -2028,7 +2383,20 @@ namespace MTYD.ViewModel
                         if (Preferences.Get("password_hashed", "") != hashedPassword2)
                         {
                             Debug.WriteLine("wrong password entered"); //21
-                            DisplayAlert("Error", "Wrong password entered.", "OK");
+                            try
+                            {
+                                WebClient client4 = new WebClient();
+                                var content3 = client4.DownloadString(Constant.AlertUrl);
+                                var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                                await DisplayAlert(obj.result[20].title, obj.result[20].message, obj.result[20].responses);
+                            }
+                            catch
+                            {
+                                await DisplayAlert("Error", "Wrong password entered.", "OK");
+                            }
+
+                            
                             return;
                         }
                         else
@@ -2148,7 +2516,20 @@ namespace MTYD.ViewModel
                 }
                 else
                 { //32
-                    await DisplayAlert("Ooops", "The amount to pay is zero. It must be greater than zero to process a payment", "OK");
+                    try
+                    {
+                        WebClient client4 = new WebClient();
+                        var content3 = client4.DownloadString(Constant.AlertUrl);
+                        var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                        await DisplayAlert(obj.result[31].title, obj.result[31].message, obj.result[31].responses);
+                    }
+                    catch
+                    {
+                        await DisplayAlert("Ooops", "The amount to pay is zero. It must be greater than zero to process a payment", "OK");
+                    }
+
+                    
                 }
             }
             catch (Exception ex)
@@ -2176,80 +2557,252 @@ namespace MTYD.ViewModel
                 {
                     if (termsChecked == false)
                     { //33
-                        await DisplayAlert("Error", "Check the terms & conditions before continuing", "OK");
+                        try
+                        {
+                            WebClient client4 = new WebClient();
+                            var content4 = client4.DownloadString(Constant.AlertUrl);
+                            var obj = JsonConvert.DeserializeObject<AlertsObj>(content4);
+
+                            await DisplayAlert(obj.result[32].title, obj.result[32].message, obj.result[32].responses);
+                        }
+                        catch
+                        {
+                            await DisplayAlert("Error", "Check the terms & conditions before continuing", "OK");
+                        }
+
+                        
                         return;
                     }
                     //await Navigation.PushAsync(new Loading());
                     //-----------validate address start
                     if (cardHolderName.Text == null)
                     {
-                        await DisplayAlert("Error", "Please enter your name", "OK");
+                        try
+                        {
+                            WebClient client4 = new WebClient();
+                            var content4 = client4.DownloadString(Constant.AlertUrl);
+                            var obj = JsonConvert.DeserializeObject<AlertsObj>(content4);
+
+                            await DisplayAlert(obj.result[0].title, obj.result[0].message, obj.result[0].responses);
+                        }
+                        catch
+                        {
+                            await DisplayAlert("Error", "Please enter your name", "OK");
+                        }
+
+                        
                         return;
                     }
 
                     if (cardHolderEmail.Text == null)
                     {
-                        await DisplayAlert("Error", "Please enter your email", "OK");
+                        try
+                        {
+                            WebClient client4 = new WebClient();
+                            var content4 = client4.DownloadString(Constant.AlertUrl);
+                            var obj = JsonConvert.DeserializeObject<AlertsObj>(content4);
+
+                            await DisplayAlert(obj.result[0].title, obj.result[0].message, obj.result[0].responses);
+                        }
+                        catch
+                        {
+                            await DisplayAlert("Error", "Please enter your email", "OK");
+                        }
+
                         return;
                     }
 
                     if (cardHolderNumber.Text == null || cardHolderNumber.Text.Length != 16)
                     {
-                        await DisplayAlert("Error", "invalid credit card number", "OK");
+                        try
+                        {
+                            WebClient client4 = new WebClient();
+                            var content4 = client4.DownloadString(Constant.AlertUrl);
+                            var obj = JsonConvert.DeserializeObject<AlertsObj>(content4);
+
+                            await DisplayAlert(obj.result[0].title, obj.result[0].message, obj.result[0].responses);
+                        }
+                        catch
+                        {
+                            await DisplayAlert("Error", "invalid credit card number", "OK");
+                        }
+
+                        
                         return;
                     }
 
                     if (cardExpMonth.Text == null)
                     {
-                        await DisplayAlert("Error", "Please enter your cc expiration month", "OK");
+                        try
+                        {
+                            WebClient client4 = new WebClient();
+                            var content4 = client4.DownloadString(Constant.AlertUrl);
+                            var obj = JsonConvert.DeserializeObject<AlertsObj>(content4);
+
+                            await DisplayAlert(obj.result[0].title, obj.result[0].message, obj.result[0].responses);
+                        }
+                        catch
+                        {
+                            await DisplayAlert("Error", "Please enter your cc expiration month", "OK");
+                        }
+
+                        
                         return;
                     }
                     else if (cardExpMonth.Text.Length < 2)
                     { //34
-                        await DisplayAlert("Error", "invalid month", "OK");
+                        try
+                        {
+                            WebClient client4 = new WebClient();
+                            var content4 = client4.DownloadString(Constant.AlertUrl);
+                            var obj = JsonConvert.DeserializeObject<AlertsObj>(content4);
+
+                            await DisplayAlert(obj.result[33].title, obj.result[33].message, obj.result[33].responses);
+                        }
+                        catch
+                        {
+                            await DisplayAlert("Error", "invalid month", "OK");
+                        }
+
                         return;
                     }
 
                     if (cardExpYear.Text == null)
                     {
-                        await DisplayAlert("Error", "Please enter your cc expiration year", "OK");
+                        try
+                        {
+                            WebClient client4 = new WebClient();
+                            var content4 = client4.DownloadString(Constant.AlertUrl);
+                            var obj = JsonConvert.DeserializeObject<AlertsObj>(content4);
+
+                            await DisplayAlert(obj.result[0].title, obj.result[0].message, obj.result[0].responses);
+                        }
+                        catch
+                        {
+                            await DisplayAlert("Error", "Please enter your cc expiration year", "OK");
+                        }
+
+                        
                         return;
                     }
                     else if (cardExpYear.Text.Length < 2)
-                    { //35
-                        await DisplayAlert("Error", "invalid year", "OK");
+                    { //35\
+                        try
+                        {
+                            WebClient client4 = new WebClient();
+                            var content4 = client4.DownloadString(Constant.AlertUrl);
+                            var obj = JsonConvert.DeserializeObject<AlertsObj>(content4);
+
+                            await DisplayAlert(obj.result[34].title, obj.result[34].message, obj.result[34].responses);
+                        }
+                        catch
+                        {
+                            await DisplayAlert("Error", "invalid year", "OK");
+                        }
+
+                        
                         return;
                     }
 
                     if (cardCVV.Text == null)
                     {
-                        await DisplayAlert("Error", "Please enter your CVV", "OK");
+                        try
+                        {
+                            WebClient client4 = new WebClient();
+                            var content4 = client4.DownloadString(Constant.AlertUrl);
+                            var obj = JsonConvert.DeserializeObject<AlertsObj>(content4);
+
+                            await DisplayAlert(obj.result[0].title, obj.result[0].message, obj.result[0].responses);
+                        }
+                        catch
+                        {
+                            await DisplayAlert("Error", "Please enter your CVV", "OK");
+                        }
+
+                        
                         return;
                     }
                     else if (cardCVV.Text.Length < 3)
                     {
-                        await DisplayAlert("Error", "invalid CVV", "OK");
+                        try
+                        {
+                            WebClient client4 = new WebClient();
+                            var content4 = client4.DownloadString(Constant.AlertUrl);
+                            var obj = JsonConvert.DeserializeObject<AlertsObj>(content4);
+
+                            await DisplayAlert(obj.result[0].title, obj.result[0].message, obj.result[0].responses);
+                        }
+                        catch
+                        {
+                            await DisplayAlert("Error", "invalid CVV", "OK");
+                        }
+
+                        
                         return;
                     }
 
                     if (cardHolderAddress.Text == null)
                     {
-                        await DisplayAlert("Error", "Please enter your address", "OK");
+                        try
+                        {
+                            WebClient client4 = new WebClient();
+                            var content2 = client4.DownloadString(Constant.AlertUrl);
+                            var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                            await DisplayAlert(obj.result[0].title, obj.result[0].message, obj.result[0].responses);
+                        }
+                        catch
+                        {
+                            await DisplayAlert("Error", "Please enter your address", "OK");
+                        }
                     }
 
                     if (cardCity.Text == null)
                     {
-                        await DisplayAlert("Error", "Please enter your city", "OK");
+                        try
+                        {
+                            WebClient client4 = new WebClient();
+                            var content2 = client4.DownloadString(Constant.AlertUrl);
+                            var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                            await DisplayAlert(obj.result[0].title, obj.result[0].message, obj.result[0].responses);
+                        }
+                        catch
+                        {
+                            await DisplayAlert("Error", "Please enter your city", "OK");
+                        }
                     }
 
                     if (cardState.Text == null)
                     {
-                        await DisplayAlert("Error", "Please enter your state", "OK");
+                        try
+                        {
+                            WebClient client4 = new WebClient();
+                            var content2 = client4.DownloadString(Constant.AlertUrl);
+                            var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                            await DisplayAlert(obj.result[0].title, obj.result[0].message, obj.result[0].responses);
+                        }
+                        catch
+                        {
+                            await DisplayAlert("Error", "Please enter your state", "OK");
+                        }
                     }
 
                     if (cardZip.Text == null)
                     {
-                        await DisplayAlert("Error", "Please enter your zipcode", "OK");
+                        try
+                        {
+                            WebClient client4 = new WebClient();
+                            var content2 = client4.DownloadString(Constant.AlertUrl);
+                            var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                            await DisplayAlert(obj.result[0].title, obj.result[0].message, obj.result[0].responses);
+                        }
+                        catch
+                        {
+                            await DisplayAlert("Error", "Please enter your zipcode", "OK");
+                        }
                     }
 
                     //if (passwordEntry.Text == null && (string)Xamarin.Forms.Application.Current.Properties["platform"] == "DIRECT")
@@ -2337,18 +2890,51 @@ namespace MTYD.ViewModel
                             }
                             else if (GetXMLElement(element, "DPVConfirmation").Equals("D"))
                             {
-                                await DisplayAlert("Missing Info", "Please enter your unit/apartment number into the appropriate field.", "OK");
+                                try
+                                {
+                                    WebClient client4 = new WebClient();
+                                    var content2 = client4.DownloadString(Constant.AlertUrl);
+                                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                                    await DisplayAlert(obj.result[5].title, obj.result[5].message, obj.result[5].responses);
+                                }
+                                catch
+                                {
+                                    await DisplayAlert("Missing Info", "Please enter your unit/apartment number into the appropriate field.", "OK");
+                                }
                                 return;
                             }
                             else
                             {
-                                await DisplayAlert("Invalid Address", "The address you entered couldn't be confirmed. Please enter another one.", "OK");
+                                try
+                                {
+                                    WebClient client4 = new WebClient();
+                                    var content2 = client4.DownloadString(Constant.AlertUrl);
+                                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                                    await DisplayAlert(obj.result[6].title, obj.result[6].message, obj.result[6].responses);
+                                }
+                                catch
+                                {
+                                    await DisplayAlert("Invalid Address", "The address you entered couldn't be confirmed. Please enter another one.", "OK");
+                                }
                                 return;
                             }
                         }
                         else
                         {
-                            await DisplayAlert("Invalid Address", "The address you entered couldn't be confirmed. Please enter another one.", "OK");
+                            try
+                            {
+                                WebClient client4 = new WebClient();
+                                var content2 = client4.DownloadString(Constant.AlertUrl);
+                                var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                                await DisplayAlert(obj.result[6].title, obj.result[6].message, obj.result[6].responses);
+                            }
+                            catch
+                            {
+                                await DisplayAlert("Invalid Address", "The address you entered couldn't be confirmed. Please enter another one.", "OK");
+                            }
                             return;
                             // USPS sents an error saying address not found in there records. In other words, this address is not valid because it does not exits.
                             //Console.WriteLine("Seems like your address is invalid.");
@@ -2359,7 +2945,18 @@ namespace MTYD.ViewModel
                     if (latitude == "0" || longitude == "0")
                     {
                         await Navigation.PopAsync(false); //8
-                        await DisplayAlert("We couldn't find your address", "Please check for errors.", "Ok");
+                        try
+                        {
+                            WebClient client4 = new WebClient();
+                            var content2 = client4.DownloadString(Constant.AlertUrl);
+                            var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                            await DisplayAlert(obj.result[7].title, obj.result[7].message, obj.result[7].responses);
+                        }
+                        catch
+                        {
+                            await DisplayAlert("We couldn't find your address", "Please check for errors.", "OK");
+                        }
                         return;
                     }
                     else
@@ -2595,7 +3192,20 @@ namespace MTYD.ViewModel
                     {
                         await Navigation.PopAsync(false);
                         // Fail
-                        await DisplayAlert("Ooops", "Payment was not succesfull. Please try again", "OK");
+                        try
+                        {
+                            WebClient client4 = new WebClient();
+                            var content4 = client4.DownloadString(Constant.AlertUrl);
+                            var obj = JsonConvert.DeserializeObject<AlertsObj>(content4);
+
+                            await DisplayAlert(obj.result[35].title, obj.result[35].message, obj.result[35].responses);
+                        }
+                        catch
+                        {
+                            await DisplayAlert("Ooops", "Payment was not successfull. Please try again", "OK");
+                        }
+
+                        
                     }
 
 
@@ -3052,7 +3662,20 @@ namespace MTYD.ViewModel
             }
             else
             {
-                await DisplayAlert("Ooops", "The amount to pay is zero. It must be greater than zero to process a payment", "OK");
+                try
+                {
+                    WebClient client4 = new WebClient();
+                    var content3 = client4.DownloadString(Constant.AlertUrl);
+                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                    await DisplayAlert(obj.result[31].title, obj.result[31].message, obj.result[31].responses);
+                }
+                catch
+                {
+                    await DisplayAlert("Ooops", "The amount to pay is zero. It must be greater than zero to process a payment", "OK");
+                }
+
+                
             }
         }
 
@@ -3581,10 +4204,30 @@ namespace MTYD.ViewModel
                                 //JObject info_obj3 = JObject.Parse(userString3);
                                 if (obj.Result.Length == 0)
                                 {
-                                    CheckAddressHeading.Text = "Still Growing…"; //49
-                                    CheckAddressBody.Text = "Sorry, it looks like we don’t deliver to your neighborhood yet. Enter your email address and we will let you know as soon as we come to your neighborhood.";
+
+                                    try
+                                    {
+                                        WebClient client4 = new WebClient();
+                                        var content3 = client4.DownloadString(Constant.AlertUrl);
+                                        var obj2 = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                                        //await DisplayAlert(obj.result[48].title, obj.result[48].message, obj.result[48].responses);
+                                        CheckAddressHeading.Text = obj2.result[48].title;
+                                        CheckAddressBody.Text = obj2.result[48].message;
+                                        OkayButton.Text = obj2.result[48].responses;
+                                    }
+                                    catch
+                                    {
+                                        CheckAddressHeading.Text = "Still Growing…";
+                                        CheckAddressBody.Text = "Sorry, it looks like we don’t deliver to your neighborhood yet. Enter your email address and we will let you know as soon as we come to your neighborhood.";
+                                        //EmailFrame.IsVisible = true;
+                                        OkayButton.Text = "Okay";
+                                    }
+
+                                    //CheckAddressHeading.Text = "Still Growing…"; //49
+                                    //CheckAddressBody.Text = "Sorry, it looks like we don’t deliver to your neighborhood yet. Enter your email address and we will let you know as soon as we come to your neighborhood.";
                                     EmailFrame.IsVisible = true;
-                                    OkayButton.Text = "Okay";
+                                    //OkayButton.Text = "Okay";
                                     loginButton2.IsVisible = false;
                                     fade.IsVisible = true;
                                     CheckAddressGrid.IsVisible = true;
@@ -3592,16 +4235,49 @@ namespace MTYD.ViewModel
                             }
                             else if (GetXMLElement(element, "DPVConfirmation").Equals("D"))
                             {
-                                await DisplayAlert("Missing Info", "Please enter your unit/apartment number into the appropriate field.", "OK");
+                                try
+                                {
+                                    WebClient client4 = new WebClient();
+                                    var content2 = client4.DownloadString(Constant.AlertUrl);
+                                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                                    await DisplayAlert(obj.result[5].title, obj.result[5].message, obj.result[5].responses);
+                                }
+                                catch
+                                {
+                                    await DisplayAlert("Missing Info", "Please enter your unit/apartment number into the appropriate field.", "OK");
+                                }
                             }
                             else
                             {
-                                await DisplayAlert("Invalid Address", "The address you entered couldn't be confirmed. Please enter another one.", "OK");
+                                try
+                                {
+                                    WebClient client4 = new WebClient();
+                                    var content2 = client4.DownloadString(Constant.AlertUrl);
+                                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                                    await DisplayAlert(obj.result[6].title, obj.result[6].message, obj.result[6].responses);
+                                }
+                                catch
+                                {
+                                    await DisplayAlert("Invalid Address", "The address you entered couldn't be confirmed. Please enter another one.", "OK");
+                                }
                             }
                         }
                         else
                         {
-                            await DisplayAlert("Invalid Address", "The address you entered couldn't be confirmed. Please enter another one.", "OK");
+                            try
+                            {
+                                WebClient client4 = new WebClient();
+                                var content2 = client4.DownloadString(Constant.AlertUrl);
+                                var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                                await DisplayAlert(obj.result[6].title, obj.result[6].message, obj.result[6].responses);
+                            }
+                            catch
+                            {
+                                await DisplayAlert("Invalid Address", "The address you entered couldn't be confirmed. Please enter another one.", "OK");
+                            }
                         }
                     }
                     //end address updating
@@ -3648,7 +4324,20 @@ namespace MTYD.ViewModel
         async void clickedSelect(System.Object sender, System.EventArgs e)
         {
             if (Preferences.Get("canChooseSelect", false) == false)
-                DisplayAlert("Error", "please purchase a meal plan first", "OK");
+            {
+                try
+                {
+                    WebClient client4 = new WebClient();
+                    var content2 = client4.DownloadString(Constant.AlertUrl);
+                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                    await DisplayAlert(obj.result[25].title, obj.result[25].message, obj.result[25].responses);
+                }
+                catch
+                {
+                    await DisplayAlert("Error", "please purchase a meal plan first", "OK");
+                }
+            }
             else
             {
                 Zones[] zones = new Zones[] { };

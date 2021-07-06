@@ -230,7 +230,19 @@ namespace MTYD
             }
             else
             {
-                await DisplayAlert("Alert!", "Please enter a 10 valid phone number", "OK");
+                try
+                {
+                    WebClient client4 = new WebClient();
+                    var content2 = client4.DownloadString(Constant.AlertUrl);
+                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                    await DisplayAlert(obj.result[0].title, obj.result[0].message, obj.result[0].responses);
+                }
+                catch
+                {
+                    await DisplayAlert("Alert!", "Please enter a 10 valid phone number", "OK");
+                }
+
             }
 
             if (AddressEntry.Text != null)
@@ -239,7 +251,18 @@ namespace MTYD
             }
             else
             {
-                await DisplayAlert("Alert!", "Please enter your address", "OK");
+                try
+                {
+                    WebClient client4 = new WebClient();
+                    var content2 = client4.DownloadString(Constant.AlertUrl);
+                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                    await DisplayAlert(obj.result[0].title, obj.result[0].message, obj.result[0].responses);
+                }
+                catch
+                {
+                    await DisplayAlert("Error", "Please enter your address", "OK");
+                }
             }
 
             if (AptEntry.Text != null)
@@ -263,7 +286,18 @@ namespace MTYD
             }
             else
             {
-                await DisplayAlert("Alert!", "Please enter your city", "OK");
+                try
+                {
+                    WebClient client4 = new WebClient();
+                    var content2 = client4.DownloadString(Constant.AlertUrl);
+                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                    await DisplayAlert(obj.result[0].title, obj.result[0].message, obj.result[0].responses);
+                }
+                catch
+                {
+                    await DisplayAlert("Error", "Please enter your city", "OK");
+                }
             }
 
             if (StateEntry.Text != null)
@@ -272,7 +306,18 @@ namespace MTYD
             }
             else
             {
-                await DisplayAlert("Alert!", "Please enter your state", "OK");
+                try
+                {
+                    WebClient client4 = new WebClient();
+                    var content2 = client4.DownloadString(Constant.AlertUrl);
+                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                    await DisplayAlert(obj.result[0].title, obj.result[0].message, obj.result[0].responses);
+                }
+                catch
+                {
+                    await DisplayAlert("Error", "Please enter your state", "OK");
+                }
             }
 
             if (ZipEntry.Text != null && ZipEntry.Text.Length == 5)
@@ -281,7 +326,18 @@ namespace MTYD
             }
             else
             {
-                await DisplayAlert("Alert!", "Please enter a 5 digit zipcode", "OK");
+                try
+                {
+                    WebClient client4 = new WebClient();
+                    var content2 = client4.DownloadString(Constant.AlertUrl);
+                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                    await DisplayAlert(obj.result[0].title, obj.result[0].message, obj.result[0].responses);
+                }
+                catch
+                {
+                    await DisplayAlert("Error", "Please enter your zipcode", "OK");
+                }
             }
 
             if (AptEntry.Text == null)
@@ -354,18 +410,51 @@ namespace MTYD
                     }
                     else if (GetXMLElement(element, "DPVConfirmation").Equals("D"))
                     {
-                        await DisplayAlert("Missing Info", "Please enter your unit/apartment number into the appropriate field.", "OK");
+                        try
+                        {
+                            WebClient client4 = new WebClient();
+                            var content2 = client4.DownloadString(Constant.AlertUrl);
+                            var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                            await DisplayAlert(obj.result[5].title, obj.result[5].message, obj.result[5].responses);
+                        }
+                        catch
+                        {
+                            await DisplayAlert("Missing Info", "Please enter your unit/apartment number into the appropriate field.", "OK");
+                        }
                         return;
                     }
                     else
                     {
-                        await DisplayAlert("Invalid Address", "The address you entered couldn't be confirmed. Please enter another one.", "OK");
+                        try
+                        {
+                            WebClient client4 = new WebClient();
+                            var content2 = client4.DownloadString(Constant.AlertUrl);
+                            var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                            await DisplayAlert(obj.result[6].title, obj.result[6].message, obj.result[6].responses);
+                        }
+                        catch
+                        {
+                            await DisplayAlert("Invalid Address", "The address you entered couldn't be confirmed. Please enter another one.", "OK");
+                        }
                         return;
                     }
                 }
                 else
                 {
-                    await DisplayAlert("Invalid Address", "The address you entered couldn't be confirmed. Please enter another one.", "OK");
+                    try
+                    {
+                        WebClient client4 = new WebClient();
+                        var content2 = client4.DownloadString(Constant.AlertUrl);
+                        var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                        await DisplayAlert(obj.result[6].title, obj.result[6].message, obj.result[6].responses);
+                    }
+                    catch
+                    {
+                        await DisplayAlert("Invalid Address", "The address you entered couldn't be confirmed. Please enter another one.", "OK");
+                    }
                     return;
                     // USPS sents an error saying address not found in there records. In other words, this address is not valid because it does not exits.
                     //Console.WriteLine("Seems like your address is invalid.");
@@ -377,12 +466,38 @@ namespace MTYD
             if (!isAddressValidated)
             {
                 //8
-                await DisplayAlert("Message", "We were not able to validate your address. Please try again.", "OK");
+                try
+                {
+                    WebClient client4 = new WebClient();
+                    var content2 = client4.DownloadString(Constant.AlertUrl);
+                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                    await DisplayAlert(obj.result[7].title, obj.result[7].message, obj.result[7].responses);
+                }
+                catch
+                {
+                    await DisplayAlert("Message", "We were not able to validate your address. Please try again.", "OK");
+                }
+
+                
             }
             else
             {
                 //9
-                await DisplayAlert("Message", "We validated your address please tap on the Sign up button to create your account!", "OK");
+                try
+                {
+                    WebClient client4 = new WebClient();
+                    var content2 = client4.DownloadString(Constant.AlertUrl);
+                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                    await DisplayAlert(obj.result[8].title, obj.result[8].message, obj.result[8].responses);
+                }
+                catch
+                {
+                    await DisplayAlert("Message", "We validated your address please tap on the Sign up button to create your account!", "OK");
+                }
+
+                
             }
         }
 
@@ -394,7 +509,18 @@ namespace MTYD
             }
             else
             {
-                await DisplayAlert("Error", "Please enter your address", "OK");
+                try
+                {
+                    WebClient client4 = new WebClient();
+                    var content2 = client4.DownloadString(Constant.AlertUrl);
+                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                    await DisplayAlert(obj.result[0].title, obj.result[0].message, obj.result[0].responses);
+                }
+                catch
+                {
+                    await DisplayAlert("Error", "Please enter your address", "OK");
+                }
                 return;
             }
 
@@ -409,7 +535,18 @@ namespace MTYD
             }
             else
             {
-                await DisplayAlert("Error", "Please enter your city", "OK");
+                try
+                {
+                    WebClient client4 = new WebClient();
+                    var content2 = client4.DownloadString(Constant.AlertUrl);
+                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                    await DisplayAlert(obj.result[0].title, obj.result[0].message, obj.result[0].responses);
+                }
+                catch
+                {
+                    await DisplayAlert("Error", "Please enter your city", "OK");
+                }
                 return;
             }
 
@@ -419,7 +556,18 @@ namespace MTYD
             }
             else
             {
-                await DisplayAlert("Error", "Please enter your state", "OK");
+                try
+                {
+                    WebClient client4 = new WebClient();
+                    var content2 = client4.DownloadString(Constant.AlertUrl);
+                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                    await DisplayAlert(obj.result[0].title, obj.result[0].message, obj.result[0].responses);
+                }
+                catch
+                {
+                    await DisplayAlert("Error", "Please enter your state", "OK");
+                }
                 return;
             }
 
@@ -429,7 +577,18 @@ namespace MTYD
             }
             else
             {
-                await DisplayAlert("Error", "Please enter your zipcode", "OK");
+                try
+                {
+                    WebClient client4 = new WebClient();
+                    var content2 = client4.DownloadString(Constant.AlertUrl);
+                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                    await DisplayAlert(obj.result[0].title, obj.result[0].message, obj.result[0].responses);
+                }
+                catch
+                {
+                    await DisplayAlert("Error", "Please enter your zipcode", "OK");
+                }
                 return;
             }
 
@@ -439,7 +598,18 @@ namespace MTYD
             }
             else
             {
-                await DisplayAlert("Error", "Please enter your phone number", "OK");
+                try
+                {
+                    WebClient client4 = new WebClient();
+                    var content2 = client4.DownloadString(Constant.AlertUrl);
+                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                    await DisplayAlert(obj.result[0].title, obj.result[0].message, obj.result[0].responses);
+                }
+                catch
+                {
+                    await DisplayAlert("Error", "Please enter your phone number", "OK");
+                }
                 return;
             }
 
@@ -506,18 +676,51 @@ namespace MTYD
                     else if (GetXMLElement(element, "DPVConfirmation").Equals("D"))
                     {
                         //6
-                        await DisplayAlert("Missing Info", "Please enter your unit/apartment number into the appropriate field.", "OK");
+                        try
+                        {
+                            WebClient client4 = new WebClient();
+                            var content2 = client4.DownloadString(Constant.AlertUrl);
+                            var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                            await DisplayAlert(obj.result[5].title, obj.result[5].message, obj.result[5].responses);
+                        }
+                        catch
+                        {
+                            await DisplayAlert("Missing Info", "Please enter your unit/apartment number into the appropriate field.", "OK");
+                        }
                         return;
                     }
                     else
                     {
-                        await DisplayAlert("Invalid Address", "The address you entered couldn't be confirmed. Please enter another one.", "OK");
+                        try
+                        {
+                            WebClient client4 = new WebClient();
+                            var content2 = client4.DownloadString(Constant.AlertUrl);
+                            var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                            await DisplayAlert(obj.result[6].title, obj.result[6].message, obj.result[6].responses);
+                        }
+                        catch
+                        {
+                            await DisplayAlert("Invalid Address", "The address you entered couldn't be confirmed. Please enter another one.", "OK");
+                        }
                         return;
                     }
                 }
                 else
                 {
-                    await DisplayAlert("Invalid Address", "The address you entered couldn't be confirmed. Please enter another one.", "OK");
+                    try
+                    {
+                        WebClient client4 = new WebClient();
+                        var content2 = client4.DownloadString(Constant.AlertUrl);
+                        var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                        await DisplayAlert(obj.result[6].title, obj.result[6].message, obj.result[6].responses);
+                    }
+                    catch
+                    {
+                        await DisplayAlert("Invalid Address", "The address you entered couldn't be confirmed. Please enter another one.", "OK");
+                    }
                     return;
                     // USPS sents an error saying address not found in there records. In other words, this address is not valid because it does not exits.
                     //Console.WriteLine("Seems like your address is invalid.");
@@ -527,25 +730,72 @@ namespace MTYD
             }
             if (latitude == "0" || longitude == "0")
             {
-                await DisplayAlert("We couldn't find your address", "Please check for errors.", "Ok");
+                try
+                {
+                    WebClient client4 = new WebClient();
+                    var content2 = client4.DownloadString(Constant.AlertUrl);
+                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                    await DisplayAlert(obj.result[7].title, obj.result[7].message, obj.result[7].responses);
+                }
+                catch
+                {
+                    await DisplayAlert("We couldn't find your address", "Please check for errors.", "OK");
+                }
             }
             else if (withinZones == false)
             {
+                try
+                {
+                    WebClient client4 = new WebClient();
+                    var content2 = client4.DownloadString(Constant.AlertUrl);
+                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                    //await DisplayAlert(obj.result[7].title, obj.result[7].message, obj.result[7].responses);
+                    CheckAddressHeading.Text = obj.result[41].title;
+                    CheckAddressBody.Text = obj.result[41].message;
+                    OkayButton.Text = obj.result[41].responses;
+                }
+                catch
+                {
+                    CheckAddressHeading.Text = "Oops!"; //42
+                    CheckAddressBody.Text = "Sorry, it looks like we don’t deliver to your Zip Code yet. Please feel free to leave us your email address and we will let you know as soon as we come to your neighborhood.";
+                    OkayButton.Text = "Okay";
+                }
+
                 fade.IsVisible = true;
                 CheckAddressGrid.IsVisible = true;
-                CheckAddressHeading.Text = "Oops!"; //42
-                CheckAddressBody.Text = "Sorry, it looks like we don’t deliver to your Zip Code yet. Please feel free to leave us your email address and we will let you know as soon as we come to your neighborhood.";
+                //CheckAddressHeading.Text = "Oops!"; //42
+                //CheckAddressBody.Text = "Sorry, it looks like we don’t deliver to your Zip Code yet. Please feel free to leave us your email address and we will let you know as soon as we come to your neighborhood.";
                 EmailFrame.IsVisible = true;
-                OkayButton.Text = "Okay";
+                //OkayButton.Text = "Okay";
             }
             else
             {
+                try
+                {
+                    WebClient client4 = new WebClient();
+                    var content2 = client4.DownloadString(Constant.AlertUrl);
+                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                    //await DisplayAlert(obj.result[7].title, obj.result[7].message, obj.result[7].responses);
+                    CheckAddressHeading.Text = obj.result[42].title;
+                    CheckAddressBody.Text = obj.result[42].message;
+                    OkayButton.Text = obj.result[42].responses;
+                }
+                catch
+                {
+                    CheckAddressHeading.Text = "Hooray!"; //42
+                    CheckAddressBody.Text = "We are so glad that we deliver to your neighborhood. Please click Continue to complete the Sign Up process.";
+                    OkayButton.Text = "Continue";
+                }
+
                 fade.IsVisible = true;
                 CheckAddressGrid.IsVisible = true;
-                CheckAddressHeading.Text = "Hooray!"; //43
-                CheckAddressBody.Text = "We are so glad that we deliver to your neighborhood. Please click Continue to complete the Sign Up process.";
+                //CheckAddressHeading.Text = "Hooray!"; //43
+                //CheckAddressBody.Text = "We are so glad that we deliver to your neighborhood. Please click Continue to complete the Sign Up process.";
                 EmailFrame.IsVisible = false;
-                OkayButton.Text = "Continue";
+                //OkayButton.Text = "Continue";
 
                 isAddessValidated = true;
 

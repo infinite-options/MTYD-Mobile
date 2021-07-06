@@ -117,7 +117,24 @@ namespace MTYD.ViewModel
             {
                 //17
                 string platform = (string)Application.Current.Properties["platform"];
-                await DisplayAlert("Alert!", "Our records show that you have an account associated with " + platform + ". Please log in with " + platform, "OK");
+
+                try
+                {
+                    WebClient client3 = new WebClient();
+                    var content2 = client3.DownloadString(Constant.AlertUrl);
+                    var obj2 = JsonConvert.DeserializeObject<AlertsObj>(content2);
+                    string msg = obj2.result[16].message;
+                    msg = msg.Substring(0, msg.IndexOf("#")) + platform + msg.Substring(msg.IndexOf("#") + 1);
+                    msg = msg.Substring(0, msg.IndexOf("#")) + platform + msg.Substring(msg.IndexOf("#") + 1);
+
+                    await DisplayAlert(obj2.result[16].title, msg, obj2.result[16].responses);
+                }
+                catch
+                {
+                    await DisplayAlert("Alert!", "Our records show that you have an account associated with " + platform + ". Please log in with " + platform, "OK");
+                }
+
+                
             }
 
         }
@@ -125,7 +142,20 @@ namespace MTYD.ViewModel
         private async void AppleError(object sender, EventArgs e)
         {
             //18
-            await DisplayAlert("Error", "We weren't able to set an account for you", "OK");
+            try
+            {
+                WebClient client4 = new WebClient();
+                var content3 = client4.DownloadString(Constant.AlertUrl);
+                var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                await DisplayAlert(obj.result[17].title, obj.result[17].message, obj.result[17].responses);
+            }
+            catch
+            {
+                await DisplayAlert("Error", "We weren't able to set an account for you", "OK");
+            }
+
+            
         }
 
         private void checkPlatform(double height, double width)
@@ -421,7 +451,21 @@ namespace MTYD.ViewModel
                 loginButton.IsEnabled = false;
                 if (String.IsNullOrEmpty(loginUsername.Text) || String.IsNullOrEmpty(loginPassword.Text))
                 { // check if all fields are filled out
-                    await DisplayAlert("Error", "Please fill in all fields", "OK");
+
+                    try
+                    {
+                        WebClient client4 = new WebClient();
+                        var content3 = client4.DownloadString(Constant.AlertUrl);
+                        var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                        await DisplayAlert(obj.result[0].title, obj.result[0].message, obj.result[0].responses);
+                    }
+                    catch
+                    {
+                        await DisplayAlert("Error", "Please fill in all fields", "OK");
+                    }
+
+                    
                     loginButton.IsEnabled = true;
                 }
                 else
@@ -435,7 +479,22 @@ namespace MTYD.ViewModel
                         if (directEmailVerified == 0)
                         {
                             //19
-                            DisplayAlert("Please Verify Email", "Please click the link in the email sent to " + loginUsername.Text + ". Check inbox and spam folders.", "OK");
+                            try
+                            {
+                                WebClient client4 = new WebClient();
+                                var content3 = client4.DownloadString(Constant.AlertUrl);
+                                var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+                                string msg = obj.result[18].message;
+                                msg = msg.Replace("#", loginUsername.Text);
+                                Debug.WriteLine("msg: " + msg);
+                                await DisplayAlert(obj.result[18].title, msg, obj.result[18].responses);
+                            }
+                            catch
+                            {
+                                await DisplayAlert("Please Verify Email", "Please click the link in the email sent to " + loginUsername.Text + ". Check inbox and spam folders.", "OK");
+                            }
+
+                            
 
                             //send email to verify email
                             emailVerifyPost emailVer = new emailVerifyPost();
@@ -529,8 +588,20 @@ namespace MTYD.ViewModel
                                         }
                                         else
                                         {
+                                            try
+                                            {
+                                                WebClient client4 = new WebClient();
+                                                var content3 = client4.DownloadString(Constant.AlertUrl);
+                                                var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
 
-                                            await DisplayAlert("Ooops!", "Something went wrong. We are not able to send you notification at this moment", "OK");
+                                                await DisplayAlert(obj.result[19].title, obj.result[19].message, obj.result[19].responses);
+                                            }
+                                            catch
+                                            {
+                                                await DisplayAlert("Ooops!", "Something went wrong. We are not able to send you notification at this moment", "OK");
+                                            }
+
+                                            
                                         }
                                     }
                                 }
@@ -656,7 +727,20 @@ namespace MTYD.ViewModel
                         else
                         {
                             //21
-                            await DisplayAlert("Error", "Wrong password was entered", "OK");
+                            try
+                            {
+                                WebClient client4 = new WebClient();
+                                var content3 = client4.DownloadString(Constant.AlertUrl);
+                                var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                                await DisplayAlert(obj.result[20].title, obj.result[20].message, obj.result[20].responses);
+                            }
+                            catch
+                            {
+                                await DisplayAlert("Error", "Wrong password was entered", "OK");
+                            }
+
+                            
                             loginButton.IsEnabled = true;
                         }
                     }
@@ -708,7 +792,20 @@ namespace MTYD.ViewModel
                     else if (DRSMessage.Contains(Constant.EmailNotFound))
                     {
                         //15
-                        await DisplayAlert("Oops!", "Our records show that you don't have an accout. Please sign up!", "OK");
+                        try
+                        {
+                            WebClient client4 = new WebClient();
+                            var content3 = client4.DownloadString(Constant.AlertUrl);
+                            var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                            await DisplayAlert(obj.result[14].title, obj.result[14].message, obj.result[14].responses);
+                        }
+                        catch
+                        {
+                            await DisplayAlert("Oops!", "Our records show that you don't have an account. Please sign up!", "OK");
+                        }
+
+                        
                     }
                     else
                     {
@@ -904,7 +1001,25 @@ namespace MTYD.ViewModel
                             Application.Current.MainPage = new MainPage();
 
                             //22
-                            var signUp = await Application.Current.MainPage.DisplayAlert("Message", "It looks like you don't have a MTYD account. Please sign up!", "OK", "Cancel");
+                            bool signUp;
+                            //15, [21]
+                            try
+                            {
+                                WebClient client4 = new WebClient();
+                                var content2 = client4.DownloadString(Constant.AlertUrl);
+                                var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+                                string beginning = obj.result[21].responses;
+                                beginning = beginning.Substring(0, beginning.IndexOf(","));
+                                string ending = obj.result[21].responses;
+                                ending = ending.Substring(ending.IndexOf("," + 2));
+
+                                signUp = await Application.Current.MainPage.DisplayAlert(obj.result[21].title, obj.result[21].message, beginning, ending);
+                            }
+                            catch
+                            {
+                                signUp = await Application.Current.MainPage.DisplayAlert("Message", "It looks like you don't have a MTYD account. Please sign up!", "OK", "Cancel");
+                            }
+
                             if (signUp)
                             {
                                 // HERE YOU NEED TO SUBSTITUTE MY SOCIAL SIGN UP PAGE WITH MTYD SOCIAL SIGN UP
@@ -1012,7 +1127,18 @@ namespace MTYD.ViewModel
                                             else
                                             {
                                                 //20
-                                                await DisplayAlert("Ooops!", "Something went wrong. We are not able to send you notification at this moment", "OK");
+                                                try
+                                                {
+                                                    WebClient client4 = new WebClient();
+                                                    var content3 = client4.DownloadString(Constant.AlertUrl);
+                                                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                                                    await DisplayAlert(obj.result[19].title, obj.result[19].message, obj.result[19].responses);
+                                                }
+                                                catch
+                                                {
+                                                    await DisplayAlert("Ooops!", "Something went wrong. We are not able to send you notification at this moment", "OK");
+                                                }
                                             }
                                         }
                                     }
@@ -1129,7 +1255,18 @@ namespace MTYD.ViewModel
                                 //testing with loading page
                                 Application.Current.MainPage = new MainPage();
                                 //14
-                                await Application.Current.MainPage.DisplayAlert("Oops", "We are facing some problems with our internal system. We weren't able to update your credentials", "OK");
+                                try
+                                {
+                                    WebClient client4 = new WebClient();
+                                    var content2 = client4.DownloadString(Constant.AlertUrl);
+                                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                                    await Application.Current.MainPage.DisplayAlert(obj.result[13].title, obj.result[13].message, obj.result[13].responses);
+                                }
+                                catch
+                                {
+                                    await Application.Current.MainPage.DisplayAlert("Ooops", "Our system is not working. We can't process your request at this moment", "OK");
+                                }
                             }
                         }
 
@@ -1150,7 +1287,18 @@ namespace MTYD.ViewModel
                             //testing with loading page
                             Application.Current.MainPage = new MainPage();
                             //16
-                            await Application.Current.MainPage.DisplayAlert("Oops!", "You have an existing MTYD account. Please use direct login", "OK");
+                            try
+                            {
+                                WebClient client4 = new WebClient();
+                                var content2 = client4.DownloadString(Constant.AlertUrl);
+                                var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                                await Application.Current.MainPage.DisplayAlert(obj.result[15].title, obj.result[15].message, obj.result[15].responses);
+                            }
+                            catch
+                            {
+                                await Application.Current.MainPage.DisplayAlert("Oops!", "You have an existing MTYD account. Please use direct login", "OK");
+                            }
                         }
                     }
                 }
@@ -1249,7 +1397,20 @@ namespace MTYD.ViewModel
                 }
                 else
                 {
-                    await DisplayAlert("Error", "Google was not able to autheticate your account", "OK");
+                    try
+                    {
+                        WebClient client4 = new WebClient();
+                        var content3 = client4.DownloadString(Constant.AlertUrl);
+                        var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                        await DisplayAlert(obj.result[22].title, obj.result[22].message, obj.result[22].responses);
+                    }
+                    catch
+                    {
+                        await DisplayAlert("Error", "Google was not able to autheticate your account", "OK");
+                    }
+
+                    
                 }
             }
             catch (Exception ex)
@@ -1308,7 +1469,25 @@ namespace MTYD.ViewModel
                             //testing with loading page
                             Application.Current.MainPage = new MainPage();
                             //22
-                            var signUp = await Application.Current.MainPage.DisplayAlert("Message", "It looks like you don't have a MTYD account. Please sign up!", "OK", "Cancel");
+                            bool signUp;
+                            //15, [21]
+                            try
+                            {
+                                WebClient client4 = new WebClient();
+                                var content2 = client4.DownloadString(Constant.AlertUrl);
+                                var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+                                string beginning = obj.result[21].responses;
+                                beginning = beginning.Substring(0, beginning.IndexOf(","));
+                                string ending = obj.result[21].responses;
+                                ending = ending.Substring(ending.IndexOf("," + 2));
+
+                                signUp = await Application.Current.MainPage.DisplayAlert(obj.result[21].title, obj.result[21].message, beginning, ending);
+                            }
+                            catch
+                            {
+                                signUp = await Application.Current.MainPage.DisplayAlert("Message", "It looks like you don't have a MTYD account. Please sign up!", "OK", "Cancel");
+                            }
+
                             if (signUp)
                             {
                                 // HERE YOU NEED TO SUBSTITUTE MY SOCIAL SIGN UP PAGE WITH MTYD SOCIAL SIGN UP
@@ -1414,7 +1593,18 @@ namespace MTYD.ViewModel
                                             else
                                             {
                                                 //20
-                                                await DisplayAlert("Ooops!", "Something went wrong. We are not able to send you notification at this moment", "OK");
+                                                try
+                                                {
+                                                    WebClient client4 = new WebClient();
+                                                    var content3 = client4.DownloadString(Constant.AlertUrl);
+                                                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                                                    await DisplayAlert(obj.result[19].title, obj.result[19].message, obj.result[19].responses);
+                                                }
+                                                catch
+                                                {
+                                                    await DisplayAlert("Ooops!", "Something went wrong. We are not able to send you notification at this moment", "OK");
+                                                }
                                             }
                                         }
                                     }
@@ -1602,7 +1792,18 @@ namespace MTYD.ViewModel
                                 //testing with loading page
                                 Application.Current.MainPage = new MainPage();
                                 //14
-                                await Application.Current.MainPage.DisplayAlert("Oops", "We are facing some problems with our internal system. We weren't able to update your credentials", "OK");
+                                try
+                                {
+                                    WebClient client4 = new WebClient();
+                                    var content2 = client4.DownloadString(Constant.AlertUrl);
+                                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                                    await Application.Current.MainPage.DisplayAlert(obj.result[13].title, obj.result[13].message, obj.result[13].responses);
+                                }
+                                catch
+                                {
+                                    await Application.Current.MainPage.DisplayAlert("Ooops", "Our system is not working. We can't process your request at this moment", "OK");
+                                }
                             }
                         }
                         //else if (responseContent.Contains(Constant.ErrorPlatform))
@@ -1626,7 +1827,18 @@ namespace MTYD.ViewModel
                             Application.Current.MainPage = new MainPage();
                             //Navigation.RemovePage(this.Navigation.NavigationStack[0]);
                             //16
-                            await Application.Current.MainPage.DisplayAlert("Oops!", "You have an existing MTYD account. Please use direct login", "OK");
+                            try
+                            {
+                                WebClient client4 = new WebClient();
+                                var content2 = client4.DownloadString(Constant.AlertUrl);
+                                var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                                await Application.Current.MainPage.DisplayAlert(obj.result[15].title, obj.result[15].message, obj.result[15].responses);
+                            }
+                            catch
+                            {
+                                await Application.Current.MainPage.DisplayAlert("Oops!", "You have an existing MTYD account. Please use direct login", "OK");
+                            }
                         }
                     }
                 }

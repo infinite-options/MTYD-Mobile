@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 using Xamarin.Essentials;
 using System.ComponentModel;
 using System.Diagnostics;
+using MTYD.Constants;
 //using Xamarin.CommunityToolkit;
 
 namespace MTYD.ViewModel
@@ -831,7 +832,21 @@ namespace MTYD.ViewModel
             MealInfo ms = b.BindingContext as MealInfo;
             //ms.MealQuantity++;
             popUpHeader.HeightRequest = 70; //44
-            popUpHeader.Text = "Don’t forget your favorite meals! Click the heart to easily find your favorite meals and get reminders.";
+
+            try
+            {
+                WebClient client4 = new WebClient();
+                var content3 = client4.DownloadString(Constant.AlertUrl);
+                var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                popUpHeader.Text = obj.result[43].message;
+            }
+            catch
+            {
+                popUpHeader.Text = "Don’t forget your favorite meals! Click the heart to easily find your favorite meals and get reminders.";
+            }
+
+            
 
             fade.IsVisible = true;
             popUpFrame.IsVisible = true;
@@ -984,7 +999,21 @@ namespace MTYD.ViewModel
         private async void clickIncrease(object sender, EventArgs e)
         {
             popUpHeader.HeightRequest = 100; //45
-            popUpHeader.Text = "Looks like you're enjoying MealsFor.Me! The + and - buttons help you add / remove meals from your meal plan.";
+
+            try
+            {
+                WebClient client4 = new WebClient();
+                var content3 = client4.DownloadString(Constant.AlertUrl);
+                var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                popUpHeader.Text = obj.result[44].message;
+            }
+            catch
+            {
+                popUpHeader.Text = "Looks like you're enjoying MealsFor.Me! The + and - buttons help you add / remove meals from your meal plan.";
+            }
+
+            
 
             fade.IsVisible = true;
             popUpFrame.IsVisible = true;
@@ -994,7 +1023,21 @@ namespace MTYD.ViewModel
         private async void clickIncreaseAddOn(object sender, EventArgs e)
         {
             popUpHeader.HeightRequest = 100; //45
-            popUpHeader.Text = "Looks like you're enjoying MealsFor.Me! The + and - buttons help you add / remove meals from your meal plan.";
+
+            try
+            {
+                WebClient client4 = new WebClient();
+                var content3 = client4.DownloadString(Constant.AlertUrl);
+                var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                popUpHeader.Text = obj.result[44].message;
+            }
+            catch
+            {
+                popUpHeader.Text = "Looks like you're enjoying MealsFor.Me! The + and - buttons help you add / remove meals from your meal plan.";
+            }
+
+            //popUpHeader.Text = "Looks like you're enjoying MealsFor.Me! The + and - buttons help you add / remove meals from your meal plan.";
 
             fade.IsVisible = true;
             popUpFrame.IsVisible = true;
@@ -1019,7 +1062,21 @@ namespace MTYD.ViewModel
         private async void clickDecrease(object sender, EventArgs e)
         {
             popUpHeader.HeightRequest = 100; //45
-            popUpHeader.Text = "Looks like you're enjoying MealsFor.Me! The + and - buttons help you add / remove meals from your meal plan.";
+
+            try
+            {
+                WebClient client4 = new WebClient();
+                var content3 = client4.DownloadString(Constant.AlertUrl);
+                var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                popUpHeader.Text = obj.result[44].message;
+            }
+            catch
+            {
+                popUpHeader.Text = "Looks like you're enjoying MealsFor.Me! The + and - buttons help you add / remove meals from your meal plan.";
+            }
+
+            //popUpHeader.Text = "Looks like you're enjoying MealsFor.Me! The + and - buttons help you add / remove meals from your meal plan.";
 
             fade.IsVisible = true;
             popUpFrame.IsVisible = true;
@@ -1129,7 +1186,21 @@ namespace MTYD.ViewModel
         private async void clickDecreaseAddOn(object sender, EventArgs e)
         {
             popUpHeader.HeightRequest = 100; //45
-            popUpHeader.Text = "Looks like you're enjoying MealsFor.Me! The + and - buttons help you add / remove meals from your meal plan.";
+
+            try
+            {
+                WebClient client4 = new WebClient();
+                var content3 = client4.DownloadString(Constant.AlertUrl);
+                var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                popUpHeader.Text = obj.result[44].message;
+            }
+            catch
+            {
+                popUpHeader.Text = "Looks like you're enjoying MealsFor.Me! The + and - buttons help you add / remove meals from your meal plan.";
+            }
+
+            //popUpHeader.Text = "Looks like you're enjoying MealsFor.Me! The + and - buttons help you add / remove meals from your meal plan.";
 
             fade.IsVisible = true;
             popUpFrame.IsVisible = true;
@@ -1161,7 +1232,21 @@ namespace MTYD.ViewModel
         private async void saveUserMeals(object sender, EventArgs e)
         {
             popUpHeader.HeightRequest = 80; //46
-            popUpHeader.Text = "Save allows you to select your meals up to 3 weeks in advance.";
+
+            try
+            {
+                WebClient client4 = new WebClient();
+                var content3 = client4.DownloadString(Constant.AlertUrl);
+                var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                popUpHeader.Text = obj.result[45].message;
+            }
+            catch
+            {
+                popUpHeader.Text = "Save allows you to select your meals up to 3 weeks in advance.";
+            }
+
+            
 
             fade.IsVisible = true;
             popUpFrame.IsVisible = true;
@@ -1171,7 +1256,21 @@ namespace MTYD.ViewModel
         private async void skipMealSelection(object sender, EventArgs e)
         {
             popUpHeader.HeightRequest = 100; //47
-            popUpHeader.Text = "Not at home or have other plans? Its easy to Skip a delivery and we’ll automatically extend your subscription.";
+
+            try
+            {
+                WebClient client4 = new WebClient();
+                var content3 = client4.DownloadString(Constant.AlertUrl);
+                var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                popUpHeader.Text = obj.result[46].message;
+            }
+            catch
+            {
+                popUpHeader.Text = "Not at home or have other plans? Its easy to Skip a delivery and we’ll automatically extend your subscription.";
+            }
+
+            
 
             fade.IsVisible = true;
             popUpFrame.IsVisible = true;
@@ -1187,7 +1286,21 @@ namespace MTYD.ViewModel
         private async void surpriseMealSelection(object sender, EventArgs e)
         {
             popUpHeader.HeightRequest = 90; //48
-            popUpHeader.Text = "Surprise means we'll give you an assortment of meals on the specific delivery day.";
+
+            try
+            {
+                WebClient client4 = new WebClient();
+                var content3 = client4.DownloadString(Constant.AlertUrl);
+                var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                popUpHeader.Text = obj.result[47].message;
+            }
+            catch
+            {
+                popUpHeader.Text = "Surprise means we'll give you an assortment of meals on the specific delivery day.";
+            }
+
+            
 
             fade.IsVisible = true;
             popUpFrame.IsVisible = true;

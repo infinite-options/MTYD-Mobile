@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using MTYD.Constants;
 using MTYD.Model;
 using MTYD.Model.Database;
 using Newtonsoft.Json;
@@ -57,6 +58,19 @@ namespace MTYD.ViewModel
                 //GetPlans();
                 ////Preferences.Set("freqSelected", "");
                 //pfp.Source = Preferences.Get("profilePicLink", "");
+
+                try
+                {
+                    WebClient client4 = new WebClient();
+                    var content3 = client4.DownloadString(Constant.AlertUrl);
+                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                    baaHeader.Text = obj.result[58].title;
+                    baaBody.Text = obj.result[58].message;
+                }
+                catch
+                {
+                }
             }
             catch (Exception ex)
             {
@@ -706,7 +720,20 @@ namespace MTYD.ViewModel
         async void clickedSelect(System.Object sender, System.EventArgs e)
         {
             if (Preferences.Get("canChooseSelect", false) == false)
-                DisplayAlert("Error", "please purchase a meal plan first", "OK");
+            {
+                try
+                {
+                    WebClient client4 = new WebClient();
+                    var content2 = client4.DownloadString(Constant.AlertUrl);
+                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                    await DisplayAlert(obj.result[25].title, obj.result[25].message, obj.result[25].responses);
+                }
+                catch
+                {
+                    await DisplayAlert("Error", "please purchase a meal plan first", "OK");
+                }
+            }
             else
             {
                 Zones[] zones = new Zones[] { };

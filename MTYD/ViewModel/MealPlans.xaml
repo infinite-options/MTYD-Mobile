@@ -332,10 +332,10 @@
                         <StackLayout>
                             <ImageButton Source="xButton.png" Aspect="AspectFit" HorizontalOptions="End" Margin="-10" WidthRequest="30" Clicked="xButtonClicked"/>
 
-                            <Label Text="Love MealsFor.Me?" FontAttributes="Bold" FontSize="25" HorizontalOptions="Center" Margin="0, 0, 0, 5"/>
+                            <Label x:Name="baaHeader" Text="Love MealsFor.Me?" FontAttributes="Bold" FontSize="25" HorizontalOptions="Center" Margin="0, 0, 0, 5"/>
                             <Label Text="Become an Ambassador" FontAttributes="Bold" FontSize="13" HorizontalOptions="Center" Margin="0, 0, 0, 15"/>
 
-                            <Label Text="Your friend(s) saves 20% on their first order and you save 20% on your next renewal&#10;+&#10;Each time your friend renews, you get an additional 5% renewal bonus. Sign up 20 friends and eat for free!"
+                            <Label x:Name="baaBody" Text="Your friend(s) saves 20% on their first order and you save 20% on your next renewal&#10;+&#10;Each time your friend renews, you get an additional 5% renewal bonus. Sign up 20 friends and eat for free!"
                                    HorizontalOptions="Center" HorizontalTextAlignment="Center" HeightRequest="170" FontSize="16" Margin="15, 0"/>
 
                             <Frame x:Name="AmbEmailFrame" BorderColor="#F26522" CornerRadius="10" HasShadow="false" Padding="15, 5">

@@ -16,6 +16,7 @@ using Newtonsoft.Json.Linq;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Collections.Generic;
+using System.Net;
 //using ServingFresh.Views;
 
 namespace MTYD.Model.Login.LoginClasses.Apple
@@ -127,8 +128,21 @@ namespace MTYD.Model.Login.LoginClasses.Apple
                         }
                         else
                         {
+                            try
+                            {
+                                WebClient client4 = new WebClient();
+                                var content2 = client4.DownloadString(Constant.AlertUrl);
+                                var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                                await Application.Current.MainPage.DisplayAlert(obj.result[13].title, obj.result[13].message, obj.result[13].responses);
+                            }
+                            catch
+                            {
+                                await Application.Current.MainPage.DisplayAlert("Ooops", "Our system is not working. We can't process your request at this moment", "OK");
+                            }
+
                             //14
-                            await Application.Current.MainPage.DisplayAlert("Ooops", "Our system is not working. We can't process your request at this moment", "OK");
+                            
                         }
                     }
                 }
@@ -172,8 +186,27 @@ namespace MTYD.Model.Login.LoginClasses.Apple
                     var data5 = JsonConvert.DeserializeObject<SuccessfulSocialLogIn>(responseContent);
                     if (data5.code.ToString() == Constant.EmailNotFound)
                     {
-                        //15
-                        var signUp = await Application.Current.MainPage.DisplayAlert("Message", "It looks like you don't have a MTYD account. Please sign up!", "OK", "Cancel");
+                        bool signUp;
+                        //15, [21]
+                        try
+                        {
+                            WebClient client4 = new WebClient();
+                            var content2 = client4.DownloadString(Constant.AlertUrl);
+                            var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+                            string beginning = obj.result[21].responses;
+                            beginning = beginning.Substring(0, beginning.IndexOf(","));
+                            string ending = obj.result[21].responses;
+                            ending = ending.Substring(ending.IndexOf("," + 2));
+
+                            signUp = await Application.Current.MainPage.DisplayAlert(obj.result[21].title, obj.result[21].message, beginning, ending);
+                        }
+                        catch
+                        {
+                            signUp = await Application.Current.MainPage.DisplayAlert("Message", "It looks like you don't have a MTYD account. Please sign up!", "OK", "Cancel");
+                        }
+
+                        
+                        //var signUp = await Application.Current.MainPage.DisplayAlert("Message", "It looks like you don't have a MTYD account. Please sign up!", "OK", "Cancel");
                         if (signUp)
                         {
                             // HERE YOU NEED TO SUBSTITUTE MY SOCIAL SIGN UP PAGE WITH MTYD SOCIAL SIGN UP
@@ -375,7 +408,20 @@ namespace MTYD.Model.Login.LoginClasses.Apple
                         else
                         {
                             //14
-                            await Application.Current.MainPage.DisplayAlert("Oops", "We are facing some problems with our internal system. We weren't able to update your credentials", "OK");
+                            try
+                            {
+                                WebClient client4 = new WebClient();
+                                var content2 = client4.DownloadString(Constant.AlertUrl);
+                                var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                                await Application.Current.MainPage.DisplayAlert(obj.result[13].title, obj.result[13].message, obj.result[13].responses);
+                            }
+                            catch
+                            {
+                                await Application.Current.MainPage.DisplayAlert("Ooops", "Our system is not working. We can't process your request at this moment", "OK");
+                            }
+
+                            
                         }
                     }
                     else if (data5.code.ToString() == Constant.ErrorPlatform)
@@ -387,7 +433,20 @@ namespace MTYD.Model.Login.LoginClasses.Apple
                     else if (data5.code.ToString() == Constant.ErrorUserDirectLogIn)
                     {
                         //16
-                        await Application.Current.MainPage.DisplayAlert("Oops!", "You have an existing MTYD account. Please use direct login", "OK");
+                        try
+                        {
+                            WebClient client4 = new WebClient();
+                            var content2 = client4.DownloadString(Constant.AlertUrl);
+                            var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                            await Application.Current.MainPage.DisplayAlert(obj.result[15].title, obj.result[15].message, obj.result[15].responses);
+                        }
+                        catch
+                        {
+                            await Application.Current.MainPage.DisplayAlert("Oops!", "You have an existing MTYD account. Please use direct login", "OK");
+                        }
+
+                        
                     }
                 }
             }

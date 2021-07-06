@@ -136,6 +136,19 @@ namespace MTYD.ViewModel
                 checkPlatform(height, width);
                 GetPlans();
                 Preferences.Set("freqSelected", "");
+
+                try
+                {
+                    WebClient client3 = new WebClient();
+                    var content3 = client3.DownloadString(Constant.AlertUrl);
+                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                    baaHeader.Text = obj.result[58].title;
+                    baaBody.Text = obj.result[58].message;
+                }
+                catch
+                {
+                }
             }
             catch (Exception ex)
             {
@@ -655,7 +668,20 @@ namespace MTYD.ViewModel
             {
                 if (total == 0)
                 { //37
-                    await DisplayAlert("Warning!", "pick a valid plan to continue", "OK");
+                    try
+                    {
+                        WebClient client4 = new WebClient();
+                        var content3 = client4.DownloadString(Constant.AlertUrl);
+                        var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                        await DisplayAlert(obj.result[36].title, obj.result[36].message, obj.result[36].responses);
+                    }
+                    catch
+                    {
+                        await DisplayAlert("Warning!", "pick a valid plan to continue", "OK");
+                    }
+
+                    
                     return;
                 }
 
@@ -755,12 +781,34 @@ namespace MTYD.ViewModel
                             }
                             else if (GetXMLElement(element, "DPVConfirmation").Equals("D"))
                             {
-                                await DisplayAlert("Missing Info", "Please enter your unit/apartment number into the appropriate field.", "OK");
+                                try
+                                {
+                                    WebClient client4 = new WebClient();
+                                    var content2 = client4.DownloadString(Constant.AlertUrl);
+                                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                                    await DisplayAlert(obj.result[5].title, obj.result[5].message, obj.result[5].responses);
+                                }
+                                catch
+                                {
+                                    await DisplayAlert("Missing Info", "Please enter your unit/apartment number into the appropriate field.", "OK");
+                                }
                                 return;
                             }
                             else
                             {
-                                await DisplayAlert("Invalid Address", "The address you entered couldn't be confirmed. Please enter another one.", "OK");
+                                try
+                                {
+                                    WebClient client4 = new WebClient();
+                                    var content2 = client4.DownloadString(Constant.AlertUrl);
+                                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                                    await DisplayAlert(obj.result[6].title, obj.result[6].message, obj.result[6].responses);
+                                }
+                                catch
+                                {
+                                    await DisplayAlert("Invalid Address", "The address you entered couldn't be confirmed. Please enter another one.", "OK");
+                                }
                                 return;
                             }
 
@@ -768,7 +816,18 @@ namespace MTYD.ViewModel
                         }
                         else
                         {
-                            await DisplayAlert("Invalid Address", "The address you entered couldn't be confirmed. Please enter another one.", "OK");
+                            try
+                            {
+                                WebClient client4 = new WebClient();
+                                var content2 = client4.DownloadString(Constant.AlertUrl);
+                                var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                                await DisplayAlert(obj.result[6].title, obj.result[6].message, obj.result[6].responses);
+                            }
+                            catch
+                            {
+                                await DisplayAlert("Invalid Address", "The address you entered couldn't be confirmed. Please enter another one.", "OK");
+                            }
                             return;
                             // USPS sents an error saying address not found in there records. In other words, this address is not valid because it does not exits.
                             //Console.WriteLine("Seems like your address is invalid.");
@@ -856,14 +915,44 @@ namespace MTYD.ViewModel
                         if (correct < 0)
                         {
                             correct *= -1; //38
+                        try
+                        {
+                            WebClient client4 = new WebClient();
+                            var content3 = client4.DownloadString(Constant.AlertUrl);
+                            var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+                            string msg = obj.result[37].message;
+                            msg = msg.Replace("#", correct.ToString());
+
+                            await DisplayAlert(obj.result[37].title, msg, obj.result[37].responses);
+                        }
+                        catch
+                        {
                             await DisplayAlert("Extra Charge", "You will be charged $" + correct.ToString() + " for this plan change.", "OK");
+                        }
+
+                        
                             extraCharge = correct;
                             updatedDue = extraCharge.ToString();
                             shouldCharge = true;
                         }
                         else
                         { //39
+                        try
+                        {
+                            WebClient client4 = new WebClient();
+                            var content3 = client4.DownloadString(Constant.AlertUrl);
+                            var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+                            string msg = obj.result[38].message;
+                            msg = msg.Replace("#", correct.ToString());
+
+                            await DisplayAlert(obj.result[38].title, msg, obj.result[38].responses);
+                        }
+                        catch
+                        {
                             await DisplayAlert("Reimbursement", "You will be reimbursed $" + correct.ToString() + " for this plan change.", "OK");
+                        }
+
+                        
                             shouldCharge = false;
                         }
 
@@ -1417,7 +1506,20 @@ namespace MTYD.ViewModel
         async void clickedSelect(System.Object sender, System.EventArgs e)
         {
             if (Preferences.Get("canChooseSelect", false) == false)
-                DisplayAlert("Error", "please purchase a meal plan first", "OK");
+            {
+                try
+                {
+                    WebClient client4 = new WebClient();
+                    var content2 = client4.DownloadString(Constant.AlertUrl);
+                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                    await DisplayAlert(obj.result[25].title, obj.result[25].message, obj.result[25].responses);
+                }
+                catch
+                {
+                    await DisplayAlert("Error", "please purchase a meal plan first", "OK");
+                }
+            }
             else
             {
                 Zones[] zones = new Zones[] { };

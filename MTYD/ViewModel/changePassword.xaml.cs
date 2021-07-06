@@ -15,6 +15,7 @@ using System.Diagnostics;
 using Newtonsoft.Json;
 using System.Text;
 using System.Security.Cryptography;
+using System.Net;
 
 namespace MTYD.ViewModel
 {
@@ -71,17 +72,50 @@ namespace MTYD.ViewModel
             //if passwords not matching
             if (password.Text == "" || password.Text == null)
             { //1
-                DisplayAlert("Error", "Please enter the new password.", "OK");
+                try
+                {
+                    WebClient client4 = new WebClient();
+                    var content3 = client4.DownloadString(Constant.AlertUrl);
+                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                    DisplayAlert(obj.result[0].title, obj.result[0].message, obj.result[0].responses);
+                }
+                catch
+                {
+                    DisplayAlert("Error", "Please enter your new password", "OK");
+                }
                 return;
             }
             else if (password2.Text == "" || password2.Text == null)
             { //1
-                DisplayAlert("Error", "Please re-enter the new password.", "OK");
+                try
+                {
+                    WebClient client4 = new WebClient();
+                    var content3 = client4.DownloadString(Constant.AlertUrl);
+                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                    DisplayAlert(obj.result[0].title, obj.result[0].message, obj.result[0].responses);
+                }
+                catch
+                {
+                    DisplayAlert("Error", "Please re-enter your new password", "OK");
+                }
                 return;
             }
             else if (password.Text != password2.Text)
             { //41
-                DisplayAlert("Error", "Your password entries don't match.", "OK");
+                try
+                {
+                    WebClient client4 = new WebClient();
+                    var content3 = client4.DownloadString(Constant.AlertUrl);
+                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                    DisplayAlert(obj.result[40].title, obj.result[40].message, obj.result[40].responses);
+                }
+                catch
+                {
+                    DisplayAlert("Error", "passwords don't match", "close");
+                }
                 return;
             }
 
@@ -115,11 +149,35 @@ namespace MTYD.ViewModel
         {
             if (String.IsNullOrEmpty(currentPassword.Text) || String.IsNullOrEmpty(password.Text) || String.IsNullOrEmpty(password2.Text))
             { // check if all fields are filled out //1
-                await DisplayAlert("Error", "Please fill in all fields", "OK");
+                try
+                {
+                    WebClient client4 = new WebClient();
+                    var content3 = client4.DownloadString(Constant.AlertUrl);
+                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                    await DisplayAlert(obj.result[0].title, obj.result[0].message, obj.result[0].responses);
+                }
+                catch
+                {
+                    await DisplayAlert("Error", "Please fill in all fields", "OK");
+                }
             }
             else if (password.Text != password2.Text)
             {//41
-                await DisplayAlert("Error", "New passwords don't match", "OK");
+                try
+                {
+                    WebClient client4 = new WebClient();
+                    var content3 = client4.DownloadString(Constant.AlertUrl);
+                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                    await DisplayAlert(obj.result[40].title, obj.result[40].message, obj.result[40].responses);
+                }
+                catch
+                {
+                    await DisplayAlert("Error", "New passwords don't match", "OK");
+                }
+
+                
             }    
             else
             {
@@ -290,7 +348,18 @@ namespace MTYD.ViewModel
                     }
                     else
                     { //21
-                        await DisplayAlert("Error", "Wrong password was entered", "OK");
+                        try
+                        {
+                            WebClient client4 = new WebClient();
+                            var content3 = client4.DownloadString(Constant.AlertUrl);
+                            var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                            await DisplayAlert(obj.result[20].title, obj.result[20].message, obj.result[20].responses);
+                        }
+                        catch
+                        {
+                            await DisplayAlert("Error", "Wrong password was entered", "OK");
+                        }
                     }
                 }
             }
@@ -332,7 +401,18 @@ namespace MTYD.ViewModel
                     }
                     else if (DRSMessage.Contains(Constant.EmailNotFound))
                     { //15
-                        await DisplayAlert("Oops!", "Our records show that you don't have an accout. Please sign up!", "OK");
+                        try
+                        {
+                            WebClient client4 = new WebClient();
+                            var content3 = client4.DownloadString(Constant.AlertUrl);
+                            var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                            await DisplayAlert(obj.result[14].title, obj.result[14].message, obj.result[14].responses);
+                        }
+                        catch
+                        {
+                            await DisplayAlert("Oops!", "Our records show that you don't have an account. Please sign up!", "OK");
+                        }
                     }
                     else
                     {
@@ -421,13 +501,37 @@ namespace MTYD.ViewModel
                 Console.WriteLine("Content: " + content2);
                 var client = new HttpClient();
                 var response = client.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_password", content2);
-                DisplayAlert("Success", "password updated!", "close"); //40
+                try
+                {
+                    WebClient client4 = new WebClient();
+                    var content3 = client4.DownloadString(Constant.AlertUrl);
+                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                    await DisplayAlert(obj.result[10].title, obj.result[10].message, obj.result[10].responses);
+                }
+                catch
+                {
+                    await DisplayAlert("Success", "password updated!", "continue");
+                } //40
                 Console.WriteLine("RESPONSE TO CHECKOUT   " + response.Result);
                 Console.WriteLine("CHECKOUT JSON OBJECT BEING SENT: " + newPaymentJSONString);
                 Console.WriteLine("clickedSave Func ENDED!");
             }
-            else DisplayAlert("Error", "passwords don't match", "close"); //41
+            else
+            {
+                try
+                {
+                    WebClient client4 = new WebClient();
+                    var content3 = client4.DownloadString(Constant.AlertUrl);
+                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
 
+                    await DisplayAlert(obj.result[40].title, obj.result[40].message, obj.result[40].responses);
+                }
+                catch
+                {
+                    await DisplayAlert("Error", "passwords don't match", "close");
+                }
+            }
 
 
 

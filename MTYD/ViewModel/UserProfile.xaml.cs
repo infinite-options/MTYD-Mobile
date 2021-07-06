@@ -17,6 +17,7 @@ using System.Xml.Linq;
 using System.Net;
 using Xamarin.Forms.Maps;
 using System.Diagnostics;
+using MTYD.Constants;
 
 namespace MTYD.ViewModel
 {
@@ -53,6 +54,18 @@ namespace MTYD.ViewModel
                 checkPlatform(height, width);
                 getInfo();
 
+                try
+                {
+                    WebClient client4 = new WebClient();
+                    var content3 = client4.DownloadString(Constant.AlertUrl);
+                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                    baaHeader.Text = obj.result[58].title;
+                    baaBody.Text = obj.result[58].message;
+                }
+                catch
+                {
+                }
             }
             catch (Exception ex)
             {
@@ -405,12 +418,38 @@ namespace MTYD.ViewModel
 
                 if (passwordEntry.Text == null)
                 { //1
-                    await DisplayAlert("Error", "Please enter your new password", "OK");
+                    try
+                    {
+                        WebClient client4 = new WebClient();
+                        var content3 = client4.DownloadString(Constant.AlertUrl);
+                        var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                        await DisplayAlert(obj.result[0].title, obj.result[0].message, obj.result[0].responses);
+                    }
+                    catch
+                    {
+                        await DisplayAlert("Error", "Please enter your new password", "OK");
+                    }
+
+                    
                     return;
                 }
                 else if (confirmPasswordEntry.Text == null)
                 { //1
-                    await DisplayAlert("Error", "Please re-enter your new password", "OK");
+                    try
+                    {
+                        WebClient client4 = new WebClient();
+                        var content3 = client4.DownloadString(Constant.AlertUrl);
+                        var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                        await DisplayAlert(obj.result[0].title, obj.result[0].message, obj.result[0].responses);
+                    }
+                    catch
+                    {
+                        await DisplayAlert("Error", "Please re-enter your new password", "OK");
+                    }
+
+                    
                     return;
                 }
                 else if (passwordEntry.Text == confirmPasswordEntry.Text)
@@ -425,12 +464,39 @@ namespace MTYD.ViewModel
                     Console.WriteLine("Content: " + content2);
                     var client = new HttpClient();
                     var response = client.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_password", content2);
-                    DisplayAlert("Success", "password updated!", "close"); //40
+                    try
+                    {
+                        WebClient client4 = new WebClient();
+                        var content3 = client4.DownloadString(Constant.AlertUrl);
+                        var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                        await DisplayAlert(obj.result[10].title, obj.result[10].message, obj.result[10].responses);
+                    }
+                    catch
+                    {
+                        await DisplayAlert("Success", "password updated!", "continue");
+                    } //40
                     Console.WriteLine("RESPONSE TO CHECKOUT   " + response.Result);
                     Console.WriteLine("CHECKOUT JSON OBJECT BEING SENT: " + newPaymentJSONString);
                     Console.WriteLine("clickedSave Func ENDED!");
                 }
-                else DisplayAlert("Error", "passwords don't match", "close"); //41
+                else
+                {
+                    try
+                    {
+                        WebClient client4 = new WebClient();
+                        var content3 = client4.DownloadString(Constant.AlertUrl);
+                        var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                        await DisplayAlert(obj.result[40].title, obj.result[40].message, obj.result[40].responses);
+                    }
+                    catch
+                    {
+                        await DisplayAlert("Error", "passwords don't match", "close");
+                    }
+                }
+
+                     //41
 
 
 
@@ -852,7 +918,20 @@ namespace MTYD.ViewModel
         async void clickedSelect(System.Object sender, System.EventArgs e)
         {
             if (Preferences.Get("canChooseSelect", false) == false)
-                DisplayAlert("Error", "please purchase a meal plan first", "OK");
+            {
+                try
+                {
+                    WebClient client4 = new WebClient();
+                    var content2 = client4.DownloadString(Constant.AlertUrl);
+                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                    await DisplayAlert(obj.result[25].title, obj.result[25].message, obj.result[25].responses);
+                }
+                catch
+                {
+                    await DisplayAlert("Error", "please purchase a meal plan first", "OK");
+                }
+            }
             else
             {
                 Zones[] zones = new Zones[] { };

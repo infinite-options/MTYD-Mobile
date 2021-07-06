@@ -80,6 +80,19 @@ namespace MTYD.ViewModel
                 toAddress.Text = fullAddress;
                 getDeliveryTime();
                 checkPlatform(height, width);
+
+                try
+                {
+                    WebClient client4 = new WebClient();
+                    var content3 = client4.DownloadString(Constant.AlertUrl);
+                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                    baaHeader.Text = obj.result[58].title;
+                    baaBody.Text = obj.result[58].message;
+                }
+                catch
+                {
+                }
             }
             catch (Exception ex)
             {
@@ -301,7 +314,22 @@ namespace MTYD.ViewModel
         {
             Zones[] passZone = new Zones[0];
             //10
-            await DisplayAlert("Success", "Your assigned password is \n" + Preferences.Get(savedFirstName, "") + Preferences.Get(savedAdd, "").Substring(0, Preferences.Get(savedAdd, "").IndexOf(" ")), "continue");
+            try
+            {
+                WebClient client4 = new WebClient();
+                var content2 = client4.DownloadString(Constant.AlertUrl);
+                var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+                string msgHolder = obj.result[9].message;
+                msgHolder = msgHolder.Replace("#", Preferences.Get(savedFirstName, "") + Preferences.Get(savedAdd, "").Substring(0, Preferences.Get(savedAdd, "").IndexOf(" ")));
+
+                await DisplayAlert(obj.result[9].title, msgHolder, obj.result[9].responses);
+            }
+            catch
+            {
+                await DisplayAlert("Success", "Your assigned password is \n" + Preferences.Get(savedFirstName, "") + Preferences.Get(savedAdd, "").Substring(0, Preferences.Get(savedAdd, "").IndexOf(" ")), "continue");
+            }
+
+            
             await Navigation.PushAsync(new Select(passZone, cust_firstName, cust_lastName, cust_email));
         }
 
@@ -324,7 +352,21 @@ namespace MTYD.ViewModel
                     Console.WriteLine("Content: " + content2);
                     var client = new HttpClient();
                     var response = client.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/change_password", content2);
-                    await DisplayAlert("Success", "password updated!", "continue");
+
+                    try
+                    {
+                        WebClient client4 = new WebClient();
+                        var content3 = client4.DownloadString(Constant.AlertUrl);
+                        var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                        await DisplayAlert(obj.result[10].title, obj.result[10].message, obj.result[10].responses);
+                    }
+                    catch
+                    {
+                        await DisplayAlert("Success", "password updated!", "continue");
+                    }
+
+                    
                     //11
                     Console.WriteLine("RESPONSE TO CHECKOUT   " + response.Result);
                     Console.WriteLine("CHECKOUT JSON OBJECT BEING SENT: " + newPaymentJSONString);
@@ -352,7 +394,19 @@ namespace MTYD.ViewModel
                 else
                 {
                     //12
-                    await DisplayAlert("Error", "Please enter a password or click SKIP.", "OK");
+                    try
+                    {
+                        WebClient client4 = new WebClient();
+                        var content = client4.DownloadString(Constant.AlertUrl);
+                        var obj = JsonConvert.DeserializeObject<AlertsObj>(content);
+
+                        await DisplayAlert(obj.result[11].title, obj.result[11].message, obj.result[11].responses);
+                    }
+                    catch
+                    {
+                        await DisplayAlert("Error", "Please enter a password or click SKIP.", "OK");
+                    }
+
                     return;
                 }
 
@@ -551,7 +605,20 @@ namespace MTYD.ViewModel
                     if (RDSData.message.Contains("taken"))
                     {
                         //13
-                        DisplayAlert("Error", "email address is already in use, please log in", "OK");
+                        try
+                        {
+                            WebClient client4 = new WebClient();
+                            var content2 = client4.DownloadString(Constant.AlertUrl);
+                            var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                            await DisplayAlert(obj.result[12].title, obj.result[12].message, obj.result[12].responses);
+                        }
+                        catch
+                        {
+                            await DisplayAlert("Error", "email address is already in use, please log in", "OK");
+                        }
+
+                        
                     }
                     else
                     {
@@ -648,7 +715,20 @@ namespace MTYD.ViewModel
         async void clickedSelect(System.Object sender, System.EventArgs e)
         {
             if (Preferences.Get("canChooseSelect", false) == false)
-                DisplayAlert("Error", "please purchase a meal plan first", "OK");
+            {
+                try
+                {
+                    WebClient client4 = new WebClient();
+                    var content2 = client4.DownloadString(Constant.AlertUrl);
+                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                    await DisplayAlert(obj.result[25].title, obj.result[25].message, obj.result[25].responses);
+                }
+                catch
+                {
+                    await DisplayAlert("Error", "please purchase a meal plan first", "OK");
+                }
+            }
             else
             {
                 Zones[] zones = new Zones[] { };

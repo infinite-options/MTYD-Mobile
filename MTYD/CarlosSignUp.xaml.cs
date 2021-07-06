@@ -757,7 +757,7 @@ namespace MTYD
                     //await DisplayAlert(obj.result[7].title, obj.result[7].message, obj.result[7].responses);
                     CheckAddressHeading.Text = obj.result[41].title;
                     CheckAddressBody.Text = obj.result[41].message;
-                    OkayButton.Text = obj.result[7].responses;
+                    OkayButton.Text = obj.result[41].responses;
                 }
                 catch
                 {
@@ -775,12 +775,30 @@ namespace MTYD
             }
             else
             {
+                try
+                {
+                    WebClient client4 = new WebClient();
+                    var content2 = client4.DownloadString(Constant.AlertUrl);
+                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                    //await DisplayAlert(obj.result[7].title, obj.result[7].message, obj.result[7].responses);
+                    CheckAddressHeading.Text = obj.result[42].title;
+                    CheckAddressBody.Text = obj.result[42].message;
+                    OkayButton.Text = obj.result[42].responses;
+                }
+                catch
+                {
+                    CheckAddressHeading.Text = "Hooray!"; //42
+                    CheckAddressBody.Text = "We are so glad that we deliver to your neighborhood. Please click Continue to complete the Sign Up process.";
+                    OkayButton.Text = "Continue";
+                }
+
                 fade.IsVisible = true;
                 CheckAddressGrid.IsVisible = true;
-                CheckAddressHeading.Text = "Hooray!"; //43
-                CheckAddressBody.Text = "We are so glad that we deliver to your neighborhood. Please click Continue to complete the Sign Up process.";
+                //CheckAddressHeading.Text = "Hooray!"; //43
+                //CheckAddressBody.Text = "We are so glad that we deliver to your neighborhood. Please click Continue to complete the Sign Up process.";
                 EmailFrame.IsVisible = false;
-                OkayButton.Text = "Continue";
+                //OkayButton.Text = "Continue";
 
                 isAddessValidated = true;
                 
