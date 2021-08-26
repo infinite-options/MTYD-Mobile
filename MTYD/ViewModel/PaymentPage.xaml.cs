@@ -162,7 +162,7 @@ namespace MTYD.ViewModel
                         EventArgs e = new EventArgs();
                         clickedDeliv(proceedButton, e);
                     }
-                    else if (Preferences.Get("prevAddFilled", false) == true)
+                    else if (Preferences.Get("prevAddFilled", false) == true || (StateEntry.Text != "" && StateEntry.Text != null))
                     {
                         // Setting request for USPS API
                         XDocument requestDoc = new XDocument(
@@ -409,6 +409,119 @@ namespace MTYD.ViewModel
                     ZipEntry.Text = Preferences.Get(savedZip, "");
                     PhoneEntry.Text = Preferences.Get(savedPhone, "");
 
+                    if (StateEntry.Text != null && StateEntry.Text != "")
+                    {
+                        // Setting request for USPS API
+                        XDocument requestDoc = new XDocument(
+                            new XElement("AddressValidateRequest",
+                            new XAttribute("USERID", "400INFIN1745"),
+                            new XElement("Revision", "1"),
+                            new XElement("Address",
+                            new XAttribute("ID", "0"),
+                            new XElement("Address1", AddressEntry.Text),
+                            new XElement("Address2", ""),
+                            new XElement("City", CityEntry.Text),
+                            new XElement("State", StateEntry.Text),
+                            new XElement("Zip5", ZipEntry.Text),
+                            new XElement("Zip4", "")
+                                 )
+                             )
+                         );
+                        var url = "https://production.shippingapis.com/ShippingAPI.dll?API=Verify&XML=" + requestDoc;
+                        Console.WriteLine(url);
+                        var client2 = new WebClient();
+                        var response2 = client2.DownloadString(url);
+
+                        var xdoc = XDocument.Parse(response2.ToString());
+                        Console.WriteLine("xdoc begin");
+                        Console.WriteLine(xdoc);
+
+
+                        string latitude = "0";
+                        string longitude = "0";
+                        foreach (XElement element in xdoc.Descendants("Address"))
+                        {
+                            if (GetXMLElement(element, "Error").Equals(""))
+                            {
+                                //  && GetXMLElement(element, "Zip5").Equals(ZipEntry.Text.Trim()) && GetXMLElement(element, "City").Equals(CityEntry.Text.ToUpper().Trim())
+                                if (GetXMLElement(element, "DPVConfirmation").Equals("Y") ||
+                                        GetXMLElement(element, "DPVConfirmation").Equals("S")) // Best case
+                                {
+                                    // Get longitude and latitide because we can make a deliver here. Move on to next page.
+                                    // Console.WriteLine("The address you entered is valid and deliverable by USPS. We are going to get its latitude & longitude");
+                                    //GetAddressLatitudeLongitude();
+                                    Geocoder geoCoder = new Geocoder();
+
+                                    Debug.WriteLine("$" + AddressEntry.Text.Trim() + "$");
+                                    Debug.WriteLine("$" + CityEntry.Text.Trim() + "$");
+                                    Debug.WriteLine("$" + StateEntry.Text.Trim() + "$");
+                                    IEnumerable<Position> approximateLocations = await geoCoder.GetPositionsForAddressAsync(AddressEntry.Text.Trim() + "," + CityEntry.Text.Trim() + "," + StateEntry.Text.Trim());
+                                    Position position = approximateLocations.FirstOrDefault();
+
+                                    latitude = $"{position.Latitude}";
+                                    longitude = $"{position.Longitude}";
+
+                                    map.MapType = MapType.Street;
+                                    var mapSpan = new MapSpan(position, 0.001, 0.001);
+
+                                    Pin address = new Pin();
+                                    address.Label = "Delivery Address";
+                                    address.Type = PinType.SearchResult;
+                                    address.Position = position;
+
+                                    map.MoveToRegion(mapSpan);
+                                    map.Pins.Add(address);
+                                }
+                                else if (GetXMLElement(element, "DPVConfirmation").Equals("D"))
+                                {
+                                    try
+                                    {
+                                        WebClient client4 = new WebClient();
+                                        var content2 = client4.DownloadString(Constant.AlertUrl);
+                                        var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                                        await DisplayAlert(obj.result[5].title, obj.result[5].message, obj.result[5].responses);
+                                    }
+                                    catch
+                                    {
+                                        await DisplayAlert("Missing Info", "Please enter your unit/apartment number into the appropriate field.", "OK");
+                                    }
+                                }
+                                else
+                                {
+                                    try
+                                    {
+                                        WebClient client4 = new WebClient();
+                                        var content2 = client4.DownloadString(Constant.AlertUrl);
+                                        var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                                        await DisplayAlert(obj.result[6].title, obj.result[6].message, obj.result[6].responses);
+                                    }
+                                    catch
+                                    {
+                                        await DisplayAlert("Invalid Address", "The address you entered couldn't be confirmed. Please enter another one.", "OK");
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    WebClient client4 = new WebClient();
+                                    var content2 = client4.DownloadString(Constant.AlertUrl);
+                                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                                    await DisplayAlert(obj.result[6].title, obj.result[6].message, obj.result[6].responses);
+                                }
+                                catch
+                                {
+                                    await DisplayAlert("Invalid Address", "The address you entered couldn't be confirmed. Please enter another one.", "OK");
+                                }
+                            }
+                        }
+                        //end address updating
+                    }
+
                     if (Preferences.Get(savedApt, "") != "")
                         AptEntry.Text = Preferences.Get(savedApt, "");
                     else AptEntry.Placeholder = "Unit";
@@ -447,6 +560,119 @@ namespace MTYD.ViewModel
                     StateEntry.Text = info_obj3["result"][0]["customer_state"].ToString();
                     ZipEntry.Text = info_obj3["result"][0]["customer_zip"].ToString();
                     PhoneEntry.Text = info_obj3["result"][0]["customer_phone_num"].ToString();
+
+                    if (StateEntry.Text != null && StateEntry.Text != "")
+                    {
+                        // Setting request for USPS API
+                        XDocument requestDoc = new XDocument(
+                            new XElement("AddressValidateRequest",
+                            new XAttribute("USERID", "400INFIN1745"),
+                            new XElement("Revision", "1"),
+                            new XElement("Address",
+                            new XAttribute("ID", "0"),
+                            new XElement("Address1", AddressEntry.Text),
+                            new XElement("Address2", ""),
+                            new XElement("City", CityEntry.Text),
+                            new XElement("State", StateEntry.Text),
+                            new XElement("Zip5", ZipEntry.Text),
+                            new XElement("Zip4", "")
+                                 )
+                             )
+                         );
+                        var url4 = "https://production.shippingapis.com/ShippingAPI.dll?API=Verify&XML=" + requestDoc;
+                        Console.WriteLine(url4);
+                        var client4 = new WebClient();
+                        var response4 = client4.DownloadString(url4);
+
+                        var xdoc = XDocument.Parse(response4.ToString());
+                        Console.WriteLine("xdoc begin");
+                        Console.WriteLine(xdoc);
+
+
+                        string latitude = "0";
+                        string longitude = "0";
+                        foreach (XElement element in xdoc.Descendants("Address"))
+                        {
+                            if (GetXMLElement(element, "Error").Equals(""))
+                            {
+                                //  && GetXMLElement(element, "Zip5").Equals(ZipEntry.Text.Trim()) && GetXMLElement(element, "City").Equals(CityEntry.Text.ToUpper().Trim())
+                                if (GetXMLElement(element, "DPVConfirmation").Equals("Y") ||
+                                        GetXMLElement(element, "DPVConfirmation").Equals("S")) // Best case
+                                {
+                                    // Get longitude and latitide because we can make a deliver here. Move on to next page.
+                                    // Console.WriteLine("The address you entered is valid and deliverable by USPS. We are going to get its latitude & longitude");
+                                    //GetAddressLatitudeLongitude();
+                                    Geocoder geoCoder = new Geocoder();
+
+                                    Debug.WriteLine("$" + AddressEntry.Text.Trim() + "$");
+                                    Debug.WriteLine("$" + CityEntry.Text.Trim() + "$");
+                                    Debug.WriteLine("$" + StateEntry.Text.Trim() + "$");
+                                    IEnumerable<Position> approximateLocations = await geoCoder.GetPositionsForAddressAsync(AddressEntry.Text.Trim() + "," + CityEntry.Text.Trim() + "," + StateEntry.Text.Trim());
+                                    Position position = approximateLocations.FirstOrDefault();
+
+                                    latitude = $"{position.Latitude}";
+                                    longitude = $"{position.Longitude}";
+
+                                    map.MapType = MapType.Street;
+                                    var mapSpan = new MapSpan(position, 0.001, 0.001);
+
+                                    Pin address = new Pin();
+                                    address.Label = "Delivery Address";
+                                    address.Type = PinType.SearchResult;
+                                    address.Position = position;
+
+                                    map.MoveToRegion(mapSpan);
+                                    map.Pins.Add(address);
+                                }
+                                else if (GetXMLElement(element, "DPVConfirmation").Equals("D"))
+                                {
+                                    try
+                                    {
+                                        WebClient client5 = new WebClient();
+                                        var content3 = client5.DownloadString(Constant.AlertUrl);
+                                        var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                                        await DisplayAlert(obj.result[5].title, obj.result[5].message, obj.result[5].responses);
+                                    }
+                                    catch
+                                    {
+                                        await DisplayAlert("Missing Info", "Please enter your unit/apartment number into the appropriate field.", "OK");
+                                    }
+                                }
+                                else
+                                {
+                                    try
+                                    {
+                                        WebClient client5 = new WebClient();
+                                        var content3 = client5.DownloadString(Constant.AlertUrl);
+                                        var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                                        await DisplayAlert(obj.result[6].title, obj.result[6].message, obj.result[6].responses);
+                                    }
+                                    catch
+                                    {
+                                        await DisplayAlert("Invalid Address", "The address you entered couldn't be confirmed. Please enter another one.", "OK");
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    WebClient client5 = new WebClient();
+                                    var content3 = client5.DownloadString(Constant.AlertUrl);
+                                    var obj = JsonConvert.DeserializeObject<AlertsObj>(content3);
+
+                                    await DisplayAlert(obj.result[6].title, obj.result[6].message, obj.result[6].responses);
+                                }
+                                catch
+                                {
+                                    await DisplayAlert("Invalid Address", "The address you entered couldn't be confirmed. Please enter another one.", "OK");
+                                }
+                            }
+                        }
+                        //end address updating
+                    }
 
 
                     DeliveryEntry.Placeholder = "Delivery Instructions (for example:\ngate code, or where to put\nyour meals if you're not home)";
@@ -2218,6 +2444,10 @@ namespace MTYD.ViewModel
                 newPayment.tax = taxPrice.Text.Substring(taxPrice.Text.IndexOf("$") + 1);
                 newPayment.tip = tipPrice.Text.Substring(tipPrice.Text.IndexOf("$") + 1);
                 newPayment.amb = ambassDisc.Text.Substring(ambassDisc.Text.IndexOf("$") + 1);
+                if (ambassTitle.Text == null)
+                    newPayment.ambassador_code = "";
+                else newPayment.ambassador_code = ambassTitle.Text;
+
                 newPayment.service_fee = serviceFeePrice.Text.Substring(serviceFeePrice.Text.IndexOf("$") + 1);
                 newPayment.delivery_fee = deliveryFeePrice.Text.Substring(deliveryFeePrice.Text.IndexOf("$") + 1);
                 newPayment.subtotal = subtotalPrice.Text.Substring(subtotalPrice.Text.IndexOf("$") + 1);
@@ -4440,7 +4670,7 @@ namespace MTYD.ViewModel
 
         void DeliveryEntry_Focused(System.Object sender, Xamarin.Forms.FocusEventArgs e)
         {
-            scroller.ScrollToAsync(0, 270, true);
+            scroller.ScrollToAsync(0, 200, true);
         }
 
         void stripeInfo_Focused(System.Object sender, Xamarin.Forms.FocusEventArgs e)
