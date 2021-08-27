@@ -788,7 +788,9 @@ namespace MTYD.ViewModel
                             qty = qty + " Deliveries";
                             //string price = (string)config["price"];
                             //string mealid = (string)config["item_uid"];
-                            string purchIdCurrent = purchUidArray[i].ToString().Substring(4);
+                            //change to display purchId with plan name instead of uid
+                            string purchUidCurrent = purchUidArray[i].ToString().Substring(4);
+                            string purchIdCurrent = purchIdArray[i].ToString().Substring(4);
                             //while (purchIdCurrent.Substring(0, 1) == "0")
                             //    purchIdCurrent = purchIdCurrent.Substring(1);
 

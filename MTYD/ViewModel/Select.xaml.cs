@@ -2589,6 +2589,7 @@ namespace MTYD.ViewModel
                                 //string price = (string)config["price"];
                                 //string mealid = (string)config["item_uid"];
                                 string purchIdCurrent = purchIdArray[i].ToString().Substring(4);
+                                string purchUidCurrent = purchUidArray[i].ToString().Substring(4);
                                 //while (purchIdCurrent.Substring(0, 1) == "0")
                                 //    purchIdCurrent = purchIdCurrent.Substring(1);
 
@@ -2601,6 +2602,9 @@ namespace MTYD.ViewModel
                                 newPlan.name = (name + qty + " : " + purchIdCurrent);
                                 namesColl.Add(newPlan);
                                 namesArray.Add(name + qty + " : " + purchIdCurrent);
+                                //newPlan.name = (name + qty + " : " + purchUidCurrent);
+                                //namesColl.Add(newPlan);
+                                //namesArray.Add(name + qty + " : " + purchUidCurrent);
                             }
                         }
                         Console.WriteLine("Outside foreach in GetmealsPlan func");
