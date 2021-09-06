@@ -1814,8 +1814,15 @@ namespace MTYD.ViewModel
                 AmbassCodePost AmbCode = new AmbassCodePost();
                 AmbCode.code = ambassTitle.Text.Trim();
                 AmbCode.info = emailEntry.Text.Trim();
-                if ((string)Application.Current.Properties["platform"] == "GUEST")
+                if ((string)Xamarin.Forms.Application.Current.Properties["platform"] == "GUEST")
+                {
                     AmbCode.IsGuest = "True";
+                    if (AptEntry.Text == null || AptEntry.Text == "")
+                    {
+                        AmbCode.info = AddressEntry.Text + ", " + CityEntry.Text + ", " + StateEntry.Text + ", " + ZipEntry.Text;
+                    }
+                    else AmbCode.info = AddressEntry.Text + ", " + AptEntry.Text + ", " + CityEntry.Text + ", " + StateEntry.Text + ", " + ZipEntry.Text;
+                }
                 else AmbCode.IsGuest = "False";
                 var AmbSerializedObj = JsonConvert.SerializeObject(AmbCode);
                 var content4 = new StringContent(AmbSerializedObj, Encoding.UTF8, "application/json");
@@ -1826,7 +1833,8 @@ namespace MTYD.ViewModel
                 Debug.WriteLine("json object sent:  " + AmbSerializedObj.ToString());
                 Debug.WriteLine("message received:  " + message.ToString());
 
-                if (message.Contains("Let the customer use the referral") == true)
+                //if (message.Contains("Let the customer use the referral") == true)
+                if (message.Contains("\"code\": 200") == true)
                 {
                     var data = JsonConvert.DeserializeObject<AmbassadorCouponDto>(message);
                     //Application.Current.Properties["user_id"] = data.result[0].valid;
@@ -1858,9 +1866,9 @@ namespace MTYD.ViewModel
                         }
 
                         //totalDiscount += Math.Round(grandTotalValue * data.result[0].discount_percent, 2);
-                        //totalDiscount += data.sub[0].discount_amount;
-                        //totalDiscount += data.sub[0].discount_shipping;
-                        totalDiscount += data.discount;
+                        totalDiscount += data.sub.discount_amount;
+                        totalDiscount += data.sub.discount_shipping;
+                        //totalDiscount += data.discount;
 
                         ambassDisc.Text = "- $" + totalDiscount.ToString();
                         //grandTotalValue -= totalDiscount;

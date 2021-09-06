@@ -89,13 +89,14 @@
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
 
-                    <Frame x:Name="ambassFrame" Padding="10,0" HorizontalOptions="Fill" CornerRadius="15" HasShadow="False" BackgroundColor="White" Grid.Column="0" BorderColor="#F26522">
+                    <Frame x:Name="ambassFrame" Padding="10,0" HorizontalOptions="Fill" CornerRadius="15" HasShadow="False"
+                           BackgroundColor="White" Grid.Column="0" BorderColor="#F26522" HeightRequest="40">
                         <Entry x:Name="ambassTitle" Placeholder="Enter Ambassador Code" IsTextPredictionEnabled="False" FontSize="Small"
                                BackgroundColor="White" PlaceholderColor="Black" TextColor="Black"/>
                     </Frame>
 
                     <Button Grid.Column="1" x:Name="verifyCode" Text="Verify" CornerRadius="15" TextColor="White" FontSize="Medium" HorizontalOptions="Start" Padding="25, 0"
-                            BackgroundColor="#F26522" Clicked="clickedVerifyCode"/>
+                            BackgroundColor="#F26522" Clicked="clickedVerifyCode" HeightRequest="40"/>
 
                     <Label Grid.Column="2" x:Name="ambassDisc" FontSize="Medium" Text="-$0.00" HorizontalOptions="End" TextColor="Black" VerticalOptions="Center"/>
 

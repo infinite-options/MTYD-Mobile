@@ -2165,7 +2165,14 @@ namespace MTYD.ViewModel
                 AmbCode.code = ambassTitle.Text.Trim();
                 AmbCode.info = emailEntry.Text.Trim();
                 if ((string)Xamarin.Forms.Application.Current.Properties["platform"] == "GUEST")
+                {
                     AmbCode.IsGuest = "True";
+                    if (AptEntry.Text == null || AptEntry.Text == "")
+                    {
+                        AmbCode.info = AddressEntry.Text + ", " + CityEntry.Text + ", " + StateEntry.Text + ", " + ZipEntry.Text;
+                    }
+                    else AmbCode.info = AddressEntry.Text + ", " + AptEntry.Text + ", " + CityEntry.Text + ", " + StateEntry.Text + ", " + ZipEntry.Text;
+                }
                 else AmbCode.IsGuest = "False";
                 var AmbSerializedObj = JsonConvert.SerializeObject(AmbCode);
                 var content4 = new StringContent(AmbSerializedObj, Encoding.UTF8, "application/json");
@@ -2176,7 +2183,8 @@ namespace MTYD.ViewModel
                 Debug.WriteLine("json object sent:  " + AmbSerializedObj.ToString());
                 Debug.WriteLine("message received:  " + message.ToString());
 
-                if (message.Contains("Let the customer use the referral") == true)
+                //if (message.Contains("Let the customer use the referral") == true)
+                if (message.Contains("\"code\": 200") == true)
                 {
                     var data = JsonConvert.DeserializeObject<AmbassadorCouponDto>(message);
                     //Application.Current.Properties["user_id"] = data.result[0].valid;
@@ -2208,9 +2216,15 @@ namespace MTYD.ViewModel
                         }
 
                         //totalDiscount += Math.Round(grandTotalValue * data.sub[0].discount_percent, 2);
-                        //totalDiscount += data.sub[0].discount_amount;
-                        //totalDiscount += data.sub[0].discount_shipping;
-                        totalDiscount += data.discount;
+                        totalDiscount += data.sub.discount_amount;
+
+                        double shippingAmt = Double.Parse(deliveryFeePrice.Text.Substring(1));
+                        if (data.sub.discount_shipping > shippingAmt)
+                            totalDiscount += shippingAmt;
+                        else totalDiscount += data.sub.discount_shipping;
+
+
+                        //totalDiscount += data.discount;
 
                         ambassDisc.Text = "- $" + totalDiscount.ToString();
                         grandTotalValue -= totalDiscount;
@@ -3274,7 +3288,13 @@ namespace MTYD.ViewModel
                     GetPaymentIntent newPaymentIntent = new GetPaymentIntent();
                     newPaymentIntent.currency = "usd";
                     newPaymentIntent.customer_uid = (string)Xamarin.Forms.Application.Current.Properties["user_id"];
-                    newPaymentIntent.business_code = DeliveryEntry.Text.Trim();
+
+                    //M4METEST uses test keys for payment intent, M4ME uses live keys for payment intent
+                    if (DeliveryEntry.Text != null && (DeliveryEntry.Text.Trim() == "M4METEST" || DeliveryEntry.Text.Trim() == "M4ME TEST"))
+                        newPaymentIntent.business_code = "M4METEST";
+                    else newPaymentIntent.business_code = "M4ME";
+
+                    //newPaymentIntent.business_code = DeliveryEntry.Text.Trim();
                     newPaymentIntent.item_uid = Preferences.Get("item_uid", "");
                     newPaymentIntent.num_items = Int32.Parse(Preferences.Get("item_name", "").Substring(0, Preferences.Get("item_name", "").IndexOf(" ")));
                     newPaymentIntent.num_deliveries = Int32.Parse(Preferences.Get("freqSelected", ""));
@@ -3295,7 +3315,7 @@ namespace MTYD.ViewModel
 
 
                     var paymentIntentJSONString = JsonConvert.SerializeObject(newPaymentIntent);
-                    Console.WriteLine("paymentIntentJSONString" + paymentIntentJSONString);
+                    Console.WriteLine("creatingPaymentIntentJSONString" + paymentIntentJSONString);
                     var content3 = new StringContent(paymentIntentJSONString, Encoding.UTF8, "application/json");
                     Console.WriteLine("Content: " + content3);
                     var client3 = new System.Net.Http.HttpClient();

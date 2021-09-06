@@ -34,13 +34,13 @@ namespace MTYD.Model
             try
             {
                 var version = await GetAppVersion();
-                Debug.WriteLine("Version: " + version);
+                Debug.WriteLine("Version from endpoint: " + version);
                 Debug.WriteLine("currentVersion: " + currentVersion);
 
-                //double currentVersionDouble = Double.Parse(currentVersion);
-                //double lastestVersionDouble = Double.Parse(version);
+                double currentVersionDouble = Double.Parse(currentVersion);
+                double lastestVersionDouble = Double.Parse(version);
 
-                if (version == currentVersion)
+                if (currentVersionDouble >= lastestVersionDouble)
                 {
                     result = "TRUE";
                 }

@@ -72,7 +72,7 @@ namespace MTYD
         {
             try
             {
-
+                //Application.Current.Properties["platform"] = "GUEST";
                 //_ = CheckVersion();
 
                 Preferences.Set("mainPageAdd", "");
