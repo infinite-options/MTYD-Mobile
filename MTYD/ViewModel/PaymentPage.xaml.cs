@@ -112,6 +112,7 @@ namespace MTYD.ViewModel
         bool termsChecked = false;
         string usedPaymentIntent = "";
         string uspsCode = "";
+        string recentLat; string recentLong;
 
         Model.Address addr;
         
@@ -1130,6 +1131,8 @@ namespace MTYD.ViewModel
 
                             latitude = $"{position.Latitude}";
                             longitude = $"{position.Longitude}";
+                            recentLat = $"{position.Latitude}";
+                            recentLong = $"{position.Longitude}";
 
                             map.MapType = MapType.Street;
                             var mapSpan = new MapSpan(position, 0.001, 0.001);
@@ -1500,29 +1503,65 @@ namespace MTYD.ViewModel
                             guestSalt = (info_obj3["result"])[0]["password_hashed"].ToString();
                         }
 
+                        //implementing make_purchase here
+                        MakePurchaseInfo makepurch = new MakePurchaseInfo();
+                        Model.Item item1 = new Model.Item();
+                        item1.name = Preferences.Get("item_name", "");
+                        item1.price = Preferences.Get("itemPrice", "00.00");
+                        item1.qty = Preferences.Get("freqSelected", "");
+                        item1.item_uid = Preferences.Get("item_uid", "");
+                        item1.itm_business_uid = "200-000002";
+                        List<Model.Item> itemsList = new List<Model.Item> { item1 };
+                        makepurch.items = itemsList;
+                        makepurch.customer_lat = latitude;
+                        makepurch.customer_long = longitude;
+                        makepurch.driver_tip = "2.00";
+
+                        var MakePurchSerializedObject = JsonConvert.SerializeObject(makepurch);
+                        var mpContent = new StringContent(MakePurchSerializedObject, Encoding.UTF8, "application/json");
+
+                        System.Diagnostics.Debug.WriteLine(MakePurchSerializedObject);
+
+                        var mpClient = new System.Net.Http.HttpClient();
+                        var mpRDSResponse = await mpClient.PutAsync(Constant.BaseUrl + "make_purchase", mpContent);
+                        Debug.WriteLine("RDSResponse for make_purchase: " + mpRDSResponse.ToString());
+                        var mpRDSMessage = await mpRDSResponse.Content.ReadAsStringAsync();
+                        Debug.WriteLine("RDSMessage for make_purchase: " + mpRDSMessage.ToString());
+
+                        var mpData = JsonConvert.DeserializeObject<MakePurchaseResponse>(mpRDSMessage);
+                        subtotalPrice.Text = "$" + mpData.new_meal_charge.ToString();
+                        discountPrice.Text = "- $" + mpData.new_discount.ToString();
+                        deliveryFeePrice.Text = "$" + mpData.delivery_fee.ToString();
+                        serviceFeePrice.Text = "$" + mpData.service_fee.ToString();
+                        taxPrice.Text = "$" + mpData.new_tax.ToString();
+                        tipPrice.Text = "$2.00";
+                        grandTotalPrice.Text = "$" + mpData.amount_should_charge.ToString();
+                        ambassDisc.Text = "- $0.00";
+
+
                         Preferences.Set("price", Preferences.Get("subtotal", "00.00"));
                         subtotalTitle.Text = "Meal Subscription \n" + Preferences.Get("item_name", "").Substring(0, 1) + " meals for " + Preferences.Get("freqSelected", "") + " deliveries";
                         meal_delivery_num.Text = Preferences.Get("item_name", "").Substring(0, 1) + " meals for " + Preferences.Get("freqSelected", "") + " deliveries";
                         deliveryTitle.Text = "Total Delivery Fee For All " + Preferences.Get("freqSelected", "") + " Deliveries: ";
 
-
+                        //old frontend calculations
                         //Preferences.Set("subtotal", Preferences.Get("price", "00.00"));
-                        Debug.WriteLine("price before tax: " + Preferences.Get("price", "00.00"));
-                        double payment = Double.Parse(Preferences.Get("price", "00.00")) + Math.Round((Double.Parse(Preferences.Get("price", "00.00")) * tax / 100), 2);
-                        Debug.WriteLine("price before tax: " + (Double.Parse(Preferences.Get("price", "00.00")) * tax / 100).ToString());
-                        double totalTax = Math.Round(Double.Parse(Preferences.Get("price", "00.00")) * tax / 100, 2);
-                        taxPrice.Text = "$" + totalTax.ToString();
-                        Debug.WriteLine("payment: " + payment.ToString());
-                        payment += serviceFee;
-                        Debug.WriteLine("payment + service fee: " + payment.ToString());
-                        payment += deliveryFee;
-                        Debug.WriteLine("payment + delivery fee: " + payment.ToString());
-                        payment += Double.Parse(tipOpt2.Text.Substring(1));
-                        Debug.WriteLine("payment + tip: " + payment.ToString());
-                        Math.Round(payment, 2);
-                        Debug.WriteLine("payment after tax and fees: " + payment.ToString());
-                        Preferences.Set("price", payment.ToString());
-                        discountPrice.Text = "- $" + Preferences.Get("discountAmt", "0");
+                        //Debug.WriteLine("price before tax: " + Preferences.Get("price", "00.00"));
+                        //double payment = Double.Parse(Preferences.Get("price", "00.00")) + Math.Round((Double.Parse(Preferences.Get("price", "00.00")) * tax / 100), 2);
+                        //Debug.WriteLine("price before tax: " + (Double.Parse(Preferences.Get("price", "00.00")) * tax / 100).ToString());
+                        //double totalTax = Math.Round(Double.Parse(Preferences.Get("price", "00.00")) * tax / 100, 2);
+                        //taxPrice.Text = "$" + totalTax.ToString();
+                        //Debug.WriteLine("payment: " + payment.ToString());
+                        //payment += serviceFee;
+                        //Debug.WriteLine("payment + service fee: " + payment.ToString());
+                        //payment += deliveryFee;
+                        //Debug.WriteLine("payment + delivery fee: " + payment.ToString());
+                        //payment += Double.Parse(tipOpt2.Text.Substring(1));
+                        //Debug.WriteLine("payment + tip: " + payment.ToString());
+                        //Math.Round(payment, 2);
+                        //Debug.WriteLine("payment after tax and fees: " + payment.ToString());
+                        //Preferences.Set("price", payment.ToString());
+                        //discountPrice.Text = "- $" + Preferences.Get("discountAmt", "0");
                         //make sure price is formatted correctly
                         var total = Preferences.Get("price", "00.00");
                         if (total.Contains(".") == false)
@@ -1536,13 +1575,13 @@ namespace MTYD.ViewModel
 
 
 
-                        subtotalPrice.Text = "$" + Preferences.Get("basePrice", "0.00").ToString();
-                        //taxPrice.Text = "$" + tax.ToString();
-                        serviceFeePrice.Text = "$" + serviceFee.ToString();
-                        deliveryFeePrice.Text = "$" + deliveryFee.ToString();
-                        tipPrice.Text = tipOpt2.Text;
-                        //addOnsPrice.Text = "$0";
-                        ambassDisc.Text = "- $0.00";
+                        //subtotalPrice.Text = "$" + Preferences.Get("basePrice", "0.00").ToString();
+                        ////taxPrice.Text = "$" + tax.ToString();
+                        //serviceFeePrice.Text = "$" + serviceFee.ToString();
+                        //deliveryFeePrice.Text = "$" + deliveryFee.ToString();
+                        //tipPrice.Text = tipOpt2.Text;
+                        ////addOnsPrice.Text = "$0";
+                        //ambassDisc.Text = "- $0.00";
                         //discountPrice.Text = "$0";
                         //if (DeliveryEntry.Text == "M4METEST" || DeliveryEntry.Text == "M4ME TEST")
                         //{
@@ -1602,7 +1641,7 @@ namespace MTYD.ViewModel
                         if (Double.Parse(total.ToString()) <= 0)
                             total = "0.00";
 
-                        grandTotalPrice.Text = "$" + total.ToString();
+                        //grandTotalPrice.Text = "$" + total.ToString();
 
                         if (grandTotalPrice.Text.Contains(".") == false)
                             grandTotalPrice.Text = grandTotalPrice.Text + ".00";
@@ -2174,7 +2213,24 @@ namespace MTYD.ViewModel
                     else AmbCode.info = AddressEntry.Text + ", " + AptEntry.Text + ", " + CityEntry.Text + ", " + StateEntry.Text + ", " + ZipEntry.Text;
                 }
                 else AmbCode.IsGuest = "False";
+
+                MakePurchaseInfo ambInfo = new MakePurchaseInfo();
+
+                Model.Item item1 = new Model.Item();
+                item1.name = Preferences.Get("item_name", "");
+                item1.price = Preferences.Get("itemPrice", "00.00");
+                item1.qty = Preferences.Get("freqSelected", "");
+                item1.item_uid = Preferences.Get("item_uid", "");
+                item1.itm_business_uid = "200-000002";
+                List<Model.Item> itemsList = new List<Model.Item> { item1 };
+                ambInfo.items = itemsList;
+                ambInfo.customer_lat = recentLat;
+                ambInfo.customer_long = recentLong;
+                ambInfo.driver_tip = tipPrice.Text.Substring(1);
+                AmbCode.purchase_data = ambInfo;
+
                 var AmbSerializedObj = JsonConvert.SerializeObject(AmbCode);
+                Debug.WriteLine("json object sent:  " + AmbSerializedObj.ToString());
                 var content4 = new StringContent(AmbSerializedObj, Encoding.UTF8, "application/json");
                 var client3 = new System.Net.Http.HttpClient();
                 var response3 = await client3.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/brandAmbassador/discount_checker", content4);
@@ -2205,32 +2261,75 @@ namespace MTYD.ViewModel
                         double totalDiscount = 0;
                         double grandTotalValue = Double.Parse(grandTotalPrice.Text.Substring(1));
 
+                        subtotalPrice.Text = "$" + data.new_billing.new_meal_charge.ToString();
+                        discountPrice.Text = "- $" + data.new_billing.new_discount.ToString();
+                        deliveryFeePrice.Text = "$" + data.new_billing.delivery_fee.ToString();
+                        serviceFeePrice.Text = "$" + data.new_billing.service_fee.ToString();
+                        taxPrice.Text = "$" + data.new_billing.new_tax.ToString();
+                        //tipPrice.Text = "$2.00";
+                        grandTotalPrice.Text = "$" + data.new_billing.amount_should_charge.ToString();
+                        ambassDisc.Text = "- $" + data.new_billing.ambassador_discount.ToString(); ;
                         //discountPrice.Text = "- $5";
 
                         //add back the previous discount before calculating for the new discount
-                        if (ambassDisc.Text != null && ambassDisc.Text != "")
-                        {
-                            double codeValue = Double.Parse(ambassDisc.Text.Substring(ambassDisc.Text.IndexOf('$') + 1));
-                            grandTotalValue = Double.Parse(grandTotalPrice.Text.Substring(1));
-                            grandTotalValue += codeValue;
-                        }
+                        //if (ambassDisc.Text != null && ambassDisc.Text != "")
+                        //{
+                        //    double codeValue = Double.Parse(ambassDisc.Text.Substring(ambassDisc.Text.IndexOf('$') + 1));
+                        //    grandTotalValue = Double.Parse(grandTotalPrice.Text.Substring(1));
+                        //    grandTotalValue += codeValue;
+                        //}
 
-                        //totalDiscount += Math.Round(grandTotalValue * data.sub[0].discount_percent, 2);
-                        totalDiscount += data.sub.discount_amount;
+                        ////totalDiscount += Math.Round(grandTotalValue * data.sub[0].discount_percent, 2);
+                        //totalDiscount += data.sub.discount_amount;
 
-                        double shippingAmt = Double.Parse(deliveryFeePrice.Text.Substring(1));
-                        if (data.sub.discount_shipping > shippingAmt)
-                            totalDiscount += shippingAmt;
-                        else totalDiscount += data.sub.discount_shipping;
+                        //double shippingAmt = Double.Parse(deliveryFeePrice.Text.Substring(1));
+                        //if (data.sub.discount_shipping > shippingAmt)
+                        //    totalDiscount += shippingAmt;
+                        //else totalDiscount += data.sub.discount_shipping;
 
 
                         //totalDiscount += data.discount;
 
-                        ambassDisc.Text = "- $" + totalDiscount.ToString();
-                        grandTotalValue -= totalDiscount;
+                        //ambassDisc.Text = "- $" + totalDiscount.ToString();
+                        //grandTotalValue -= totalDiscount;
 
-                        if (grandTotalValue <= 0)
-                            grandTotalValue = 0.00;
+                        //if (grandTotalValue <= 0)
+                        //    grandTotalValue = 0.00;
+
+                        if (subtotalPrice.Text.Contains(".") == false)
+                            subtotalPrice.Text = subtotalPrice.Text + ".00";
+                        else if (subtotalPrice.Text.Substring(subtotalPrice.Text.IndexOf(".") + 1).Length == 1)
+                            subtotalPrice.Text = subtotalPrice.Text + "0";
+                        else if (subtotalPrice.Text.Substring(subtotalPrice.Text.IndexOf(".") + 1).Length == 0)
+                            subtotalPrice.Text = subtotalPrice.Text + "00";
+
+                        if (discountPrice.Text.Contains(".") == false)
+                            discountPrice.Text = discountPrice.Text + ".00";
+                        else if (discountPrice.Text.Substring(discountPrice.Text.IndexOf(".") + 1).Length == 1)
+                            discountPrice.Text = discountPrice.Text + "0";
+                        else if (discountPrice.Text.Substring(discountPrice.Text.IndexOf(".") + 1).Length == 0)
+                            discountPrice.Text = discountPrice.Text + "00";
+
+                        if (taxPrice.Text.Contains(".") == false)
+                            taxPrice.Text = taxPrice.Text + ".00";
+                        else if (taxPrice.Text.Substring(taxPrice.Text.IndexOf(".") + 1).Length == 1)
+                            taxPrice.Text = taxPrice.Text + "0";
+                        else if (taxPrice.Text.Substring(taxPrice.Text.IndexOf(".") + 1).Length == 0)
+                            taxPrice.Text = taxPrice.Text + "00";
+
+                        if (serviceFeePrice.Text.Contains(".") == false)
+                            serviceFeePrice.Text = serviceFeePrice.Text + ".00";
+                        else if (serviceFeePrice.Text.Substring(serviceFeePrice.Text.IndexOf(".") + 1).Length == 1)
+                            serviceFeePrice.Text = serviceFeePrice.Text + "0";
+                        else if (serviceFeePrice.Text.Substring(serviceFeePrice.Text.IndexOf(".") + 1).Length == 0)
+                            serviceFeePrice.Text = serviceFeePrice.Text + "00";
+
+                        if (deliveryFeePrice.Text.Contains(".") == false)
+                            deliveryFeePrice.Text = deliveryFeePrice.Text + ".00";
+                        else if (deliveryFeePrice.Text.Substring(deliveryFeePrice.Text.IndexOf(".") + 1).Length == 1)
+                            deliveryFeePrice.Text = deliveryFeePrice.Text + "0";
+                        else if (deliveryFeePrice.Text.Substring(deliveryFeePrice.Text.IndexOf(".") + 1).Length == 0)
+                            deliveryFeePrice.Text = deliveryFeePrice.Text + "00";
 
                         string grandTotalString = grandTotalValue.ToString();
 
@@ -2243,15 +2342,15 @@ namespace MTYD.ViewModel
 
 
 
-                        if (grandTotalString.Contains(".") == false)
-                            grandTotalString = grandTotalString + ".00";
-                        else if (grandTotalString.Substring(grandTotalString.IndexOf(".") + 1).Length == 1)
-                            grandTotalString = grandTotalString + "0";
-                        else if (grandTotalString.Substring(grandTotalString.IndexOf(".") + 1).Length == 0)
-                            grandTotalString = grandTotalString + "00";
-                        Preferences.Set("price", grandTotalString);
+                        if (grandTotalPrice.Text.Contains(".") == false)
+                            grandTotalPrice.Text = grandTotalPrice.Text + ".00";
+                        else if (grandTotalPrice.Text.Substring(grandTotalPrice.Text.IndexOf(".") + 1).Length == 1)
+                            grandTotalPrice.Text = grandTotalPrice.Text + "0";
+                        else if (grandTotalPrice.Text.Substring(grandTotalPrice.Text.IndexOf(".") + 1).Length == 0)
+                            grandTotalPrice.Text = grandTotalPrice.Text + "00";
+                        Preferences.Set("price", grandTotalPrice.Text.Substring(1));
 
-                        grandTotalPrice.Text = "$" + grandTotalString;
+                        //grandTotalPrice.Text = "$" + grandTotalString;
                     }
                 }
                 else
@@ -2457,7 +2556,7 @@ namespace MTYD.ViewModel
                 newPayment.amount_paid = grandTotalPrice.Text.Substring(1);//Preferences.Get("price", "00.00");
                 newPayment.tax = taxPrice.Text.Substring(taxPrice.Text.IndexOf("$") + 1);
                 newPayment.tip = tipPrice.Text.Substring(tipPrice.Text.IndexOf("$") + 1);
-                newPayment.amb = ambassDisc.Text.Substring(ambassDisc.Text.IndexOf("$") + 1);
+                newPayment.ambassador_discount = ambassDisc.Text.Substring(ambassDisc.Text.IndexOf("$") + 1);
                 if (ambassTitle.Text == null)
                     newPayment.ambassador_code = "";
                 else newPayment.ambassador_code = ambassTitle.Text;

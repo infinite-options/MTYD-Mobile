@@ -24,6 +24,30 @@ namespace MTYD.Model
         public string qty { get; set; }
     }
 
+    public class MakePurchaseInfo
+    {
+        public List<Item> items { get; set; }
+        public string customer_lat { get; set; }
+        public string customer_long { get; set; }
+        public string driver_tip { get; set; }
+    }
+
+    public class MakePurchaseResponse
+    {
+        public double new_meal_charge { get; set; }
+        public double new_discount { get; set; }
+        public double new_driver_tip { get; set; }
+        public double tax_rate { get; set; }
+        public double new_tax { get; set; }
+        public double service_fee { get; set; }
+        public double delivery_fee { get; set; }
+        public string charge_without_amb { get; set; }
+        public string charge_with_amb { get; set; }
+        public double ambassador_discount { get; set; }
+        public double amount_should_charge { get; set; }
+
+    }
+
     public class PaymentInfo
     {
         public string customer_uid { get; set; }
@@ -59,8 +83,8 @@ namespace MTYD.Model
         public string service_fee { get; set; }
         public string delivery_fee { get; set; }
         public string subtotal { get; set; }
-        public string amb { get; set; }
         public string ambassador_code { get; set; }
+        public string ambassador_discount { get; set; }
         //public string payment_intent { get; set; }
         /*
         public string customer_uid { get; set; }

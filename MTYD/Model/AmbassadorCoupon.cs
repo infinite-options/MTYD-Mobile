@@ -8,9 +8,9 @@ namespace MTYD.Model
     public class AmbassCodePost
     {
         public string code { get; set; }
-        public string info { get; set; }
         public string IsGuest { get; set; }
-
+        public string info { get; set; }
+        public MakePurchaseInfo purchase_data { get; set; }
     }
 
     public class AmbassadorCouponDto
@@ -20,6 +20,7 @@ namespace MTYD.Model
         //public double discount { get; set; }
         //public string[] uids { get; set; }
         public AmbassadorCoupon sub { get; set; }
+        public MakePurchaseResponse new_billing { get; set; }
     }
 
 
