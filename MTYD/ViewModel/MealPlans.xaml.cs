@@ -1690,26 +1690,26 @@ namespace MTYD.ViewModel
                     //    refundAmount = refund_obj["refund_amount"].ToString();
 
                     //}
-                    WebClient client4 = new WebClient();
-                    var content = client4.DownloadString("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/calculator/" + chosenPurchUid);
-                    var obj = JsonConvert.DeserializeObject<Calculator>(content);
-                    Debug.WriteLine("gotten meal refund: " + obj.MealRefund.ToString());
-                    double totalRefund = obj.MealRefund;
-                    totalRefund -= obj.AmtDiscount;
-                    totalRefund += obj.ServiceFee;
-                    totalRefund += obj.DelivFee;
-                    totalRefund += obj.DriverTip;
-                    totalRefund += obj.Taxes;
-                    totalRefund -= obj.AmbCode;
+                    //WebClient client4 = new WebClient();
+                    //var content = client4.DownloadString("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/calculator/" + chosenPurchUid);
+                    //var obj = JsonConvert.DeserializeObject<Calculator>(content);
+                    //Debug.WriteLine("gotten meal refund: " + obj.MealRefund.ToString());
+                    //double totalRefund = obj.MealRefund;
+                    //totalRefund -= obj.AmtDiscount;
+                    //totalRefund += obj.ServiceFee;
+                    //totalRefund += obj.DelivFee;
+                    //totalRefund += obj.DriverTip;
+                    //totalRefund += obj.Taxes;
+                    //totalRefund -= obj.AmbCode;
 
-                    Math.Round(totalRefund, 2);
-                    var refundString = totalRefund.ToString();
-                    if (refundString.Contains(".") == false)
-                        refundString = refundString + ".00";
-                    else if (refundString.Substring(refundString.IndexOf(".") + 1).Length == 1)
-                        refundString = refundString + "0";
-                    else if (refundString.Substring(refundString.IndexOf(".") + 1).Length == 0)
-                        refundString = refundString + "00";
+                    //Math.Round(totalRefund, 2);
+                    //var refundString = totalRefund.ToString();
+                    //if (refundString.Contains(".") == false)
+                    //    refundString = refundString + ".00";
+                    //else if (refundString.Substring(refundString.IndexOf(".") + 1).Length == 1)
+                    //    refundString = refundString + "0";
+                    //else if (refundString.Substring(refundString.IndexOf(".") + 1).Length == 0)
+                    //    refundString = refundString + "00";
 
                     //pulled from the db
                     Debug.WriteLine("amount to refund: " + nextBillAmountsArray[currentIndex].ToString());
