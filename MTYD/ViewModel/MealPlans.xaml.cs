@@ -32,6 +32,7 @@ namespace MTYD.ViewModel
         ArrayList purchIdArray = new ArrayList();
         ArrayList nextBillDatesArray = new ArrayList();
         ArrayList nextBillAmountsArray = new ArrayList();
+        ArrayList AmountPaidArray = new ArrayList();
         ArrayList namesArray = new ArrayList();
         ArrayList itemUidArray = new ArrayList();
         JObject info_obj;
@@ -454,8 +455,8 @@ namespace MTYD.ViewModel
                 Console.WriteLine("user_id: " + (string)Application.Current.Properties["user_id"]);
                 //used before 5/16/21
                 //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/customer_lplp?customer_uid=" + (string)Application.Current.Properties["user_id"];
-                string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/predict_next_billing_date/" + (string)Application.Current.Properties["user_id"];
-
+                //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/predict_next_billing_date/" + (string)Application.Current.Properties["user_id"];
+                string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/predict_next_billing_amount/" + (string)Application.Current.Properties["user_id"];
                 //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + (string)Application.Current.Properties["user_id"];
                 //string url = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals_selected?customer_uid=" + "100-000256";
                 request.RequestUri = new Uri(url);
@@ -688,9 +689,9 @@ namespace MTYD.ViewModel
 
                 //used before 5/16/21
                 //request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/customer_lplp?customer_uid=" + userID);
-                request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/predict_next_billing_date/" + userID);
-
-                Console.WriteLine("GET MEALS PLAN ENDPOINT TRYING TO BE REACHED: " + "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/customer_lplp?customer_uid=" + userID);
+                //request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/predict_next_billing_date/" + userID);
+                request.RequestUri = new Uri("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/predict_next_billing_amount/" + userID);
+                Console.WriteLine("GET MEALS PLAN ENDPOINT TRYING TO BE REACHED: " + "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/predict_next_billing_amount/" + userID);
                 request.Method = HttpMethod.Get;
                 var client = new HttpClient();
                 HttpResponseMessage response = await client.SendAsync(request);
@@ -748,10 +749,14 @@ namespace MTYD.ViewModel
                             purchUidArray.Add((m["purchase_uid"].ToString()));
                             purchIdArray.Add((m["purchase_id"].ToString()));
                             nextBillDatesArray.Add(date1.ToString("D"));
-                            nextBillAmountsArray.Add(total.ToString());
+                            //nextBillAmountsArray.Add(total.ToString());
+                            nextBillAmountsArray.Add(m["amount_due"].ToString());
+                            AmountPaidArray.Add(m["amount_paid"].ToString());
                             activePlans.Add(m);
                         }
                         else Debug.WriteLine(m["purchase_uid"].ToString() + " was skipped");
+
+                        Debug.WriteLine("date and amount: " + date1.ToString("D") + "     " + double.Parse(m["amount_due"].ToString()).ToString());
                     }
 
                     if (purchUidArray.Count == 0 || activePlans.Count == 0)
@@ -893,19 +898,28 @@ namespace MTYD.ViewModel
                 //string numMeal = itemsStr.Substring(itemsStr.IndexOf("name") + 8);
                 //numMeal = numMeal.Substring(0, numMeal.IndexOf(" "));
                 Debug.WriteLine("qty: " + qty);
-                
+
+                string ambCode = "";
+                if (activePlans[currentIndex]["amb_code"].ToString() != null && activePlans[currentIndex]["amb_code"].ToString() != "")
+                    ambCode = activePlans[currentIndex]["amb_code"].ToString();
+
+                //double refundAmtDouble = double.Parse(nextBillAmountsArray[currentIndex].ToString()) - double.Parse(AmountPaidArray[currentIndex].ToString());
+                //string refundAmt = refundAmtDouble.ToString();
+                string planCost = nextBillAmountsArray[currentIndex].ToString();
 
 
                 if (activePlans[currentIndex]["cc_num"].ToString() == null || activePlans[currentIndex]["cc_num"].ToString() == "")
                 {
-                    await Navigation.PushAsync(new SubscriptionModal(cust_firstName, cust_lastName, cust_email, "",
+                    await Navigation.PushAsync(new SubscriptionModal(cust_firstName, cust_lastName, cust_email, activePlans[currentIndex]["delivery_email"].ToString(), "",
                     "", "", "",
                     activePlans[currentIndex]["purchase_id"].ToString(), activePlans[currentIndex]["purchase_uid"].ToString(),
                     itemsStr.Substring(itemsStr.IndexOf("itm_business_uid") + 20, 10),
                     itemsStr.Substring(itemsStr.IndexOf("item_uid") + 12, 10), activePlans[currentIndex]["pur_customer_uid"].ToString(),
                     qty, numMeal, AddressEntry.Text, AptEntry.Text, CityEntry.Text, StateEntry.Text, ZipEntry.Text,
                     activePlans[currentIndex]["delivery_instructions"].ToString(), activePlans[currentIndex]["start_delivery_date"].ToString(),
-                    activePlans[currentIndex]["delivery_phone_num"].ToString()), false);
+                    activePlans[currentIndex]["delivery_phone_num"].ToString(), activePlans[currentIndex]["delivery_latitude"].ToString(),
+                    activePlans[currentIndex]["delivery_longitude"].ToString(), ambCode, activePlans[currentIndex]["driver_tip"].ToString(),
+                    planCost), false);
                 }
                 else
                 {
@@ -913,7 +927,7 @@ namespace MTYD.ViewModel
                     //var testing = (info_obj["result"])[1];
                     //string zip = testing["cc_zip"].ToString();
 
-                    await Navigation.PushAsync(new SubscriptionModal(cust_firstName, cust_lastName, cust_email,
+                    await Navigation.PushAsync(new SubscriptionModal(cust_firstName, cust_lastName, cust_email, activePlans[currentIndex]["delivery_email"].ToString(),
                         activePlans[currentIndex]["cc_num"].ToString(), expDate.Substring(0, 10),
                         activePlans[currentIndex]["cc_cvv"].ToString(), activePlans[currentIndex]["cc_zip"].ToString(),
                         activePlans[currentIndex]["purchase_id"].ToString(), activePlans[currentIndex]["purchase_uid"].ToString(),
@@ -921,7 +935,9 @@ namespace MTYD.ViewModel
                         itemsStr.Substring(itemsStr.IndexOf("item_uid") + 12, 10), activePlans[currentIndex]["pur_customer_uid"].ToString(),
                         qty, numMeal, AddressEntry.Text, AptEntry.Text, CityEntry.Text, StateEntry.Text, ZipEntry.Text,
                         activePlans[currentIndex]["delivery_instructions"].ToString(), activePlans[currentIndex]["start_delivery_date"].ToString(),
-                        activePlans[currentIndex]["delivery_phone_num"].ToString()), false);
+                        activePlans[currentIndex]["delivery_phone_num"].ToString(), activePlans[currentIndex]["delivery_latitude"].ToString(),
+                        activePlans[currentIndex]["delivery_longitude"].ToString(), ambCode, activePlans[currentIndex]["driver_tip"].ToString(),
+                        planCost), false);
                 }
                 
             }
@@ -1695,6 +1711,15 @@ namespace MTYD.ViewModel
                     else if (refundString.Substring(refundString.IndexOf(".") + 1).Length == 0)
                         refundString = refundString + "00";
 
+                    //pulled from the db
+                    Debug.WriteLine("amount to refund: " + nextBillAmountsArray[currentIndex].ToString());
+                    Debug.WriteLine("amount already paid: " + AmountPaidArray[currentIndex].ToString());
+
+                    //double refundAmtDouble = double.Parse(nextBillAmountsArray[currentIndex].ToString()) - double.Parse(AmountPaidArray[currentIndex].ToString());
+                    double refundAmtDouble = double.Parse(AmountPaidArray[currentIndex].ToString());
+                    refundAmtDouble = Math.Abs(refundAmtDouble);
+                    string refundAmt = refundAmtDouble.ToString();
+
                     //28
                     bool answer;
                     //15, [21]
@@ -1709,13 +1734,14 @@ namespace MTYD.ViewModel
                         ending = ending.Substring(ending.IndexOf("," + 2));
                         string msg = obj2.result[27].message;
                         msg = msg.Substring(0, msg.IndexOf("#")) + currentPlan + msg.Substring(msg.IndexOf("#") + 1);
-                        msg = msg.Substring(0, msg.IndexOf("#")) + refundString + msg.Substring(msg.IndexOf("#") + 1);
+                        //msg = msg.Substring(0, msg.IndexOf("#")) + refundString + msg.Substring(msg.IndexOf("#") + 1);
+                        msg = msg.Substring(0, msg.IndexOf("#")) + refundAmt + msg.Substring(msg.IndexOf("#") + 1);
 
                         answer = await DisplayAlert(obj2.result[27].title, msg, beginning, ending);
                     }
                     catch
                     {
-                        answer = await DisplayAlert("Delete a Plan", "Are you sure you want to delete this " + currentPlan + "? If yes, you will be refunded $" + refundString + ".", "Y", "N");
+                        answer = await DisplayAlert("Delete a Plan", "Are you sure you want to delete this " + currentPlan + "? If yes, you will be refunded $" + refundAmt + ".", "Y", "N");
                     }
 
                     

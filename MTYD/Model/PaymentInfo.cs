@@ -208,7 +208,10 @@ namespace MTYD.Model
         //public string new_item_id { get; set; }
         public string purchase_uid { get; set; }
         public string driver_tip { get; set; }
+        public string customer_lat { get; set; }
+        public string customer_long { get; set; }
         public string start_delivery_date { get; set; }
+        public string ambassador_code { get; set; }
     }
 
     public class updatePurchase
