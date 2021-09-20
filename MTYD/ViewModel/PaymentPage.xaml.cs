@@ -2551,9 +2551,10 @@ namespace MTYD.ViewModel
                 newPayment.delivery_latitude = "";
                 newPayment.order_instructions = "slow";
 
-                newPayment.amount_due = Preferences.Get("price", "00.00");
+                //newPayment.amount_due = Preferences.Get("price", "00.00");
+                newPayment.amount_due = grandTotalPrice.Text.Substring(1);
                 newPayment.amount_discount = Preferences.Get("discountAmt", "0.00");
-                newPayment.amount_paid = grandTotalPrice.Text.Substring(1);//Preferences.Get("price", "00.00");
+                newPayment.amount_paid = "0";//Preferences.Get("price", "00.00");
                 newPayment.tax = taxPrice.Text.Substring(taxPrice.Text.IndexOf("$") + 1);
                 newPayment.tip = tipPrice.Text.Substring(tipPrice.Text.IndexOf("$") + 1);
                 newPayment.ambassador_discount = ambassDisc.Text.Substring(ambassDisc.Text.IndexOf("$") + 1);

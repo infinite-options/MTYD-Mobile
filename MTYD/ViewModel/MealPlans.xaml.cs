@@ -565,7 +565,8 @@ namespace MTYD.ViewModel
                 chosenPurchUid = purchUidArray[selectedIndex].ToString();
                 chosenPurchId = purchIdArray[selectedIndex].ToString();
                 //chosenPurchUid = purchUidArray[PlanCollectionView.].ToString();
-                Debug.WriteLine("selected chosen purch id in plan change: " + chosenPurchUid.ToString());
+                Debug.WriteLine("selected chosen purch uid in plan change: " + chosenPurchUid.ToString());
+                Debug.WriteLine("selected chosen purch id in plan change: " + chosenPurchId.ToString());
 
                 //currentIndex = planPicker.SelectedIndex;
                 //Debug.WriteLine("current index: " + currentIndex.ToString());

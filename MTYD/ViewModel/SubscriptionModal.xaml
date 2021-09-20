@@ -212,6 +212,26 @@
 
                 <BoxView HeightRequest="0.5" Color="Black" Margin="30, 0, 30, 5"/>
 
+                <Grid x:Name="ambassGrid" Margin="30,5,30,5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2.3*"/>
+                        <ColumnDefinition Width="1.1*"/>
+                        <ColumnDefinition Width="0.8*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Frame x:Name="ambassFrame" Padding="10,0" HorizontalOptions="Fill" CornerRadius="15" HasShadow="False"
+                           BackgroundColor="White" Grid.Column="0" BorderColor="#F26522" HeightRequest="40">
+                        <Entry x:Name="ambassTitle" Placeholder="Enter Ambassador Code" IsTextPredictionEnabled="False" FontSize="14"
+                               BackgroundColor="White" PlaceholderColor="Black" TextColor="Black"/>
+                    </Frame>
+
+                    <Button Grid.Column="1" x:Name="verifyCode" Text="Verify" CornerRadius="15" TextColor="White" FontSize="Medium" HorizontalOptions="Start" Padding="15, 0"
+                            BackgroundColor="#F26522" Clicked="clickedVerifyCode" HeightRequest="40"/>
+
+                    <Label Grid.Column="2" x:Name="ambassDisc" FontSize="14" Text="-$0" HorizontalOptions="End" TextColor="Black" VerticalOptions="Center"/>
+
+                </Grid>
+
                 <Grid Margin="30, 10">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="80"/>

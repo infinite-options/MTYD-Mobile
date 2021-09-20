@@ -46,6 +46,7 @@ namespace MTYD.ViewModel
         string chargeId = ""; string delivInstructions, startDeliv;
         string updatedDiscount, updatedDue, updatedTax, updatedTip, updatedService, updatedDelivery, updatedSub, updatedAmb;
         string lati, longi;
+        double enteredCodeAmt;
 
         int mealSelected;
         int deliverySelected;
@@ -65,6 +66,7 @@ namespace MTYD.ViewModel
         {
             try
             {
+                enteredCodeAmt = 0;
                 //purchase id is used for charges, purchase uid is used for refunds (change_purchase)
                 cust_firstName = firstName;
                 cust_lastName = lastName;
@@ -168,6 +170,7 @@ namespace MTYD.ViewModel
                 //}
 
                 checkPlatform(height, width);
+                getLatLong();
                 GetPlans();
                 Preferences.Set("freqSelected", "");
 
@@ -191,6 +194,157 @@ namespace MTYD.ViewModel
             }
         }
 
+        async void getLatLong()
+        {
+            // Setting request for USPS API
+            XDocument requestDoc = new XDocument(
+                new XElement("AddressValidateRequest",
+                new XAttribute("USERID", "400INFIN1745"),
+                new XElement("Revision", "1"),
+                new XElement("Address",
+                new XAttribute("ID", "0"),
+                new XElement("Address1", passedAdd),
+                new XElement("Address2", passedUnit),
+                new XElement("City", passedCity),
+                new XElement("State", passedState),
+                new XElement("Zip5", passedZip),
+                new XElement("Zip4", "")
+                     )
+                 )
+             );
+            var url = "https://production.shippingapis.com/ShippingAPI.dll?API=Verify&XML=" + requestDoc;
+            Console.WriteLine(url);
+            var client2 = new WebClient();
+            var response2 = client2.DownloadString(url);
+
+            var xdoc = XDocument.Parse(response2.ToString());
+            Console.WriteLine("xdoc begin");
+            Console.WriteLine(xdoc);
+
+
+            string latitude = "0";
+            string longitude = "0";
+            foreach (XElement element in xdoc.Descendants("Address"))
+            {
+                if (GetXMLElement(element, "Error").Equals(""))
+                {
+                    if ((GetXMLElement(element, "DPVConfirmation").Equals("Y") ||
+                            GetXMLElement(element, "DPVConfirmation").Equals("S")) && GetXMLElement(element, "Zip5").Equals(passedZip) && GetXMLElement(element, "City").Equals(passedCity.ToUpper())) // Best case
+                    {
+                        // Get longitude and latitide because we can make a deliver here. Move on to next page.
+                        // Console.WriteLine("The address you entered is valid and deliverable by USPS. We are going to get its latitude & longitude");
+                        //GetAddressLatitudeLongitude();
+                        Geocoder geoCoder = new Geocoder();
+
+                        //Debug.WriteLine("$" + AddressEntry.Text.Trim() + "$");
+                        //Debug.WriteLine("$" + CityEntry.Text.Trim() + "$");
+                        //Debug.WriteLine("$" + StateEntry.Text.Trim() + "$");
+                        IEnumerable<Position> approximateLocations = await geoCoder.GetPositionsForAddressAsync(passedAdd + "," + passedCity + "," + passedState);
+                        Position position = approximateLocations.FirstOrDefault();
+
+                        latitude = $"{position.Latitude}";
+                        longitude = $"{position.Longitude}";
+
+
+                        lati = latitude;
+                        longi = longitude;
+                        //used for createaccount endpoint
+                        Preferences.Set("user_latitude", latitude);
+                        Preferences.Set("user_longitude", longitude);
+                        Debug.WriteLine("user latitude: " + latitude);
+                        Debug.WriteLine("user longitude: " + longitude);
+
+                        //directSignUp.latitude = latitude;
+                        //directSignUp.longitude = longitude;
+                        //map.MapType = MapType.Street;
+                        //var mapSpan = new MapSpan(position, 0.001, 0.001);
+
+                        //Pin address = new Pin();
+                        //address.Label = "Delivery Address";
+                        //address.Type = PinType.SearchResult;
+                        //address.Position = position;
+
+                        //map.MoveToRegion(mapSpan);
+                        //map.Pins.Add(address);
+
+                        //https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/categoricalOptions/-121.8866517,37.2270928 long,lat
+                        //var request3 = new HttpRequestMessage();
+                        //Console.WriteLine("user_id: " + (string)Application.Current.Properties["user_id"]);
+                        //Debug.WriteLine("latitude: " + latitude + ", longitude: " + longitude);
+                        string url3 = "https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/categoricalOptions/" + longitude + "," + latitude;
+                        //request3.RequestUri = new Uri(url3);
+                        //request3.Method = HttpMethod.Get;
+                        //var client3 = new HttpClient();
+                        //HttpResponseMessage response3 = await client3.SendAsync(request3);
+                        Debug.WriteLine("categorical options url: " + url3);
+
+                        var content = client4.DownloadString(url3);
+                        var obj = JsonConvert.DeserializeObject<ZonesDto>(content);
+
+                        Debug.WriteLine("first business: " + obj.Result[0].business_name);
+                        taxRate = obj.Result[0].tax_rate / 100;
+                        //deliveryFee = obj.Result[0].delivery_fee;
+                        //serviceFee = obj.Result[0].service_fee;
+                        //passingZones = obj.Result;
+                        //withinZones = true;
+                    }
+                    else if (GetXMLElement(element, "DPVConfirmation").Equals("D"))
+                    {
+                        try
+                        {
+                            WebClient client4 = new WebClient();
+                            var content2 = client4.DownloadString(Constant.AlertUrl);
+                            var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                            await DisplayAlert(obj.result[5].title, obj.result[5].message, obj.result[5].responses);
+                        }
+                        catch
+                        {
+                            await DisplayAlert("Missing Info", "Please enter your unit/apartment number into the appropriate field.", "OK");
+                        }
+                        return;
+                    }
+                    else
+                    {
+                        try
+                        {
+                            WebClient client4 = new WebClient();
+                            var content2 = client4.DownloadString(Constant.AlertUrl);
+                            var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                            await DisplayAlert(obj.result[6].title, obj.result[6].message, obj.result[6].responses);
+                        }
+                        catch
+                        {
+                            await DisplayAlert("Invalid Address", "The address you entered couldn't be confirmed. Please enter another one.", "OK");
+                        }
+                        return;
+                    }
+
+                    break;
+                }
+                else
+                {
+                    try
+                    {
+                        WebClient client4 = new WebClient();
+                        var content2 = client4.DownloadString(Constant.AlertUrl);
+                        var obj = JsonConvert.DeserializeObject<AlertsObj>(content2);
+
+                        await DisplayAlert(obj.result[6].title, obj.result[6].message, obj.result[6].responses);
+                    }
+                    catch
+                    {
+                        await DisplayAlert("Invalid Address", "The address you entered couldn't be confirmed. Please enter another one.", "OK");
+                    }
+                    return;
+                    // USPS sents an error saying address not found in there records. In other words, this address is not valid because it does not exits.
+                    //Console.WriteLine("Seems like your address is invalid.");
+                    //await DisplayAlert("Alert!", "Error from USPS. The address you entered was not found.", "Ok");
+                    //return;
+                }
+            }
+        }
 
         protected async Task GetPlans()
         {
@@ -698,6 +852,59 @@ namespace MTYD.ViewModel
             else return new StripeClient(Constant.LivePK);
         }
 
+        async void clickedVerifyCode(object sender, EventArgs e)
+        {
+            AmbassCodePost AmbCode = new AmbassCodePost();
+            AmbCode.code = passedAmbCode;
+            AmbCode.info = cust_email;
+            if ((string)Xamarin.Forms.Application.Current.Properties["platform"] == "GUEST")
+            {
+                AmbCode.IsGuest = "True";
+                if (passedUnit == null || passedUnit == "")
+                {
+                    AmbCode.info = passedAdd + ", " + passedCity + ", " + passedState + ", " + passedZip;
+                }
+                else AmbCode.info = passedAdd + ", " + passedUnit + ", " + passedCity + ", " + passedState + ", " + passedZip;
+            }
+            else AmbCode.IsGuest = "False";
+
+            MakePurchaseInfo ambInfo = new MakePurchaseInfo();
+
+            Model.Item item3 = new Model.Item();
+            item3.name = Preferences.Get("item_name", "");
+            item3.price = Preferences.Get("itemPrice", "00.00");
+            item3.qty = Preferences.Get("freqSelected", "");
+            item3.item_uid = Preferences.Get("item_uid", "");
+            item3.itm_business_uid = "200-000002";
+            List<Model.Item> itemsList3 = new List<Model.Item> { item3 };
+            ambInfo.items = itemsList3;
+            ambInfo.customer_lat = lati;
+            ambInfo.customer_long = longi;
+            ambInfo.driver_tip = tipPrice.Text.Substring(1);
+            AmbCode.purchase_data = ambInfo;
+
+            var AmbSerializedObj = JsonConvert.SerializeObject(AmbCode);
+            Debug.WriteLine("json object sent:  " + AmbSerializedObj.ToString());
+            var content4 = new StringContent(AmbSerializedObj, Encoding.UTF8, "application/json");
+            var client3 = new System.Net.Http.HttpClient();
+            var response3 = await client3.PostAsync("https://ht56vci4v9.execute-api.us-west-1.amazonaws.com/dev/api/v2/brandAmbassador/discount_checker", content4);
+            var message = await response3.Content.ReadAsStringAsync();
+            Debug.WriteLine("RESPONSE TO verifyCode   " + response3.ToString());
+            Debug.WriteLine("json object sent:  " + AmbSerializedObj.ToString());
+            Debug.WriteLine("message received:  " + message.ToString());
+
+            if (message.Contains("\"code\": 200") == true)
+            {
+                var data = JsonConvert.DeserializeObject<AmbassadorCouponDto>(message);
+
+                if (data.sub.valid == "TRUE")
+                {
+                    enteredCodeAmt = data.new_billing.amount_should_charge;
+                    Debug.WriteLine("how much to refund from previous plan: " + passedPlanCost);
+                }
+            }
+        }
+
         private async void clickedDone(object sender, EventArgs e)
         {
             try
@@ -884,7 +1091,12 @@ namespace MTYD.ViewModel
                     //HttpResponseMessage response3 = await client3.SendAsync(request3);
                     //Debug.WriteLine("response from refund calc: " + response3);
                     double correct;
-                    if (passedAmbCode != null && passedAmbCode != "")
+                    if (enteredCodeAmt != 0)
+                    {
+                        correct = double.Parse(passedPlanCost) - enteredCodeAmt;
+                        Debug.WriteLine("how much to refund from previous plan: " + passedPlanCost);
+                    }
+                    else if (passedAmbCode != null && passedAmbCode != "")
                     {
                         AmbassCodePost AmbCode = new AmbassCodePost();
                         AmbCode.code = passedAmbCode;
@@ -910,8 +1122,8 @@ namespace MTYD.ViewModel
                         item3.itm_business_uid = "200-000002";
                         List<Model.Item> itemsList3 = new List<Model.Item> { item3 };
                         ambInfo.items = itemsList3;
-                        ambInfo.customer_lat = passedLat;
-                        ambInfo.customer_long = passedLong;
+                        ambInfo.customer_lat = lati;
+                        ambInfo.customer_long = longi;
                         ambInfo.driver_tip = tipPrice.Text.Substring(1);
                         AmbCode.purchase_data = ambInfo;
 
@@ -946,8 +1158,8 @@ namespace MTYD.ViewModel
                                 item1.itm_business_uid = "200-000002";
                                 List<Model.Item> itemsList = new List<Model.Item> { item1 };
                                 makepurch.items = itemsList;
-                                makepurch.customer_lat = passedLat;
-                                makepurch.customer_long = passedLong;
+                                makepurch.customer_lat = lati;
+                                makepurch.customer_long = longi;
                                 makepurch.driver_tip = tipPrice.Text.Substring(1);
 
                                 var MakePurchSerializedObject = JsonConvert.SerializeObject(makepurch);
@@ -979,8 +1191,8 @@ namespace MTYD.ViewModel
                             item1.itm_business_uid = "200-000002";
                             List<Model.Item> itemsList = new List<Model.Item> { item1 };
                             makepurch.items = itemsList;
-                            makepurch.customer_lat = passedLat;
-                            makepurch.customer_long = passedLong;
+                            makepurch.customer_lat = lati;
+                            makepurch.customer_long = longi;
                             makepurch.driver_tip = tipPrice.Text.Substring(1);
 
                             var MakePurchSerializedObject = JsonConvert.SerializeObject(makepurch);
@@ -1012,8 +1224,8 @@ namespace MTYD.ViewModel
                         item1.itm_business_uid = "200-000002";
                         List<Model.Item> itemsList = new List<Model.Item> { item1 };
                         makepurch.items = itemsList;
-                        makepurch.customer_lat = passedLat;
-                        makepurch.customer_long = passedLong;
+                        makepurch.customer_lat = lati;
+                        makepurch.customer_long = longi;
                         makepurch.driver_tip = tipPrice.Text.Substring(1);
 
                         var MakePurchSerializedObject = JsonConvert.SerializeObject(makepurch);
@@ -1165,8 +1377,8 @@ namespace MTYD.ViewModel
                         updated.cc_exp_date = "NULL";
                         updated.cc_cvv = "NULL";
                         updated.cc_zip = "NULL";
-                        updated.customer_lat = passedLat;
-                        updated.customer_long = passedLong;
+                        updated.customer_lat = lati;
+                        updated.customer_long = longi;
                         updated.ambassador_code = passedAmbCode;
                         updated.purchase_uid = purchase_uid;
                         updated.driver_tip = tipPrice.Text.Substring(1);
@@ -1592,8 +1804,8 @@ namespace MTYD.ViewModel
                         updated.cc_exp_date = "NULL";
                         updated.cc_cvv = "NULL";
                         updated.cc_zip = "NULL";
-                        updated.customer_lat = passedLat;
-                        updated.customer_long = passedLong;
+                        updated.customer_lat = lati;
+                        updated.customer_long = longi;
                         updated.ambassador_code = passedAmbCode;
                         updated.purchase_uid = purchase_uid;
                         updated.driver_tip = tipPrice.Text.Substring(1);
