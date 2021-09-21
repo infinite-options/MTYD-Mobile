@@ -424,9 +424,12 @@ namespace MTYD
                     HashSet<string> dates = new HashSet<string>();
                     foreach (var m in plan_obj["result"])
                     {
+                        if (menuNames.Contains(m["meal_name"].ToString()))
+                            continue;
+
                         dates.Add(m["menu_date"].ToString());
                         Debug.WriteLine("dates menu_date: " + m["menu_date"].ToString());
-                        if (dates.Count > 2) break;
+                        //if (dates.Count > 2) break;
                         if (m["meal_cat"].ToString() == "Add-On")
                             continue;
                         menuNames.Add(m["meal_name"].ToString());

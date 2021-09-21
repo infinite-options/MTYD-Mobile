@@ -18,6 +18,7 @@
                         </Grid.RowDefinitions>
                         <ImageButton x:Name="pfp" BackgroundColor="LightGray" VerticalOptions="End" HorizontalOptions="End" Clicked="clickedPfp"/>
                         <Label x:Name="initials" TextColor="Black" FontAttributes="Bold" VerticalOptions="Center"  HorizontalOptions="Center"/>
+                        <Button HorizontalOptions="Fill" VerticalOptions="Fill" BackgroundColor="Transparent" Clicked="clickedPfp"/>
                      </Grid>
 
                      <ImageButton x:Name="menu" Source="new_menu.png" BackgroundColor="Transparent" VerticalOptions="End" HorizontalOptions="Start" Clicked="clickedOpenMenu"/>

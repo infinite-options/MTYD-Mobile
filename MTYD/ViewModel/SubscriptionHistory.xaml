@@ -22,6 +22,7 @@
                         </Grid.RowDefinitions>
                         <ImageButton x:Name="pfp" BackgroundColor="LightGray" VerticalOptions="End" HorizontalOptions="End" Clicked="clickedPfp"/>
                         <Label x:Name="initials" TextColor="Black" FontAttributes="Bold" VerticalOptions="Center"  HorizontalOptions="Center"/>
+                        <Button HorizontalOptions="Fill" VerticalOptions="Fill" BackgroundColor="Transparent" Opacity="0.5" Clicked="clickedPfp"/>
 
                     </Grid>
 
@@ -71,18 +72,18 @@
                 </StackLayout>
                 </Grid>
 
-                <BoxView HeightRequest="2"  Margin="25,0" BackgroundColor="#F26522" HorizontalOptions="Fill"/>
+                <BoxView HeightRequest="2"  Margin="22,0" BackgroundColor="#F26522" HorizontalOptions="Fill"/>
 
                 <Grid Margin="0,2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
-                <Label Margin="25, 0, 0,0" Text="Next Billing date " FontSize="17" TextColor="#F26522" HorizontalTextAlignment="Start" HorizontalOptions="Fill"/>
-                <Label Grid.Column="1" Margin="0, 0, 25, 0" Text="TBD" x:Name="nextBillingLabel" FontSize="17" TextColor="#F26522" HorizontalTextAlignment="End" HorizontalOptions="Fill"/>
+                <Label Margin="22, 0, 0,0" Text="Next Billing date " FontSize="17" TextColor="#F26522" HorizontalTextAlignment="Start" HorizontalOptions="Fill"/>
+                <Label Grid.Column="1" Margin="0, 0, 22, 0" Text="TBD" x:Name="nextBillingLabel" FontSize="17" TextColor="#F26522" HorizontalTextAlignment="End" HorizontalOptions="Fill"/>
                 </Grid>
 
-                <BoxView HeightRequest="2" Margin="25,0,25,10" BackgroundColor="#F26522" HorizontalOptions="Fill"/> 
+                <BoxView HeightRequest="2" Margin="22,0,22,10" BackgroundColor="#F26522" HorizontalOptions="Fill"/> 
 
                 <CollectionView x:Name="weekOneMenu">
                     <CollectionView.ItemsLayout>
@@ -103,33 +104,33 @@
                                     <!--<Forms9Patch:Label x:Name="mealDesc" Margin="3,0" Text="{Binding MealDesc}" HorizontalTextAlignment="Center" IsVisible="{Binding SeeDesc}" Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="Transparent" TextColor="Black"/>-->
                                     <StackLayout IsVisible="{Binding mainGridVisible}">
 
-                                    <BoxView HeightRequest="2" Margin="15,0" BackgroundColor="#F26522" HorizontalOptions="Fill"/>
+                                    <BoxView HeightRequest="2" Margin="12,0" BackgroundColor="#F26522" HorizontalOptions="Fill"/>
 
                                     <Grid Margin="0,2">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="1*"/>
                                             <ColumnDefinition Width="1*"/>
                                         </Grid.ColumnDefinitions>
-                                    <Label Margin="15, 0, 0,0" Text="Billing date" FontSize="17" TextColor="#F26522" HorizontalTextAlignment="Start" HorizontalOptions="Fill"/>
-                                    <Label Grid.Column="1" Margin="0, 0, 15, 0" Text="{Binding Date}" FontSize="17" TextColor="#F26522" HorizontalTextAlignment="End" HorizontalOptions="Fill"/>
+                                    <Label Margin="12, 0, 0,0" Text="Billing date" FontSize="17" TextColor="#F26522" HorizontalTextAlignment="Start" HorizontalOptions="Fill"/>
+                                    <Label Grid.Column="1" Margin="0, 0, 12, 0" Text="{Binding Date}" FontSize="17" TextColor="#F26522" HorizontalTextAlignment="End" HorizontalOptions="Fill"/>
                                     </Grid>
 
-                                    <BoxView HeightRequest="2" Margin="15,0" BackgroundColor="#F26522" HorizontalOptions="Fill"/>
+                                    <BoxView HeightRequest="2" Margin="12,0" BackgroundColor="#F26522" HorizontalOptions="Fill"/>
 
                                     <Grid Margin="0,2,0,0">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="1*"/>
                                             <ColumnDefinition Width="3*"/>
                                         </Grid.ColumnDefinitions>
-                                    <Label Margin="15, 0, 0,0" Text="Meal plan" FontSize="17" TextColor="#F26522" HorizontalTextAlignment="Start" HorizontalOptions="Fill"/>
-                                    <Label Grid.Column="1" Margin="0, 0, 15, 0" Text="{Binding mealPlanName}" FontSize="17" TextColor="#F26522" HorizontalTextAlignment="End" HorizontalOptions="Fill"/>
+                                    <Label Margin="12, 0, 0,0" Text="Meal plan" FontSize="17" TextColor="#F26522" HorizontalTextAlignment="Start" HorizontalOptions="Fill"/>
+                                    <Label Grid.Column="1" Margin="0, 0, 12, 0" Text="{Binding mealPlanName}" FontSize="17" TextColor="#F26522" HorizontalTextAlignment="End" HorizontalOptions="Fill"/>
                                     <Button BackgroundColor="Transparent" Grid.ColumnSpan="2" HorizontalOptions="Fill" VerticalOptions="Fill"  Clicked="clickedSeeMeals"/>
                                     </Grid>
 
                                     <!--<Label Text="{Binding Date}" FontSize="15" HorizontalTextAlignment="Center" HorizontalOptions="Center" Margin="10"/>
                                     <Button Text="{Binding mealPlanName}" HeightRequest="40" FontSize="15" HorizontalOptions="Fill" BackgroundColor="LightGray" Margin="40,5" Clicked="clickedSeeMeals"/>-->  
                                     
-                                    <CollectionView Margin="15,-15,15,0" ItemsSource="{Binding mealColl}" IsVisible="{Binding CollVisible}" HeightRequest="{Binding mealCollHeight}">
+                                    <CollectionView Margin="12,-15,12,0" ItemsSource="{Binding mealColl}" IsVisible="{Binding CollVisible}" HeightRequest="{Binding mealCollHeight}">
                                         <CollectionView.ItemsLayout>
                                             <GridItemsLayout
                                             Orientation="Vertical"
@@ -147,8 +148,8 @@
                                                         <ColumnDefinition Width="1*" />
                                                     </Grid.ColumnDefinitions>
 
-                                                    <Label Text="Meals Delivered" TextColor="Black" Grid.Column="0" FontSize="18" HeightRequest="30" FontAttributes="Bold" VerticalOptions="Center" VerticalTextAlignment="Center" HorizontalOptions="Start" HorizontalTextAlignment="Start"/>
-                                                    <Forms9Patch:Label Text="{Binding DelivDate}" TextColor="Black" Grid.Column="1" FontSize="15" HeightRequest="30" FontAttributes="Bold" VerticalOptions="Center" VerticalTextAlignment="Center" HorizontalOptions="End" HorizontalTextAlignment="End"/>
+                                                    <Label Text="Meals Delivered" TextColor="Black" Grid.Column="0" FontSize="15" HeightRequest="30" FontAttributes="Bold" VerticalOptions="Center" VerticalTextAlignment="Center" HorizontalOptions="Start" HorizontalTextAlignment="Start"/>
+                                                    <Forms9Patch:Label Text="{Binding DelivDate}" TextColor="Black" Grid.Column="1" FontSize="14" HeightRequest="30" FontAttributes="Bold" VerticalOptions="Center" VerticalTextAlignment="Center" HorizontalOptions="End" HorizontalTextAlignment="End"/>
                                                         
                                                 </Grid>
 
@@ -158,14 +159,14 @@
                                                     </Grid.RowDefinitions>
                                                     <Grid.ColumnDefinitions>
                                                         <ColumnDefinition Width="1*" />
-                                                        <ColumnDefinition Width="4*" />
+                                                        <ColumnDefinition Width="4.5*" />
                                                         <ColumnDefinition Width="1*" />
                                                     </Grid.ColumnDefinitions>
                                                         <!--<Forms9Patch:Label x:Name="mealDesc" Margin="3,0" Text="{Binding MealDesc}" HorizontalTextAlignment="Center" IsVisible="{Binding SeeDesc}" Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="Transparent" TextColor="Black"/>-->
                                                         
                                                         <Label Grid.Column="0" TextColor="Black" Text="{Binding qty}" FontSize="30" HeightRequest="50" FontAttributes="Bold" VerticalOptions="Center" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" HorizontalOptions="Fill"/>
                                                         <Label Grid.Column="1" TextColor="Black" Text="{Binding mealName}" FontSize="16" HeightRequest="50" VerticalOptions="Center" VerticalTextAlignment="Center" HorizontalTextAlignment="Start" HorizontalOptions="Fill"/>
-                                                        <Image Grid.Column="2" HorizontalOptions="Center" Aspect="AspectFill" VerticalOptions="Center" HeightRequest="50" WidthRequest="50" Source="{Binding urlLink}"/>
+                                                        <Image Grid.Column="2" HorizontalOptions="Start" Aspect="AspectFill" VerticalOptions="Center" HeightRequest="50" WidthRequest="50" Source="{Binding urlLink}"/>
                                                 </Grid>
                                                 </StackLayout>
                                             </DataTemplate>

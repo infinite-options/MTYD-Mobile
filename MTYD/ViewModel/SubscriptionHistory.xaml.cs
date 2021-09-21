@@ -458,8 +458,8 @@ namespace MTYD.ViewModel
                 {
                     try
                     {
-                        if ((value.Value)[i].MealName == null && (value.Value)[i].MealDesc != "SURPRISE")
-                            continue;
+                        //if ((value.Value)[i].MealName == null && )
+                        //    continue;
                         DateTime currentTime = DateTime.Now;
 
                         var deliv = new DateTime(int.Parse((value.Value)[i].StartDelivDate.Substring(0, 4)), int.Parse((value.Value)[i].StartDelivDate.Substring(5, 2)), int.Parse((value.Value)[i].StartDelivDate.Substring(8, 2)));
@@ -477,14 +477,24 @@ namespace MTYD.ViewModel
                         }
                         else m1.DelivDateVisible = false;
 
+
                         if ((value.Value)[i].MealDesc == "SURPRISE")
                         {
                             if (String.Compare(deliv.ToString("u").Substring(0, deliv.ToString("u").IndexOf(" ")), currentTime.ToString("u").Substring(0, currentTime.ToString("u").IndexOf(" "))) >= 0 ||
                             String.Compare(selmenu.ToString("u").Substring(0, selmenu.ToString("u").IndexOf(" ")), currentTime.ToString("u").Substring(0, currentTime.ToString("u").IndexOf(" "))) >= 0)
                                 m1.DelivDate = selmenu.ToString("D").Substring(selmenu.ToString("D").IndexOf(" ") + 1) + " (Future)";
                             else m1.DelivDate = selmenu.ToString("D").Substring(selmenu.ToString("D").IndexOf(" ") + 1);
-                            m1.mealName = "SURPRISE";
+                            m1.mealName = "Surprise";
                             m1.qty = subHist.mealPlanName.Substring(0, 1);
+                        }
+                        else if((value.Value)[i].MealDesc == "SKIP")
+                        {
+                            if (String.Compare(deliv.ToString("u").Substring(0, deliv.ToString("u").IndexOf(" ")), currentTime.ToString("u").Substring(0, currentTime.ToString("u").IndexOf(" "))) >= 0 ||
+                            String.Compare(selmenu.ToString("u").Substring(0, selmenu.ToString("u").IndexOf(" ")), currentTime.ToString("u").Substring(0, currentTime.ToString("u").IndexOf(" "))) >= 0)
+                                m1.DelivDate = selmenu.ToString("D").Substring(selmenu.ToString("D").IndexOf(" ") + 1) + " (Future)";
+                            else m1.DelivDate = selmenu.ToString("D").Substring(selmenu.ToString("D").IndexOf(" ") + 1);
+                            m1.mealName = "Skip";
+                            m1.qty = "0";
                         }
                         else
                         {
