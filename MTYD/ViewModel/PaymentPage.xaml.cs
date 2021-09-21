@@ -1725,7 +1725,7 @@ namespace MTYD.ViewModel
         private async void DeliveryAdd_TextChanged(object sender, TextChangedEventArgs e)
         {
             paymentStack.IsVisible = false;
-            await scroller.ScrollToAsync(0, -50, true);
+            //await scroller.ScrollToAsync(0, -50, true);
             //saveDeliv.IsVisible = true;
         }
 

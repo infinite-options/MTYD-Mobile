@@ -215,7 +215,7 @@
                    </Frame>
                 </Grid>
 
-                <Frame x:Name="mapFrame" HasShadow="False" BackgroundColor="Gray" Padding="0" HeightRequest="200" Margin="20, 10" CornerRadius="10">
+                <Frame x:Name="mapFrame" HasShadow="False" BackgroundColor="Gray" Padding="0" HeightRequest="200" Margin="20, 20" CornerRadius="10">
                     <maps:Map
                         x:Name="map"
                         IsVisible="true">
@@ -317,7 +317,7 @@
 
                 </Grid>-->
                 
-                <Button x:Name="proceedButton" BackgroundColor="#F26522" TextColor="White" FontSize="18" Margin="50, 10, 50, 10" Padding="0, 10"
+                <Button x:Name="proceedButton" BackgroundColor="#F26522" TextColor="White" FontSize="18" Margin="50, 30, 50, 10" Padding="0, 10"
                         CornerRadius="15" Text="Proceed" Clicked="clickedDeliv"/>
 
             </StackLayout>
@@ -928,6 +928,8 @@
                     Text="CHECKOUT" TextColor="White"  FontAttributes="Bold" FontSize="20" IsVisible="false"
                     WidthRequest="150" HeightRequest="50" Grid.Column="1" Grid.Row="0" Clicked="checkoutButton_Clicked"/>
             </Grid>
+
+            <BoxView x:Name="bottomSpace" HeightRequest="30" HorizontalOptions="Fill"/>
                
             </StackLayout>
 

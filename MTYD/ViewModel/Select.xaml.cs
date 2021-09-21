@@ -1591,6 +1591,7 @@ namespace MTYD.ViewModel
 
                 qtyDict.Clear();
                 qtyDict_addon.Clear();
+                dateCarousel.ScrollTo(0);
                 //getUserMeals();
                 //if (SubscriptionPicker.SelectedItem.ToString().Substring(0, 2).Equals("5 "))
                 //{
@@ -1647,6 +1648,8 @@ namespace MTYD.ViewModel
                     Debug.WriteLine("index of meal plan selected in plan change: " + indexOfMealPlanSelected.ToString());
                     Preferences.Set("purchId", purchIdArray[indexOfMealPlanSelected].ToString());
                     Preferences.Set("purchUid", purchUidArray[indexOfMealPlanSelected].ToString());
+                    Debug.WriteLine("chosen purch id in plan change: " + purchIdArray[indexOfMealPlanSelected].ToString());
+                    Debug.WriteLine("chosen purch uid in plan change: " + purchUidArray[indexOfMealPlanSelected].ToString());
                     Console.WriteLine("Purch Id: " + Preferences.Get("purchId", ""));
                     //testing
                     getUserMeals();

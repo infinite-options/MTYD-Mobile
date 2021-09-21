@@ -143,12 +143,12 @@
                                                         <RowDefinition Height="Auto" />
                                                     </Grid.RowDefinitions>
                                                     <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="1*" />
+                                                        <ColumnDefinition Width="Auto" />
                                                         <ColumnDefinition Width="1*" />
                                                     </Grid.ColumnDefinitions>
 
-                                                    <Label Text="Meals Delivered" TextColor="Black" Grid.Column="0" FontSize="21" HeightRequest="30" FontAttributes="Bold" VerticalOptions="Center" VerticalTextAlignment="Center" HorizontalOptions="Start" HorizontalTextAlignment="Start"/>
-                                                    <Label Text="{Binding DelivDate}" TextColor="Black" Grid.Column="1" FontSize="21" HeightRequest="30" FontAttributes="Bold" VerticalOptions="Center" VerticalTextAlignment="Center" HorizontalOptions="End" HorizontalTextAlignment="End"/>
+                                                    <Label Text="Meals Delivered" TextColor="Black" Grid.Column="0" FontSize="18" HeightRequest="30" FontAttributes="Bold" VerticalOptions="Center" VerticalTextAlignment="Center" HorizontalOptions="Start" HorizontalTextAlignment="Start"/>
+                                                    <Forms9Patch:Label Text="{Binding DelivDate}" TextColor="Black" Grid.Column="1" FontSize="15" HeightRequest="30" FontAttributes="Bold" VerticalOptions="Center" VerticalTextAlignment="Center" HorizontalOptions="End" HorizontalTextAlignment="End"/>
                                                         
                                                 </Grid>
 

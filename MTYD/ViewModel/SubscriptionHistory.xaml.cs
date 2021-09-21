@@ -464,9 +464,9 @@ namespace MTYD.ViewModel
 
                         var deliv = new DateTime(int.Parse((value.Value)[i].StartDelivDate.Substring(0, 4)), int.Parse((value.Value)[i].StartDelivDate.Substring(5, 2)), int.Parse((value.Value)[i].StartDelivDate.Substring(8, 2)));
                         var selmenu = new DateTime(int.Parse((value.Value)[i].SelMenuDate.Substring(0, 4)), int.Parse((value.Value)[i].SelMenuDate.Substring(5, 2)), int.Parse((value.Value)[i].SelMenuDate.Substring(8, 2)));
-                        if (String.Compare(deliv.ToString("u").Substring(0, deliv.ToString("u").IndexOf(" ")), currentTime.ToString("u").Substring(0, currentTime.ToString("u").IndexOf(" "))) >= 0 ||
-                            String.Compare(selmenu.ToString("u").Substring(0, selmenu.ToString("u").IndexOf(" ")), currentTime.ToString("u").Substring(0, currentTime.ToString("u").IndexOf(" "))) >= 0)
-                            continue;
+                        //if (String.Compare(deliv.ToString("u").Substring(0, deliv.ToString("u").IndexOf(" ")), currentTime.ToString("u").Substring(0, currentTime.ToString("u").IndexOf(" "))) >= 0 ||
+                        //    String.Compare(selmenu.ToString("u").Substring(0, selmenu.ToString("u").IndexOf(" ")), currentTime.ToString("u").Substring(0, currentTime.ToString("u").IndexOf(" "))) >= 0)
+                        //    continue;
 
                         Meals m1 = new Meals();
                         if ((value.Value)[i].SelMenuDate != mostRecentMenuDate)
@@ -479,13 +479,20 @@ namespace MTYD.ViewModel
 
                         if ((value.Value)[i].MealDesc == "SURPRISE")
                         {
-                            m1.DelivDate = selmenu.ToString("D").Substring(selmenu.ToString("D").IndexOf(" ") + 1);
+                            if (String.Compare(deliv.ToString("u").Substring(0, deliv.ToString("u").IndexOf(" ")), currentTime.ToString("u").Substring(0, currentTime.ToString("u").IndexOf(" "))) >= 0 ||
+                            String.Compare(selmenu.ToString("u").Substring(0, selmenu.ToString("u").IndexOf(" ")), currentTime.ToString("u").Substring(0, currentTime.ToString("u").IndexOf(" "))) >= 0)
+                                m1.DelivDate = selmenu.ToString("D").Substring(selmenu.ToString("D").IndexOf(" ") + 1) + " (Future)";
+                            else m1.DelivDate = selmenu.ToString("D").Substring(selmenu.ToString("D").IndexOf(" ") + 1);
                             m1.mealName = "SURPRISE";
                             m1.qty = subHist.mealPlanName.Substring(0, 1);
                         }
                         else
                         {
-                            m1.DelivDate = selmenu.ToString("D").Substring(selmenu.ToString("D").IndexOf(" ") + 1);
+                            if (String.Compare(deliv.ToString("u").Substring(0, deliv.ToString("u").IndexOf(" ")), currentTime.ToString("u").Substring(0, currentTime.ToString("u").IndexOf(" "))) >= 0 ||
+                            String.Compare(selmenu.ToString("u").Substring(0, selmenu.ToString("u").IndexOf(" ")), currentTime.ToString("u").Substring(0, currentTime.ToString("u").IndexOf(" "))) >= 0)
+                                m1.DelivDate = selmenu.ToString("D").Substring(selmenu.ToString("D").IndexOf(" ") + 1) + " (Future)";
+                            else m1.DelivDate = selmenu.ToString("D").Substring(selmenu.ToString("D").IndexOf(" ") + 1);
+                            //m1.DelivDate = selmenu.ToString("D").Substring(selmenu.ToString("D").IndexOf(" ") + 1);
                             m1.qty = (value.Value)[i].MealQty;
                             m1.mealName = (value.Value)[i].MealName;
                             m1.urlLink = (value.Value)[i].MealPhotoUrl;
@@ -546,99 +553,8 @@ namespace MTYD.ViewModel
             subHistColl.Add(subHist_test2);
             subHistColl.Add(subHist_test2);
 
-            //for (int j = 0; j < dateArray.Count; j++)
-            //{
-            //    if (String.Compare(obj2.NextBilling.MenuDate, (string)dateArray[j]) < 0)
-            //        continue;
-
-            //    SubHist subHist = new SubHist();
-
-            //    var billDate = new DateTime(int.Parse(obj2.NextBilling.MenuDate.ToString().Substring(0, 4)), int.Parse(obj2.NextBilling.MenuDate.ToString().Substring(5, 2)), int.Parse(obj2.NextBilling.MenuDate.ToString().Substring(8, 2)));
-            //    //subHist.Date = billDate.ToString("D").Substring(billDate.ToString("D").IndexOf(" ") + 1);
-            //    Debug.WriteLine("next billing date: " + obj2.NextBilling.MenuDate);
-            //    nextBillingLabel.Text = billDate.ToString("D").Substring(billDate.ToString("D").IndexOf(" ") + 1);
-            //    //Debug.WriteLine("next billing date: " + dateArray[j]);
-            //    var date1 = new DateTime(int.Parse(dateArray[j].ToString().Substring(0, 4)), int.Parse(dateArray[j].ToString().Substring(5, 2)), int.Parse(dateArray[j].ToString().Substring(8, 2)));
-            //    Debug.WriteLine("formatted next billing date: " + date1.ToString("D").Substring(date1.ToString("D").IndexOf(" ") + 1));
-            //    subHist.Date = date1.ToString("D").Substring(date1.ToString("D").IndexOf(" ") + 1);
-            //    subHist.CollVisible = false;
-            //    ObservableCollection<Meals> mealsColl = new ObservableCollection<Meals>();
-            //    for (int i = 0; i < obj2.Result.Length; i++)
-            //    {
-            //        if (obj2.Result[i].MenuDate == (string)dateArray[j])
-            //        {
-            //            Debug.WriteLine("entered");
-            //            try
-            //            {
-            //                JArray newobj = Newtonsoft.Json.JsonConvert.DeserializeObject<JArray>(obj2.Result[i].CombinedSelection);
-
-
-            //                foreach (JObject config in newobj)
-            //                {
-            //                    Meals m1 = new Meals();
-            //                    m1.qty = (string)config["qty"];
-            //                    m1.mealName = (string)config["name"];
-            //                    Debug.WriteLine("this was tracked: " + (string)config["name"] + " : " + (string)config["qty"]);
-            //                    mealsColl.Add(m1);
-            //                }
-            //            }
-            //            catch
-            //            {
-            //                Debug.WriteLine("caught from processing combined selection");
-            //            }
-
-            //            subHist.mainGridVisible = true;
-            //            //get the name of the meal plan
-            //            JArray newobj2 = Newtonsoft.Json.JsonConvert.DeserializeObject<JArray>(obj2.Result[i].Items);
-            //            Debug.WriteLine("obj2.Result[i].Items: " + obj2.Result[i].Items.ToString());
-            //            Debug.WriteLine("newobj2: " + newobj2.ToString());
-            //            Debug.WriteLine("newobj2 object: " + newobj2[0].ToString());
-            //            foreach (JObject config in newobj2)
-            //            {
-            //                Console.WriteLine("Inside foreach loop in GetmealsPlan func");
-            //                string qty = (string)config["qty"];
-            //                string name = (string)config["name"];
-            //                Debug.WriteLine("quantity: " + qty);
-            //                Debug.WriteLine("name: " + name);
-            //                name = name.Substring(0, name.IndexOf(" "));
-            //                name = name + " Meals, ";
-            //                qty = qty + " Deliveries";
-            //                subHist.mealPlanName = name + qty;
-            //            }
-
-            //            subHist.mealCollHeight = mealsColl.Count * 60;
-            //            break;
-            //        }
-            //    }
-
-            //    subHist.mealColl = mealsColl;
-            //    subHistColl.Add(subHist);
-            //}
-
             weekOneMenu.HeightRequest = subHistColl.Count * 110;
-            //SubHist subHist = new SubHist();
-
-            //Debug.WriteLine("next billing date: " + obj2.NextBilling.MenuDate);
-            //var date1 = new DateTime(int.Parse(obj2.NextBilling.MenuDate.Substring(0, 4)), int.Parse(obj2.NextBilling.MenuDate.Substring(5, 2)), int.Parse(obj2.NextBilling.MenuDate.Substring(8, 2)));
-            //Debug.WriteLine("formatted next billing date: " + date1.ToString("D").Substring(date1.ToString("D").IndexOf(" ") + 1));
-            //subHist.Date = date1.ToString("D").Substring(date1.ToString("D").IndexOf(" ") + 1);
-
-            //ObservableCollection<Meals> mealsColl = new ObservableCollection<Meals>();
-            //for (int i = 0; i < obj2.Result.Length; i++)
-            //{
-            //    Debug.WriteLine("entered");
-            //    JArray newobj = Newtonsoft.Json.JsonConvert.DeserializeObject<JArray>(obj2.Result[i].CombinedSelection);
-
-            //    foreach (JObject config in newobj)
-            //    {
-            //        Meals m1 = new Meals();
-            //        m1.mealName = (string)config["name"];
-            //        mealsColl.Add(m1);
-            //    }
-            //}
-
-            //subHist.mealColl = mealsColl;
-            //subHistColl.Add(subHist);
+            
 
             weekOneMenu.ItemsSource = subHistColl;
         }

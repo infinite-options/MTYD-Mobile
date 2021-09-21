@@ -854,8 +854,14 @@ namespace MTYD.ViewModel
 
         async void clickedVerifyCode(object sender, EventArgs e)
         {
+            if (ambassTitle.Text == null || ambassTitle.Text == "")
+            {
+                await DisplayAlert("Oops", "Enter an ambassador code first", "OK");
+                return;
+            }
+
             AmbassCodePost AmbCode = new AmbassCodePost();
-            AmbCode.code = passedAmbCode;
+            AmbCode.code = ambassTitle.Text;
             AmbCode.info = cust_email;
             if ((string)Xamarin.Forms.Application.Current.Properties["platform"] == "GUEST")
             {
@@ -900,6 +906,7 @@ namespace MTYD.ViewModel
                 if (data.sub.valid == "TRUE")
                 {
                     enteredCodeAmt = data.new_billing.amount_should_charge;
+                    ambassDisc.Text = "-$" + data.new_billing.ambassador_discount.ToString();
                     Debug.WriteLine("how much to refund from previous plan: " + passedPlanCost);
                 }
             }
@@ -1379,7 +1386,9 @@ namespace MTYD.ViewModel
                         updated.cc_zip = "NULL";
                         updated.customer_lat = lati;
                         updated.customer_long = longi;
-                        updated.ambassador_code = passedAmbCode;
+                        if (enteredCodeAmt != 0)
+                            updated.ambassador_code = ambassTitle.Text;
+                        else updated.ambassador_code = passedAmbCode;
                         updated.purchase_uid = purchase_uid;
                         updated.driver_tip = tipPrice.Text.Substring(1);
                         updated.customer_email = cust_email;
@@ -1806,7 +1815,10 @@ namespace MTYD.ViewModel
                         updated.cc_zip = "NULL";
                         updated.customer_lat = lati;
                         updated.customer_long = longi;
-                        updated.ambassador_code = passedAmbCode;
+                        if (enteredCodeAmt != 0)
+                            updated.ambassador_code = ambassTitle.Text;
+                        else updated.ambassador_code = passedAmbCode;
+                        //updated.ambassador_code = passedAmbCode;
                         updated.purchase_uid = purchase_uid;
                         updated.driver_tip = tipPrice.Text.Substring(1);
                         updated.customer_email = cust_email;
