@@ -18,7 +18,7 @@ namespace MTYD.ViewModel
             NavigationPage.SetHasBackButton(this, false);
             NavigationPage.SetHasNavigationBar(this, false);
             checkPlatform(height, width);
-        } 
+        }
 
         public void checkPlatform(double height, double width)
         {

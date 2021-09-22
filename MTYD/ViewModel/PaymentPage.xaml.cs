@@ -1719,7 +1719,7 @@ namespace MTYD.ViewModel
 
         async void clickedMenu(System.Object sender, System.EventArgs e)
         {
-            await Navigation.PushAsync(new Menu(cust_firstName, cust_lastName, cust_email));
+            //await Navigation.PushAsync(new Menu(cust_firstName, cust_lastName, cust_email));
         }
 
         private async void DeliveryAdd_TextChanged(object sender, TextChangedEventArgs e)

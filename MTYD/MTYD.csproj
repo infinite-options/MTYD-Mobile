@@ -59,14 +59,6 @@
     <Compile Remove="DirectSignUpA.xaml.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="ViewModel\OldLogin.xaml.cs">
-      <DependentUpon>OldLogin.xaml</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Update="ViewModel\OldMealSched.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Update="ViewModel\PaymentPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>

@@ -1922,7 +1922,7 @@ namespace MTYD.ViewModel
 
         async void clickedMenu(System.Object sender, System.EventArgs e)
         {
-            await Navigation.PushAsync(new Menu(cust_firstName, cust_lastName, cust_email));
+            //await Navigation.PushAsync(new Menu(cust_firstName, cust_lastName, cust_email));
             //Application.Current.MainPage = new Menu();
         }
 

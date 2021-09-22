@@ -544,7 +544,7 @@ namespace MTYD.ViewModel
 
         async void clickedMenu(System.Object sender, System.EventArgs e)
         {
-            await Navigation.PushAsync(new Menu(first, last, email));
+            //await Navigation.PushAsync(new Menu(first, last, email));
         }
         /*
         protected async Task SetMealSelect()
@@ -4158,7 +4158,7 @@ namespace MTYD.ViewModel
 
         async void clickedStripeTest(System.Object sender, System.EventArgs e)
         {
-            await Navigation.PushAsync(new StripeTesting(), false);
+            //await Navigation.PushAsync(new StripeTesting(), false);
             //Navigation.RemovePage(this.Navigation.NavigationStack[this.Navigation.NavigationStack.Count - 2]);
         }
 

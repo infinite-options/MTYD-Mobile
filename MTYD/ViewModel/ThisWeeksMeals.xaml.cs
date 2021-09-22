@@ -203,7 +203,7 @@ namespace MTYD.ViewModel
 
         async void clickedBack(System.Object sender, System.EventArgs e)
         {
-            Application.Current.MainPage = new HowItWorks();
+            //Application.Current.MainPage = new HowItWorks();
         }
 
         async void clickedSignUp(System.Object sender, System.EventArgs e)
