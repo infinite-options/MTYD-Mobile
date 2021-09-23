@@ -53,7 +53,7 @@ namespace MTYD.ViewModel
             orangeBox.CornerRadius = height / 40;
             logo.HeightRequest = width / 15;
             logo.Margin = new Thickness(0, 0, 0, 30);
-            innerGrid.Margin = new Thickness(0, 0, 23, 27);
+            //innerGrid.Margin = new Thickness(0, 0, 23, 27);
 
             menu.Margin = new Thickness(25, 0, 0, 30);
             menu.WidthRequest = 40;
@@ -86,9 +86,9 @@ namespace MTYD.ViewModel
             if (Device.RuntimePlatform == Device.iOS)
             {
                 
-                pfp.HeightRequest = 40;
-                pfp.WidthRequest = 40;
-                pfp.CornerRadius = 20;
+                //pfp.HeightRequest = 40;
+                //pfp.WidthRequest = 40;
+                //pfp.CornerRadius = 20;
 
                 mainLogo.HeightRequest = height / 18;
                 getStarted.HeightRequest = height / 35;
@@ -162,9 +162,9 @@ namespace MTYD.ViewModel
             }
             else //Android
             {
-                pfp.HeightRequest = 40;
-                pfp.WidthRequest = 40;
-                pfp.CornerRadius = 20;
+                //pfp.HeightRequest = 40;
+                //pfp.WidthRequest = 40;
+                //pfp.CornerRadius = 20;
 
                 mainLogo.HeightRequest = height / 20;
                 getStarted.HeightRequest = height / 45;

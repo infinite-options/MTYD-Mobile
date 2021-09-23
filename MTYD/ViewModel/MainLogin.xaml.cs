@@ -166,11 +166,11 @@ namespace MTYD.ViewModel
             orangeBox.CornerRadius = height / 40;
             heading.WidthRequest = 140;
 
-            pfp.HeightRequest = 40;
-            pfp.WidthRequest = 40;
-            pfp.CornerRadius = 20;
-            pfp.Margin = new Thickness(0, 0, 23, 27);
-            innerGrid.Margin = new Thickness(0, 0, 23, 27);
+            //pfp.HeightRequest = 40;
+            //pfp.WidthRequest = 40;
+            //pfp.CornerRadius = 20;
+            //pfp.Margin = new Thickness(0, 0, 23, 27);
+            //innerGrid.Margin = new Thickness(0, 0, 23, 27);
 
             if (Preferences.Get("profilePicLink", "") == "")
             {
@@ -250,11 +250,11 @@ namespace MTYD.ViewModel
                 orangeBox.CornerRadius = height / 40;
                 heading.WidthRequest = 140;
 
-                pfp.HeightRequest = 40;
-                pfp.WidthRequest = 40;
-                pfp.CornerRadius = 20;
-                pfp.Margin = new Thickness(0, 0, 23, 27);
-                innerGrid.Margin = new Thickness(0, 0, 23, 27);
+                //pfp.HeightRequest = 40;
+                //pfp.WidthRequest = 40;
+                //pfp.CornerRadius = 20;
+                //pfp.Margin = new Thickness(0, 0, 23, 27);
+                //innerGrid.Margin = new Thickness(0, 0, 23, 27);
 
                 userFrame.HeightRequest = 42;
                 passFrame.HeightRequest = 42;
@@ -1959,7 +1959,7 @@ namespace MTYD.ViewModel
 
         void HIWclicked(System.Object sender, System.EventArgs e)
         {
-            Application.Current.MainPage = new HowItWorks();
+            //Application.Current.MainPage = new HowItWorks();
         }
 
         async public void getProfileInfo()

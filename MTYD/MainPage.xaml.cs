@@ -303,11 +303,11 @@ namespace MTYD
             orangeBox.Margin = new Thickness(0, -height / 2.2, 0, 0);
             orangeBox.CornerRadius = height / 40;
             heading.WidthRequest = 140;
-            pfp.HeightRequest = 40;
-            pfp.WidthRequest = 40;
-            pfp.CornerRadius = 20;
-            //pfp.Margin = new Thickness(0, 0, 23, 27);
-            innerGrid.Margin = new Thickness(0, 0, 23, 27);
+            //pfp.HeightRequest = 40;
+            //pfp.WidthRequest = 40;
+            //pfp.CornerRadius = 20;
+            ////pfp.Margin = new Thickness(0, 0, 23, 27);
+            //innerGrid.Margin = new Thickness(0, 0, 23, 27);
             fade.Margin = new Thickness(0, -height / 3, 0, 0);
 
             if (Preferences.Get("profilePicLink", "") == "")
@@ -481,7 +481,7 @@ namespace MTYD
             orangeBox.HeightRequest = height / 2;
             orangeBox.Margin = new Thickness(0, -height / 2.2, 0, 0);
             orangeBox.CornerRadius = height / 40;
-            innerGrid.Margin = new Thickness(0, 0, 23, 27);
+            //innerGrid.Margin = new Thickness(0, 0, 23, 27);
             heading.WidthRequest = 140;
 
             menu.Margin = new Thickness(25, 0, 0, 30);
@@ -520,9 +520,9 @@ namespace MTYD
                 menu.WidthRequest = 40;
                 //heading adjustments
 
-                pfp.HeightRequest = 40;
-                pfp.WidthRequest = 40;
-                pfp.CornerRadius = 20;
+                //pfp.HeightRequest = 40;
+                //pfp.WidthRequest = 40;
+                //pfp.CornerRadius = 20;
 
                 //mainLogo.HeightRequest = height / 18;
                 //mainLogo.WidthRequest = 250;
@@ -575,9 +575,9 @@ namespace MTYD
                 menu.WidthRequest = 40;
                 //heading adjustments
 
-                pfp.HeightRequest = 40;
-                pfp.WidthRequest = 40;
-                pfp.CornerRadius = 20;
+                //pfp.HeightRequest = 40;
+                //pfp.WidthRequest = 40;
+                //pfp.CornerRadius = 20;
                 initials.FontSize = 20;
 
                 //mainLogo.HeightRequest = height / 20;
@@ -2157,7 +2157,7 @@ namespace MTYD
 
         void HIWclicked(System.Object sender, System.EventArgs e)
         {
-            Application.Current.MainPage = new HowItWorks();
+            //Application.Current.MainPage = new HowItWorks();
         }
 
         async public void getProfileInfo()

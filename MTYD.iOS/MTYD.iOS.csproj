@@ -66,7 +66,7 @@
     <MtouchArch>ARM64</MtouchArch>
     <CodesignKey>Apple Distribution: Infinite Options, LLC (8V66NC2T37)</CodesignKey>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
-    <CodesignProvision>com.infiniteoptions.MTYD</CodesignProvision>
+    <CodesignProvision>com.infiniteoptions.M4ME</CodesignProvision>
     <MtouchLink>SdkOnly</MtouchLink>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">

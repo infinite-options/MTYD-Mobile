@@ -18,12 +18,12 @@
                     <BoxView x:Name="orangeBox" BackgroundColor="#F26522" HorizontalOptions="Fill"/>
                     <!--<Label x:Name="heading" Text="UPCOMING MENUS" FontAttributes="Bold" VerticalOptions="End" HorizontalTextAlignment="Center" TextColor="Black"/>-->
                     <Image x:Name="heading" Source="heading.png" Margin="0,0,0,10" VerticalOptions="End" HorizontalOptions="Center"/>
-                    <Grid x:Name="innerGrid" VerticalOptions="End" HorizontalOptions="End">
+                    <Grid x:Name="innerGrid" VerticalOptions="End" HorizontalOptions="End" Margin="0,0,23,22">
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="50"/>
                         </Grid.RowDefinitions>
-                    <ImageButton x:Name="pfp" BackgroundColor="LightGray" VerticalOptions="End" HorizontalOptions="End" Clicked="clickedPfp"/>
-                    <Label x:Name="initials" TextColor="Black" FontAttributes="Bold" VerticalOptions="Center"  HorizontalOptions="Center"/>
+                        <ImageButton x:Name="pfp" HeightRequest="40" WidthRequest="40" CornerRadius="20" BackgroundColor="LightGray" VerticalOptions="Center" HorizontalOptions="Center" Clicked="clickedPfp"/>
+                        <Label x:Name="initials" TextColor="Black" FontAttributes="Bold" VerticalOptions="Center"  HorizontalOptions="Center"/>
                         <Button HorizontalOptions="Fill" VerticalOptions="Fill" BackgroundColor="Transparent" Clicked="clickedPfp"/>
                     </Grid>
 

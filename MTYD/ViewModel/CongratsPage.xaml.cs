@@ -154,10 +154,10 @@ namespace MTYD.ViewModel
             orangeBox.HeightRequest = height / 2;
             orangeBox.Margin = new Thickness(0, -height / 2.2, 0, 0);
             orangeBox.CornerRadius = height / 40;
-            pfp.HeightRequest = 40;
-            pfp.WidthRequest = 40;
-            pfp.CornerRadius = 20;
-            innerGrid.Margin = new Thickness(0, 0, 23, 27);
+            //pfp.HeightRequest = 40;
+            //pfp.WidthRequest = 40;
+            //pfp.CornerRadius = 20;
+            //innerGrid.Margin = new Thickness(0, 0, 23, 27);
 
             fade.Margin = new Thickness(0, -height / 3, 0, 0);
 

@@ -95,11 +95,11 @@ namespace MTYD.ViewModel
                 orangeBox.CornerRadius = height / 40;
                 //heading.FontSize = width / 32;
                 //heading.Margin = new Thickness(0, 0, 0, 30);
-                pfp.HeightRequest = 40;
-                pfp.WidthRequest = 40;
-                pfp.CornerRadius = 20;
+                //pfp.HeightRequest = 40;
+                //pfp.WidthRequest = 40;
+                //pfp.CornerRadius = 20;
                 //pfp.Margin = new Thickness(0, 0, 23, 27);
-                innerGrid.Margin = new Thickness(0, 0, 23, 27);
+                //innerGrid.Margin = new Thickness(0, 0, 23, 27);
 
 
                 string userInitials = "";
@@ -183,11 +183,11 @@ namespace MTYD.ViewModel
                 orangeBox.CornerRadius = height / 40;
                 //heading.FontSize = width / 32;
                 //heading.Margin = new Thickness(0, 0, 0, 30);
-                pfp.HeightRequest = 40;
-                pfp.WidthRequest = 40;
-                pfp.CornerRadius = 20;
+                //pfp.HeightRequest = 40;
+                //pfp.WidthRequest = 40;
+                //pfp.CornerRadius = 20;
                 //pfp.Margin = new Thickness(0, 0, 23, 27);
-                innerGrid.Margin = new Thickness(0, 0, 23, 27);
+                //innerGrid.Margin = new Thickness(0, 0, 23, 27);
 
                 initials.FontSize = 20;
                 string userInitials = "";
