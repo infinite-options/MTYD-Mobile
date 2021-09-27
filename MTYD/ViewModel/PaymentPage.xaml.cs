@@ -136,7 +136,7 @@ namespace MTYD.ViewModel
             {
                 if (Preferences.Get("anyPrev", false) == true)
                 {
-
+                    Debug.WriteLine("Preferences.Get(anyPrev, false) == true reached");
                     FNameEntry.Text = Preferences.Get("prevFName", "");
                     LNameEntry.Text = Preferences.Get("prevLName", "");
                     emailEntry.Text = Preferences.Get("prevEmail", "");
@@ -161,6 +161,15 @@ namespace MTYD.ViewModel
                     if (Preferences.Get("prevProceeed", false) == true)
                     {
                         EventArgs e = new EventArgs();
+
+                        if (AddressEntry.Text != null && AddressEntry.Text != "")
+                        {
+                            addressList.IsVisible = false;
+                            UnitCity.IsVisible = true;
+                            StateZip.IsVisible = true;
+                        }
+
+                        //commented out for testing
                         clickedDeliv(proceedButton, e);
                     }
                     else if (Preferences.Get("prevAddFilled", false) == true || (StateEntry.Text != "" && StateEntry.Text != null))
@@ -401,6 +410,8 @@ namespace MTYD.ViewModel
                 }
                 else if (Preferences.Get(savedFirstName, "") != "" && (string)Xamarin.Forms.Application.Current.Properties["platform"] != "GUEST")
                 {
+                    Debug.WriteLine("not guest and have saved reached");
+
                     FNameEntry.Text = Preferences.Get(savedFirstName, "");
                     LNameEntry.Text = Preferences.Get(savedLastName, "");
                     emailEntry.Text = Preferences.Get(savedEmail, "");
@@ -531,6 +542,14 @@ namespace MTYD.ViewModel
                     else DeliveryEntry.Placeholder = "Delivery Instructions (for example:\n gate code, or where to put\nyour meals if you're not home)";
 
                     EventArgs e = new EventArgs();
+
+                    if (AddressEntry.Text != null && AddressEntry.Text != "")
+                    {
+                        addressList.IsVisible = false;
+                        UnitCity.IsVisible = true;
+                        StateZip.IsVisible = true;
+                    }
+                    //commented out for testing
                     clickedDeliv(proceedButton, e);
                 }
                 //if there is no saved info
@@ -678,15 +697,36 @@ namespace MTYD.ViewModel
 
                     DeliveryEntry.Placeholder = "Delivery Instructions (for example:\ngate code, or where to put\nyour meals if you're not home)";
 
+                    Debug.WriteLine("end of no info if reached");
+                    addressList.IsVisible = false;
+                    UnitCity.IsVisible = true;
+                    StateZip.IsVisible = true;
+
+                    //if (AddressEntry.Text != null && AddressEntry.Text != "")
+                    //{
+                    //    Debug.WriteLine("end of no info inner if reached");
+                    //    addr.addressSelected(addressList, new Grid[] { UnitCity, StateZip }, AddressEntry, CityEntry, StateEntry, ZipEntry);
+                    //    addressList.IsVisible = false;
+                    //    UnitCity.IsVisible = true;
+                    //    StateZip.IsVisible = true;
+                    //}
+                    AddressEntry.TextChanged += OnAddressChanged;
                     return;
                 }
 
+                Debug.WriteLine("end of fillentriesdeliv reached");
+                AddressEntry.TextChanged += OnAddressChanged;
                 addressList.IsVisible = false;
                 UnitCity.IsVisible = true;
                 StateZip.IsVisible = true;
             }
             catch (Exception ex)
             {
+                AddressEntry.TextChanged += OnAddressChanged;
+                addressList.IsVisible = false;
+                UnitCity.IsVisible = true;
+                StateZip.IsVisible = true;
+
                 Generic gen = new Generic();
                 gen.parseException(ex.ToString());
             }
@@ -729,6 +769,7 @@ namespace MTYD.ViewModel
                 addr = new Model.Address();
                 InitializeComponent();
                 BindingContext = this;
+                fillEntriesDeliv();
 
                 if ((string)Xamarin.Forms.Application.Current.Properties["platform"] == "GUEST")
                 {
@@ -886,7 +927,7 @@ namespace MTYD.ViewModel
                     //SignUpButton.CornerRadius = 25;
                 }
 
-                fillEntriesDeliv();
+                //fillEntriesDeliv();
                 //saveContact.IsVisible = false;
                 try
                 {
@@ -899,6 +940,13 @@ namespace MTYD.ViewModel
                 }
                 catch
                 {
+                }
+
+                if (AddressEntry.Text != null && AddressEntry.Text != "")
+                {
+                    addressList.IsVisible = false;
+                    UnitCity.IsVisible = true;
+                    StateZip.IsVisible = true;
                 }
             }
             catch (Exception ex)
@@ -914,6 +962,10 @@ namespace MTYD.ViewModel
         {
             try
             {
+                addressList.IsVisible = false;
+                UnitCity.IsVisible = true;
+                StateZip.IsVisible = true;
+
                 checkoutAdd = AddressEntry.Text;
                 checkoutUnit = AptEntry.Text;
                 checkoutCity = CityEntry.Text;
@@ -1660,6 +1712,10 @@ namespace MTYD.ViewModel
                         Debug.WriteLine("secret after setpaypalcredentials: " + secret.ToString());
                     }
                 }
+
+                addressList.IsVisible = false;
+                UnitCity.IsVisible = true;
+                StateZip.IsVisible = true;
             }
             catch (Exception ex)
             {
@@ -2465,6 +2521,13 @@ namespace MTYD.ViewModel
                 addressList2.IsVisible = false;
                 UnitGrid.IsVisible = true;
                 CityStateZip.IsVisible = true;
+
+                if (AddressEntry.Text != null && AddressEntry.Text != "")
+                {
+                    addressList.IsVisible = false;
+                    UnitCity.IsVisible = true;
+                    StateZip.IsVisible = true;
+                }
             }
             catch (Exception ex)
             {
@@ -2558,9 +2621,12 @@ namespace MTYD.ViewModel
                 newPayment.tax = taxPrice.Text.Substring(taxPrice.Text.IndexOf("$") + 1);
                 newPayment.tip = tipPrice.Text.Substring(tipPrice.Text.IndexOf("$") + 1);
                 newPayment.ambassador_discount = ambassDisc.Text.Substring(ambassDisc.Text.IndexOf("$") + 1);
-                if (ambassTitle.Text == null)
+                if (double.Parse(newPayment.ambassador_discount) == 0 || ambassTitle.Text == null)
                     newPayment.ambassador_code = "";
                 else newPayment.ambassador_code = ambassTitle.Text;
+                //if (ambassTitle.Text == null)
+                //    newPayment.ambassador_code = "";
+
 
                 newPayment.service_fee = serviceFeePrice.Text.Substring(serviceFeePrice.Text.IndexOf("$") + 1);
                 newPayment.delivery_fee = deliveryFeePrice.Text.Substring(deliveryFeePrice.Text.IndexOf("$") + 1);

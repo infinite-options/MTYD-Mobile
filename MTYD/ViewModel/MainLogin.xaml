@@ -16,7 +16,7 @@
                         <BoxView x:Name="orangeBox" BackgroundColor="#F26522" HorizontalOptions="Fill"/>
                         <Image x:Name="heading" Source="heading.png" Margin="0,0,0,10" VerticalOptions="End" HorizontalOptions="Center"/>
                         <!--<Image Source="pgHeader.png" Margin="0,-85,0,0" HorizontalOptions="Fill"/>-->
-                        <Grid x:Name="innerGrid" VerticalOptions="End" HorizontalOptions="End" Margin="0,0,23,22">
+                        <Grid x:Name="innerGrid" IsVisible="false" VerticalOptions="End" HorizontalOptions="End" Margin="0,0,23,22">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="50"/>
                         </Grid.RowDefinitions>

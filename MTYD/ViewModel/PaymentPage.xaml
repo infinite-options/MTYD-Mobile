@@ -144,7 +144,7 @@
                    <Frame x:Name="street" Grid.Row="0" Grid.Column="0" Padding="10,5" Margin="20,0.5" BackgroundColor="White" HasShadow="False"
                           BorderColor="#F26522" CornerRadius="10">
                         <Entry x:Name="AddressEntry" Keyboard="Text" FontSize="17" TextColor="Black" Placeholder="Street Address*" PlaceholderColor="Black"
-                               Text="{Binding AddressText}" TextChanged="OnAddressChanged" Focused="addressEntryFocused" Unfocused="addressEntryUnfocused"/>
+                               Text="{Binding AddressText}" Focused="addressEntryFocused" Unfocused="addressEntryUnfocused"/>
                    </Frame>
                 </Grid>
 
@@ -448,7 +448,7 @@
 
                     <Frame Padding="10,0" HorizontalOptions="Fill" CornerRadius="10" HasShadow="False" BackgroundColor="White" Grid.Column="0" BorderColor="#F26522">
                         <Entry x:Name="ambassTitle" Placeholder="Enter Ambassador Code" IsTextPredictionEnabled="False" FontSize="Micro"
-                               BackgroundColor="White" PlaceholderColor="Black" TextColor="Black"/>
+                               BackgroundColor="White" Keyboard="Email" PlaceholderColor="Black" TextColor="Black"/>
                     </Frame>
 
                     <Button Grid.Column="1" x:Name="verifyCode" Text="Verify" CornerRadius="10" TextColor="White" FontSize="14" HorizontalOptions="Start" Padding="25, 0"

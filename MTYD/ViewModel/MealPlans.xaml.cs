@@ -633,9 +633,9 @@ namespace MTYD.ViewModel
                 try
                 {
                     string creditCardNum = (info_obj["result"])[selectedIndex]["cc_num"].ToString();
-                    //cardNum.Text = creditCardNum.Substring(creditCardNum.Length - 2);
-                    //cardNum.Text = "**************" + cardNum.Text;
-                    cardNum1.Text = "**********" + creditCardNum.Substring(creditCardNum.Length - 2);
+                    if (creditCardNum.ToLower() == "null")
+                        cardNum1.Text = "************";
+                    else cardNum1.Text = "**********" + creditCardNum.Substring(creditCardNum.Length - 2);
                 }
                 catch
                 {
@@ -2078,11 +2078,15 @@ namespace MTYD.ViewModel
         }
         //end of menu functions
 
-        void Edit_Focused(System.Object sender, Xamarin.Forms.FocusEventArgs e)
+        void Edit_FocusedDelivInstr(System.Object sender, Xamarin.Forms.FocusEventArgs e)
         {
-            scroller.ScrollToAsync(0, beforeDelivDetailsStack.Height, true);
-        }        
+            scroller.ScrollToAsync(0, 600, true);
+        }
 
+        void Edit_FocusedGeneric(System.Object sender, Xamarin.Forms.FocusEventArgs e)
+        {
+            scroller.ScrollToAsync(0, 350, true);
+        }
 
     }
 }

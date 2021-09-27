@@ -82,7 +82,7 @@
 
                 </Grid>
 
-                <Grid x:Name="ambassGrid" Margin="10,0,10,5">
+                <Grid IsVisible="false" x:Name="ambassGrid" Margin="10,0,10,5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="2*"/>
                         <ColumnDefinition Width="1.3*"/>
@@ -92,7 +92,7 @@
                     <Frame x:Name="ambassFrame" Padding="10,0" HorizontalOptions="Fill" CornerRadius="15" HasShadow="False"
                            BackgroundColor="White" Grid.Column="0" BorderColor="#F26522" HeightRequest="40">
                         <Entry x:Name="ambassTitle" Placeholder="Enter Ambassador Code" IsTextPredictionEnabled="False" FontSize="Small"
-                               BackgroundColor="White" PlaceholderColor="Black" TextColor="Black"/>
+                               BackgroundColor="White" Keyboard="Email" PlaceholderColor="Black" TextColor="Black"/>
                     </Frame>
 
                     <Button Grid.Column="1" x:Name="verifyCode" Text="Verify" CornerRadius="15" TextColor="White" FontSize="Medium" HorizontalOptions="Start" Padding="25, 0"
@@ -120,13 +120,13 @@
                    <Frame x:Name="firstName" Grid.Row="0" Grid.Column="0" Padding="10,5" Margin="20,0.5,1,5" BackgroundColor="White" HasShadow="False"
                           BorderColor="#F26522" CornerRadius="10">
                         <Entry x:Name="FNameEntry" Keyboard="Text" FontSize="17" TextColor="Black" Placeholder="First Name*" PlaceholderColor="Black"
-                                Focused="Edit_Focused"/>
+                                Focused="Edit_FocusedGeneric"/>
                    </Frame>
 
                    <Frame x:Name="lastName" Grid.Row="0" Grid.Column="1" Padding="10,5" Margin="1,0.5,20,5" BackgroundColor="White" HasShadow="False"
                           BorderColor="#F26522" CornerRadius="10">
                         <Entry x:Name="LNameEntry" Keyboard="Text" FontSize="17" TextColor="Black" Placeholder="Last Name*" PlaceholderColor="Black"
-                               Focused="Edit_Focused"/>
+                               Focused="Edit_FocusedGeneric"/>
                    </Frame>
                 </Grid>
 
@@ -141,7 +141,7 @@
                    <Frame x:Name="emailAdd" Grid.Row="0" Grid.Column="0" Padding="10,5" Margin="20,0.5, 20, 5" BackgroundColor="White" HasShadow="False"
                           BorderColor="#F26522" CornerRadius="10">
                         <Entry x:Name="emailEntry" Keyboard="Email" FontSize="17" TextColor="Black" Placeholder="Email Address*" PlaceholderColor="Black"
-                               Focused="Edit_Focused"/>
+                               Focused="Edit_FocusedGeneric"/>
                    </Frame>
 
                 </Grid>
@@ -158,7 +158,7 @@
                           BorderColor="#F26522" CornerRadius="10">
 
                         <Entry x:Name="PhoneEntry" MaxLength="10" Keyboard="Numeric" FontSize="17" TextColor="Black" Placeholder="Phone Number*" PlaceholderColor="Black"
-                               Focused="Edit_Focused"/>
+                               Focused="Edit_FocusedGeneric"/>
 
                     </Frame>
 
@@ -244,7 +244,7 @@
                    <Frame x:Name="deliveryInstr" Grid.Row="0" Grid.Column="0" Padding="10,5" Margin="20,0.5,20,5" BackgroundColor="White" HasShadow="False"
                           BorderColor="#F26522" CornerRadius="10">
                         <Editor x:Name="DeliveryEntry" Keyboard="Text" FontSize="17" TextColor="Black" HeightRequest="80" PlaceholderColor="Black"
-                                Focused="Edit_Focused" Placeholder="Delivery Instructions (for example:&#x0a;gate code, or where to put&#x0a;your meals if you're not home)"/>
+                                Focused="Edit_FocusedDelivInstr" Placeholder="Delivery Instructions (for example:&#x0a;gate code, or where to put&#x0a;your meals if you're not home)"/>
                    </Frame>
                 </Grid>
 
@@ -271,7 +271,8 @@
 
                     <StackLayout Grid.Column="0">
                         <Label HorizontalTextAlignment="Center" FontSize="17" Text="Card" FontAttributes="Bold" TextColor="Black" Margin="0,0,0,5"/>
-                        <ImageButton HorizontalOptions="Center" BackgroundColor="Transparent" Source="MPcard.png" HeightRequest="65" WidthRequest="65" Aspect="AspectFit" VerticalOptions="Center" Clicked="clickedInfo"/>
+                        <!--used to use clickedInfo-->
+                        <ImageButton HorizontalOptions="Center" BackgroundColor="Transparent" Source="MPcard.png" HeightRequest="65" WidthRequest="65" Aspect="AspectFit" VerticalOptions="Center"/>
                         <Forms9Patch:Label x:Name="cardNum1" Text="**********##" FontSize="Small" HorizontalTextAlignment="Center" HorizontalOptions="Fill" Margin="3,0,3,5" TextColor="Black"/>
                     </StackLayout>
 
